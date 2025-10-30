@@ -1,34 +1,29 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient";
-
-export type ProgressStatus = "learning" | "known" | "review";
-
-export interface ConceptProgressRecord {
-  conceptId: string;
-  deviceKey: string;
-  status: ProgressStatus;
-  lastReviewedAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type {
+  ConceptProgress,
+  ConceptProgressRow,
+  ProgressStatus,
+  UpsertProgressInput,
+} from "../types";
 
 const TABLE = "concept_progress";
 
-function mapRow(row: Record<string, unknown>): ConceptProgressRecord {
+function mapRow(row: Partial<ConceptProgressRow>): ConceptProgress {
   return {
-    conceptId: String(row.concept_id),
-    deviceKey: String(row.device_key),
+    conceptId: String(row.concept_id ?? ""),
+    deviceKey: String(row.device_key ?? ""),
     status: (row.status as ProgressStatus) ?? "learning",
-    lastReviewedAt: String(row.last_reviewed_at),
-    createdAt: String(row.created_at),
-    updatedAt: String(row.updated_at),
+    lastReviewedAt: String(row.last_reviewed_at ?? ""),
+    createdAt: String(row.created_at ?? ""),
+    updatedAt: String(row.updated_at ?? ""),
   };
 }
 
 export async function listProgressByDevice(
   deviceKey: string,
   client: SupabaseClient | null = null
-): Promise<ConceptProgressRecord[]> {
+): Promise<ConceptProgress[]> {
   const supabase = client ?? getSupabaseClient();
   const { data, error } = await (supabase as any)
     .from(TABLE)
@@ -43,13 +38,6 @@ export async function listProgressByDevice(
   }
 
   return (data ?? []).map(mapRow);
-}
-
-export interface UpsertProgressInput {
-  concept_id: string;
-  device_key: string;
-  status?: ProgressStatus;
-  last_reviewed_at?: string;
 }
 
 export async function upsertProgress(

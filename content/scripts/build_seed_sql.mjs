@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
+import { z } from "zod";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,22 +25,31 @@ function escapeLiteral(value) {
   return `'${String(value).replace(/'/g, "''")}'`;
 }
 
+const conceptSchema = z.object({
+  section_code: z.string().min(1),
+  section_title: z.string().min(1).nullable().optional(),
+  subsection_code: z.string().min(1).nullable().optional(),
+  subsection_title: z.string().min(1).nullable().optional(),
+  slug: z.string().min(1),
+  term_lt: z.string().min(1),
+  term_en: z.string().min(1).nullable().optional(),
+  description_lt: z.string().min(1).nullable().optional(),
+  description_en: z.string().min(1).nullable().optional(),
+  source_ref: z.string().min(1).nullable().optional(),
+});
+
 function validateConcepts(records) {
+  const parsed = conceptSchema.array().parse(records);
   const slugs = new Set();
-  const requiredFields = ["section_code", "subsection_code", "slug", "term_lt"];
 
-  records.forEach((record, index) => {
-    requiredFields.forEach((field) => {
-      if (!record[field]) {
-        throw new Error(`Record ${index} missing required field '${field}'`);
-      }
-    });
-
+  parsed.forEach((record) => {
     if (slugs.has(record.slug)) {
       throw new Error(`Duplicate slug detected: ${record.slug}`);
     }
     slugs.add(record.slug);
   });
+
+  return parsed;
 }
 
 function buildValuesClause(records) {
@@ -101,9 +111,9 @@ on conflict (slug) do update set
 function main() {
   const rawContent = readFileSync(RAW_FILE, "utf8");
   const records = JSON.parse(rawContent);
-  validateConcepts(records);
+  const parsedRecords = validateConcepts(records);
 
-  const sql = buildSeedSql(records);
+  const sql = buildSeedSql(parsedRecords);
   writeFileSync(OUTPUT_FILE, `${sql}\n`, "utf8");
   console.log(`Seed SQL regenerated at ${OUTPUT_FILE}`);
 }

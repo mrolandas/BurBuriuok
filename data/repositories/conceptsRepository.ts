@@ -1,24 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient";
-
-export type ConceptStatus = "learning" | "known" | "review";
-
-export interface ConceptRecord {
-  id: string;
-  sectionCode: string;
-  sectionTitle: string | null;
-  subsectionCode: string | null;
-  subsectionTitle: string | null;
-  slug: string;
-  termLt: string;
-  termEn: string | null;
-  descriptionLt: string | null;
-  descriptionEn: string | null;
-  sourceRef: string | null;
-  metadata: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Concept, ConceptRow, UpsertConceptInput } from "../types";
 
 const TABLE = "concepts";
 
@@ -26,29 +8,29 @@ type ConceptsQueryOptions = {
   sectionCode?: string;
 };
 
-function mapRow(row: Record<string, unknown>): ConceptRecord {
+function mapRow(row: Partial<ConceptRow>): Concept {
   return {
-    id: String(row.id),
-    sectionCode: String(row.section_code),
-    sectionTitle: (row.section_title as string) ?? null,
-    subsectionCode: row.subsection_code ? String(row.subsection_code) : null,
-    subsectionTitle: row.subsection_title ? String(row.subsection_title) : null,
-    slug: String(row.slug),
-    termLt: String(row.term_lt),
-    termEn: row.term_en ? String(row.term_en) : null,
-    descriptionLt: row.description_lt ? String(row.description_lt) : null,
-    descriptionEn: row.description_en ? String(row.description_en) : null,
-    sourceRef: row.source_ref ? String(row.source_ref) : null,
+    id: String(row.id ?? ""),
+    sectionCode: String(row.section_code ?? ""),
+    sectionTitle: row.section_title ?? null,
+    subsectionCode: row.subsection_code ?? null,
+    subsectionTitle: row.subsection_title ?? null,
+    slug: String(row.slug ?? ""),
+    termLt: String(row.term_lt ?? ""),
+    termEn: row.term_en ?? null,
+    descriptionLt: row.description_lt ?? null,
+    descriptionEn: row.description_en ?? null,
+    sourceRef: row.source_ref ?? null,
     metadata: (row.metadata as Record<string, unknown>) ?? {},
-    createdAt: String(row.created_at),
-    updatedAt: String(row.updated_at),
+    createdAt: String(row.created_at ?? ""),
+    updatedAt: String(row.updated_at ?? ""),
   };
 }
 
 export async function listConcepts(
   client: SupabaseClient | null = null,
   options: ConceptsQueryOptions = {}
-): Promise<ConceptRecord[]> {
+): Promise<Concept[]> {
   const supabase = client ?? getSupabaseClient();
   let query = (supabase as any)
     .from(TABLE)
@@ -72,7 +54,7 @@ export async function listConcepts(
 export async function getConceptBySlug(
   slug: string,
   client: SupabaseClient | null = null
-): Promise<ConceptRecord | null> {
+): Promise<Concept | null> {
   const supabase = client ?? getSupabaseClient();
   const { data, error } = await (supabase as any)
     .from(TABLE)
@@ -92,20 +74,6 @@ export async function getConceptBySlug(
   return data ? mapRow(data) : null;
 }
 
-export interface UpsertConceptInput {
-  section_code: string;
-  section_title?: string | null;
-  subsection_code?: string | null;
-  subsection_title?: string | null;
-  slug: string;
-  term_lt: string;
-  term_en?: string | null;
-  description_lt?: string | null;
-  description_en?: string | null;
-  source_ref?: string | null;
-  metadata?: Record<string, unknown>;
-}
-
 export async function upsertConcepts(
   concepts: UpsertConceptInput[],
   client: SupabaseClient | null = null
@@ -120,13 +88,11 @@ export async function upsertConcepts(
     metadata: concept.metadata ?? {},
   }));
 
-  const { error, count } = await (supabase as any)
-    .from(TABLE)
-    .upsert(payload, {
-      onConflict: "slug",
-      ignoreDuplicates: false,
-      count: "exact",
-    });
+  const { error, count } = await (supabase as any).from(TABLE).upsert(payload, {
+    onConflict: "slug",
+    ignoreDuplicates: false,
+    count: "exact",
+  });
 
   if (error) {
     throw new Error(`Failed to upsert concepts: ${error.message}`);

@@ -42,7 +42,7 @@ Maintain this document during the active development session. Update checklists,
 
 - [x] Implement Supabase client wrapper in `data/supabaseClient.ts`.
 - [x] Create repository modules (`conceptsRepository`, `progressRepository`).
-- [ ] Define shared TypeScript types/interfaces for concepts and progress records.
+- [x] Define shared TypeScript types/interfaces for concepts and progress records.
 - [ ] Add lightweight caching utilities for frequently requested data.
 - [ ] Document module usage in `data/README.md`.
 
