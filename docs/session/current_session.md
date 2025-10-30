@@ -69,6 +69,18 @@ Maintain this document during the active development session. Update checklists,
 - [ ] Record moderation requirements once image upload planning advances.
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 
+## Branching & Testing Strategy
+
+Maintain short-lived feature branches branching from `main`, each focused on a single workstream milestone. Suggested sequence:
+
+1. `feature/data-supabase-schema` – define Supabase schema, seed scripts, and data layer repositories. When ready: run unit tests (if present) and manual Supabase validation; merge into `main` after verifying seed scripts succeed.
+2. `feature/frontend-glossary` – scaffold SvelteKit, build concepts list/search UI consuming the repositories. Manual UI smoke test (Chrome + mobile viewport) before merging.
+3. `feature/backend-progress-api` – implement Express progress/concept endpoints. Run automated tests + manual API calls (Insomnia/curl) prior to merge.
+4. `feature/frontend-progress-sync` – connect UI progress toggles to backend/Supabase. Manual regression test: mark/unmark concepts, reload, ensure state persists.
+5. `feature/content-expansion` – ingest additional sections, update seed data, adjust UI navigation. Manual verification of new content integrity.
+
+After each branch passes manual verification, open a PR targeting `main`, include checklist results, merge upon review, and then branch anew for the next milestone. Keep branches small so AI coding agents can context-switch easily.
+
 ## Wrap-up Checklist
 
 - [ ] Review all open checkboxes; move incomplete work to new docs or issues.
