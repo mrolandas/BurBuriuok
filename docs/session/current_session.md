@@ -69,6 +69,7 @@ Maintain this document during the active development session. Update checklists,
 - [ ] Record moderation requirements once image upload planning advances.
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 - [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.
+- [ ] Log V3 discussion feature requirements (comments, voting, limited formatting) for future roadmapping.
 
 ## Branching & Testing Strategy
 

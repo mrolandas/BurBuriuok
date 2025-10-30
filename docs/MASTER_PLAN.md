@@ -30,6 +30,7 @@ Create a focused, Lithuanian-language learning companion that helps aspiring ski
 - **Bilingual Terminology** – Lithuanian primary terms, English equivalents, optional pronunciation cues in later releases.
 - **Assessments** – flashcards, micro-quizzes, and scenario prompts tailored to the official exam style.
 - **Modular Infrastructure** – layered architecture (`frontend/`, `backend/`, `data/`, `content/`, `infra/`) with strict separation of concerns for ease of maintenance and AI-assistant navigation.
+- **Community Discussions (V3)** – concept-level threads where authenticated users can post questions/answers, upvote/downvote, embed trusted links, and use limited rich text (basic formatting, emojis).
 
 ## Content Development Approach
 
@@ -45,6 +46,7 @@ Create a focused, Lithuanian-language learning companion that helps aspiring ski
 - Accessibility: WCAG AA baseline, high-contrast themes for outdoor use.
 - Security: minimal in V1 (static hosting with Supabase data access via service layer), plan input validation and rate limiting for V2 APIs.
 - Maintain AI coding agent friendliness by providing consistent project structure, explicit interfaces, and up-to-date documentation.
+- Community moderation: plan voting/flagging workflows and abuse prevention for V3 discussion features.
 
 ## Open Questions
 
@@ -52,4 +54,5 @@ Create a focused, Lithuanian-language learning companion that helps aspiring ski
 - Preferred AI model hosting for V2 (self-hosted Ollama vs cloud inference).
 - Requirements for collaborative note sharing and privacy expectations.
 - Image moderation workflow and storage cost management once uploads are enabled.
+- Moderation tooling and policy for V3 community discussion threads.
 - Level of automation needed to keep module scaffolds, seeds, and docs synchronized as features expand.
