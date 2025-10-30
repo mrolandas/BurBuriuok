@@ -16,7 +16,8 @@ This document captures how BurBuriuok uses Supabase during early development (st
 
 - **Database name/schema** – create a dedicated schema `burburiuok` in the shared instance to avoid collisions with other projects.
 - **Tables (V1)**
-  - `concepts` – canonical curriculum entries, including Lithuanian/English terms and metadata.
+  - `concepts` – canonical curriculum entries, including Lithuanian/English terms, curriculum alignment (`is_required`), and metadata.
+    - Required entries trace directly to `docs/static_info/LBS_programa.md`; optional entries provide additional depth but are still surfaced by the same table.
   - `concept_progress` – learned/quiz tracking per (anonymous) device or user token.
 - **Tables (V2+)**
   - `profiles` – user metadata tied to Supabase Auth users.
@@ -43,15 +44,16 @@ This document captures how BurBuriuok uses Supabase during early development (st
 
 1. Ensure you are logged into the Supabase CLI with a personal access token: `npx supabase login`.
 2. From the repo root, push migrations to the hosted project: `npx supabase db push --project-ref zvlziltltbalebqpmuqs`.
-3. Seed Section 1 concepts by running the generated SQL in the SQL editor or via CLI (see below).
-4. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`).
-5. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local`.
+3. Generate the latest seed SQL (`npm run content:seed:generate`) after extracting prototype content (`node content/scripts/extract_prototype_content.mjs`). The generator reports how many concepts are tagged `is_required` vs optional so you can sanity-check curriculum coverage.
+4. Seed concepts by running the generated SQL in the SQL editor or via CLI (see below).
+5. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`).
+6. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local`.
 
 ### Applying seeds via CLI
 
 Supabase CLI does not yet support direct seed execution against hosted projects. Options:
 
-- Open the Supabase web console → SQL Editor → run `supabase/seeds/seed_concepts.sql`.
+- Open the Supabase web console → SQL Editor → run `supabase/seeds/seed_concepts.sql` (regenerate it first with `npm run content:seed:generate`).
 - Or provision a temporary local stack, run migrations + seeds locally, then export/import the data using `pg_dump`/`psql`.
 
 ## Future Migration Plan

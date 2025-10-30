@@ -3,9 +3,11 @@
 // Generates Supabase seed SQL from raw concept JSON data.
 // Usage: `node content/scripts/build_seed_sql.mjs`
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
+
+import { applyCurriculumRequirements } from "./lib/curriculum.mjs";
 
 let z;
 try {
@@ -25,13 +27,16 @@ const OUTPUT_FILE = path.resolve(
   __dirname,
   "../../supabase/seeds/seed_concepts.sql"
 );
-const RAW_FILE = path.join(RAW_DIR, "section1_concepts.json");
 
 function escapeLiteral(value) {
   if (value === null || value === undefined) {
     return "NULL";
   }
   return `'${String(value).replace(/'/g, "''")}'`;
+}
+
+function formatBoolean(value) {
+  return value ? "true" : "false";
 }
 
 const conceptSchema = z.object({
@@ -45,20 +50,37 @@ const conceptSchema = z.object({
   description_lt: z.string().min(1).nullable().optional(),
   description_en: z.string().min(1).nullable().optional(),
   source_ref: z.string().min(1).nullable().optional(),
+  is_required: z.boolean().optional(),
 });
 
-function validateConcepts(records) {
-  const parsed = conceptSchema.array().parse(records);
-  const slugs = new Set();
+function loadConceptRecords() {
+  const files = readdirSync(RAW_DIR)
+    .filter((file) => /^section_[a-z0-9_]+_concepts\.json$/i.test(file))
+    .sort();
 
-  parsed.forEach((record) => {
-    if (slugs.has(record.slug)) {
+  if (!files.length) {
+    throw new Error(
+      `No section concept files found in ${RAW_DIR}. Run extract_prototype_content.mjs first.`
+    );
+  }
+
+  const combined = [];
+  for (const file of files) {
+    const absolutePath = path.join(RAW_DIR, file);
+    const rawContent = readFileSync(absolutePath, "utf8");
+    const parsed = conceptSchema.array().parse(JSON.parse(rawContent));
+    combined.push(...parsed);
+  }
+
+  const slugSet = new Set();
+  combined.forEach((record) => {
+    if (slugSet.has(record.slug)) {
       throw new Error(`Duplicate slug detected: ${record.slug}`);
     }
-    slugs.add(record.slug);
+    slugSet.add(record.slug);
   });
 
-  return parsed;
+  return combined;
 }
 
 function buildValuesClause(records) {
@@ -74,6 +96,7 @@ function buildValuesClause(records) {
       escapeLiteral(record.description_lt ?? null),
       escapeLiteral(record.description_en ?? null),
       escapeLiteral(record.source_ref ?? null),
+      formatBoolean(record.is_required === true),
     ];
     return `    (${columns.join(", ")})`;
   });
@@ -95,7 +118,8 @@ insert into burburiuok.concepts (
     term_en,
     description_lt,
     description_en,
-    source_ref
+    source_ref,
+    is_required
 ) values
 `;
 
@@ -111,6 +135,7 @@ on conflict (slug) do update set
     description_lt = excluded.description_lt,
     description_en = excluded.description_en,
     source_ref = excluded.source_ref,
+    is_required = excluded.is_required,
     updated_at = timezone('utc', now());
 `;
 
@@ -118,13 +143,15 @@ on conflict (slug) do update set
 }
 
 function main() {
-  const rawContent = readFileSync(RAW_FILE, "utf8");
-  const records = JSON.parse(rawContent);
-  const parsedRecords = validateConcepts(records);
+  const parsedRecords = loadConceptRecords();
+  const { records: enrichedRecords, summary } =
+    applyCurriculumRequirements(parsedRecords);
 
-  const sql = buildSeedSql(parsedRecords);
+  const sql = buildSeedSql(enrichedRecords);
   writeFileSync(OUTPUT_FILE, `${sql}\n`, "utf8");
-  console.log(`Seed SQL regenerated at ${OUTPUT_FILE}`);
+  console.log(
+    `Seed SQL regenerated at ${OUTPUT_FILE} (required: ${summary.required}, optional: ${summary.optional})`
+  );
 }
 
 main();

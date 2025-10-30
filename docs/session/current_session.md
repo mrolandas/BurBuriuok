@@ -70,6 +70,7 @@ Maintain this document during the active development session. Update checklists,
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 - [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.
 - [ ] Log V3 discussion feature requirements (comments, voting, limited formatting) for future roadmapping.
+- [ ] Next session: reshape Supabase schema/seed to mirror `docs/static_info/temp_structure_interpretation.md` (supersedes legacy `first_draft` structure).
 
 ## Branching & Testing Strategy
 

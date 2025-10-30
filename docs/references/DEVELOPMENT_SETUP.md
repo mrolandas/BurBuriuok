@@ -53,7 +53,8 @@ This document keeps the development environment expectations in one place. Updat
 - `npm run test` – run automated tests (see `docs/TESTING_GUIDE.md`).
 - `npm run build` – production build for deployment.
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
-- `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding.
+- `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding (script annotates each concept with `is_required` so we can surface curriculum-mandatory content in the apps).
+- `node content/scripts/extract_prototype_content.mjs` – rebuild JSON datasets from `first_draft/index.html` before regenerating seeds.
 
 ### Supabase local push (developer note)
 
