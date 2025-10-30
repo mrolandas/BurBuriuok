@@ -17,7 +17,7 @@ Create a focused, Lithuanian-language learning companion that helps aspiring ski
 
 ## Version Roadmap
 
-- **V1 (MVP)** – Supabase-backed content and progress storage (shared schema), personal progress tracking, basic quizzes, lightweight note taking stored locally in the browser. No authentication, single-device assumptions, hosted on GitHub Pages.
+- **V1 (MVP)** – Supabase-backed content and progress storage (hosted project `zvlziltltbalebqpmuqs`), personal progress tracking, basic quizzes, lightweight note taking stored locally in the browser. No authentication, single-device assumptions, hosted on GitHub Pages.
 - **V2** – Supabase-backed storage, optional authentication, AI assistant via Ollama or public models, synchronised notes, richer analytics, offline-friendly packaging, and collaborative image uploads (iki 4 vaizdų vienam naudotojui per sąvoką) su moderuotu bendru vaizdų katalogu.
 - **Beyond** – multi-user classroom mode, instructor dashboards, localisation helpers for English-first learners.
 

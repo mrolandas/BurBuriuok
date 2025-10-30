@@ -4,7 +4,7 @@
 
 - **Hosting** – GitHub Pages (static deployment from the `main` branch or a dedicated `gh-pages` branch once the build pipeline exists).
 - **Runtime** – Static frontend consuming Supabase REST endpoints; no custom server-side runtime yet.
-- **Data Storage** – Supabase (shared local instance) for curriculum content and progress data, browser storage for lightweight caches and notes.
+- **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content and progress data, browser storage for lightweight caches and notes. Local Supabase stack remains a fallback for offline work.
 - **Integrations** – Supabase REST/Realtime endpoints only (no auth, no storage bucket yet).
 - **Codebase Layout** – Modular filesystem: `frontend/` (SvelteKit UI), `backend/` (Express API-to-be), `data/` (Supabase client + repositories), `content/` (curriculum seed files), `infra/` (deployment scripts and migrations).
 
@@ -13,7 +13,7 @@
 - Establish automated build and deploy workflow (GitHub Actions) once the SvelteKit frontend is scaffolded.
 - Define content build steps to transform source JSON/Markdown into consumable bundles.
 - Document environment variables needed for local development and future services.
-- Connect to the shared local Supabase instance (see `docs/references/SUPABASE.md`) while modelling the migration path to hosted Supabase.
+- Connect to the hosted Supabase project via CLI (`npx supabase login`, `npx supabase db push --project-ref zvlziltltbalebqpmuqs`) as described in `docs/references/SUPABASE.md`; retain guidance for spinning up the local stack if offline development becomes necessary.
 - Add per-module READMEs describing responsibilities and public interfaces for AI-friendly navigation.
 - Introduce Supabase migrations and seed scripts under `infra/` to keep schema changes deterministic.
 

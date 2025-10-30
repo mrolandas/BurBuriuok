@@ -1,13 +1,14 @@
 # Supabase Reference
 
-This document captures how BurBuriuok uses the shared local Supabase stack during early development (starting with V1) and how we expect to evolve toward hosted Supabase later.
+This document captures how BurBuriuok uses Supabase during early development (starting with V1) and how we expect to evolve the setup over time.
 
 ## Current Environment
 
-- **Instance** – Local Supabase stack running on a sibling WSL machine, reachable at `http://127.0.0.1:54321`.
-- **API URL** – `SUPABASE_URL` in the project `.env` file (currently `http://127.0.0.1:54321`).
-- **Anon Key** – `SUPABASE_ANON_KEY` (for client-side authenticated requests once we enable Supabase Auth).
+- **Hosted project** – `burburiuok` on Supabase.com, project reference `zvlziltltbalebqpmuqs`.
+- **API URL** – `SUPABASE_URL` in `.env` (currently `https://zvlziltltbalebqpmuqs.supabase.co`).
+- **Anon Key** – `SUPABASE_ANON_KEY` (client-side requests once auth is enabled).
 - **Service Role Key** – `SUPABASE_SERVICE_ROLE_KEY` (server-side only; keep out of client bundles). Stored locally in `.env` for now.
+- **Local fallback** – prior local-stack variables remain commented in `.env` in case we need to bring back the on-device Supabase instance for offline work.
 
 > Make sure `.env` is never committed. The repo `.gitignore` already excludes it.
 
@@ -40,11 +41,18 @@ This document captures how BurBuriuok uses the shared local Supabase stack durin
 
 ## Local Development Workflow
 
-1. Ensure the shared Supabase stack is running (`supabase start`) on the sibling WSL machine.
-2. Export or share the `.env` file with the current URL and keys.
-3. Run frontend/backend dev servers; they will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and (for backend only) `SUPABASE_SERVICE_ROLE_KEY`.
-4. Use Supabase Studio (`http://127.0.0.1:54323`) or `supabase db push` to apply migrations (starting with `0001_initial_schema.sql`) and materialise `concepts`/`concept_progress` tables.
-5. Seed Section 1 concepts with `supabase db remote commit --file infra/supabase/seeds/seed_concepts.sql` or run the SQL snippet manually in Supabase Studio.
+1. Ensure you are logged into the Supabase CLI with a personal access token: `npx supabase login`.
+2. From the repo root, push migrations to the hosted project: `npx supabase db push --project-ref zvlziltltbalebqpmuqs`.
+3. Seed Section 1 concepts by running the generated SQL in the SQL editor or via CLI (see below).
+4. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`).
+5. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local`.
+
+### Applying seeds via CLI
+
+Supabase CLI does not yet support direct seed execution against hosted projects. Options:
+
+- Open the Supabase web console → SQL Editor → run `infra/supabase/seeds/seed_concepts.sql`.
+- Or provision a temporary local stack, run migrations + seeds locally, then export/import the data using `pg_dump`/`psql`.
 
 ## Future Migration Plan
 

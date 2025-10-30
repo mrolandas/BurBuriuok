@@ -48,7 +48,7 @@ Maintain this document during the active development session. Update checklists,
 
 ### 5. Infrastructure & Tooling
 
-- [ ] Add Supabase CLI workflow (`supabase db push`, `supabase db seed`).
+- [x] Add Supabase CLI workflow (`supabase db push`, `supabase db seed`).
 - [ ] Configure npm scripts for linting, testing, building across layers.
 - [ ] Set up GitHub Actions pipeline (lint + test + build) once code exists.
 - [ ] Draft deployment script for GitHub Pages (frontend) and placeholder for backend hosting.
@@ -65,7 +65,7 @@ Maintain this document during the active development session. Update checklists,
 
 - _Use this section to capture decisions, blockers, and notes for future contributors._
 
-- [ ] Document why Supabase is used from V1 and any constraints of the shared local instance.
+- [ ] Document why Supabase is used from V1 and any constraints of the shared local instance (updated with hosted project details in `docs/references/SUPABASE.md`).
 - [ ] Record moderation requirements once image upload planning advances.
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 - [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.

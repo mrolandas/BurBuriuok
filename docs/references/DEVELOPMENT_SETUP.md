@@ -55,6 +55,34 @@ This document keeps the development environment expectations in one place. Updat
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
 - `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding.
 
+### Supabase local push (developer note)
+
+When your Supabase instance is running on a sibling WSL machine or a local stack, prefer the local push command which targets the local instance rather than a remote project. Example:
+
+```bash
+# apply migrations to the local Supabase instance
+npx supabase db push --local
+
+# optionally run a seed SQL file (run inside Supabase Studio or via CLI depending on setup)
+# e.g., open the SQL editor at http://127.0.0.1:54323 or run an appropriate `supabase` CLI command
+```
+
+Notes:
+
+- `--local` is useful when the developer machine is not authenticated against a hosted Supabase project and you are applying migrations to a local stack.
+- If your local Supabase CLI setup uses different flags or a `remote` target, adapt the command accordingly (for example, `npx supabase db push --project-ref <ref>` for remote pushes).
+- Always review migrations and backups before applying them to any shared instance. See `docs/references/SUPABASE.md` for details about the shared local instance and the `infra/supabase/migrations` directory.
+
+### Supabase hosted push
+
+We maintain a hosted project `burburiuok` (ref `zvlziltltbalebqpmuqs`). After logging into the Supabase CLI (`npx supabase login`), run:
+
+```bash
+npx supabase db push --project-ref zvlziltltbalebqpmuqs
+```
+
+This applies the migrations in `infra/supabase/migrations` to the hosted database. Execute seeds through the Supabase SQL editor or the workflow described in `docs/references/SUPABASE.md`.
+
 ## AI Assistant Guidance
 
 - Respect this document for shell command expectations.
