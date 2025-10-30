@@ -16,8 +16,8 @@ Maintain this document during the active development session. Update checklists,
 - [x] Define Supabase schema (`concepts`, `concept_progress`) and apply migrations.
 - [x] Extract Section 1 concepts from `first_draft` into structured JSON/CSV.
 - [ ] Seed Supabase `concepts` table with parsed data via seed script.
-- [ ] Implement data validation (zod/schema) for concepts before inserting.
-- [ ] Document seeding workflow in `content/README.md` (to create).
+- [x] Implement data validation (zod/schema) for concepts before inserting.
+- [x] Document seeding workflow in `content/README.md` (to create).
 
 ### 2. Frontend (SvelteKit)
 

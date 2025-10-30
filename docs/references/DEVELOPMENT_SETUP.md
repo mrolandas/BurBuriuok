@@ -25,7 +25,8 @@ This document keeps the development environment expectations in one place. Updat
 - `@supabase/supabase-js`
 - `@types/node`
 - `typescript`
-- `ts-node` or build tooling of choice for running scripts
+- `ts-node` (or the chosen build tooling for running scripts)
+- `zod` (or another schema validator) for data checks in content tooling
 
 ## Project Bootstrap
 
@@ -52,6 +53,7 @@ This document keeps the development environment expectations in one place. Updat
 - `npm run test` – run automated tests (see `docs/TESTING_GUIDE.md`).
 - `npm run build` – production build for deployment.
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
+- `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding.
 
 ## AI Assistant Guidance
 
