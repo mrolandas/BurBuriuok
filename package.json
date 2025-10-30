@@ -1,0 +1,30 @@
+{
+  "name": "buriavimas",
+  "version": "1.0.0",
+  "description": "BurBuriuok is a Lithuanian-first learning companion that helps prepare for the Lithuanian Sailing Association skipper curriculum. User-facing copy will stay in Lithuanian, while source code, internal documentation, and developer discussions remain in English for clarity.",
+  "type": "module",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests/checkSupabaseConnection.mjs",
+    "content:seed:generate": "node content/scripts/build_seed_sql.mjs",
+    "test:supabase": "node tests/checkSupabaseConnection.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrolandas/BurBuriuok.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrolandas/BurBuriuok/issues"
+  },
+  "homepage": "https://mrolandas.github.io/BurBuriuok/",
+  "dependencies": {
+    "node-html-parser": "^7.0.1",
+    "zod": "^4.1.12"
+  }
+}
