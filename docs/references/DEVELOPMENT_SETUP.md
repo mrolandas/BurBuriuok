@@ -20,6 +20,13 @@ This document keeps the development environment expectations in one place. Updat
 - Git 2.40+.
 - Supabase CLI (install once backend storage and image uploads are introduced in V2).
 
+## Core Dependencies (install once project tooling is initialised)
+
+- `@supabase/supabase-js`
+- `@types/node`
+- `typescript`
+- `ts-node` or build tooling of choice for running scripts
+
 ## Project Bootstrap
 
 1. Clone the repository: `git clone https://github.com/mrolandas/BurBuriuok.git`.

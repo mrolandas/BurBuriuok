@@ -13,8 +13,8 @@ Maintain this document during the active development session. Update checklists,
 
 ### 1. Data & Content
 
-- [ ] Define Supabase schema (`concepts`, `concept_progress`) and apply migrations.
-- [ ] Extract Section 1 concepts from `first_draft` into structured JSON/CSV.
+- [x] Define Supabase schema (`concepts`, `concept_progress`) and apply migrations.
+- [x] Extract Section 1 concepts from `first_draft` into structured JSON/CSV.
 - [ ] Seed Supabase `concepts` table with parsed data via seed script.
 - [ ] Implement data validation (zod/schema) for concepts before inserting.
 - [ ] Document seeding workflow in `content/README.md` (to create).
@@ -40,8 +40,8 @@ Maintain this document during the active development session. Update checklists,
 
 ### 4. Data Layer
 
-- [ ] Implement Supabase client wrapper in `data/supabaseClient.ts`.
-- [ ] Create repository modules (`conceptsRepository`, `progressRepository`).
+- [x] Implement Supabase client wrapper in `data/supabaseClient.ts`.
+- [x] Create repository modules (`conceptsRepository`, `progressRepository`).
 - [ ] Define shared TypeScript types/interfaces for concepts and progress records.
 - [ ] Add lightweight caching utilities for frequently requested data.
 - [ ] Document module usage in `data/README.md`.
@@ -68,6 +68,7 @@ Maintain this document during the active development session. Update checklists,
 - [ ] Document why Supabase is used from V1 and any constraints of the shared local instance.
 - [ ] Record moderation requirements once image upload planning advances.
 - [ ] Note any deviations from the plan and link to follow-up tasks.
+- [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.
 
 ## Branching & Testing Strategy
 

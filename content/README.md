@@ -8,6 +8,7 @@ Holds curriculum source material, transformations, and seed scripts used to popu
 - Transformation scripts (TypeScript/Node) that normalise data and map to database schema.
 - Seed scripts that push data into Supabase (`supabase db seed`).
 - Version history/changelogs for content updates.
+- `raw/` directory contains source JSON (e.g., `section1_concepts.json`) generated from the legacy prototype.
 
 ## Development Notes
 

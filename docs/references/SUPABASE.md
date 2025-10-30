@@ -22,6 +22,7 @@ This document captures how BurBuriuok uses the shared local Supabase stack durin
   - `concept_notes` – user-authored notes referencing curriculum concepts.
   - `media_assets` – metadata for user-uploaded images (concept id, storage path, owner, status, moderation fields, soft-delete markers).
 - **Migrations** – once tooling is in place, manage via Supabase CLI (`supabase db diff`, `supabase db push`).
+- **Current migration** – `infra/supabase/migrations/0001_initial_schema.sql` creates the schema and V1 tables.
 
 ## Storage Buckets (Planned)
 
@@ -42,7 +43,8 @@ This document captures how BurBuriuok uses the shared local Supabase stack durin
 1. Ensure the shared Supabase stack is running (`supabase start`) on the sibling WSL machine.
 2. Export or share the `.env` file with the current URL and keys.
 3. Run frontend/backend dev servers; they will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and (for backend only) `SUPABASE_SERVICE_ROLE_KEY`.
-4. Use Supabase Studio (`http://127.0.0.1:54323`) or `supabase sql` to create the `burburiuok` schema and V1 tables (`concepts`, `concept_progress`) while migrations are being formalised.
+4. Use Supabase Studio (`http://127.0.0.1:54323`) or `supabase db push` to apply migrations (starting with `0001_initial_schema.sql`) and materialise `concepts`/`concept_progress` tables.
+5. Seed Section 1 concepts with `supabase db remote commit --file infra/supabase/seeds/seed_concepts.sql` or run the SQL snippet manually in Supabase Studio.
 
 ## Future Migration Plan
 

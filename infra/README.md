@@ -8,6 +8,7 @@ Automation scripts, deployment workflows, and infrastructure-as-code assets for 
 - Deployment tooling for frontend (GitHub Pages/Vercel) and backend (Railway/Fly.io/etc.).
 - CI/CD configurations (GitHub Actions workflow files).
 - Environment provisioning scripts and documentation (e.g., shell scripts, Terraform in future).
+- Seed data lives under `supabase/seeds/` with SQL scripts (`seed_concepts.sql`) until automated loaders are in place.
 
 ## Development Notes
 
