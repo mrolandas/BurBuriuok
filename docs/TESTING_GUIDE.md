@@ -6,12 +6,18 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 ## Current Status (V1)
 
-- Automated tests: not yet implemented.
+- Automated tests: limited to a Supabase connectivity check.
 - Manual smoke tests:
   - Load glossary sections and verify terminology renders in Lithuanian and English (data served from Supabase `concepts`).
   - Toggle learned state for several terms and confirm persistence via Supabase (`concept_progress`) with fallback caching on the client.
   - Perform searches in Lithuanian and English; validate filtering and results.
   - Run the quiz feature and confirm scoring logic works end-to-end.
+
+### Automated Connectivity Check
+
+- `node tests/checkSupabaseConnection.mjs`
+  - Confirms the hosted Supabase REST endpoint responds with HTTP 200 using the service role key.
+  - Requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to be available in the environment (the script falls back to `.env` if variables are unset).
 
 ## Planned Automated Coverage
 
@@ -22,6 +28,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 ## Test Commands (to be defined)
 
+- `node tests/checkSupabaseConnection.mjs` – hosted Supabase availability check.
 - `npm run test` – run the full suite locally.
 - `npm run test:unit` – unit tests only.
 - `npm run test:e2e` – end-to-end tests (requires local backend once available).

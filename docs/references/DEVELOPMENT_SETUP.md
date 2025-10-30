@@ -83,6 +83,8 @@ npx supabase db push --project-ref zvlziltltbalebqpmuqs
 
 This applies the migrations in `supabase/migrations/` to the hosted database. Execute seeds through the Supabase SQL editor or the workflow described in `docs/references/SUPABASE.md`.
 
+> Store your Supabase CLI access token outside of `.env` (for example, run `supabase login --token <value>` or export `SUPABASE_ACCESS_TOKEN` in your shell session). Avoid committing the token to the repository.
+
 ## AI Assistant Guidance
 
 - Respect this document for shell command expectations.
