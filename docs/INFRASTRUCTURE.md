@@ -41,4 +41,4 @@
 - [ ] Evaluate CDN or caching strategy for serving approved imagery efficiently.
 - [ ] Draft IaC or scripted setup for recreating Supabase schema, roles, and storage policies.
 - [ ] Keep module READMEs and docs in sync with code changes (especially for AI coding agents).
-- [ ] Automate execution of `infra/supabase/migrations/` and `infra/supabase/seeds/` via CI or release workflows.
+- [ ] Automate execution of `supabase/migrations/` and `supabase/seeds/` via CI or release workflows.

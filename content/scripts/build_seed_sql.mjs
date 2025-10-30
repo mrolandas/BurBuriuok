@@ -6,7 +6,16 @@
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
-import { z } from "zod";
+
+let z;
+try {
+  ({ z } = await import("zod"));
+} catch (error) {
+  console.error(
+    "Missing dependency 'zod'. Install it locally with `npm install zod` before running this script."
+  );
+  process.exit(1);
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +23,7 @@ const __dirname = path.dirname(__filename);
 const RAW_DIR = path.resolve(__dirname, "../raw");
 const OUTPUT_FILE = path.resolve(
   __dirname,
-  "../../infra/supabase/seeds/seed_concepts.sql"
+  "../../supabase/seeds/seed_concepts.sql"
 );
 const RAW_FILE = path.join(RAW_DIR, "section1_concepts.json");
 

@@ -71,7 +71,7 @@ Notes:
 
 - `--local` is useful when the developer machine is not authenticated against a hosted Supabase project and you are applying migrations to a local stack.
 - If your local Supabase CLI setup uses different flags or a `remote` target, adapt the command accordingly (for example, `npx supabase db push --project-ref <ref>` for remote pushes).
-- Always review migrations and backups before applying them to any shared instance. See `docs/references/SUPABASE.md` for details about the shared local instance and the `infra/supabase/migrations` directory.
+- Always review migrations and backups before applying them to any shared instance. See `docs/references/SUPABASE.md` for details about the hosted project and the canonical migration files under `supabase/migrations/`.
 
 ### Supabase hosted push
 
@@ -81,7 +81,7 @@ We maintain a hosted project `burburiuok` (ref `zvlziltltbalebqpmuqs`). After lo
 npx supabase db push --project-ref zvlziltltbalebqpmuqs
 ```
 
-This applies the migrations in `infra/supabase/migrations` to the hosted database. Execute seeds through the Supabase SQL editor or the workflow described in `docs/references/SUPABASE.md`.
+This applies the migrations in `supabase/migrations/` to the hosted database. Execute seeds through the Supabase SQL editor or the workflow described in `docs/references/SUPABASE.md`.
 
 ## AI Assistant Guidance
 

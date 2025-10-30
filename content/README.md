@@ -16,7 +16,7 @@ Holds curriculum source material, transformations, and seed scripts used to popu
 - Treat content files as source of truth for Supabase seeds; avoid manual edits in the database.
 - Include validation steps in transformation scripts (e.g., using zod schemas).
 - Keep large datasets split by section to avoid merge conflicts.
-- Run `node content/scripts/build_seed_sql.mjs` after updating raw data to regenerate `infra/supabase/seeds/seed_concepts.sql`.
+- Run `node content/scripts/build_seed_sql.mjs` after updating raw data to regenerate `supabase/seeds/seed_concepts.sql`.
 
 ## Planned Commands
 

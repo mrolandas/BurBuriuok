@@ -23,7 +23,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
   - `concept_notes` – user-authored notes referencing curriculum concepts.
   - `media_assets` – metadata for user-uploaded images (concept id, storage path, owner, status, moderation fields, soft-delete markers).
 - **Migrations** – once tooling is in place, manage via Supabase CLI (`supabase db diff`, `supabase db push`).
-- **Current migration** – `infra/supabase/migrations/0001_initial_schema.sql` creates the schema and V1 tables.
+- **Current migration** – `supabase/migrations/0001_initial_schema.sql` creates the schema and V1 tables.
 
 ## Storage Buckets (Planned)
 
@@ -51,7 +51,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 
 Supabase CLI does not yet support direct seed execution against hosted projects. Options:
 
-- Open the Supabase web console → SQL Editor → run `infra/supabase/seeds/seed_concepts.sql`.
+- Open the Supabase web console → SQL Editor → run `supabase/seeds/seed_concepts.sql`.
 - Or provision a temporary local stack, run migrations + seeds locally, then export/import the data using `pg_dump`/`psql`.
 
 ## Future Migration Plan
