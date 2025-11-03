@@ -1,98 +1,88 @@
-# Current Session Plan – BurBuriuok
+# Current Session Plan – Build Sprint 1
 
-Maintain this document during the active development session. Update checklists, add findings, and link to new documents as they appear. When the session ends or scope changes, archive or split portions into more specific docs.
+Kick-off session for actual backend and frontend implementation following the planning groundwork completed on 2025-11-03. Use this plan to coordinate thin vertical slices that deliver end-to-end learner and admin value while keeping Supabase schema changes incremental.
 
 ## Objectives
 
-- Translate the refreshed product vision into actionable, mobile-first deliverables.
-- Lock the near-term backlog for backend, admin tooling, and learner experience foundations.
-- Capture moderation, media, and engagement requirements early so implementation stays aligned.
+- Stand up the initial backend services (Supabase schema + Express API) that expose curriculum data and user progress endpoints.
+- Implement the first learner-facing views (section board, concept detail shell) in SvelteKit using live Supabase data.
+- Deliver the admin CRUD foundation for concepts and curriculum nodes with validation and draft/publish support.
+- Keep automation healthy: migrations, seeds, markdown validation, and snapshot guards must stay green in CI and pre-commit.
+- Translate Issue Tracker entries into GitHub issues as workstreams kick off and update statuses continuously.
 
 ## Workstreams & Checklists
 
-### A. Product Definition & UX
+### A. Backend Foundations (Supabase + API)
 
-- [x] Draft mobile-first wireframes for curriculum boards, concept detail drawers, and study path runner.
-- [x] Document dependency surfacing patterns (prerequisite pills, inline drawers, next-step suggestions).
-- [x] Outline study path templates, including how quizzes and reflections slot in.
-- [x] Validate personas and permissions (learner, contributor, admin) against planned workflows.
+- [ ] Finalise prerequisite `curriculum_dependencies` migration and seeds (link to `docs/references/SCHEMA_DECISIONS.md`).
+- [ ] Add content versioning tables/triggers (`content_versions`, `content_version_changes`).
+- [ ] Scaffold Express (or Supabase Edge) API with read endpoints: curriculum tree, concept by slug, dependency lookups.
+- [ ] Implement write endpoints for progress tracking (`concept_progress`) with validation and rate limiting stubs.
+- [ ] Add audit logging for admin content mutations.
 
-### B. Data & Backend Architecture
+### B. Frontend Learner Experience (SvelteKit)
 
-- [x] Extend Supabase schema with prerequisite mapping tables and draft/publish flags.
-- [x] Design media asset metadata + moderation state tables.
-- [x] Specify API endpoints (read, progress, admin) and contract expectations.
-- [x] Plan audit logging strategy for content edits and approvals.
-- [x] Define gamification data model (XP, streaks, badges) for future phases.
-- [x] Consolidate curriculum concepts into a single markdown source and drive Supabase seeding from it.
+- [ ] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
+- [ ] Implement Section Board page consuming live Supabase data (issue LX-001).
+- [ ] Build collapsible curriculum tree component with lazy-loaded nodes (issue LX-002).
+- [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue LX-003).
+- [ ] Integrate Supabase client, environment config, and error handling patterns.
 
-### C. Admin & Moderation Tools
+### C. Admin & Moderation Interface
 
-- [x] Map admin dashboard screens (overview, content CRUD, moderation queue).
-- [x] Capture validation rules (duplicates, orphan nodes, missing translations) for form submissions.
-- [x] Describe media approval workflow, notifications, and contributor feedback.
-- [x] Decide on rate limiting/quota policies for uploads and edits.
+- [ ] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`).
+- [ ] Implement concept management form (create/edit) with draft/publish toggle and validation.
+- [ ] Surface moderation queue list with status filters (`pending`, `approved`, `rejected`).
+- [ ] Wire Slack/email notification stubs in backend per `docs/references/MODERATION_SLA.md` (placeholder logs until integration exists).
+- [ ] Document how admin actions map to analytics events for future instrumentation.
 
-### D. Learner Experience Implementation
+### D. Learner Practice & Progress
 
-- [x] Break curriculum navigation into component-level backlog (section board, collapsible tree, dependency indicators).
-- [x] Specify concept view structure (definition, prerequisites, media carousel, actions).
-- [x] Define study queue interactions (“mark as mastered”, “study later”, “needs review”).
-- [x] Determine analytics events required to monitor learner progression (see `docs/references/ANALYTICS_EVENTS.md`).
+- [ ] Implement local queue store for Ready/Needs Review/Completed lists (issue LX-004).
+- [ ] Persist queue interactions to Supabase `concept_progress` via API.
+- [ ] Create study session runner MVP with timer and confidence capture (issue LX-005).
+- [ ] Define first batch of analytics event emissions in frontend aligned with `docs/references/ANALYTICS_EVENTS.md`.
+- [ ] Draft UX for spaced repetition scheduling (implementation optional this sprint).
 
-### E. Engagement & Analytics
+### E. Quality, Automation & Ops
 
-- [x] Choose initial badge catalogue and streak rules aligned with curriculum milestones.
-- [x] Outline spaced repetition algorithm inputs (confidence scores, quiz outcomes, timestamps).
-- [x] Plan notification cadence (streak nudge, study path completion, pending review).
-- [x] Establish reporting needs for admins (most-missed concepts, dormant learners).
+- [ ] Keep regression guards (`npm run content:seed:check`, `npm run content:snapshot:check`, `npm run content:markdown:validate`) green before every commit.
+- [ ] Extend automated tests: add unit tests for new repositories/service layers (`tests/` folder).
+- [ ] Configure linting/formatting baseline (ESLint + Prettier) with npm scripts.
+- [ ] Set up CI to run lint + unit tests in addition to content guards.
+- [ ] Document deployment checklist for the first integrated backend/frontend release.
 
-### F. Documentation & Delivery
+### F. Documentation & Tracking
 
-- [x] Refresh `docs/MASTER_PLAN.md` with the holistic strategy and phased roadmap.
-- [x] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
-- [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
-- [x] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap (see `docs/references/PHASE_BACKLOG.md`, `docs/references/ISSUE_TRACKER.md`).
-- [x] Capture canonical concept content source and seed automation in docs (`SUPABASE.md`, `INFRASTRUCTURE.md`, `TESTING_GUIDE.md`).
+- [ ] Open GitHub issues for each READY item in `docs/references/ISSUE_TRACKER.md` and back-link issue numbers.
+- [ ] Update `docs/references/DEVELOPMENT_SETUP.md` with final run commands as services come online.
+- [ ] Maintain API contract updates in `docs/references/API_CONTRACTS.md` as endpoints evolve.
+- [ ] Capture admin UX refinements in `docs/references/ADMIN_DASHBOARD.md` as screens ship.
+- [ ] Record implementation decisions in `docs/references/SCHEMA_DECISIONS.md` when migrations diverge from the current plan.
 
 ## Session Log
 
-- 2025-11-03: Captured holistic product direction (media moderation, mobile-first UX, engagement strategy) and updated `MASTER_PLAN.md` accordingly.
-- 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
-- 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
-- 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
-- 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
-- 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
-- 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
-- 2025-11-03: Authored `docs/static_info/LBS_concepts_master.md` as the single source of truth for curriculum concepts and linked it to seed automation.
-- 2025-11-03: Updated `content/scripts/build_seed_sql.mjs` to parse the master markdown and regenerate `supabase/seeds/seed_concepts.sql` (300 concepts synced with curriculum structure).
-- 2025-11-03: Refreshed `docs/references/DEVELOPMENT_SETUP.md` with the markdown-driven seed workflow and canonical content guidance.
-- 2025-11-03: Published `docs/references/PHASE_BACKLOG.md` to outline Phase 0/Phase 1 engineering backlog and learner experience components.
-- 2025-11-03: Logged schema decisions for prerequisites, draft content, and media moderation in `docs/references/SCHEMA_DECISIONS.md`.
-- 2025-11-03: Documented moderation SLA and notification plan in `docs/references/MODERATION_SLA.md`.
-- 2025-11-03: Defined learner analytics event catalog in `docs/references/ANALYTICS_EVENTS.md`.
-- 2025-11-03: Wired Husky pre-commit hook and GitHub Action `Content Seed Guard` to enforce markdown-driven seed consistency.
-- 2025-11-03: Added curriculum snapshot + markdown validation guards (pre-commit + CI) and documented the workflow in `docs/TESTING_GUIDE.md`.
-- 2025-11-03: Confirmed no standalone wireframe assets exist; UX considerations live in `docs/references/UX_MOBILE_WIREFRAMES.md`.
-- [x] Record schema extension decisions after prerequisite + moderation tables are modelled (tracked in `docs/references/SCHEMA_DECISIONS.md`).
-- [x] Log outcomes from wireframing sessions (screenshots/links) for future reference (no standalone assets; see `docs/references/UX_MOBILE_WIREFRAMES.md`).
-- [x] Document moderation SLA/notification strategy once agreed (captured in `docs/references/MODERATION_SLA.md`).
+- 2025-11-03: Build Sprint 1 created after planning merge; backlog seeded from `docs/references/ISSUE_TRACKER.md`.
+
+> Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Review the schema decision log (prerequisites, drafts, media states) with stakeholders before shipping migrations.
-- Validate personas/permissions and map them to Auth roles/policies.
-- Translate the new learner experience backlog (`docs/references/PHASE_BACKLOG.md`) into tracked issues for Section board, concept view, and study queue delivery.
-- Close this planning session and spin up a build-focused session plan covering backend/frontend implementation.
+- Spin out GitHub issues for backend and frontend slices (LX-001 to LX-005, DB-001 to DB-003, AUTO items already done).
+- Establish project scaffolds: initialise SvelteKit app and backend service structure.
+- Draft prerequisite dependency migration for review before execution.
+- Confirm Supabase credentials and environment setup for implementation contributors.
 
 ## Branching & Testing Strategy
 
-- Maintain short-lived feature branches off `main`; scope them to single roadmap items.
-- Block merges on lint/tests once automation is configured; capture manual QA notes in PR descriptions.
-- Use `docs/session/current_session.md` to track context so branches remain lightweight for AI agent collaboration.
+- Use feature branches per issue (e.g., `feature/lx-001-section-board`).
+- Require pre-commit hooks to pass; add lint/test scripts to PR checks before merge.
+- Keep PRs narrowly scoped (one slice per PR) with links to Issue Tracker IDs.
 
 ## Wrap-up Checklist
 
-- [ ] Review open checkboxes; move untouched items into issues or future sessions.
-- [ ] Summarise session outcomes (commit notes, PR descriptions, or archive entry).
-- [ ] Ensure `.env` handling and secrets remain excluded from git history.
+- [ ] Backend scaffolding merged and deployable.
+- [ ] Frontend skeleton deployed with live curriculum read-only views.
+- [ ] Admin CRUD MVP behind authentication.
+- [ ] Automation (CI + Husky) green across new tooling.
+- [ ] Documentation updated with any new patterns or tooling decisions.
