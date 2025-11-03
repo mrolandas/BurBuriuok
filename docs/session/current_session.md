@@ -12,9 +12,9 @@ Maintain this document during the active development session. Update checklists,
 
 ### A. Product Definition & UX
 
-- [ ] Draft mobile-first wireframes for curriculum boards, concept detail drawers, and study path runner.
-- [ ] Document dependency surfacing patterns (prerequisite pills, inline drawers, next-step suggestions).
-- [ ] Outline study path templates, including how quizzes and reflections slot in.
+- [x] Draft mobile-first wireframes for curriculum boards, concept detail drawers, and study path runner.
+- [x] Document dependency surfacing patterns (prerequisite pills, inline drawers, next-step suggestions).
+- [x] Outline study path templates, including how quizzes and reflections slot in.
 - [ ] Validate personas and permissions (learner, contributor, admin) against planned workflows.
 
 ### B. Data & Backend Architecture
@@ -23,7 +23,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Design media asset metadata + moderation state tables.
 - [x] Specify API endpoints (read, progress, admin) and contract expectations.
 - [x] Plan audit logging strategy for content edits and approvals.
-- [ ] Define gamification data model (XP, streaks, badges) for future phases.
+- [x] Define gamification data model (XP, streaks, badges) for future phases.
 
 ### C. Admin & Moderation Tools
 
@@ -41,10 +41,10 @@ Maintain this document during the active development session. Update checklists,
 
 ### E. Engagement & Analytics
 
-- [ ] Choose initial badge catalogue and streak rules aligned with curriculum milestones.
-- [ ] Outline spaced repetition algorithm inputs (confidence scores, quiz outcomes, timestamps).
-- [ ] Plan notification cadence (streak nudge, study path completion, pending review).
-- [ ] Establish reporting needs for admins (most-missed concepts, dormant learners).
+- [x] Choose initial badge catalogue and streak rules aligned with curriculum milestones.
+- [x] Outline spaced repetition algorithm inputs (confidence scores, quiz outcomes, timestamps).
+- [x] Plan notification cadence (streak nudge, study path completion, pending review).
+- [x] Establish reporting needs for admins (most-missed concepts, dormant learners).
 
 ### F. Documentation & Delivery
 
@@ -60,6 +60,7 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
 - 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
 - 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
+- 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.
@@ -67,8 +68,8 @@ Maintain this document during the active development session. Update checklists,
 ## Immediate Focus
 
 - Finalise schema extension proposal (prerequisites, drafts, media states) and circulate for review.
-- Sketch core mobile screens to validate navigation and dependency surfacing.
-- Define admin workflow (CRUD + moderation) so backend contracts can follow.
+- Validate personas/permissions and map them to Auth roles/policies.
+- Break down frontend implementation tasks (navigation components, concept detail, study plan runner) into backlog issues.
 
 ## Branching & Testing Strategy
 
