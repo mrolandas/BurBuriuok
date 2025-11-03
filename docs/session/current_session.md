@@ -35,9 +35,9 @@ Maintain this document during the active development session. Update checklists,
 
 ### D. Learner Experience Implementation
 
-- [ ] Break curriculum navigation into component-level backlog (section board, collapsible tree, dependency indicators).
-- [ ] Specify concept view structure (definition, prerequisites, media carousel, actions).
-- [ ] Define study queue interactions (“mark as mastered”, “study later”, “needs review”).
+- [x] Break curriculum navigation into component-level backlog (section board, collapsible tree, dependency indicators).
+- [x] Specify concept view structure (definition, prerequisites, media carousel, actions).
+- [x] Define study queue interactions (“mark as mastered”, “study later”, “needs review”).
 - [ ] Determine analytics events required to monitor learner progression.
 
 ### E. Engagement & Analytics
@@ -66,6 +66,8 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
 - 2025-11-03: Authored `docs/static_info/LBS_concepts_master.md` as the single source of truth for curriculum concepts and linked it to seed automation.
 - 2025-11-03: Updated `content/scripts/build_seed_sql.mjs` to parse the master markdown and regenerate `supabase/seeds/seed_concepts.sql` (300 concepts synced with curriculum structure).
+- 2025-11-03: Refreshed `docs/references/DEVELOPMENT_SETUP.md` with the markdown-driven seed workflow and canonical content guidance.
+- 2025-11-03: Published `docs/references/PHASE_BACKLOG.md` to outline Phase 0/Phase 1 engineering backlog and learner experience components.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.
@@ -74,8 +76,8 @@ Maintain this document during the active development session. Update checklists,
 
 - Finalise schema extension proposal (prerequisites, drafts, media states) and circulate for review.
 - Validate personas/permissions and map them to Auth roles/policies.
-- Break down frontend implementation tasks (navigation components, concept detail, study plan runner) into backlog issues.
-- Establish regression checks so future concept edits update `LBS_concepts_master.md` and regenerate Supabase seeds via CI.
+- Translate the new learner experience backlog (`docs/references/PHASE_BACKLOG.md`) into tracked issues for Section board, concept view, and study queue delivery.
+- Establish regression checks so future concept edits update `LBS_concepts_master.md` and regenerate Supabase seeds via CI (see Automation & Regression Guards backlog section).
 
 ## Branching & Testing Strategy
 

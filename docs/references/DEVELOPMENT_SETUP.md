@@ -34,7 +34,8 @@ This document keeps the development environment expectations in one place. Updat
 2. Switch into the project directory: `cd BurBuriuok`.
 3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. Current local keys live in `.env` (not versioned).
 4. Install dependencies (placeholder until the SvelteKit/Express scaffold lands): `npm install`.
-5. Start the development servers (to be defined once the scaffold is ready). Expected commands:
+5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` before pushing.
+6. Start the development servers (to be defined once the scaffold is ready). Expected commands:
    - `npm run dev:frontend` – launch SvelteKit in development mode.
    - `npm run dev:backend` – launch the Express API locally.
    - `npm run dev` – run both via a concurrent script.
@@ -63,7 +64,7 @@ This document keeps the development environment expectations in one place. Updat
 - `npm run build` – production build for deployment.
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
 - `npm run content:seed:curriculum` – regenerate the normalized curriculum hierarchy seed (`supabase/seeds/seed_curriculum.sql`).
-- `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding (script annotates each concept with `is_required` so we can surface curriculum-mandatory content in the apps).
+- `npm run content:seed:generate` – regenerate concept seeds from `docs/static_info/LBS_concepts_master.md` via `content/scripts/build_seed_sql.mjs` (script annotates each concept with `is_required` and curriculum linkage metadata).
 - `node content/scripts/extract_prototype_content.mjs` – rebuild JSON datasets from `first_draft/index.html` before regenerating seeds.
 
 ### Supabase local push (developer note)
