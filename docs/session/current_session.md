@@ -21,16 +21,16 @@ Maintain this document during the active development session. Update checklists,
 
 - [x] Extend Supabase schema with prerequisite mapping tables and draft/publish flags.
 - [x] Design media asset metadata + moderation state tables.
-- [ ] Specify API endpoints (read, progress, admin) and contract expectations.
-- [ ] Plan audit logging strategy for content edits and approvals.
+- [x] Specify API endpoints (read, progress, admin) and contract expectations.
+- [x] Plan audit logging strategy for content edits and approvals.
 - [ ] Define gamification data model (XP, streaks, badges) for future phases.
 
 ### C. Admin & Moderation Tools
 
 - [ ] Map admin dashboard screens (overview, content CRUD, moderation queue).
-- [ ] Capture validation rules (duplicates, orphan nodes, missing translations) for form submissions.
-- [ ] Describe media approval workflow, notifications, and contributor feedback.
-- [ ] Decide on rate limiting/quota policies for uploads and edits.
+- [x] Capture validation rules (duplicates, orphan nodes, missing translations) for form submissions.
+- [x] Describe media approval workflow, notifications, and contributor feedback.
+- [x] Decide on rate limiting/quota policies for uploads and edits.
 
 ### D. Learner Experience Implementation
 
@@ -58,6 +58,7 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Captured holistic product direction (media moderation, mobile-first UX, engagement strategy) and updated `MASTER_PLAN.md` accordingly.
 - 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
 - 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
+- 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.

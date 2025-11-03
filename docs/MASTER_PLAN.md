@@ -26,32 +26,38 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 ## Experience Blueprint
 
 ### Learner Journey
+
 - Landing screen highlights curriculum sections as “boards” with progress meters and estimated study time.
 - Expanding a section reveals a collapsible tree; each node advertises prerequisites and next steps so learners can navigate depth without losing context.
 - Quick search lives in a persistent bottom navigation item, clustering results by concept/module/media.
 
 ### Concept View
+
 - Definition and translation front and center, followed by prerequisite badges that open inline drawers (no back-navigation needed).
 - “Next concepts” suggestions nudge learners through recommended sequences.
 - Media carousel (images, videos, PDFs) is swipe-friendly and lazy loaded.
 - Immediate actions: mark mastered, add to study queue, launch micro-quiz.
 
 ### Guided Study & Practice
+
 - Curated “study paths” bundle concepts into manageable runs with embedded quizzes and reflections.
 - Adaptive review targets concepts marked as unclear or missed in quizzes, scheduling flashcards automatically.
 - Gentle nudges (push/email later) celebrate streaks and remind learners when progress stalls.
 
 ### Admin Workspace
+
 - Dashboard summarises pending media submissions, draft content, and high-impact concepts (e.g., high failure rate).
 - Editors can add/edit/delete nodes, items, and concepts inline with validation, dependency linking, and preview diffs prior to publish.
 - Versioning supports draft vs published states plus basic history for rollback.
 
 ### Media Moderation Flow
+
 - Authenticated users submit media with metadata (type, language, captions, credit).
 - Submissions queue for admin approval; automated checks enforce quota, MIME type, file size, and malicious content scanning.
 - Approved media inherits contributor attribution and can be revoked or edited at any time.
 
 ## Engagement & Gamification
+
 - Lightweight XP system tracks completed concepts, streaks, and milestones per module.
 - Badges celebrate key achievements (“Rigging Ready”, “Safety Champion”).
 - “Study later” queue and spaced repetition reminders keep learners returning.
@@ -60,16 +66,19 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 ## Technical Direction
 
 ### Backend & Data
+
 - Supabase remains the system of record: curriculum nodes, items, concepts, prerequisites, media assets, user progress, and gamification stats.
 - Future Express (or similar) service mediates requests for rate limiting, validation, and moderation workflows.
 - Content edits follow draft/publish flags with audit logs to track who changed what and when.
 
 ### Frontend & UX
+
 - SvelteKit (or equivalent) mobile-first UI with offline-friendly caching for content and progress snapshots.
 - Persistent menu supporting quick access to curriculum, search, practice, and profile areas.
 - Context-aware drawers and overlays to show prerequisite content without destructive navigation.
 
 ### Media Handling
+
 - Supabase Storage buckets segregated by media type with signed URL access.
 - Metadata tables track moderation state (`pending`, `approved`, `rejected`, `archived`).
 - Automated scanning pipeline (e.g., via edge function or scheduled job) to flag suspicious uploads before admin review.
@@ -77,13 +86,15 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 ## Implementation Roadmap
 
 ### Phase 0 – Platform Foundation
+
 - [x] Generate canonical curriculum + concept seeds and push baseline Supabase schema.
 - [ ] Model prerequisite relationships (node/concept dependency tables + seed alignment).
 - [ ] Define draft/published states and change history tables for content.
-- [ ] Outline API surface (read, progress, admin) with contracts documented.
+- [x] Outline API surface (read, progress, admin) with contracts documented (`docs/references/API_CONTRACTS.md`).
 - [ ] Prepare baseline mobile wireframes for curriculum board and concept view.
 
 ### Phase 1 – Content Management & Moderation
+
 - [ ] Build admin CRUD UI for nodes, items, concepts, and dependencies.
 - [ ] Implement content versioning workflow (draft → review → publish).
 - [ ] Ship media submission pipeline (upload, metadata capture, queued status).
@@ -91,6 +102,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Add automated validation checks (missing fields, duplicate ordinals, orphan dependencies).
 
 ### Phase 2 – Learner Experience
+
 - [ ] Implement curriculum navigation (section boards, collapsible tree, dependency indicators).
 - [ ] Build concept detail view with prerequisite/next concept drawers and media carousel.
 - [ ] Create study path runner (sequence UI + progress HUD).
@@ -98,6 +110,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Ship global search with grouped results and filters.
 
 ### Phase 3 – Engagement & Analytics
+
 - [ ] Introduce streaks, XP, and badge attribution tables + UI surfaces.
 - [ ] Launch adaptive review loop (spaced repetition service + flashcard UI).
 - [ ] Configure nudges/notifications for streak breaks and path completions.
@@ -105,6 +118,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Build lightweight insights dashboard for admins (e.g., most-missed concepts).
 
 ### Phase 4 – Social Layer (Post-MVP)
+
 - [ ] Design concept-level discussion threads with moderation hooks.
 - [ ] Enable upvote/downvote + flag mechanisms.
 - [ ] Create forum channels (navigation, safety, community tips) with tagging.
