@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Prevent commits when the markdown-driven seeds are stale
+npm run content:seed:check

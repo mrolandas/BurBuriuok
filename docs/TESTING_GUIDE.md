@@ -30,12 +30,12 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 ### Regression Guards for Markdown-Driven Seeds
 
 - `npm run content:seed:check` (or `npm run content:seed:generate -- --check`)
-  - Planned flag that regenerates seeds into a temp directory and validates the contents against the committed `supabase/seeds/seed_concepts.sql`.
-  - Fails when the canonical markdown produces drift (missing slugs, changed hierarchy codes, translation mismatches) to prevent silent divergence between source content and database state.
-- Git hook proposal (`pre-commit`)
-  - Runs the check locally before commits touching `docs/static_info/LBS_concepts_master.md` or `content/scripts/build_seed_sql.mjs` are allowed.
-- CI gate
-  - Add a dedicated job `content-regression` once the `--check` flag lands so pull requests fail fast when markdown edits are not followed by regenerated seeds.
+  - Regenerates seed SQL in-memory and validates it against the committed `supabase/seeds/seed_concepts.sql`.
+  - Fails when the canonical markdown produces drift (missing slugs, changed hierarchy codes, translation mismatches) so stale seeds can't slip through.
+- Git hook (`.husky/pre-commit`)
+  - Executes the seed check locally before commits, preventing out-of-date seeds from landing in the repository.
+- CI gate (`.github/workflows/content-seed-guard.yml`)
+  - GitHub Action `Content Seed Guard` installs dependencies with `npm ci` and runs `npm run content:seed:check` on pushes and pull requests targeting `main`.
 
 ## Planned Automated Coverage
 

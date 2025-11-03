@@ -40,6 +40,6 @@ Use this backlog to spin issues or PR scopes. Keep items focused on thin slices 
 
 ## Automation & Regression Guards
 
-- [ ] **Seed regeneration check** – CI job to run `npm run content:seed:check` and fail on diff, guaranteeing master markdown edits propagate (workflow described in `docs/TESTING_GUIDE.md`).
+- [x] **Seed regeneration check** – CI job (`.github/workflows/content-seed-guard.yml`) and Husky pre-commit hook ensure `npm run content:seed:check` fails on drift (details in `docs/TESTING_GUIDE.md`).
 - [ ] **Curriculum snapshot** – nightly/CI task to refresh `docs/static_info/curriculum_in_supabase.csv` and surface drift vs Supabase.
 - [ ] **Concept content tests** – schema validation for master markdown tables to catch missing columns or malformed headings.
