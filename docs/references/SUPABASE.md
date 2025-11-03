@@ -31,7 +31,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
   - `engagement_stats` – XP, streak, and badge counters (phase 3 roadmap).
   - `profiles` / `concept_notes` – remain on the roadmap for authenticated experiences and synced note taking.
 - **Migrations** – once tooling is in place, manage via Supabase CLI (`supabase db diff`, `supabase db push`).
-- **Current migrations** – `0001`–`0005` under `supabase/migrations/` create the schema, add views, introduce the curriculum hierarchy, and extend concepts with curriculum linkage.
+- **Current migrations** – `0001`–`0006` under `supabase/migrations/` create the schema, add views, introduce the curriculum hierarchy, extend concepts with curriculum linkage, and add prerequisite/content-version/media scaffolding.
 
 ### Data Exports & Validations
 

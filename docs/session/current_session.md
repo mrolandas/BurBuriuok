@@ -19,8 +19,8 @@ Maintain this document during the active development session. Update checklists,
 
 ### B. Data & Backend Architecture
 
-- [ ] Extend Supabase schema with prerequisite mapping tables and draft/publish flags.
-- [ ] Design media asset metadata + moderation state tables.
+- [x] Extend Supabase schema with prerequisite mapping tables and draft/publish flags.
+- [x] Design media asset metadata + moderation state tables.
 - [ ] Specify API endpoints (read, progress, admin) and contract expectations.
 - [ ] Plan audit logging strategy for content edits and approvals.
 - [ ] Define gamification data model (XP, streaks, badges) for future phases.
@@ -49,13 +49,15 @@ Maintain this document during the active development session. Update checklists,
 ### F. Documentation & Delivery
 
 - [x] Refresh `docs/MASTER_PLAN.md` with the holistic strategy and phased roadmap.
-- [ ] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
+- [x] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
 - [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
 - [ ] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap.
 
 ## Session Log
 
 - 2025-11-03: Captured holistic product direction (media moderation, mobile-first UX, engagement strategy) and updated `MASTER_PLAN.md` accordingly.
+- 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
+- 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.
