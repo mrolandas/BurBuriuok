@@ -1,6 +1,6 @@
 # Supabase Reference
 
-This document captures how BurBuriuok uses Supabase during early development (starting with V1) and how we expect to evolve the setup over time.
+This document captures how BurBuriuok uses Supabase during early development (starting with V1), how to access the live project, and what changes are planned as we expand admin tooling, moderation, and learner engagement.
 
 ## Current Environment
 
@@ -9,22 +9,35 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - **Anon Key** – `SUPABASE_ANON_KEY` (client-side requests once auth is enabled).
 - **Service Role Key** – `SUPABASE_SERVICE_ROLE_KEY` (server-side only; keep out of client bundles). Stored locally in `.env` for now.
 - **Local fallback** – prior local-stack variables remain commented in `.env` in case we need to bring back the on-device Supabase instance for offline work.
+- **Dashboard access** – global admin logs into https://app.supabase.com → project `burburiuok` → Database/Storage/Auth tabs. Only the owner account currently has admin rights; invite additional maintainers directly from the Supabase UI.
 
 > Make sure `.env` is never committed. The repo `.gitignore` already excludes it.
 
-## Database Layout (Draft)
+## Database Layout (Current + Planned)
 
 - **Database name/schema** – create a dedicated schema `burburiuok` in the shared instance to avoid collisions with other projects.
 - **Tables (V1)**
   - `concepts` – canonical curriculum entries, including Lithuanian/English terms, curriculum alignment (`is_required`), and metadata.
     - Required entries trace directly to `docs/static_info/LBS_programa.md`; optional entries provide additional depth but are still surfaced by the same table.
+    - Columns `curriculum_node_code`, `curriculum_item_ordinal`, and `curriculum_item_label` link each concept back to the normalized curriculum hierarchy.
   - `concept_progress` – learned/quiz tracking per (anonymous) device or user token.
-- **Tables (V2+)**
-  - `profiles` – user metadata tied to Supabase Auth users.
-  - `concept_notes` – user-authored notes referencing curriculum concepts.
-  - `media_assets` – metadata for user-uploaded images (concept id, storage path, owner, status, moderation fields, soft-delete markers).
+  - `curriculum_nodes` – hierarchical outline of the LBS curriculum (codes, titles, summaries, parent links, ordinals).
+  - `curriculum_items` – bullet-point leaves (comma-separated items in the source curriculum) associated with their parent node.
+- **Tables (in design)**
+  - `curriculum_dependencies` – explicit mapping between concepts/nodes and their prerequisites (unblocks inline prerequisite drawers).
+  - `content_versions` – draft/publish workflow with audit history (tracks who changed what and when).
+  - `media_assets` – metadata for user-uploaded images, PDFs, audio files, and embedded videos (concept id, storage path, contributor id, moderation state).
+  - `media_reviews` – queue of pending moderation decisions (approved/rejected, reviewer, timestamps).
+  - `engagement_stats` – XP, streak, and badge counters (phase 3 roadmap).
+  - `profiles` / `concept_notes` – remain on the roadmap for authenticated experiences and synced note taking.
 - **Migrations** – once tooling is in place, manage via Supabase CLI (`supabase db diff`, `supabase db push`).
-- **Current migration** – `supabase/migrations/0001_initial_schema.sql` creates the schema and V1 tables.
+- **Current migrations** – `0001`–`0005` under `supabase/migrations/` create the schema, add views, introduce the curriculum hierarchy, and extend concepts with curriculum linkage.
+
+### Data Exports & Validations
+
+- `content/raw/curriculum_structure.json` is the canonical JSON source for curriculum nodes/items.
+- Run `node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv` to refresh the published curriculum snapshot used for doc reviews.
+- Run `node tests/exportCurriculumTree.mjs` without arguments for a quick on-screen tree view that matches the seeded structure in Supabase.
 
 ## Storage Buckets (Planned)
 
@@ -33,6 +46,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
   - File size/extension limits (e.g., JPEG/PNG under 5 MB).
   - Public read for approved assets, restricted write/delete to owners + moderators.
 - Maintain separate folder structure for approved vs pending moderation (e.g., `pending/{conceptId}/{userId}/` and `approved/{conceptId}/`).
+- Add additional buckets if needed (e.g., `concept-documents`, `concept-audio`). Keep moderation metadata in `media_assets` regardless of physical bucket.
 
 ## Auth Considerations
 
@@ -43,21 +57,30 @@ This document captures how BurBuriuok uses Supabase during early development (st
 ## Local Development Workflow
 
 1. Ensure you are logged into the Supabase CLI with a personal access token: `npx supabase login`.
-2. From the repo root, push migrations to the hosted project: `npx supabase db push --project-ref zvlziltltbalebqpmuqs`.
-3. Generate the latest seed SQL (`npm run content:seed:generate`) after extracting prototype content (`node content/scripts/extract_prototype_content.mjs`). The generator reports how many concepts are tagged `is_required` vs optional so you can sanity-check curriculum coverage.
-4. Seed concepts by running the generated SQL in the SQL editor or via CLI (see below).
+2. Link the local repository to the hosted project (one-time per machine): `npx supabase link --project-ref zvlziltltbalebqpmuqs`.
+3. Regenerate curriculum data prior to deployment:
+
+- `npm run content:seed:curriculum` to rebuild `supabase/seeds/seed_curriculum.sql`.
+- `npm run content:seed:generate` to rebuild `supabase/seeds/seed_concepts.sql` (uses the normalized curriculum JSON).
+- Optional sanity check: `node tests/exportCurriculumTree.mjs --format tree` to verify hierarchy output before seeding.
+
+4. Push migrations and apply seeds in a single step: `npx supabase db push --include-seed`.
 5. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`).
-6. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local`.
+6. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local --include-seed`.
 
 ### Applying seeds via CLI
 
-Supabase CLI does not yet support direct seed execution against hosted projects. Options:
+The Supabase CLI can run seeds when `--include-seed` is provided. Example workflows:
 
-- Open the Supabase web console → SQL Editor → run `supabase/seeds/seed_concepts.sql` (regenerate it first with `npm run content:seed:generate`).
-- Or provision a temporary local stack, run migrations + seeds locally, then export/import the data using `pg_dump`/`psql`.
+- **Hosted project**: `npx supabase db push --include-seed` (after linking), which applies migrations then executes every SQL file matching the `supabase/seeds/*.sql` glob.
+- **Local stack**: `npx supabase db push --local --include-seed` after launching `supabase start`.
+
+If manual execution is ever required, open the Supabase web console → SQL Editor → run `supabase/seeds/seed_curriculum.sql` followed by `supabase/seeds/seed_concepts.sql`.
 
 ## Future Migration Plan
 
 - When moving to hosted Supabase, create environment-specific `.env` files (`.env.development`, `.env.production`).
 - Rotate anon/service keys and update GitHub Action secrets.
-- Configure object storage CDN and image moderation tooling before enabling public image uploads.
+- Configure object storage CDN and image moderation tooling before enabling public media uploads.
+- Add automated checks (edge functions or scheduled jobs) to scan pending uploads and notify moderators.
+- Capture all schema evolution in migrations + documentation; update this reference whenever tables/policies change.
