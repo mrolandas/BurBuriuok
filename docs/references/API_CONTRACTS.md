@@ -59,6 +59,7 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
 | PATCH | `/media-submissions/:id` | Allow contributor to withdraw pending submission. |
 
 Progress endpoints accept optional `deviceKey` header to support offline caching; server falls back to authenticated user ID.
+Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/GAMIFICATION_MODEL.md`.
 
 ## Admin Endpoints
 
@@ -84,7 +85,7 @@ Progress endpoints accept optional `deviceKey` header to support offline caching
 
 | Method | Path | Description |
 | ------ | ---- | ----------- |
-| GET | `/admin/media`, query `status=pending|approved|rejected` | Paginates submissions with contributor info. |
+| GET | `/admin/media`, query `status=pending\|approved\|rejected` | Paginates submissions with contributor info. |
 | POST | `/admin/media/:id/decision` | Body `{ decision: 'approved' | 'rejected', notes? }` updates `media_assets.status`, creates `media_reviews` row, notifies contributor. |
 | POST | `/admin/media/:id/reassign` | Optional future endpoint to re-map asset to a different concept/node. |
 
