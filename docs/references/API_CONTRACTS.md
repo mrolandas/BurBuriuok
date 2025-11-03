@@ -12,13 +12,13 @@ JWTs are verified with Supabase public keys. Requests without a valid token are 
 
 ## Public Read Endpoints
 
-| Method | Path | Query Params | Description |
-| ------ | ---- | ------------ | ----------- |
-| GET | `/curriculum` | `level?` – optional depth filter (`1` = topic, `2` = section, `3+` = sub-sections) | Returns all curriculum nodes ordered by ordinal. Includes nested items for the requested depth. |
-| GET | `/curriculum/:code` |  | Returns a single node by code with parent, children, items, and dependencies. |
-| GET | `/concepts` | `sectionCode?`, `nodeCode?`, `requiredOnly?` | Lists concepts with pagination (`page`, `pageSize` to add later). |
-| GET | `/concepts/:slug` |  | Returns concept detail plus prerequisite and next-step summaries. |
-| GET | `/search` | `q`, `limit?` | Full-text search across concepts, nodes, and media captions. |
+| Method | Path                | Query Params                                                                       | Description                                                                                     |
+| ------ | ------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| GET    | `/curriculum`       | `level?` – optional depth filter (`1` = topic, `2` = section, `3+` = sub-sections) | Returns all curriculum nodes ordered by ordinal. Includes nested items for the requested depth. |
+| GET    | `/curriculum/:code` |                                                                                    | Returns a single node by code with parent, children, items, and dependencies.                   |
+| GET    | `/concepts`         | `sectionCode?`, `nodeCode?`, `requiredOnly?`                                       | Lists concepts with pagination (`page`, `pageSize` to add later).                               |
+| GET    | `/concepts/:slug`   |                                                                                    | Returns concept detail plus prerequisite and next-step summaries.                               |
+| GET    | `/search`           | `q`, `limit?`                                                                      | Full-text search across concepts, nodes, and media captions.                                    |
 
 ### Response Shapes
 
@@ -39,9 +39,7 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
     "prerequisites": [
       { "type": "concept", "slug": "laivas", "termLt": "Laivas" }
     ],
-    "nextConcepts": [
-      { "type": "concept", "slug": "kilis", "termLt": "Kilis" }
-    ]
+    "nextConcepts": [{ "type": "concept", "slug": "kilis", "termLt": "Kilis" }]
   },
   "meta": { "fetchedAt": "2025-11-03T15:22:00Z" }
 }
@@ -49,14 +47,14 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
 
 ## Learner (Authenticated) Endpoints
 
-| Method | Path | Description |
-| ------ | ---- | ----------- |
-| GET | `/progress` | Returns concept progress states for the requesting learner (`deviceKey` derived from profile/device binding). |
-| PUT | `/progress/:conceptId` | Body `{ status: "learning" | "known" | "review", lastReviewedAt? }`. Upserts `concept_progress` row. |
-| POST | `/study-queue` | Adds concept to personal queue. Later backed by dedicated table. |
-| DELETE | `/study-queue/:conceptId` | Removes concept from queue. |
-| POST | `/media-submissions` | Upload metadata payload; signed upload URL returned for storage. |
-| PATCH | `/media-submissions/:id` | Allow contributor to withdraw pending submission. |
+| Method | Path                      | Description                                                                                                   |
+| ------ | ------------------------- | ------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------- |
+| GET    | `/progress`               | Returns concept progress states for the requesting learner (`deviceKey` derived from profile/device binding). |
+| PUT    | `/progress/:conceptId`    | Body `{ status: "learning"                                                                                    | "known" | "review", lastReviewedAt? }`. Upserts `concept_progress` row. |
+| POST   | `/study-queue`            | Adds concept to personal queue. Later backed by dedicated table.                                              |
+| DELETE | `/study-queue/:conceptId` | Removes concept from queue.                                                                                   |
+| POST   | `/media-submissions`      | Upload metadata payload; signed upload URL returned for storage.                                              |
+| PATCH  | `/media-submissions/:id`  | Allow contributor to withdraw pending submission.                                                             |
 
 Progress endpoints accept optional `deviceKey` header to support offline caching; server falls back to authenticated user ID.
 Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/GAMIFICATION_MODEL.md`.
@@ -65,36 +63,36 @@ Learner endpoints also accept optional `confidence` payload values (`high`, `med
 
 ### Curriculum & Concepts
 
-| Method | Path | Body | Notes |
-| ------ | ---- | ---- | ----- |
-| POST | `/admin/curriculum/nodes` | `{ code, title, summary?, parentCode?, ordinal }` | Creates node; enforces unique code and ordinal-within-parent. |
-| PATCH | `/admin/curriculum/nodes/:code` | Partial fields | Updates node; writes entry to `content_versions`. |
-| DELETE | `/admin/curriculum/nodes/:code` | | Soft delete by setting status to `archived`; cascade handled via Supabase RLS. |
-| POST | `/admin/curriculum/nodes/:code/items` | `{ ordinal, label }` | Validates ordinal uniqueness for the node. |
-| PATCH | `/admin/curriculum/nodes/:code/items/:ordinal` | Partial | Allows label edits or ordinal swaps. |
-| POST | `/admin/curriculum/dependencies` | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
-| DELETE | `/admin/curriculum/dependencies/:id` | | Removes mapping, writes audit row. |
+| Method | Path                                           | Body                                                           | Notes                                                                                          |
+| ------ | ---------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| POST   | `/admin/curriculum/nodes`                      | `{ code, title, summary?, parentCode?, ordinal }`              | Creates node; enforces unique code and ordinal-within-parent.                                  |
+| PATCH  | `/admin/curriculum/nodes/:code`                | Partial fields                                                 | Updates node; writes entry to `content_versions`.                                              |
+| DELETE | `/admin/curriculum/nodes/:code`                |                                                                | Soft delete by setting status to `archived`; cascade handled via Supabase RLS.                 |
+| POST   | `/admin/curriculum/nodes/:code/items`          | `{ ordinal, label }`                                           | Validates ordinal uniqueness for the node.                                                     |
+| PATCH  | `/admin/curriculum/nodes/:code/items/:ordinal` | Partial                                                        | Allows label edits or ordinal swaps.                                                           |
+| POST   | `/admin/curriculum/dependencies`               | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
+| DELETE | `/admin/curriculum/dependencies/:id`           |                                                                | Removes mapping, writes audit row.                                                             |
 
-| Method | Path | Body | Notes |
-| ------ | ---- | ---- | ----- |
-| POST | `/admin/concepts` | `UpsertConceptInput` | Auto-generates slug if missing; ensures slug uniqueness. |
-| PATCH | `/admin/concepts/:id` | Partial | All writes recorded in `content_versions` with diff snapshot. |
-| DELETE | `/admin/concepts/:id` | | Soft delete only; actual removal requires archived state + manual confirmation. |
+| Method | Path                  | Body                 | Notes                                                                           |
+| ------ | --------------------- | -------------------- | ------------------------------------------------------------------------------- |
+| POST   | `/admin/concepts`     | `UpsertConceptInput` | Auto-generates slug if missing; ensures slug uniqueness.                        |
+| PATCH  | `/admin/concepts/:id` | Partial              | All writes recorded in `content_versions` with diff snapshot.                   |
+| DELETE | `/admin/concepts/:id` |                      | Soft delete only; actual removal requires archived state + manual confirmation. |
 
 ### Media Moderation
 
-| Method | Path | Description |
-| ------ | ---- | ----------- |
-| GET | `/admin/media`, query `status=pending\|approved\|rejected` | Paginates submissions with contributor info. |
-| POST | `/admin/media/:id/decision` | Body `{ decision: 'approved' | 'rejected', notes? }` updates `media_assets.status`, creates `media_reviews` row, notifies contributor. |
-| POST | `/admin/media/:id/reassign` | Optional future endpoint to re-map asset to a different concept/node. |
+| Method | Path                                                       | Description                                                           |
+| ------ | ---------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| GET    | `/admin/media`, query `status=pending\|approved\|rejected` | Paginates submissions with contributor info.                          |
+| POST   | `/admin/media/:id/decision`                                | Body `{ decision: 'approved'                                          | 'rejected', notes? }`updates`media_assets.status`, creates `media_reviews` row, notifies contributor. |
+| POST   | `/admin/media/:id/reassign`                                | Optional future endpoint to re-map asset to a different concept/node. |
 
 ### Audit & Versioning
 
-| Method | Path | Description |
-| ------ | ---- | ----------- |
-| GET | `/admin/audit/content` | Returns paginated `content_versions` entries with filters (`entityType`, `status`, `createdBy`). |
-| GET | `/admin/audit/media` | Returns moderation history from `media_reviews`. |
+| Method | Path                   | Description                                                                                      |
+| ------ | ---------------------- | ------------------------------------------------------------------------------------------------ |
+| GET    | `/admin/audit/content` | Returns paginated `content_versions` entries with filters (`entityType`, `status`, `createdBy`). |
+| GET    | `/admin/audit/media`   | Returns moderation history from `media_reviews`.                                                 |
 
 ## Validation Rules
 

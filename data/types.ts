@@ -1,5 +1,43 @@
 export type ConceptStatus = "learning" | "known" | "review";
 
+export interface CurriculumNodeRow {
+  code: string;
+  title: string;
+  summary: string | null;
+  level: number;
+  parent_code: string | null;
+  ordinal: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CurriculumNode {
+  code: string;
+  title: string;
+  summary: string | null;
+  level: number;
+  parentCode: string | null;
+  ordinal: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CurriculumItemRow {
+  node_code: string;
+  ordinal: number;
+  label: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CurriculumItem {
+  nodeCode: string;
+  ordinal: number;
+  label: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ConceptRow {
   id: string;
   section_code: string;
@@ -13,6 +51,10 @@ export interface ConceptRow {
   description_en: string | null;
   source_ref: string | null;
   metadata: Record<string, unknown> | null;
+  is_required: boolean | null;
+  curriculum_node_code: string | null;
+  curriculum_item_ordinal: number | null;
+  curriculum_item_label: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +72,10 @@ export interface Concept {
   descriptionEn: string | null;
   sourceRef: string | null;
   metadata: Record<string, unknown>;
+  isRequired: boolean;
+  curriculumNodeCode: string | null;
+  curriculumItemOrdinal: number | null;
+  curriculumItemLabel: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,6 +92,10 @@ export interface UpsertConceptInput {
   description_en?: string | null;
   source_ref?: string | null;
   metadata?: Record<string, unknown>;
+  is_required?: boolean;
+  curriculum_node_code?: string | null;
+  curriculum_item_ordinal?: number | null;
+  curriculum_item_label?: string | null;
 }
 
 export type ProgressStatus = ConceptStatus;

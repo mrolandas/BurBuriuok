@@ -1,31 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient";
-import type { Concept, ConceptRow, UpsertConceptInput } from "../types";
+import type { Concept, UpsertConceptInput } from "../types";
+import { mapConceptRow } from "./conceptsMapper";
 
 const TABLE = "concepts";
 
 type ConceptsQueryOptions = {
   sectionCode?: string;
 };
-
-function mapRow(row: Partial<ConceptRow>): Concept {
-  return {
-    id: String(row.id ?? ""),
-    sectionCode: String(row.section_code ?? ""),
-    sectionTitle: row.section_title ?? null,
-    subsectionCode: row.subsection_code ?? null,
-    subsectionTitle: row.subsection_title ?? null,
-    slug: String(row.slug ?? ""),
-    termLt: String(row.term_lt ?? ""),
-    termEn: row.term_en ?? null,
-    descriptionLt: row.description_lt ?? null,
-    descriptionEn: row.description_en ?? null,
-    sourceRef: row.source_ref ?? null,
-    metadata: (row.metadata as Record<string, unknown>) ?? {},
-    createdAt: String(row.created_at ?? ""),
-    updatedAt: String(row.updated_at ?? ""),
-  };
-}
 
 export async function listConcepts(
   client: SupabaseClient | null = null,
@@ -48,7 +30,7 @@ export async function listConcepts(
     throw new Error(`Failed to fetch concepts: ${error.message}`);
   }
 
-  return (data ?? []).map(mapRow);
+  return (data ?? []).map(mapConceptRow);
 }
 
 export async function getConceptBySlug(
@@ -71,7 +53,7 @@ export async function getConceptBySlug(
     );
   }
 
-  return data ? mapRow(data) : null;
+  return data ? mapConceptRow(data) : null;
 }
 
 export async function upsertConcepts(

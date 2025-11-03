@@ -15,7 +15,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Draft mobile-first wireframes for curriculum boards, concept detail drawers, and study path runner.
 - [x] Document dependency surfacing patterns (prerequisite pills, inline drawers, next-step suggestions).
 - [x] Outline study path templates, including how quizzes and reflections slot in.
-- [ ] Validate personas and permissions (learner, contributor, admin) against planned workflows.
+- [x] Validate personas and permissions (learner, contributor, admin) against planned workflows.
 
 ### B. Data & Backend Architecture
 
@@ -61,6 +61,7 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
 - 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
 - 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
+- 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.

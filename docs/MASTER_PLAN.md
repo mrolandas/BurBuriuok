@@ -91,7 +91,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Model prerequisite relationships (node/concept dependency tables + seed alignment).
 - [ ] Define draft/published states and change history tables for content.
 - [x] Outline API surface (read, progress, admin) with contracts documented (`docs/references/API_CONTRACTS.md`).
-- [ ] Prepare baseline mobile wireframes for curriculum board and concept view.
+- [x] Prepare baseline mobile wireframes for curriculum board and concept view (`docs/references/UX_MOBILE_WIREFRAMES.md`).
 
 ### Phase 1 – Content Management & Moderation
 
@@ -100,6 +100,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Ship media submission pipeline (upload, metadata capture, queued status).
 - [ ] Deliver admin moderation queue with approve/reject actions and notifications.
 - [ ] Add automated validation checks (missing fields, duplicate ordinals, orphan dependencies).
+- [ ] Finalise role-based UI controls according to `docs/references/PERSONAS_PERMISSIONS.md`.
 
 ### Phase 2 – Learner Experience
 
@@ -108,6 +109,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Create study path runner (sequence UI + progress HUD).
 - [ ] Wire up progress tracking and “study later” queue synced to Supabase.
 - [ ] Ship global search with grouped results and filters.
+- [ ] Personalise recommendations based on gamification/study path data.
 
 ### Phase 3 – Engagement & Analytics
 
@@ -116,6 +118,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Configure nudges/notifications for streak breaks and path completions.
 - [ ] Instrument analytics events for curriculum traversal and practice outcomes.
 - [ ] Build lightweight insights dashboard for admins (e.g., most-missed concepts).
+- [ ] Operationalise gamification rules defined in `docs/references/GAMIFICATION_MODEL.md`.
 
 ### Phase 4 – Social Layer (Post-MVP)
 

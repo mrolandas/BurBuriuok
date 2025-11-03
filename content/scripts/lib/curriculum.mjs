@@ -10,7 +10,7 @@ const DEFAULT_DOC_PATH = path.resolve(
   "../../../docs/static_info/LBS_programa.md"
 );
 
-function sanitize(text) {
+export function normalizeCurriculumString(text) {
   return text
     .toLowerCase()
     .normalize("NFD")
@@ -43,14 +43,14 @@ export function createCurriculumMatcher(docPath = DEFAULT_DOC_PATH) {
     throw new Error(`Curriculum document not found at ${docPath}`);
   }
 
-  const docSanitized = sanitize(readFileSync(docPath, "utf8"));
+  const docSanitized = normalizeCurriculumString(readFileSync(docPath, "utf8"));
   const tokenMatchesDoc = buildTokenMatcher(docSanitized);
 
   function isRequired(term) {
     if (!term) return false;
 
     const base = term.split("(")[0];
-    const sanitizedBase = sanitize(base);
+    const sanitizedBase = normalizeCurriculumString(base);
     if (!sanitizedBase) return false;
 
     if (docSanitized.includes(sanitizedBase)) {

@@ -47,12 +47,22 @@ This document keeps the development environment expectations in one place. Updat
 - ESLint + Prettier baseline (rules TBD).
 - Keep UI strings in Lithuanian; internal identifiers and comments in English.
 
+## Reference Guides
+
+- `docs/references/API_CONTRACTS.md` – REST surface, validation rules, rate limits, and persona-level access expectations.
+- `docs/references/ADMIN_DASHBOARD.md` – admin flows, moderation tasks, and analytics widgets that engineering must support.
+- `docs/references/UX_MOBILE_WIREFRAMES.md` – prioritized mobile-first layouts and interaction patterns.
+- `docs/references/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
+- `docs/references/STUDY_PATHS.md` – curated learner journeys, unlock criteria, and backlog items.
+- `docs/references/PERSONAS_PERMISSIONS.md` – persona matrix with role bindings and Supabase RLS considerations.
+
 ## Helpful Utilities
 
 - `npm run lint` – static analysis (to be configured).
 - `npm run test` – run automated tests (see `docs/TESTING_GUIDE.md`).
 - `npm run build` – production build for deployment.
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
+- `npm run content:seed:curriculum` – regenerate the normalized curriculum hierarchy seed (`supabase/seeds/seed_curriculum.sql`).
 - `node content/scripts/build_seed_sql.mjs` – regenerate SQL seed files from raw JSON before seeding (script annotates each concept with `is_required` so we can surface curriculum-mandatory content in the apps).
 - `node content/scripts/extract_prototype_content.mjs` – rebuild JSON datasets from `first_draft/index.html` before regenerating seeds.
 
@@ -76,13 +86,14 @@ Notes:
 
 ### Supabase hosted push
 
-We maintain a hosted project `burburiuok` (ref `zvlziltltbalebqpmuqs`). After logging into the Supabase CLI (`npx supabase login`), run:
+We maintain a hosted project `burburiuok` (ref `zvlziltltbalebqpmuqs`). After logging into the Supabase CLI (`npx supabase login`), link the local repository once per machine and then push migrations plus seeds:
 
 ```bash
-npx supabase db push --project-ref zvlziltltbalebqpmuqs
+npx supabase link --project-ref zvlziltltbalebqpmuqs
+npx supabase db push --include-seed
 ```
 
-This applies the migrations in `supabase/migrations/` to the hosted database. Execute seeds through the Supabase SQL editor or the workflow described in `docs/references/SUPABASE.md`.
+The `--include-seed` flag applies `supabase/seeds/seed_curriculum.sql` and `supabase/seeds/seed_concepts.sql` immediately after migrations so the hosted database always mirrors the generated content. Re-run the content scripts before pushing whenever curriculum data changes.
 
 > Store your Supabase CLI access token outside of `.env` (for example, run `supabase login --token <value>` or export `SUPABASE_ACCESS_TOKEN` in your shell session). Avoid committing the token to the repository.
 

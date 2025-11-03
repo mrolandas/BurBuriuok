@@ -10,3 +10,4 @@ declare module "@supabase/supabase-js" {
 declare const process: {
   env: Record<string, string | undefined>;
 };
+

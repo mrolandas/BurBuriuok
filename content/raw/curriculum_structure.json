@@ -1,0 +1,2823 @@
+{
+  "nodes": [
+    {
+      "code": "1",
+      "title": "JACHTOS KONSTRUKCIJA, ĮRANGA IR BURLAIVIO TEORIJOS PAGRINDAI (4 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 1
+    },
+    {
+      "code": "1.1",
+      "title": "Korpusų ir burlaivių tipai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "1",
+      "ordinal": 1
+    },
+    {
+      "code": "1.1a",
+      "title": "Burinių jachtų korpusų tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.1",
+      "ordinal": 1
+    },
+    {
+      "code": "1.1.1",
+      "title": "Burlaivių tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.1",
+      "ordinal": 2
+    },
+    {
+      "code": "1.2",
+      "title": "Burlaivio sandara",
+      "summary": "korpusas, rangautas, takelažas, burės, burių tipai.",
+      "level": 2,
+      "parent_code": "1",
+      "ordinal": 2
+    },
+    {
+      "code": "1.2.1",
+      "title": "Korpusas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 1
+    },
+    {
+      "code": "1.2.2",
+      "title": "Rangautas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 2
+    },
+    {
+      "code": "1.2.3",
+      "title": "Takelažas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 3
+    },
+    {
+      "code": "1.2.4",
+      "title": "Burių tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 4
+    },
+    {
+      "code": "1.3",
+      "title": "Jachtos įranga",
+      "summary": null,
+      "level": 2,
+      "parent_code": "1",
+      "ordinal": 3
+    },
+    {
+      "code": "1.3.1",
+      "title": "Švartavimo ir inkaravimo priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 1
+    },
+    {
+      "code": "1.3.2",
+      "title": "Avarinės ir gelbėjimo priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 2
+    },
+    {
+      "code": "1.3.3",
+      "title": "Jachtos pagalbinis mechaninis variklis",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 3
+    },
+    {
+      "code": "1.3.4",
+      "title": "Variklio naudojimo atvejai jachtoje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 4
+    },
+    {
+      "code": "1.3.4.1",
+      "title": "Švartuojantis (judant į priekį ir judant atgaline eiga)",
+      "summary": null,
+      "level": 4,
+      "parent_code": "1.3.4",
+      "ordinal": 1
+    },
+    {
+      "code": "1.3.4.2",
+      "title": "Lūžus stiebui",
+      "summary": null,
+      "level": 4,
+      "parent_code": "1.3.4",
+      "ordinal": 2
+    },
+    {
+      "code": "1.3.4.3",
+      "title": "Atliekant manevrus ,,žmogus už borto”",
+      "summary": null,
+      "level": 4,
+      "parent_code": "1.3.4",
+      "ordinal": 3
+    },
+    {
+      "code": "2",
+      "title": "BURIAVIMO TEORIJOS PAGRINDAI",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 2
+    },
+    {
+      "code": "2.1",
+      "title": "Jachtos charakteristikos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 1
+    },
+    {
+      "code": "2.2",
+      "title": "Jachtos teorinis brėžinys. Diametralioji plokštuma. Midelšpanhauto plokštuma. Vaterlinijos, batoksai, španhautai. Buringumo centras ir šoninio pasipriešinimo centras",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 2
+    },
+    {
+      "code": "2.3",
+      "title": "Aerodinaminės jėgos susidarymas (kėlimo, traukos, dreifo jėgos, frontinis ir indukcinis pasipriešinimas). Šių jėgų vektorių schema, jachtos centravimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 3
+    },
+    {
+      "code": "2.4",
+      "title": "Laminarinis oro srauto aptekėjimas, turbulencijos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 4
+    },
+    {
+      "code": "2.5",
+      "title": "Tikrasis vėjas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 5
+    },
+    {
+      "code": "2.6",
+      "title": "Kursinis vėjas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 6
+    },
+    {
+      "code": "2.7",
+      "title": "Vimpelinis vėjas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 7
+    },
+    {
+      "code": "2.8",
+      "title": "Vėjo indikatoriai, vėjarodės ir jų veikimo principas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "2",
+      "ordinal": 8
+    },
+    {
+      "code": "3",
+      "title": "JACHTOS VALDYMO TECHNIKA (6 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 3
+    },
+    {
+      "code": "3.1",
+      "title": "Terminai ir sąvokos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 1
+    },
+    {
+      "code": "3.2",
+      "title": "Jachtos kursai vėjo atžvilgiu. Jachtos kursai pasaulio šalių atžvilgiu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 2
+    },
+    {
+      "code": "3.3",
+      "title": "Jachtos kursai laivų (burinių ir kitų) atžvilgiu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 3
+    },
+    {
+      "code": "3.4",
+      "title": "Manevravimo sąvokos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 4
+    },
+    {
+      "code": "3.5",
+      "title": "Pasiruošimas išplaukti. Jachtos patikrinimas. Jachtos aptakelavimas ir nutakelavimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 5
+    },
+    {
+      "code": "3.6",
+      "title": "Jachtos (švertboto ir kilinės) vairavimas. Dreifo mažinimo būdai lengvose ir sunkiose jachtose. Kaip sumažinti kreną ir kaip reguliuoti diferentą",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 6
+    },
+    {
+      "code": "3.7",
+      "title": "Jachtos valdymas vairu ir burėmis. Jachtos valdymas tik burėmis. Jachtos stabdymo būdai. Švertboto valdymo ypatumai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 7
+    },
+    {
+      "code": "3.8",
+      "title": "Išplaukimas (nuo kranto, prieplaukos, bojos), priplaukimas (prie kranto, prieplaukos, bojos)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 8
+    },
+    {
+      "code": "3.9",
+      "title": "Manevravimas iškritus žmogui už borto (plaukiant su burėmis). Įgulos veiksmai ir žmogaus iškėlimas iš vandens",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 9
+    },
+    {
+      "code": "3.10",
+      "title": "Žmogaus už borto situacija, jachtos apsisukimas ir grįžimas,",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 10
+    },
+    {
+      "code": "3.11",
+      "title": "Švartavimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 11
+    },
+    {
+      "code": "3.11.1",
+      "title": "Atmušų (krancų, fenderių) vietos ir aukščio parinkimas švartuojantis prie aukštos ir žemos krantinės, lagu prie kito laivo",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 1
+    },
+    {
+      "code": "3.11.2",
+      "title": "Švartavimo lyno, jo storio ir ilgio pasirinkimas, apsauga nuo trinties, klampės mazgas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 2
+    },
+    {
+      "code": "3.11.3",
+      "title": "Švartavimo vietos pasirinkimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 3
+    },
+    {
+      "code": "3.11.4",
+      "title": "Jachtos švartavimas prie krantinės, pontono, šonu (lagu), Šliuze, laivagaliu prie krantinės su inkaru priekyje, keliais bortais",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 4
+    },
+    {
+      "code": "3.11.5",
+      "title": "Priplaukimas prie švartavimo vietos, krypties pasirinkimas esant vėjui ir srovei",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 5
+    },
+    {
+      "code": "3.12",
+      "title": "Inkaravimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 12
+    },
+    {
+      "code": "3.12.1",
+      "title": "Vietos parinkimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 1
+    },
+    {
+      "code": "3.12.2",
+      "title": "Inkaro nuleidimo tvarka ir reikalavimai, komandos ir pranešimai. Inkaro grandinės ilgis",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 2
+    },
+    {
+      "code": "3.12.3",
+      "title": "Inkaro iškėlimo tvarka ir reikalavimai, komandos ir pranešimai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 3
+    },
+    {
+      "code": "3.13",
+      "title": "Buriavimas audros sąlygomis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 13
+    },
+    {
+      "code": "3.13.1",
+      "title": "Įgulos pasirengimas ir jachtos paruošimas audrai, buringumo mažinimo būdai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.13",
+      "ordinal": 1
+    },
+    {
+      "code": "3.13.2",
+      "title": "Plaukimas naudojant variklį. Manevrų atlikimas naudojant tik variklį",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.13",
+      "ordinal": 2
+    },
+    {
+      "code": "3.14",
+      "title": "Ypatingi plaukiojimo atvejai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 14
+    },
+    {
+      "code": "3.14.1",
+      "title": "Užplaukimas ant pavėjinės ir priešvėjinės seklumos",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 1
+    },
+    {
+      "code": "3.14.2",
+      "title": "Vilkimas (buksyravimas)",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 2
+    },
+    {
+      "code": "3.14.3",
+      "title": "Pagalbos suteikimas kitam laivui",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 3
+    },
+    {
+      "code": "3.14.4",
+      "title": "Švertboto apvirtimas, atvertimas ir atvertimo technika",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 4
+    },
+    {
+      "code": "3.15",
+      "title": "Avarijos ir jų likvidavimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "3",
+      "ordinal": 15
+    },
+    {
+      "code": "3.15.1",
+      "title": "Nutrūkus",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 1
+    },
+    {
+      "code": "3.15.2",
+      "title": "Atsikabinus",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 2
+    },
+    {
+      "code": "3.15.3",
+      "title": "Suplyšus burei",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 3
+    },
+    {
+      "code": "3.15.4",
+      "title": "Lūžus stiebui, gikui, gafeliui, rumpeliui, vairo plunksnai, nutrūkus šturtrosams",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 4
+    },
+    {
+      "code": "3.15.5",
+      "title": "Pažeidus korpuso hermetiškumą",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 5
+    },
+    {
+      "code": "4",
+      "title": "SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 4
+    },
+    {
+      "code": "4.1",
+      "title": "Saugos planas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 1
+    },
+    {
+      "code": "4.2",
+      "title": "Buriuotojo apranga",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 2
+    },
+    {
+      "code": "4.3",
+      "title": "Gelbėjimo liemenės ir jų tipai pagal plaukiojimo rajoną. Liemenės komplektacija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 3
+    },
+    {
+      "code": "4.4",
+      "title": "Gelbėjimo ratai, gelbėjimo pasagos dėvėjimas, metamoji virvė, metamasis žiburys, metamoji boja (angl. danbouy), saugos diržai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 4
+    },
+    {
+      "code": "4.5",
+      "title": "Gelbėjimo plaustas ir jo pripūtimas, tvarka gelbėjimo plauste",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 5
+    },
+    {
+      "code": "4.6",
+      "title": "Elgesys gelbėjimo operacijos metu (su gelbėtojų kateriu, su gelbėtojų sraigtasparniu)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 6
+    },
+    {
+      "code": "4.7",
+      "title": "Privalomas jachtos inventorius 4-ai ir 5-ai plaukiojimo kategorijoms",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 7
+    },
+    {
+      "code": "4.8",
+      "title": "Priešgaisrinė sauga",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 8
+    },
+    {
+      "code": "4.8.1",
+      "title": "Gesintuvai, jų rūšys galiojimas ir naudojimo taisyklės. Gesintuvų išdėstymo vietos jachtoje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 1
+    },
+    {
+      "code": "4.8.2",
+      "title": "Gaisro gesinimas varikio skyriuje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 2
+    },
+    {
+      "code": "4.8.3",
+      "title": "Elektros instaliacijos sukelto gaisro gesinimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 3
+    },
+    {
+      "code": "4.8.4",
+      "title": "Kitos priešgaisrinės priemonės. Nedegus audeklas, parankinės priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 4
+    },
+    {
+      "code": "4.9",
+      "title": "Pagalbos iškvietimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 9
+    },
+    {
+      "code": "4.10",
+      "title": "Pirmoji medicinos pagalba",
+      "summary": null,
+      "level": 2,
+      "parent_code": "4",
+      "ordinal": 10
+    },
+    {
+      "code": "4.10.1",
+      "title": "Laivo vaistinėlės turinys. Naudojimo instrukcija",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 1
+    },
+    {
+      "code": "4.10.2",
+      "title": "Sumušimai, kaulų lūžiai, galvos traumos",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 2
+    },
+    {
+      "code": "4.10.3",
+      "title": "Žaizdos ir kraujavimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 3
+    },
+    {
+      "code": "4.10.4",
+      "title": "Nudegimai, saulės smūgis,",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 4
+    },
+    {
+      "code": "4.10.5",
+      "title": "Apsinuodijimas maistu",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 5
+    },
+    {
+      "code": "4.10.6",
+      "title": "Dirbtinis kvėpavimas ir išorinis širdies masažas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 6
+    },
+    {
+      "code": "5",
+      "title": "HIDROMETEOROLOGIJA (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 5
+    },
+    {
+      "code": "5.1",
+      "title": "Atmosferos slėgis, jo kaita ir matavimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 1
+    },
+    {
+      "code": "5.2",
+      "title": "Ciklonas, anticiklonas, oro judėjimas juose",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 2
+    },
+    {
+      "code": "5.3",
+      "title": "Orai, oro pablogėjimo požymiai, oro pagerėjimo požymiai, škvalo artėjimo požymiai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 3
+    },
+    {
+      "code": "5.4",
+      "title": "Rūkas ir migla, jų susidarymas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 4
+    },
+    {
+      "code": "5.5",
+      "title": "Vėjas (jo susidarymas, matavimas, Boforto skalė). Vėjo stiprumo nustatymas pagal jūros būklę. Gūsis, škvalas, audra, štormas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 5
+    },
+    {
+      "code": "5.6",
+      "title": "Tipiniai vėjai, vėjų rožė",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 6
+    },
+    {
+      "code": "5.7",
+      "title": "Orų prognozės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 7
+    },
+    {
+      "code": "5.8",
+      "title": "Bangos, jų susidarymas ir matavimas. Bangavimo skalė",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 8
+    },
+    {
+      "code": "5.9",
+      "title": "Potvynių ir atoslūgių reiškinys. Pagrindinės sąvokos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "5",
+      "ordinal": 9
+    },
+    {
+      "code": "6",
+      "title": "NAVIGACIJA, LOCIJA (4 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 6
+    },
+    {
+      "code": "6.1",
+      "title": "Navigacijos paskirtis ir esmė (naudojami jūrlapiai, jų paskirtis, jūrlapių numeracija, platumos ir ilgumos tinklainių žymėjimai. Šiaurės, Pietų pusrutuliai. Žymėjimo principai, grafinio ženklinimo standartas (INT-1“))",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 1
+    },
+    {
+      "code": "6.2",
+      "title": "Geografinės koordinatės, atstumo, greičio, gylio matavimas laivyboje (matai ir prietaisai)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 2
+    },
+    {
+      "code": "6.3",
+      "title": "Matomasis horizontas, jo dalijimo sistemos (laipsniai, rumbai). Merkatoriaus projekcija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 3
+    },
+    {
+      "code": "6.4",
+      "title": "Tikrasis kursas ir pelengas. Magnetinis kompasas ir jo naudojimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 4
+    },
+    {
+      "code": "6.5",
+      "title": "Locija. Apibrėžimas. Paskirtis ir turinys",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 5
+    },
+    {
+      "code": "6.6",
+      "title": "Locijos terminai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 6
+    },
+    {
+      "code": "6.7",
+      "title": "Vidaus vandenų keliai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 7
+    },
+    {
+      "code": "6.8",
+      "title": "Vidaus vandenų locija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 8
+    },
+    {
+      "code": "6.9",
+      "title": "Upių locija. Terminai, sąvokos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 9
+    },
+    {
+      "code": "6.10",
+      "title": "Jūrų locija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 10
+    },
+    {
+      "code": "6.11",
+      "title": "Kliūčių žymėjimo sistemos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 11
+    },
+    {
+      "code": "6.12",
+      "title": "Jūrlapiai ir jų skaitymas (INT 1 standartas)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 12
+    },
+    {
+      "code": "6.13",
+      "title": "Darbo su jūrlapiais taisyklės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 13
+    },
+    {
+      "code": "6.14",
+      "title": "Navigatoriaus-šturmano įrankiai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 14
+    },
+    {
+      "code": "6.15",
+      "title": "Grafinių navigacinių uždavinių sprendimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 15
+    },
+    {
+      "code": "6.16",
+      "title": "Elektroniniai navigacijos prietaisai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 16
+    },
+    {
+      "code": "6.17",
+      "title": "Radiolokatoriaus atšvaitas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "6",
+      "ordinal": 17
+    },
+    {
+      "code": "7",
+      "title": "JŪRŲ TEISĖ (4 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 7
+    },
+    {
+      "code": "7.1",
+      "title": "Lietuvos Respublikos Vidaus vandenų transporto kodeksas. Vidaus vandenų kelių sąvoka, kelių naudotojai (6, 7str.), vidaus vandenų transporto priemonių sąvoka, klasifikacija (14, 15 str.), laivų registravimas ir techninė apžiūra (16 str.), burinių jachtų vadų diplomavimas (19.4 str.), laivo kapitono teisės (20 str.), laivo kapitono pareigos kilus pavojui laivui, žmonėms ir gamtai (21 str.), atlyginimas už pagalbos suteikimą (22 str.), vidaus vandenų transporto priemonių plaukiojimo rajonai (24 str.), valstybinė laivybos Lietuvos Respublikos vidaus vandenyse priežiūra (26 str.), Vidaus vandenų transporto priemonių avarijų saugos tyrimo tikslai ir tvarka (27 str.)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 1
+    },
+    {
+      "code": "7.2",
+      "title": "LIETUVOS RESPUBLIKOS VALSTYBĖS SIENOS IR JOS APSAUGOS ĮSTATYMAS (Suvestinė redakcija nuo 2024-01-01) Sąvokos",
+      "summary": "straipsniai Nr.2/2; 3; 4; 5; 6; 9; 18.",
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 2
+    },
+    {
+      "code": "7.2.1",
+      "title": "Buriavimas pasienio ruože",
+      "summary": null,
+      "level": 3,
+      "parent_code": "7.2",
+      "ordinal": 1
+    },
+    {
+      "code": "7.2.2",
+      "title": "Draudimai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "7.2",
+      "ordinal": 2
+    },
+    {
+      "code": "7.3",
+      "title": "Klaipėdos valstybinio jūrų uosto laivybos taisyklės (3, 4, 6 str.), uosto akvatorijos ribos (priedas nr.1), laivų greičio ribojimas (50 str.), plaukimas laivybos kanalu (38, 54 str.); draudimas plaukioti uosto akvatorija, esant ribotam matomumui ir stipriam vėjui (56, 57 str.), draudimas plaukioti pramoginiams laivams tam tikrose uosto akvatorijos dalyse (62 str.), laivų prasilenkimas su SGD saugykla ir SGD vežančiais laivais (58, 59 str.), laivų eismo valdymas (60, 61, 63 str.), uosto akvatorijoje galiojantys apribojimai (136, 137 str.). Prasilenkimas su dugno gilintuvais (128, 130 str.), vėliavų etiketas uoste (81str.)",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 3
+    },
+    {
+      "code": "7.4",
+      "title": "Pramoginių laivų uostų taisyklės. Bendras supratimas, ką šios taisyklės reglamentuoja",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 4
+    },
+    {
+      "code": "7.5",
+      "title": "Burinių jachtų registravimo taisyklės. Registravimo tvarka, jachtų žymėjimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 5
+    },
+    {
+      "code": "7.6",
+      "title": "Burinių jachtų techninių apžiūrų taisyklės. Bendras supratimas, ką šios taisyklės reglamentuoja",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 6
+    },
+    {
+      "code": "7.7",
+      "title": "Burinių jachtų laivavedžių diplomavimo taisyklės. Laivavedžių kvalifikaciniai laipsniai, jiems keliami reikalavimai ir jų kompetencija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 7
+    },
+    {
+      "code": "7.8",
+      "title": "Buriavimo etiketas ir jūriniai papročiai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 8
+    },
+    {
+      "code": "7.9",
+      "title": "Vėliavų etiketas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 9
+    },
+    {
+      "code": "7.10",
+      "title": "Buriuotojo apranga",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 10
+    },
+    {
+      "code": "7.11",
+      "title": "Ekologiniai reikalavimai, burlaivio ir uosto etiketas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 11
+    },
+    {
+      "code": "7.12",
+      "title": "Buriuotojo etika",
+      "summary": null,
+      "level": 2,
+      "parent_code": "7",
+      "ordinal": 12
+    },
+    {
+      "code": "8",
+      "title": "EUROPOS VIDAUS VANDENŲ LAIVYBOS TAISYKLĖS – CEVNI (6 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 8
+    },
+    {
+      "code": "8.1",
+      "title": "Pagrindinės sąvokos",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 1
+    },
+    {
+      "code": "8.2",
+      "title": "Laivavedys, jo ir įgulos narių pareigos. Laivo valdymas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 2
+    },
+    {
+      "code": "8.3",
+      "title": "Pramoginio laivo dokumentai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 3
+    },
+    {
+      "code": "8.4",
+      "title": "Gelbėjimas ir pagalbos teikimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 4
+    },
+    {
+      "code": "8.5",
+      "title": "Laivavedžio prievolės laivui užplaukus ant seklumos ar nuskendus",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 5
+    },
+    {
+      "code": "8.6",
+      "title": "Laivų ženklinimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 6
+    },
+    {
+      "code": "8.7",
+      "title": "Laivų vizualioji signalizacija. Priemonės",
+      "summary": "žiburiai, skydai, vėliavos, gairelės, cilindrai, rutuliai, rombai, kūgiai ir dvigubi kūgiai.",
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 7
+    },
+    {
+      "code": "8.7.1",
+      "title": "Visų tipų laivų eigos ir stovėjimo navigaciniai žiburiai ir ženklai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.7",
+      "ordinal": 1
+    },
+    {
+      "code": "8.7.2",
+      "title": "Specialioji signalizacija (žiburiai ir ženklai)",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.7",
+      "ordinal": 2
+    },
+    {
+      "code": "8.8",
+      "title": "Laivų garsinė signalizacija",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 8
+    },
+    {
+      "code": "8.9",
+      "title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 9
+    },
+    {
+      "code": "8.10",
+      "title": "Plaukiojimo taisyklės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "8",
+      "ordinal": 10
+    },
+    {
+      "code": "8.10.1",
+      "title": "Sąvokos",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 1
+    },
+    {
+      "code": "8.10.2",
+      "title": "Laivų prasilenkimas su kitais laivais kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 2
+    },
+    {
+      "code": "8.10.3",
+      "title": "Mažųjų laivų prasilenkimas su kitais laivais siaurumose ir vienpusio plaukimo atveju",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 3
+    },
+    {
+      "code": "8.10.4",
+      "title": "Laivų prasilenkimas su kitais laivais darant posūkį, išplaukiant ar įplaukiant į uostą ar intaką",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 4
+    },
+    {
+      "code": "8.10.5",
+      "title": "Sugretėjusių laivų plaukimas viena kryptimi. Dreifavimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 5
+    },
+    {
+      "code": "8.10.6",
+      "title": "Plaukimas šliuzais, užtvankomis ir po tiltais",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 6
+    },
+    {
+      "code": "8.10.7",
+      "title": "Mažųjų laivų plaukimas riboto matomumo sąlygomis",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 7
+    },
+    {
+      "code": "8.10.8",
+      "title": "Ypatingi prioritetai. Laivų prasilenkimas su žvejojančiais ir narus aptarnaujančiais laivais",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 8
+    },
+    {
+      "code": "8.10.9",
+      "title": "Laivų stovėjimo taisyklės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "8.10",
+      "ordinal": 9
+    },
+    {
+      "code": "9",
+      "title": "TARPTAUTINĖS TAISYKLĖS LAIVŲ SUSIDŪRIMAMS JŪROJE IŠVENGTI – COLREGS (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 9
+    },
+    {
+      "code": "9.1",
+      "title": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 1
+    },
+    {
+      "code": "9.2",
+      "title": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 2
+    },
+    {
+      "code": "9.3",
+      "title": "Laivų navigaciniai žiburiai ir ženklai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 3
+    },
+    {
+      "code": "10",
+      "title": "PRAKTINIAI MOKYMAI (12 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 10
+    },
+    {
+      "code": "10.1",
+      "title": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 1
+    },
+    {
+      "code": "10.2",
+      "title": "Burių paruošimas išplaukiant",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 2
+    },
+    {
+      "code": "10.3",
+      "title": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 3
+    },
+    {
+      "code": "10.4",
+      "title": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 4
+    },
+    {
+      "code": "10.5",
+      "title": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 5
+    },
+    {
+      "code": "10.6",
+      "title": "Burių rifavimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 6
+    },
+    {
+      "code": "10.7",
+      "title": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 7
+    },
+    {
+      "code": "10.8",
+      "title": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 8
+    },
+    {
+      "code": "10.9",
+      "title": "Laviruotė prieš vėją ir pavėjui",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 9
+    },
+    {
+      "code": "10.10",
+      "title": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 10
+    },
+    {
+      "code": "10.11",
+      "title": "Manevras „žmogus už borto“ plaukiant burėmis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 11
+    },
+    {
+      "code": "10.12",
+      "title": "Manevras „žmogus už borto“ plaukiant varikliu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 12
+    },
+    {
+      "code": "10.13",
+      "title": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 13
+    },
+    {
+      "code": "10.14",
+      "title": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 14
+    },
+    {
+      "code": "10.15",
+      "title": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 15
+    },
+    {
+      "code": "10.16",
+      "title": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 16
+    },
+    {
+      "code": "10.17",
+      "title": "Jūriniai mazgai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 17
+    }
+  ],
+  "items": [
+    {
+      "node_code": "1.1a",
+      "ordinal": 1,
+      "label": "jolė"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 2,
+      "label": "švertbotas"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 3,
+      "label": "kilinė jachta"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 4,
+      "label": "kompromisas"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 5,
+      "label": "katamaranas"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 6,
+      "label": "trimaranas"
+    },
+    {
+      "node_code": "1.1a",
+      "ordinal": 7,
+      "label": "proa."
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 1,
+      "label": "ketas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 2,
+      "label": "šliupas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 3,
+      "label": "kuteris (tenderis)"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 4,
+      "label": "kečas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 5,
+      "label": "jolas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 6,
+      "label": "škuna"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 7,
+      "label": "brigantina"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 8,
+      "label": "brigas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 9,
+      "label": "barkentina"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 10,
+      "label": "barkas"
+    },
+    {
+      "node_code": "1.1.1",
+      "ordinal": 11,
+      "label": "burinis laivas."
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 1,
+      "label": "falškilis"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 2,
+      "label": "kilis"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 3,
+      "label": "kilsonas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 4,
+      "label": "floras"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 5,
+      "label": "stepsas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 6,
+      "label": "španhautai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 7,
+      "label": "stringeriai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 8,
+      "label": "knicos"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 9,
+      "label": "bimsai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 10,
+      "label": "pusbimsiai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 11,
+      "label": "karlingsai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 12,
+      "label": "komingsai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 13,
+      "label": "pileriai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 14,
+      "label": "švertas (šliūžė)"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 15,
+      "label": "šverto šulinys"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 16,
+      "label": "šverto talė"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 17,
+      "label": "pakabinamasis ir stacionarusis vairas (skegas, vairo plunksna, vairo dėžė, sorlynis, baleris, vairo galvutė, rumpelis, šturvalas, šturtrosai)"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 18,
+      "label": "balansyrinis ir pusiau balansyrinis vairas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 19,
+      "label": "forštevenis"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 20,
+      "label": "achterštevenis"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 21,
+      "label": "priekinė ir galinė nuosvyros"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 22,
+      "label": "deidvudas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 23,
+      "label": "kairysis bortas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 24,
+      "label": "dešinysis bortas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 25,
+      "label": "falšbortas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 26,
+      "label": "denio sritys (bakas, midelis, jutas, kokpitas, kajutės antstatas, falšbortas). Denio dalys: relingai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 27,
+      "label": "lejeriai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 28,
+      "label": "lejerių stovai. Patalpos po deniu: forpikas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 29,
+      "label": "kajutė"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 30,
+      "label": "kajutkompanija"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 31,
+      "label": "achterpikas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 32,
+      "label": "triumas"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 33,
+      "label": "galjunas (WC)"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 34,
+      "label": "kambuzas (virtuvė)"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 35,
+      "label": "variklio skyrius"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 36,
+      "label": "liukai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 37,
+      "label": "iliuminatoriai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 38,
+      "label": "ventiliatoriai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 39,
+      "label": "vandens tankai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 40,
+      "label": "vandens tiekimo sistemos"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 41,
+      "label": "špigatai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 42,
+      "label": "triumo siurbliai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 43,
+      "label": "ventiliacijos alsuokliai"
+    },
+    {
+      "node_code": "1.2.1",
+      "ordinal": 44,
+      "label": "deflektoriai."
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 1,
+      "label": "stiebas (stiebo topas, klotikas, pėda, šporas, pertnersas, zalingai)"
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 2,
+      "label": "gikas"
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 3,
+      "label": "bušpritas"
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 4,
+      "label": "spinakerio gikas"
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 5,
+      "label": "gafelis"
+    },
+    {
+      "node_code": "1.2.2",
+      "ordinal": 6,
+      "label": "jų pėdos ir nokai. Stiebų pavadinimai."
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 1,
+      "label": "nejudamasis (stovimasis) takelažas: forštagai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 2,
+      "label": "achterštagai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 3,
+      "label": "bakštagai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 4,
+      "label": "vantai (topvantai, pagrindiniai vantai)"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 5,
+      "label": "talrepai (tempikliai). Judamasis takelažas: falai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 6,
+      "label": "šotai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 7,
+      "label": "brasai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 8,
+      "label": "halsai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 9,
+      "label": "rifštertai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 10,
+      "label": "topenantai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 11,
+      "label": "atotampos (groto giko, spinakerio giko barberio). Takelažo detalės: raksai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 12,
+      "label": "karabinai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 13,
+      "label": "šekeliai (jungės)"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 14,
+      "label": "blokai (skridiniai)"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 15,
+      "label": "klampės"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 16,
+      "label": "fiksatoriai (stoporai)"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 17,
+      "label": "kipos"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 18,
+      "label": "putensai"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 19,
+      "label": "gervės"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 20,
+      "label": "grotšotų bėgelis su šliaužikliu"
+    },
+    {
+      "node_code": "1.2.3",
+      "ordinal": 21,
+      "label": "stakselšotų ir kiti bėgeliai su šliaužikliais."
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 1,
+      "label": "tiesioji"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 2,
+      "label": "špritinė"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 3,
+      "label": "gafelinė"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 4,
+      "label": "markoni (bermudinė)"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 5,
+      "label": "liugerinė"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 6,
+      "label": "huari"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 7,
+      "label": "lotyniška"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 8,
+      "label": "džonka. Burės: grotas"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 9,
+      "label": "stakselis"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 10,
+      "label": "genuja (genujietiškas stakselis)"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 11,
+      "label": "simetrinis ir asimetrinis spinakeris"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 12,
+      "label": "triselis"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 13,
+      "label": "audros stakselis. Bermudinio groto konstrukcija: kampų ir kraštinių pavadinimai"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 14,
+      "label": "boutai"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 15,
+      "label": "liktrosas"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 16,
+      "label": "bulinis"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 17,
+      "label": "liuversai"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 18,
+      "label": "falo lentelė"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 19,
+      "label": "latės"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 20,
+      "label": "lačių kišenės"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 21,
+      "label": "rifbantai"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 22,
+      "label": "rifsezeniai"
+    },
+    {
+      "node_code": "1.2.4",
+      "ordinal": 23,
+      "label": "rifštertai."
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 1,
+      "label": "kliuzai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 2,
+      "label": "klampės"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 3,
+      "label": "knechtai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 4,
+      "label": "bitengai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 5,
+      "label": "žiedai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 6,
+      "label": "atmušai (krancai, fenderiai)"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 7,
+      "label": "priekiniai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 8,
+      "label": "galiniai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 9,
+      "label": "pripaudžiamieji lynai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 10,
+      "label": "špringai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 11,
+      "label": "inkarai"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 12,
+      "label": "jų tipai (admiraliteto, Denforto, plūginis, sudedamasis, grybo, sraigtinis, katė, delta)"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 13,
+      "label": "inkaro lynas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 14,
+      "label": "grandinė"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 15,
+      "label": "suktukas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 16,
+      "label": "žvakahalsas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 17,
+      "label": "grandinės stabdis"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 18,
+      "label": "inkaro boja (tomboja). Admiraliteto inkaras: kotas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 19,
+      "label": "štokas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 20,
+      "label": "ragas"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 21,
+      "label": "letena"
+    },
+    {
+      "node_code": "1.3.1",
+      "ordinal": 22,
+      "label": "inkaro kulnas (trentas)."
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 1,
+      "label": "gesintuvai"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 2,
+      "label": "kibirai"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 3,
+      "label": "avarinis rumpelis"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 4,
+      "label": "įrankiai trosams nukirpti"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 5,
+      "label": "kūginių kamščių rinkinys"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 6,
+      "label": "gelbėjimo ratas ir liemenės"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 7,
+      "label": "saugos diržai"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 8,
+      "label": "saugos lejeriai. Avarinių ir gelbėjimo priemonių laikymo jachtoje vietos ir schema. Sanitarinės"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 9,
+      "label": "navigacinės"
+    },
+    {
+      "node_code": "1.3.2",
+      "ordinal": 10,
+      "label": "signalizavimo priemonės."
+    },
+    {
+      "node_code": "1.3.3",
+      "ordinal": 1,
+      "label": "variklių rūšys (dyzeliniai, benzininiai, elektriniai). Variklių galingumas. Variklio paruošimas eksploatacijai"
+    },
+    {
+      "node_code": "1.3.3",
+      "ordinal": 2,
+      "label": "priežiūra."
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 1,
+      "label": "ilgis (LOA)"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 2,
+      "label": "plotis (BMAX)"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 3,
+      "label": "grimzlė (T)"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 4,
+      "label": "vaterlinijos ilgis (LWL)"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 5,
+      "label": "laisvo borto aukštis (F)"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 6,
+      "label": "vandentalpa"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 7,
+      "label": "keliamoji galia"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 8,
+      "label": "stovumas"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 9,
+      "label": "buringumas"
+    },
+    {
+      "node_code": "2.1",
+      "ordinal": 10,
+      "label": "plūdrumas."
+    },
+    {
+      "node_code": "2.5",
+      "ordinal": 1,
+      "label": "stiprumas (TWS) ir kryptis (TWA)."
+    },
+    {
+      "node_code": "2.6",
+      "ordinal": 1,
+      "label": "sąvoka ir susidarymo priežastis."
+    },
+    {
+      "node_code": "2.7",
+      "ordinal": 1,
+      "label": "kryptis (AWA) ir stiprumas (AWS) nustatymas. Susidarymo priežastis ir veikimas."
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 1,
+      "label": "vendas"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 2,
+      "label": "halsas"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 3,
+      "label": "kilti"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 4,
+      "label": "kristi"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 5,
+      "label": "laviruoti"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 6,
+      "label": "buriuoti aštriau/bukiau"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 7,
+      "label": "dreifuoti"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 8,
+      "label": "dreifuoti su burėmis ir be jų"
+    },
+    {
+      "node_code": "3.4",
+      "ordinal": 9,
+      "label": "manevrų komandos."
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 1,
+      "label": "atsižvelgiant į vandens telkinio dugno gruntą"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 2,
+      "label": "povandeninius kliuvinius"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 3,
+      "label": "dugno nuolydį"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 4,
+      "label": "kranto orientyrus"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 5,
+      "label": "meteorologinius"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 6,
+      "label": "hidrologinius"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 7,
+      "label": "teisinius"
+    },
+    {
+      "node_code": "3.12.1",
+      "ordinal": 8,
+      "label": "urbanistinius aspektus."
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 1,
+      "label": "priešvėjiniam vantui"
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 2,
+      "label": "bakštagui"
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 3,
+      "label": "forštagui"
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 4,
+      "label": "achterštagui"
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 5,
+      "label": "stakselio falui"
+    },
+    {
+      "node_code": "3.15.1",
+      "ordinal": 6,
+      "label": "groto falui."
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 1,
+      "label": "pavėjiniam vantui"
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 2,
+      "label": "bakštagui"
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 3,
+      "label": "forštagui"
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 4,
+      "label": "achterštagui"
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 5,
+      "label": "stakselio falui"
+    },
+    {
+      "node_code": "3.15.2",
+      "ordinal": 6,
+      "label": "groto falui."
+    },
+    {
+      "node_code": "4.9",
+      "ordinal": 1,
+      "label": "mob. tel. Nr. 112"
+    },
+    {
+      "node_code": "4.9",
+      "ordinal": 2,
+      "label": "VHF radijo ryšiu"
+    },
+    {
+      "node_code": "4.9",
+      "ordinal": 3,
+      "label": "gestais matomumo ribose"
+    },
+    {
+      "node_code": "4.9",
+      "ordinal": 4,
+      "label": "signalizacinė pirotechnika."
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 1,
+      "label": "baseinas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 2,
+      "label": "akvatorija"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 3,
+      "label": "sekluma"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 4,
+      "label": "sėklius"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 5,
+      "label": "baras"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 6,
+      "label": "rifas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 7,
+      "label": "bankė"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 8,
+      "label": "reidas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 9,
+      "label": "uostas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 10,
+      "label": "avanportas (priešuostis)"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 11,
+      "label": "prieplauka"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 12,
+      "label": "pirsas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 13,
+      "label": "damba"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 14,
+      "label": "molas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 15,
+      "label": "bangolaužis"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 16,
+      "label": "kanalas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 17,
+      "label": "farvateris"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 18,
+      "label": "gairė"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 19,
+      "label": "bakenas"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 20,
+      "label": "boja"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 21,
+      "label": "švyturys"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 22,
+      "label": "pludrusis švyturys"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 23,
+      "label": "sektorinis švyturys"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 24,
+      "label": "kranto orientyras"
+    },
+    {
+      "node_code": "6.6",
+      "ordinal": 25,
+      "label": "vedlinė."
+    },
+    {
+      "node_code": "6.11",
+      "ordinal": 1,
+      "label": "kardinalinė"
+    },
+    {
+      "node_code": "6.11",
+      "ordinal": 2,
+      "label": "lateralinė ir kiti ženklai."
+    },
+    {
+      "node_code": "6.13",
+      "ordinal": 1,
+      "label": "linijų ilgis"
+    },
+    {
+      "node_code": "6.13",
+      "ordinal": 2,
+      "label": "jų braižymas ir kampų nustatymas."
+    },
+    {
+      "node_code": "6.14",
+      "ordinal": 1,
+      "label": "matlankis"
+    },
+    {
+      "node_code": "6.14",
+      "ordinal": 2,
+      "label": "lygiagrečioji liniuotė"
+    },
+    {
+      "node_code": "6.14",
+      "ordinal": 3,
+      "label": "skriestuvas-matuoklis."
+    },
+    {
+      "node_code": "6.15",
+      "ordinal": 1,
+      "label": "pažymėto jūrlapyje taško koordinačių nustatymas"
+    },
+    {
+      "node_code": "6.15",
+      "ordinal": 2,
+      "label": "taško radimas jūrlapyje pagal duotas koordinates"
+    },
+    {
+      "node_code": "6.15",
+      "ordinal": 3,
+      "label": "atstumo tarp dviejų taškų jūrlapyje nustatymas"
+    },
+    {
+      "node_code": "6.15",
+      "ordinal": 4,
+      "label": "tikrojo kurso ar pelengo brėžimas nuo pažymėto jūrlapyje taško"
+    },
+    {
+      "node_code": "6.15",
+      "ordinal": 5,
+      "label": "nubrėžtos jūrlapyje linijos krypties nustatymas."
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 1,
+      "label": "lagas"
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 2,
+      "label": "echolotas"
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 3,
+      "label": "vėjo krypties ir greičio matavimo"
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 4,
+      "label": "GPS (stacionari ir mobili)"
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 5,
+      "label": "A.I.S. (angl. Automatic Identification System)"
+    },
+    {
+      "node_code": "6.16",
+      "ordinal": 6,
+      "label": "kompasas."
+    },
+    {
+      "node_code": "7.2.1",
+      "ordinal": 1,
+      "label": "straipsniai Nr. 14/1; 7.8."
+    },
+    {
+      "node_code": "7.2.2",
+      "ordinal": 1,
+      "label": "straipsniai Nr. 14/12; 13; 14."
+    },
+    {
+      "node_code": "7.9",
+      "ordinal": 1,
+      "label": "buriuojant"
+    },
+    {
+      "node_code": "7.9",
+      "ordinal": 2,
+      "label": "stovint uoste ir nuleidus inkarą"
+    },
+    {
+      "node_code": "7.9",
+      "ordinal": 3,
+      "label": "plaukiant varikliu"
+    },
+    {
+      "node_code": "7.9",
+      "ordinal": 4,
+      "label": "būnant kitos valstybės vandenyse."
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 1,
+      "label": "laivas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 2,
+      "label": "laivas su mechaniniu varikliu"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 3,
+      "label": "burinis laivas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 4,
+      "label": "greitaeigis laivas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 5,
+      "label": "mažasis laivas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 6,
+      "label": "keltas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 7,
+      "label": "žvejojantis laivas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 8,
+      "label": "laivas stovi"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 9,
+      "label": "laivas plaukia"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 10,
+      "label": "saugus greitis"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 11,
+      "label": "diena"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 12,
+      "label": "naktis"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 13,
+      "label": "ribotas matomumas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 14,
+      "label": "trumpas garsas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 15,
+      "label": "ilgas garsas"
+    },
+    {
+      "node_code": "8.1",
+      "ordinal": 16,
+      "label": "labai trumpų garsų serija."
+    },
+    {
+      "node_code": "8.8",
+      "ordinal": 1,
+      "label": "bendrieji signalai (dėmesio, keičiu savo kursą kairėn, dešinėn, atbulinė eiga, negaliu manevruoti, susidūrimo pavojus); signalai atliekant posūkį; signalai esant ribotam matomumui. Nelaimės pranešimo siganalai."
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 1,
+      "label": "draudžiamieji"
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 2,
+      "label": "privalomieji"
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 3,
+      "label": "ribojamieji"
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 4,
+      "label": "nurodomieji"
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 5,
+      "label": "informaciniai"
+    },
+    {
+      "node_code": "8.9",
+      "ordinal": 6,
+      "label": "pagalbiniai."
+    },
+    {
+      "node_code": "8.10.1",
+      "ordinal": 1,
+      "label": "plaukimas aukštyn/žemyn"
+    },
+    {
+      "node_code": "8.10.1",
+      "ordinal": 2,
+      "label": "priešpriešinis plaukimas"
+    },
+    {
+      "node_code": "8.10.1",
+      "ordinal": 3,
+      "label": "kursų susikirtimas"
+    },
+    {
+      "node_code": "8.10.1",
+      "ordinal": 4,
+      "label": "lenkimas."
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 1,
+      "label": "burinio"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 2,
+      "label": "su mechaniniu varikliu"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 3,
+      "label": "žvejojančio"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 4,
+      "label": "velkančio"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 5,
+      "label": "vilkstinės"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 6,
+      "label": "žemkasės"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 7,
+      "label": "stovinčio nuleidus inkarą"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 8,
+      "label": "ant seklumos"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 9,
+      "label": "locmano"
+    },
+    {
+      "node_code": "9.3",
+      "ordinal": 10,
+      "label": "traluojančio minas. Pagrindiniai garso signalai manevruojant. Nelaimės signalai."
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 1,
+      "label": "vytulas (virvės suringavimas)"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 2,
+      "label": "klampės"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 3,
+      "label": "aštuoniukė"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 4,
+      "label": "tikrasis"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 5,
+      "label": "rifo"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 6,
+      "label": "šoto"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 7,
+      "label": "bramšoto"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 8,
+      "label": "paprastasis štekas"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 9,
+      "label": "inkaro"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 10,
+      "label": "gelbėjimo kilpa"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 11,
+      "label": "buksyravimo"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 12,
+      "label": "žvejų"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 13,
+      "label": "piemenų (veblingo)"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 14,
+      "label": "stoporo"
+    },
+    {
+      "node_code": "10.17",
+      "ordinal": 15,
+      "label": "plokščiasis."
+    }
+  ]
+}

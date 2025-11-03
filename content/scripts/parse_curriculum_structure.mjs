@@ -17,6 +17,11 @@ const DEFAULT_OUTPUT_PATH = path.resolve(
   "docs/static_info/temp_structure_interpretation.md"
 );
 
+const DEFAULT_JSON_OUTPUT_PATH = path.resolve(
+  __dirname,
+  "../raw/curriculum_structure.json"
+);
+
 function parseLines(lines) {
   const topics = [];
   const stack = [];
@@ -38,10 +43,12 @@ function parseLines(lines) {
       const remainder = numberedMatch[3] ?? "";
 
       const numberSegments = baseNumber.split(".").filter(Boolean);
-      let level = numberSegments.length || 1;
-
       const topOfStack = stack[stack.length - 1];
-      if (hasTrailingDot && topOfStack && topOfStack.numberKey === baseNumber) {
+      const duplicateWithParent =
+        hasTrailingDot && topOfStack && topOfStack.numberKey === baseNumber;
+
+      let level = numberSegments.length || 1;
+      if (duplicateWithParent && topOfStack) {
         level = topOfStack.level + 1;
       }
 
@@ -51,8 +58,12 @@ function parseLines(lines) {
         level,
         rawText: remainder.trim(),
         title: "",
+        summary: "",
         items: [],
         subsections: [],
+        ordinal: 0,
+        hasTrailingDot,
+        duplicateWithParent,
       };
 
       while (stack.length >= level) {
@@ -60,9 +71,11 @@ function parseLines(lines) {
       }
 
       if (stack.length === 0) {
+        node.ordinal = topics.length + 1;
         topics.push(node);
       } else {
         const parent = stack[stack.length - 1];
+        node.ordinal = parent.subsections.length + 1;
         parent.subsections.push(node);
       }
 
@@ -110,6 +123,7 @@ function finalizeNode(node) {
 
   if (!text) {
     node.title = "";
+    node.summary = "";
   } else {
     const colonIndex = text.indexOf(":");
     const hasItems = colonIndex !== -1 && colonIndex < text.length - 1;
@@ -119,8 +133,15 @@ function finalizeNode(node) {
 
       const itemsText = text.slice(colonIndex + 1).trim();
       node.items = splitItemsPreservingParentheses(itemsText);
+      node.summary = "";
     } else {
-      node.title = hasItems ? text.trim() : text.replace(/\.+$/u, "").trim();
+      if (colonIndex !== -1) {
+        node.title = text.slice(0, colonIndex).replace(/\.+$/u, "").trim();
+        node.summary = text.slice(colonIndex + 1).trim();
+      } else {
+        node.title = text.replace(/\.+$/u, "").trim();
+        node.summary = "";
+      }
     }
   }
 
@@ -142,6 +163,10 @@ function markdownForNode(node, depth = 0) {
     node.title
   }`;
   lines.push(bullet);
+
+  if (node.summary) {
+    lines.push(`${indent}  - summary: ${node.summary}`);
+  }
 
   if (node.items.length) {
     lines.push(
@@ -215,6 +240,56 @@ function buildMarkdown(topics) {
   return markdown;
 }
 
+function alphabeticSuffix(index) {
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  let value = "";
+  let current = index;
+  while (current > 0) {
+    current -= 1;
+    value = letters[current % 26] + value;
+    current = Math.floor(current / 26);
+  }
+  return value;
+}
+
+function buildNodeCode(node) {
+  if (node.duplicateWithParent) {
+    return `${node.numberKey}${alphabeticSuffix(node.ordinal)}`;
+  }
+  return node.numberRaw.replace(/\.$/u, "");
+}
+
+function flattenStructure(topics) {
+  const nodes = [];
+  const items = [];
+
+  function walk(node, parentCode = null) {
+    const code = buildNodeCode(node);
+    nodes.push({
+      code,
+      title: node.title,
+      summary: node.summary || null,
+      level: node.level,
+      parent_code: parentCode,
+      ordinal: node.ordinal,
+    });
+
+    node.items.forEach((label, index) => {
+      items.push({
+        node_code: code,
+        ordinal: index + 1,
+        label: label.trim().replace(/[\s\u00A0]+$/u, ""),
+      });
+    });
+
+    node.subsections.forEach((child) => walk(child, code));
+  }
+
+  topics.forEach((topic) => walk(topic, null));
+
+  return { nodes, items };
+}
+
 function main() {
   const docPath = process.argv[2]
     ? path.resolve(process.argv[2])
@@ -222,6 +297,7 @@ function main() {
   const outputPath = process.argv[3]
     ? path.resolve(process.argv[3])
     : DEFAULT_OUTPUT_PATH;
+  const jsonOutputPath = DEFAULT_JSON_OUTPUT_PATH;
 
   const raw = readFileSync(docPath, "utf8");
   const lines = raw.split(/\r?\n/u);
@@ -232,6 +308,16 @@ function main() {
 
   const markdown = buildMarkdown(topics);
   writeFileSync(outputPath, `${markdown.trim()}\n`, "utf8");
+
+  const structure = flattenStructure(topics);
+  writeFileSync(
+    jsonOutputPath,
+    `${JSON.stringify(structure, null, 2)}\n`,
+    "utf8"
+  );
+  console.log(
+    `Wrote interpretation markdown to ${outputPath} and structure JSON to ${jsonOutputPath}`
+  );
 }
 
 main();
