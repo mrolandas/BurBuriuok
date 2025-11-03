@@ -79,6 +79,13 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Media Handling
 
+## Planning Status (2025-11-03)
+
+- Planning deliverables are consolidated in `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`, `docs/references/ANALYTICS_EVENTS.md`, and `docs/references/ISSUE_TRACKER.md`.
+- Regression guardrail automation (seeds, curriculum snapshot, markdown validation) runs locally via Husky and in CI via `content-seed-guard.yml`.
+- No standalone wireframing assets exist beyond the written UX notes in `docs/references/UX_MOBILE_WIREFRAMES.md`; there are currently no screenshots to maintain.
+- Engineering is cleared to begin backend and frontend implementation using the backlog seeds in `docs/references/ISSUE_TRACKER.md` and the roadmap below.
+
 - Supabase Storage buckets segregated by media type with signed URL access.
 - Metadata tables track moderation state (`pending`, `approved`, `rejected`, `archived`).
 - Automated scanning pipeline (e.g., via edge function or scheduled job) to flag suspicious uploads before admin review.

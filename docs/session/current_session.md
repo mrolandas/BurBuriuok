@@ -73,8 +73,9 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Defined learner analytics event catalog in `docs/references/ANALYTICS_EVENTS.md`.
 - 2025-11-03: Wired Husky pre-commit hook and GitHub Action `Content Seed Guard` to enforce markdown-driven seed consistency.
 - 2025-11-03: Added curriculum snapshot + markdown validation guards (pre-commit + CI) and documented the workflow in `docs/TESTING_GUIDE.md`.
+- 2025-11-03: Confirmed no standalone wireframe assets exist; UX considerations live in `docs/references/UX_MOBILE_WIREFRAMES.md`.
 - [x] Record schema extension decisions after prerequisite + moderation tables are modelled (tracked in `docs/references/SCHEMA_DECISIONS.md`).
-- [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
+- [x] Log outcomes from wireframing sessions (screenshots/links) for future reference (no standalone assets; see `docs/references/UX_MOBILE_WIREFRAMES.md`).
 - [x] Document moderation SLA/notification strategy once agreed (captured in `docs/references/MODERATION_SLA.md`).
 
 ## Immediate Focus
@@ -82,7 +83,7 @@ Maintain this document during the active development session. Update checklists,
 - Review the schema decision log (prerequisites, drafts, media states) with stakeholders before shipping migrations.
 - Validate personas/permissions and map them to Auth roles/policies.
 - Translate the new learner experience backlog (`docs/references/PHASE_BACKLOG.md`) into tracked issues for Section board, concept view, and study queue delivery.
-- Capture wireframing session outputs (screenshots/links) so design artifacts live alongside the requirements.
+- Close this planning session and spin up a build-focused session plan covering backend/frontend implementation.
 
 ## Branching & Testing Strategy
 

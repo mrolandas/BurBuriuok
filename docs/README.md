@@ -8,5 +8,6 @@ Use this directory to keep the working knowledge for BurBuriuok organised and ea
 - `static_info/LBS_programa.md` – authoritative concept list extracted from the Lithuanian Sailing Association curriculum.
 - `references/DEVELOPMENT_SETUP.md` – development environment expectations, local tooling, and helper commands for human and AI contributors.
 - `references/SUPABASE.md` – connection details and usage plan for the shared Supabase stack.
+- `references/ISSUE_TRACKER.md` – backlog-ready issue seeds grouped by workstream with status to accelerate GitHub issue creation.
 
 > Tip: When adding a new document inside `docs/`, link it here with a short description so contributors can discover it quickly.

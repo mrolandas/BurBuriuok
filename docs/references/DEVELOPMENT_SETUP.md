@@ -56,6 +56,7 @@ This document keeps the development environment expectations in one place. Updat
 - `docs/references/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
 - `docs/references/STUDY_PATHS.md` – curated learner journeys, unlock criteria, and backlog items.
 - `docs/references/PERSONAS_PERMISSIONS.md` – persona matrix with role bindings and Supabase RLS considerations.
+- `docs/references/ISSUE_TRACKER.md` – pre-scoped engineering tickets ready to be converted into GitHub issues (status tracked per workstream).
 
 ## Helpful Utilities
 
