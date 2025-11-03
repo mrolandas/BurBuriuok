@@ -1,0 +1,716 @@
+[
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-laivas",
+    "term_lt": "laivas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-laivas-su-mechaniniu-varikliu",
+    "term_lt": "laivas su mechaniniu varikliu",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-burinis-laivas",
+    "term_lt": "burinis laivas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-greitaeigis-laivas",
+    "term_lt": "greitaeigis laivas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-mazasis-laivas",
+    "term_lt": "mažasis laivas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-keltas",
+    "term_lt": "keltas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-zvejojantis-laivas",
+    "term_lt": "žvejojantis laivas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-laivas-stovi",
+    "term_lt": "laivas stovi",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-laivas-plaukia",
+    "term_lt": "laivas plaukia",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-saugus-greitis",
+    "term_lt": "saugus greitis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-diena",
+    "term_lt": "diena",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-naktis",
+    "term_lt": "naktis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-ribotas-matomumas",
+    "term_lt": "ribotas matomumas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-trumpas-garsas",
+    "term_lt": "trumpas garsas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-ilgas-garsas",
+    "term_lt": "ilgas garsas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.1",
+    "section_title": "Pagrindinės sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-1-labai-trumpu-garsu-serija",
+    "term_lt": "labai trumpų garsų serija.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Pagrindinės sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.2",
+    "section_title": "Laivavedys, jo ir įgulos narių pareigos. Laivo valdymas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-2-laivavedys-jo-ir-igulos-nariu-pareigos-laivo-valdymas",
+    "term_lt": "Laivavedys, jo ir įgulos narių pareigos. Laivo valdymas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.3",
+    "section_title": "Pramoginio laivo dokumentai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-3-pramoginio-laivo-dokumentai",
+    "term_lt": "Pramoginio laivo dokumentai",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.4",
+    "section_title": "Gelbėjimas ir pagalbos teikimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-4-gelbejimas-ir-pagalbos-teikimas",
+    "term_lt": "Gelbėjimas ir pagalbos teikimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.5",
+    "section_title": "Laivavedžio prievolės laivui užplaukus ant seklumos ar nuskendus",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-5-laivavedzio-prievoles-laivui-uzplaukus-ant-seklumos-ar-nuskendus",
+    "term_lt": "Laivavedžio prievolės laivui užplaukus ant seklumos ar nuskendus",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.6",
+    "section_title": "Laivų ženklinimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-6-laivu-zenklinimas",
+    "term_lt": "Laivų ženklinimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.7.8.7.1",
+    "section_title": "Visų tipų laivų eigos ir stovėjimo navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-7-8-7-1-visu-tipu-laivu-eigos-ir-stovejimo-navigaciniai-ziburiai-ir-zenklai",
+    "term_lt": "Visų tipų laivų eigos ir stovėjimo navigaciniai žiburiai ir ženklai",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.7.8.7.2",
+    "section_title": "Specialioji signalizacija (žiburiai ir ženklai)",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-7-8-7-2-specialioji-signalizacija-ziburiai-ir-zenklai",
+    "term_lt": "Specialioji signalizacija (žiburiai ir ženklai)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.8",
+    "section_title": "Laivų garsinė signalizacija",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-8-bendrieji-signalai-demesio-keiciu-savo-kursa-kairen-desinen-atbuline-eiga-negaliu-manev",
+    "term_lt": "bendrieji signalai (dėmesio, keičiu savo kursą kairėn, dešinėn, atbulinė eiga, negaliu manevruoti, susidūrimo pavojus); signalai atliekant posūkį; signalai esant ribotam matomumui. Nelaimės pranešimo siganalai.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivų garsinė signalizacija"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-draudziamieji",
+    "term_lt": "draudžiamieji",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-privalomieji",
+    "term_lt": "privalomieji",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-ribojamieji",
+    "term_lt": "ribojamieji",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-nurodomieji",
+    "term_lt": "nurodomieji",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-informaciniai",
+    "term_lt": "informaciniai",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.9",
+    "section_title": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-9-pagalbiniai",
+    "term_lt": "pagalbiniai.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Laivybą vandens keliuose reguliuojantys signaliniai ženklai"
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.1",
+    "section_title": "Sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-1-plaukimas-aukstyn-zemyn",
+    "term_lt": "plaukimas aukštyn/žemyn",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.1",
+    "section_title": "Sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-1-priespriesinis-plaukimas",
+    "term_lt": "priešpriešinis plaukimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.1",
+    "section_title": "Sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-1-kursu-susikirtimas",
+    "term_lt": "kursų susikirtimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.1",
+    "section_title": "Sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-1-lenkimas",
+    "term_lt": "lenkimas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "parent_section": "Sąvokos"
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.2",
+    "section_title": "Laivų prasilenkimas su kitais laivais kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-2-laivu-prasilenkimas-su-kitais-laivais-kursu-susikirtimo-priespriesinio-plaukimo-ir",
+    "term_lt": "Laivų prasilenkimas su kitais laivais kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.3",
+    "section_title": "Mažųjų laivų prasilenkimas su kitais laivais siaurumose ir vienpusio plaukimo atveju",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-3-mazuju-laivu-prasilenkimas-su-kitais-laivais-siaurumose-ir-vienpusio-plaukimo-atveju",
+    "term_lt": "Mažųjų laivų prasilenkimas su kitais laivais siaurumose ir vienpusio plaukimo atveju",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.4",
+    "section_title": "Laivų prasilenkimas su kitais laivais darant posūkį, išplaukiant ar įplaukiant į uostą ar intaką",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-4-laivu-prasilenkimas-su-kitais-laivais-darant-posuki-isplaukiant-ar-iplaukiant-i-uos",
+    "term_lt": "Laivų prasilenkimas su kitais laivais darant posūkį, išplaukiant ar įplaukiant į uostą ar intaką",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.5",
+    "section_title": "Sugretėjusių laivų plaukimas viena kryptimi. Dreifavimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-5-sugretejusiu-laivu-plaukimas-viena-kryptimi-dreifavimas",
+    "term_lt": "Sugretėjusių laivų plaukimas viena kryptimi. Dreifavimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.6",
+    "section_title": "Plaukimas šliuzais, užtvankomis ir po tiltais",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-6-plaukimas-sliuzais-uztvankomis-ir-po-tiltais",
+    "term_lt": "Plaukimas šliuzais, užtvankomis ir po tiltais",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.7",
+    "section_title": "Mažųjų laivų plaukimas riboto matomumo sąlygomis",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-7-mazuju-laivu-plaukimas-riboto-matomumo-salygomis",
+    "term_lt": "Mažųjų laivų plaukimas riboto matomumo sąlygomis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.8",
+    "section_title": "Ypatingi prioritetai. Laivų prasilenkimas su žvejojančiais ir narus aptarnaujančiais laivais",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-8-ypatingi-prioritetai-laivu-prasilenkimas-su-zvejojanciais-ir-narus-aptarnaujanciais",
+    "term_lt": "Ypatingi prioritetai. Laivų prasilenkimas su žvejojančiais ir narus aptarnaujančiais laivais",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "8.8.10.8.10.9",
+    "section_title": "Laivų stovėjimo taisyklės",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "8-8-8-10-8-10-9-laivu-stovejimo-taisykles",
+    "term_lt": "Laivų stovėjimo taisyklės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 8,
+      "is_section_header": true
+    }
+  }
+]

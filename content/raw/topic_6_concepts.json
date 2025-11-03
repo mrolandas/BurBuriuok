@@ -1,0 +1,920 @@
+[
+  {
+    "section_code": "6.6.1",
+    "section_title": "Navigacijos paskirtis ir esmė (naudojami jūrlapiai, jų paskirtis, jūrlapių numeracija, platumos ir ilgumos tinklainių žymėjimai. Šiaurės, Pietų pusrutuliai. Žymėjimo principai, grafinio ženklinimo standartas (INT-1“))",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-1-navigacijos-paskirtis-ir-esme-naudojami-jurlapiai-ju-paskirtis-jurlapiu-numeracija-platu",
+    "term_lt": "Navigacijos paskirtis ir esmė (naudojami jūrlapiai, jų paskirtis, jūrlapių numeracija, platumos ir ilgumos tinklainių žymėjimai. Šiaurės, Pietų pusrutuliai. Žymėjimo principai, grafinio ženklinimo standartas (INT-1“))",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.2",
+    "section_title": "Geografinės koordinatės, atstumo, greičio, gylio matavimas laivyboje (matai ir prietaisai)",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-2-geografines-koordinates-atstumo-greicio-gylio-matavimas-laivyboje-matai-ir-prietaisai",
+    "term_lt": "Geografinės koordinatės, atstumo, greičio, gylio matavimas laivyboje (matai ir prietaisai)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.3",
+    "section_title": "Matomasis horizontas, jo dalijimo sistemos (laipsniai, rumbai). Merkatoriaus projekcija",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-3-matomasis-horizontas-jo-dalijimo-sistemos-laipsniai-rumbai-merkatoriaus-projekcija",
+    "term_lt": "Matomasis horizontas, jo dalijimo sistemos (laipsniai, rumbai). Merkatoriaus projekcija",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.4",
+    "section_title": "Tikrasis kursas ir pelengas. Magnetinis kompasas ir jo naudojimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-4-tikrasis-kursas-ir-pelengas-magnetinis-kompasas-ir-jo-naudojimas",
+    "term_lt": "Tikrasis kursas ir pelengas. Magnetinis kompasas ir jo naudojimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.5",
+    "section_title": "Locija. Apibrėžimas. Paskirtis ir turinys",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-5-locija-apibrezimas-paskirtis-ir-turinys",
+    "term_lt": "Locija. Apibrėžimas. Paskirtis ir turinys",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-baseinas",
+    "term_lt": "baseinas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-akvatorija",
+    "term_lt": "akvatorija",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-sekluma",
+    "term_lt": "sekluma",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-seklius",
+    "term_lt": "sėklius",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-baras",
+    "term_lt": "baras",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-rifas",
+    "term_lt": "rifas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-banke",
+    "term_lt": "bankė",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-reidas",
+    "term_lt": "reidas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-uostas",
+    "term_lt": "uostas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-avanportas-priesuostis",
+    "term_lt": "avanportas (priešuostis)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-prieplauka",
+    "term_lt": "prieplauka",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-pirsas",
+    "term_lt": "pirsas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-damba",
+    "term_lt": "damba",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-molas",
+    "term_lt": "molas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-bangolauzis",
+    "term_lt": "bangolaužis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-kanalas",
+    "term_lt": "kanalas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-farvateris",
+    "term_lt": "farvateris",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-gaire",
+    "term_lt": "gairė",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-bakenas",
+    "term_lt": "bakenas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-boja",
+    "term_lt": "boja",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-svyturys",
+    "term_lt": "švyturys",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-pludrusis-svyturys",
+    "term_lt": "pludrusis švyturys",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-sektorinis-svyturys",
+    "term_lt": "sektorinis švyturys",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-kranto-orientyras",
+    "term_lt": "kranto orientyras",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.6",
+    "section_title": "Locijos terminai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-6-vedline",
+    "term_lt": "vedlinė.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Locijos terminai"
+    }
+  },
+  {
+    "section_code": "6.6.7",
+    "section_title": "Vidaus vandenų keliai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-7-vidaus-vandenu-keliai",
+    "term_lt": "Vidaus vandenų keliai",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.8",
+    "section_title": "Vidaus vandenų locija",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-8-vidaus-vandenu-locija",
+    "term_lt": "Vidaus vandenų locija",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.9",
+    "section_title": "Upių locija. Terminai, sąvokos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-9-upiu-locija-terminai-savokos",
+    "term_lt": "Upių locija. Terminai, sąvokos",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.10",
+    "section_title": "Jūrų locija",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-10-juru-locija",
+    "term_lt": "Jūrų locija",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.11",
+    "section_title": "Kliūčių žymėjimo sistemos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-11-kardinaline",
+    "term_lt": "kardinalinė",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Kliūčių žymėjimo sistemos"
+    }
+  },
+  {
+    "section_code": "6.6.11",
+    "section_title": "Kliūčių žymėjimo sistemos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-11-lateraline-ir-kiti-zenklai",
+    "term_lt": "lateralinė ir kiti ženklai.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Kliūčių žymėjimo sistemos"
+    }
+  },
+  {
+    "section_code": "6.6.12",
+    "section_title": "Jūrlapiai ir jų skaitymas (INT 1 standartas)",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-12-jurlapiai-ir-ju-skaitymas-int-1-standartas",
+    "term_lt": "Jūrlapiai ir jų skaitymas (INT 1 standartas)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "6.6.13",
+    "section_title": "Darbo su jūrlapiais taisyklės",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-13-liniju-ilgis",
+    "term_lt": "linijų ilgis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Darbo su jūrlapiais taisyklės"
+    }
+  },
+  {
+    "section_code": "6.6.13",
+    "section_title": "Darbo su jūrlapiais taisyklės",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-13-ju-braizymas-ir-kampu-nustatymas",
+    "term_lt": "jų braižymas ir kampų nustatymas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Darbo su jūrlapiais taisyklės"
+    }
+  },
+  {
+    "section_code": "6.6.14",
+    "section_title": "Navigatoriaus-šturmano įrankiai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-14-matlankis",
+    "term_lt": "matlankis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Navigatoriaus-šturmano įrankiai"
+    }
+  },
+  {
+    "section_code": "6.6.14",
+    "section_title": "Navigatoriaus-šturmano įrankiai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-14-lygiagrecioji-liniuote",
+    "term_lt": "lygiagrečioji liniuotė",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Navigatoriaus-šturmano įrankiai"
+    }
+  },
+  {
+    "section_code": "6.6.14",
+    "section_title": "Navigatoriaus-šturmano įrankiai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-14-skriestuvas-matuoklis",
+    "term_lt": "skriestuvas-matuoklis.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Navigatoriaus-šturmano įrankiai"
+    }
+  },
+  {
+    "section_code": "6.6.15",
+    "section_title": "Grafinių navigacinių uždavinių sprendimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-15-pazymeto-jurlapyje-tasko-koordinaciu-nustatymas",
+    "term_lt": "pažymėto jūrlapyje taško koordinačių nustatymas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Grafinių navigacinių uždavinių sprendimas"
+    }
+  },
+  {
+    "section_code": "6.6.15",
+    "section_title": "Grafinių navigacinių uždavinių sprendimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-15-tasko-radimas-jurlapyje-pagal-duotas-koordinates",
+    "term_lt": "taško radimas jūrlapyje pagal duotas koordinates",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Grafinių navigacinių uždavinių sprendimas"
+    }
+  },
+  {
+    "section_code": "6.6.15",
+    "section_title": "Grafinių navigacinių uždavinių sprendimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-15-atstumo-tarp-dvieju-tasku-jurlapyje-nustatymas",
+    "term_lt": "atstumo tarp dviejų taškų jūrlapyje nustatymas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Grafinių navigacinių uždavinių sprendimas"
+    }
+  },
+  {
+    "section_code": "6.6.15",
+    "section_title": "Grafinių navigacinių uždavinių sprendimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-15-tikrojo-kurso-ar-pelengo-brezimas-nuo-pazymeto-jurlapyje-tasko",
+    "term_lt": "tikrojo kurso ar pelengo brėžimas nuo pažymėto jūrlapyje taško",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Grafinių navigacinių uždavinių sprendimas"
+    }
+  },
+  {
+    "section_code": "6.6.15",
+    "section_title": "Grafinių navigacinių uždavinių sprendimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-15-nubreztos-jurlapyje-linijos-krypties-nustatymas",
+    "term_lt": "nubrėžtos jūrlapyje linijos krypties nustatymas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Grafinių navigacinių uždavinių sprendimas"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-lagas",
+    "term_lt": "lagas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-echolotas",
+    "term_lt": "echolotas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-vejo-krypties-ir-greicio-matavimo",
+    "term_lt": "vėjo krypties ir greičio matavimo",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-gps-stacionari-ir-mobili",
+    "term_lt": "GPS (stacionari ir mobili)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-a-i-s-angl-automatic-identification-system",
+    "term_lt": "A.I.S. (angl. Automatic Identification System)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.16",
+    "section_title": "Elektroniniai navigacijos prietaisai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-16-kompasas",
+    "term_lt": "kompasas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "parent_section": "Elektroniniai navigacijos prietaisai"
+    }
+  },
+  {
+    "section_code": "6.6.17",
+    "section_title": "Radiolokatoriaus atšvaitas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "6-6-6-17-radiolokatoriaus-atsvaitas",
+    "term_lt": "Radiolokatoriaus atšvaitas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 6,
+      "is_section_header": true
+    }
+  }
+]

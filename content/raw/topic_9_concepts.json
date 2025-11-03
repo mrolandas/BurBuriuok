@@ -1,0 +1,206 @@
+[
+  {
+    "section_code": "9.9.1",
+    "section_title": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-1-bendroji-dalis-atsakomybe-terminai-ir-savokos-laivu-su-mechaniniais-varikliais-ir-buriniu",
+    "term_lt": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "9.9.2",
+    "section_title": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-2-burlaivio-prasilenkimas-su-kitais-laivais-diena-ir-nakti-kursu-susikirtimo-priespriesinio",
+    "term_lt": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-burinio",
+    "term_lt": "burinio",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-su-mechaniniu-varikliu",
+    "term_lt": "su mechaniniu varikliu",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-zvejojancio",
+    "term_lt": "žvejojančio",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-velkancio",
+    "term_lt": "velkančio",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-vilkstines",
+    "term_lt": "vilkstinės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-zemkases",
+    "term_lt": "žemkasės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-stovincio-nuleidus-inkara",
+    "term_lt": "stovinčio nuleidus inkarą",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-ant-seklumos",
+    "term_lt": "ant seklumos",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-locmano",
+    "term_lt": "locmano",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  },
+  {
+    "section_code": "9.9.3",
+    "section_title": "Laivų navigaciniai žiburiai ir ženklai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "9-9-9-3-traluojancio-minas-pagrindiniai-garso-signalai-manevruojant-nelaimes-signalai",
+    "term_lt": "traluojančio minas. Pagrindiniai garso signalai manevruojant. Nelaimės signalai.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 9,
+      "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
+    }
+  }
+]

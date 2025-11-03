@@ -41,21 +41,21 @@ function formatBoolean(value) {
 
 const conceptSchema = z.object({
   section_code: z.string().min(1),
-  section_title: z.string().min(1).nullable().optional(),
-  subsection_code: z.string().min(1).nullable().optional(),
-  subsection_title: z.string().min(1).nullable().optional(),
+  section_title: z.string().nullable().optional(),
+  subsection_code: z.string().nullable().optional(),
+  subsection_title: z.string().nullable().optional(),
   slug: z.string().min(1),
   term_lt: z.string().min(1),
-  term_en: z.string().min(1).nullable().optional(),
-  description_lt: z.string().min(1).nullable().optional(),
-  description_en: z.string().min(1).nullable().optional(),
-  source_ref: z.string().min(1).nullable().optional(),
+  term_en: z.string().nullable().optional(),
+  description_lt: z.string().nullable().optional(),
+  description_en: z.string().nullable().optional(),
+  source_ref: z.string().nullable().optional(),
   is_required: z.boolean().optional(),
 });
 
 function loadConceptRecords() {
   const files = readdirSync(RAW_DIR)
-    .filter((file) => /^section_[a-z0-9_]+_concepts\.json$/i.test(file))
+    .filter((file) => /_(concepts|section_[a-z0-9_]+)\.json$/i.test(file))
     .sort();
 
   if (!files.length) {

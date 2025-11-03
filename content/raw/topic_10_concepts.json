@@ -1,0 +1,529 @@
+[
+  {
+    "section_code": "10.10.1",
+    "section_title": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-1-instruktazas-igulai-jachtos-patikrinimas-ir-paruosimas-plaukti",
+    "term_lt": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.2",
+    "section_title": "Burių paruošimas išplaukiant",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-2-buriu-paruosimas-isplaukiant",
+    "term_lt": "Burių paruošimas išplaukiant",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.3",
+    "section_title": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-3-nuplaukimo-nuo-krantines-pontono-bojos-kitos-plaukiancios-jachtos-su-buremis-arba-vari",
+    "term_lt": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.4",
+    "section_title": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-4-tinkamas-laiko-ir-vietos-parinkimas-iskelti-ar-nuleisti-bures-isplaukiant-bei-atplaukiant",
+    "term_lt": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.5",
+    "section_title": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-5-pagrindines-saugaus-plaukiojimo-uoste-taisykles",
+    "term_lt": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.6",
+    "section_title": "Burių rifavimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-6-buriu-rifavimas",
+    "term_lt": "Burių rifavimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.7",
+    "section_title": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-7-plaukimas-astriais-kursais-posukiai-pries-veja",
+    "term_lt": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.8",
+    "section_title": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-8-plaukimas-pavejiniais-kursais-posukiai-pavejui",
+    "term_lt": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.9",
+    "section_title": "Laviruotė prieš vėją ir pavėjui",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-9-laviruote-pries-veja-ir-pavejui",
+    "term_lt": "Laviruotė prieš vėją ir pavėjui",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.10",
+    "section_title": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-10-jachtos-valdymas-bendravimas-su-igula-komandos-plaukiant-buremis-ivairiomis-oro-salygo",
+    "term_lt": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.11",
+    "section_title": "Manevras „žmogus už borto“ plaukiant burėmis",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-11-manevras-zmogus-uz-borto-plaukiant-buremis",
+    "term_lt": "Manevras „žmogus už borto“ plaukiant burėmis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.12",
+    "section_title": "Manevras „žmogus už borto“ plaukiant varikliu",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-12-manevras-zmogus-uz-borto-plaukiant-varikliu",
+    "term_lt": "Manevras „žmogus už borto“ plaukiant varikliu",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.13",
+    "section_title": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-13-plaukiojimas-varikliu-plaukimas-varikliu-atbuline-eiga-sraigto-sukimosi-itaka",
+    "term_lt": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.14",
+    "section_title": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-14-inkaro-naudojimas-inkaro-lyno-ar-grandines-ilgio-parinkimas",
+    "term_lt": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.15",
+    "section_title": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-15-priplaukimas-prie-krantines-pontono-bojos-kitos-jachtos-plaukiancios-buremis-varikl",
+    "term_lt": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.16",
+    "section_title": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-16-svartavimo-budai-jachtos-sutvarkymas-po-plaukimo",
+    "term_lt": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-vytulas-virves-suringavimas",
+    "term_lt": "vytulas (virvės suringavimas)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-klampes",
+    "term_lt": "klampės",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-astuoniuke",
+    "term_lt": "aštuoniukė",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-tikrasis",
+    "term_lt": "tikrasis",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-rifo",
+    "term_lt": "rifo",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-soto",
+    "term_lt": "šoto",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-bramsoto",
+    "term_lt": "bramšoto",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-paprastasis-stekas",
+    "term_lt": "paprastasis štekas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-inkaro",
+    "term_lt": "inkaro",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-gelbejimo-kilpa",
+    "term_lt": "gelbėjimo kilpa",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-buksyravimo",
+    "term_lt": "buksyravimo",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-zveju",
+    "term_lt": "žvejų",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-piemenu-veblingo",
+    "term_lt": "piemenų (veblingo)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-stoporo",
+    "term_lt": "stoporo",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  },
+  {
+    "section_code": "10.10.17",
+    "section_title": "Jūriniai mazgai",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "10-10-10-17-ploksciasis",
+    "term_lt": "plokščiasis.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 10,
+      "parent_section": "Jūriniai mazgai"
+    }
+  }
+]

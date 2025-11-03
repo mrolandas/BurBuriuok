@@ -70,7 +70,29 @@ Maintain this document during the active development session. Update checklists,
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 - [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.
 - [ ] Log V3 discussion feature requirements (comments, voting, limited formatting) for future roadmapping.
-- [ ] Next session: reshape Supabase schema/seed to mirror `docs/static_info/temp_structure_interpretation.md` (supersedes legacy `first_draft` structure).
+
+### Current Work (Nov 3, 2025) - Option A: Complete Data Foundation
+
+**Decision**: Extend content extraction to cover all 10 curriculum topics before moving to frontend development.
+
+**Rationale**:
+
+- `temp_structure_interpretation.md` shows the full curriculum hierarchy (10 topics, 104 subsections, 55 nested subsections)
+- Current extraction only covers Section 1 from the prototype
+- Having complete dataset enables better UI decisions and prevents rework
+- Seed generation with `is_required` flag is already working for Section 1
+
+**Work Plan**:
+
+1. ✅ Parse curriculum structure (`parse_curriculum_structure.mjs` complete)
+2. 🔄 Extend extraction to topics 2-10 (currently only Section 1 done)
+3. Generate structured JSON for all topics in `content/raw/`
+4. Regenerate `supabase/seeds/seed_concepts.sql` with full dataset
+5. Test seeding on hosted Supabase project (`zvlziltltbalebqpmuqs`)
+6. Merge `feature/full-prototype-seed` to `main`
+7. Then proceed with frontend scaffolding
+
+**Note**: Since topics 2-10 don't have prototype equivalents in `first_draft/`, we'll need to create seed data directly from the curriculum structure or decide on minimal placeholder content.
 
 ## Branching & Testing Strategy
 

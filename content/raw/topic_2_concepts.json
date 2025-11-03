@@ -1,0 +1,291 @@
+[
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-ilgis-loa",
+    "term_lt": "ilgis (LOA)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-plotis-bmax",
+    "term_lt": "plotis (BMAX)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-grimzle-t",
+    "term_lt": "grimzlė (T)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-vaterlinijos-ilgis-lwl",
+    "term_lt": "vaterlinijos ilgis (LWL)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-laisvo-borto-aukstis-f",
+    "term_lt": "laisvo borto aukštis (F)",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-vandentalpa",
+    "term_lt": "vandentalpa",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-keliamoji-galia",
+    "term_lt": "keliamoji galia",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-stovumas",
+    "term_lt": "stovumas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-buringumas",
+    "term_lt": "buringumas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.1",
+    "section_title": "Jachtos charakteristikos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-1-pludrumas",
+    "term_lt": "plūdrumas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Jachtos charakteristikos"
+    }
+  },
+  {
+    "section_code": "2.2.2",
+    "section_title": "Jachtos teorinis brėžinys. Diametralioji plokštuma. Midelšpanhauto plokštuma. Vaterlinijos, batoksai, španhautai. Buringumo centras ir šoninio pasipriešinimo centras",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-2-jachtos-teorinis-brezinys-diametralioji-plokstuma-midelspanhauto-plokstuma-vaterlinijos",
+    "term_lt": "Jachtos teorinis brėžinys. Diametralioji plokštuma. Midelšpanhauto plokštuma. Vaterlinijos, batoksai, španhautai. Buringumo centras ir šoninio pasipriešinimo centras",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "2.2.3",
+    "section_title": "Aerodinaminės jėgos susidarymas (kėlimo, traukos, dreifo jėgos, frontinis ir indukcinis pasipriešinimas). Šių jėgų vektorių schema, jachtos centravimas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-3-aerodinamines-jegos-susidarymas-kelimo-traukos-dreifo-jegos-frontinis-ir-indukcinis-pasi",
+    "term_lt": "Aerodinaminės jėgos susidarymas (kėlimo, traukos, dreifo jėgos, frontinis ir indukcinis pasipriešinimas). Šių jėgų vektorių schema, jachtos centravimas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "2.2.4",
+    "section_title": "Laminarinis oro srauto aptekėjimas, turbulencijos",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-4-laminarinis-oro-srauto-aptekejimas-turbulencijos",
+    "term_lt": "Laminarinis oro srauto aptekėjimas, turbulencijos",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "is_section_header": true
+    }
+  },
+  {
+    "section_code": "2.2.5",
+    "section_title": "Tikrasis vėjas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-5-stiprumas-tws-ir-kryptis-twa",
+    "term_lt": "stiprumas (TWS) ir kryptis (TWA).",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Tikrasis vėjas"
+    }
+  },
+  {
+    "section_code": "2.2.6",
+    "section_title": "Kursinis vėjas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-6-savoka-ir-susidarymo-priezastis",
+    "term_lt": "sąvoka ir susidarymo priežastis.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Kursinis vėjas"
+    }
+  },
+  {
+    "section_code": "2.2.7",
+    "section_title": "Vimpelinis vėjas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-7-kryptis-awa-ir-stiprumas-aws-nustatymas-susidarymo-priezastis-ir-veikimas",
+    "term_lt": "kryptis (AWA) ir stiprumas (AWS) nustatymas. Susidarymo priežastis ir veikimas.",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "parent_section": "Vimpelinis vėjas"
+    }
+  },
+  {
+    "section_code": "2.2.8",
+    "section_title": "Vėjo indikatoriai, vėjarodės ir jų veikimo principas",
+    "subsection_code": null,
+    "subsection_title": null,
+    "slug": "2-2-2-8-vejo-indikatoriai-vejarodes-ir-ju-veikimo-principas",
+    "term_lt": "Vėjo indikatoriai, vėjarodės ir jų veikimo principas",
+    "term_en": "",
+    "description_lt": "",
+    "description_en": "",
+    "source_ref": "LBS_programa.md",
+    "metadata": {
+      "curriculum_required": true,
+      "topic_number": 2,
+      "is_section_header": true
+    }
+  }
+]
