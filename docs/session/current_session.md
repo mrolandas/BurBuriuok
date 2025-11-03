@@ -4,110 +4,76 @@ Maintain this document during the active development session. Update checklists,
 
 ## Objectives
 
-- Establish the multi-layer architecture (frontend, backend, data, content, infra).
-- Move prototype content into structured Supabase-backed stores.
-- Deliver V1 features (terminology browsing, search, progress tracking, basic quizzes, offline-friendly notes).
-- Prepare groundwork for V2 (auth, collaborative notes, image uploads, AI assistant).
+- Translate the refreshed product vision into actionable, mobile-first deliverables.
+- Lock the near-term backlog for backend, admin tooling, and learner experience foundations.
+- Capture moderation, media, and engagement requirements early so implementation stays aligned.
 
 ## Workstreams & Checklists
 
-### 1. Data & Content
+### A. Product Definition & UX
 
-- [x] Define Supabase schema (`concepts`, `concept_progress`) and apply migrations.
-- [x] Extract Section 1 concepts from `first_draft` into structured JSON/CSV.
-- [ ] Seed Supabase `concepts` table with parsed data via seed script.
-- [x] Implement data validation (zod/schema) for concepts before inserting.
-- [x] Document seeding workflow in `content/README.md` (to create).
+- [ ] Draft mobile-first wireframes for curriculum boards, concept detail drawers, and study path runner.
+- [ ] Document dependency surfacing patterns (prerequisite pills, inline drawers, next-step suggestions).
+- [ ] Outline study path templates, including how quizzes and reflections slot in.
+- [ ] Validate personas and permissions (learner, contributor, admin) against planned workflows.
 
-### 2. Frontend (SvelteKit)
+### B. Data & Backend Architecture
 
-- [ ] Initialise SvelteKit project under `frontend/` with TypeScript.
-- [ ] Set up shared Supabase client in `frontend/src/lib/data/` using `data/` package.
-- [ ] Build glossary browsing route (`/concepts`) with list, filters, and search.
-- [ ] Implement concept detail view with note-taking stub (client-only for now).
-- [ ] Add progress toggles synced to Supabase; cache state locally for offline use.
-- [ ] Create UI components (ProgressSummary, SearchBar, ConceptCard) adhering to design guidelines.
-- [ ] Configure localisation/i18n helpers to keep Lithuanian UI strings organised.
+- [ ] Extend Supabase schema with prerequisite mapping tables and draft/publish flags.
+- [ ] Design media asset metadata + moderation state tables.
+- [ ] Specify API endpoints (read, progress, admin) and contract expectations.
+- [ ] Plan audit logging strategy for content edits and approvals.
+- [ ] Define gamification data model (XP, streaks, badges) for future phases.
 
-### 3. Backend (Express)
+### C. Admin & Moderation Tools
 
-- [ ] Scaffold Express app in `backend/` with routing, error handling, logging.
-- [ ] Create health/status endpoint for monitoring.
-- [ ] Implement read-only concept endpoints proxying Supabase (if needed for rate limiting or future caching).
-- [ ] Define progress endpoints (`GET/POST`) to mediate Supabase updates.
-- [ ] Add validation schemas (zod) for backend request/response contracts.
-- [ ] Set up testing harness (Vitest/Jest) for backend services.
+- [ ] Map admin dashboard screens (overview, content CRUD, moderation queue).
+- [ ] Capture validation rules (duplicates, orphan nodes, missing translations) for form submissions.
+- [ ] Describe media approval workflow, notifications, and contributor feedback.
+- [ ] Decide on rate limiting/quota policies for uploads and edits.
 
-### 4. Data Layer
+### D. Learner Experience Implementation
 
-- [x] Implement Supabase client wrapper in `data/supabaseClient.ts`.
-- [x] Create repository modules (`conceptsRepository`, `progressRepository`).
-- [x] Define shared TypeScript types/interfaces for concepts and progress records.
-- [ ] Add lightweight caching utilities for frequently requested data.
-- [ ] Document module usage in `data/README.md`.
+- [ ] Break curriculum navigation into component-level backlog (section board, collapsible tree, dependency indicators).
+- [ ] Specify concept view structure (definition, prerequisites, media carousel, actions).
+- [ ] Define study queue interactions (“mark as mastered”, “study later”, “needs review”).
+- [ ] Determine analytics events required to monitor learner progression.
 
-### 5. Infrastructure & Tooling
+### E. Engagement & Analytics
 
-- [x] Add Supabase CLI workflow (`supabase db push`, `supabase db seed`).
-- [ ] Configure npm scripts for linting, testing, building across layers.
-- [ ] Set up GitHub Actions pipeline (lint + test + build) once code exists.
-- [ ] Draft deployment script for GitHub Pages (frontend) and placeholder for backend hosting.
-- [ ] Plan backup/export routine for Supabase data (manual for now).
+- [ ] Choose initial badge catalogue and streak rules aligned with curriculum milestones.
+- [ ] Outline spaced repetition algorithm inputs (confidence scores, quiz outcomes, timestamps).
+- [ ] Plan notification cadence (streak nudge, study path completion, pending review).
+- [ ] Establish reporting needs for admins (most-missed concepts, dormant learners).
 
-### 6. Documentation & AI Guidance
+### F. Documentation & Delivery
 
-- [ ] Create README in each major directory outlining purpose, entry points, and key commands.
-- [ ] Update `DEVELOPMENT_SETUP.md` as scripts are added.
-- [ ] Keep `SUPABASE.md` synced with schema changes and policies.
-- [ ] Record notable decisions or context in session log below.
+- [x] Refresh `docs/MASTER_PLAN.md` with the holistic strategy and phased roadmap.
+- [ ] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
+- [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
+- [ ] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap.
 
 ## Session Log
 
-- _Use this section to capture decisions, blockers, and notes for future contributors._
+- 2025-11-03: Captured holistic product direction (media moderation, mobile-first UX, engagement strategy) and updated `MASTER_PLAN.md` accordingly.
+- [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
+- [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
+- [ ] Document moderation SLA/notification strategy once agreed.
 
-- [ ] Document why Supabase is used from V1 and any constraints of the shared local instance (updated with hosted project details in `docs/references/SUPABASE.md`).
-- [ ] Record moderation requirements once image upload planning advances.
-- [ ] Note any deviations from the plan and link to follow-up tasks.
-- [ ] Capture Supabase migration/seed execution steps once tested against the shared instance.
-- [ ] Log V3 discussion feature requirements (comments, voting, limited formatting) for future roadmapping.
+## Immediate Focus
 
-### Current Work (Nov 3, 2025) - Option A: Complete Data Foundation
-
-**Decision**: Extend content extraction to cover all 10 curriculum topics before moving to frontend development.
-
-**Rationale**:
-
-- `temp_structure_interpretation.md` shows the full curriculum hierarchy (10 topics, 104 subsections, 55 nested subsections)
-- Current extraction only covers Section 1 from the prototype
-- Having complete dataset enables better UI decisions and prevents rework
-- Seed generation with `is_required` flag is already working for Section 1
-
-**Work Plan**:
-
-1. ✅ Parse curriculum structure (`parse_curriculum_structure.mjs` complete)
-2. 🔄 Extend extraction to topics 2-10 (currently only Section 1 done)
-3. Generate structured JSON for all topics in `content/raw/`
-4. Regenerate `supabase/seeds/seed_concepts.sql` with full dataset
-5. Test seeding on hosted Supabase project (`zvlziltltbalebqpmuqs`)
-6. Merge `feature/full-prototype-seed` to `main`
-7. Then proceed with frontend scaffolding
-
-**Note**: Since topics 2-10 don't have prototype equivalents in `first_draft/`, we'll need to create seed data directly from the curriculum structure or decide on minimal placeholder content.
+- Finalise schema extension proposal (prerequisites, drafts, media states) and circulate for review.
+- Sketch core mobile screens to validate navigation and dependency surfacing.
+- Define admin workflow (CRUD + moderation) so backend contracts can follow.
 
 ## Branching & Testing Strategy
 
-Maintain short-lived feature branches branching from `main`, each focused on a single workstream milestone. Suggested sequence:
-
-1. `feature/data-supabase-schema` – define Supabase schema, seed scripts, and data layer repositories. When ready: run unit tests (if present) and manual Supabase validation; merge into `main` after verifying seed scripts succeed.
-2. `feature/frontend-glossary` – scaffold SvelteKit, build concepts list/search UI consuming the repositories. Manual UI smoke test (Chrome + mobile viewport) before merging.
-3. `feature/backend-progress-api` – implement Express progress/concept endpoints. Run automated tests + manual API calls (Insomnia/curl) prior to merge.
-4. `feature/frontend-progress-sync` – connect UI progress toggles to backend/Supabase. Manual regression test: mark/unmark concepts, reload, ensure state persists.
-5. `feature/content-expansion` – ingest additional sections, update seed data, adjust UI navigation. Manual verification of new content integrity.
-
-After each branch passes manual verification, open a PR targeting `main`, include checklist results, merge upon review, and then branch anew for the next milestone. Keep branches small so AI coding agents can context-switch easily.
+- Maintain short-lived feature branches off `main`; scope them to single roadmap items.
+- Block merges on lint/tests once automation is configured; capture manual QA notes in PR descriptions.
+- Use `docs/session/current_session.md` to track context so branches remain lightweight for AI agent collaboration.
 
 ## Wrap-up Checklist
 
-- [ ] Review all open checkboxes; move incomplete work to new docs or issues.
-- [ ] Summarise session outcomes in repository (commit message, PR, or session archive).
+- [ ] Review open checkboxes; move untouched items into issues or future sessions.
+- [ ] Summarise session outcomes (commit notes, PR descriptions, or archive entry).
 - [ ] Ensure `.env` handling and secrets remain excluded from git history.
