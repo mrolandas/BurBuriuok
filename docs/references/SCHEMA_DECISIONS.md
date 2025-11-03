@@ -5,70 +5,78 @@ This log captures authoritative decisions about the evolving Supabase schema so 
 ## 2025-11-03 – Curriculum Dependencies
 
 - **Tables**: `curriculum_dependencies`
-  - `id` (uuid default gen_random_uuid()) primary key.
-  - `source_node_code` (text, not null) references `curriculum_nodes.code`.
-  - `target_node_code` (text, not null) references `curriculum_nodes.code`.
-  - `source_concept_slug` (text, null) references `concepts.slug` when the dependency is concept-specific.
-  - `target_concept_slug` (text, null) references `concepts.slug`.
-  - `relation_type` (text, default 'prerequisite') for future expansion (e.g., "related", "follow-up").
-  - `notes` (text) for manual annotations.
-  - `created_at` / `updated_at` (timestamptz) with default `timezone('utc', now())`.
-- **Indexes**:
-  - Unique constraint on (`source_node_code`, `target_node_code`, `source_concept_slug`, `target_concept_slug`, `relation_type`).
-  - B-tree index on `target_node_code` to accelerate reverse lookups.
+  - `id` (uuid default `gen_random_uuid()`) primary key.
+  - `source_type` (text) constrained to `concept` or `node`.
+  - `source_concept_id` (uuid, nullable) references `concepts.id` when `source_type = 'concept'`.
+  - `source_node_code` (text, nullable) references `curriculum_nodes.code` when `source_type = 'node'`.
+  - `prerequisite_type` (text) constrained to `concept` or `node`.
+  - `prerequisite_concept_id` (uuid, nullable) references `concepts.id` when `prerequisite_type = 'concept'`.
+  - `prerequisite_node_code` (text, nullable) references `curriculum_nodes.code` when `prerequisite_type = 'node'`.
+  - `notes` (text) for reviewer context.
+  - `created_by` (text) for lightweight audit; defaults handled in seed files.
+  - `created_at` (timestamptz) default `timezone('utc', now())`.
+- **Constraints & Indexes**:
+  - `curriculum_dependencies_source_chk` / `curriculum_dependencies_prerequisite_chk` enforce that concept/node identifiers are mutually exclusive.
+  - Filtered indexes for each lookup leg: `curriculum_dependencies_source_concept_idx`, `curriculum_dependencies_source_node_idx`, `curriculum_dependencies_prereq_concept_idx`, `curriculum_dependencies_prereq_node_idx`.
+  - Partial unique indexes on concept→concept (`curriculum_dependencies_concept_to_concept_uniq`) and node→node (`curriculum_dependencies_node_to_node_uniq`) edges prevent duplicate rows while keeping cross-type links flexible.
 - **Seed strategy**:
-  - Extend `content/scripts/build_seed_sql.mjs` after dependency data is authored (CSV/markdown) to emit insert statements.
-  - For initial rollout, only populate node-level prerequisites; concept-level edges follow once QA approves.
+  - `content/scripts/build_dependency_seed_sql.mjs` reads `content/raw/curriculum_dependencies.json` and generates `supabase/seeds/seed_curriculum_dependencies.sql` with idempotent inserts.
+  - Initial data focuses on top-level module prerequisites; expand the JSON when concept-level edges are ready.
 - **Policies**:
-  - RLS disabled for now (admin-only access). When roles land, allow admins to insert/update, read-only for learners.
+  - RLS remains disabled (service-role only). Once persona roles land, restrict inserts to admins and expose read-only views for learners.
 
 ## 2025-11-03 – Content Versioning
 
-- **Tables**: `content_versions`, `content_version_changes`
-  - `content_versions`
-    - `id` (uuid) primary key.
-    - `concept_slug` (text) not null references `concepts.slug`.
-    - `status` (text) enum `draft|in_review|published|archived`.
-    - `title_lt`, `title_en`, `definition_lt`, `definition_en` (text) snapshot fields.
-    - `created_by`, `updated_by` (uuid) referencing `profiles.id` (to be added once auth in place).
-    - `created_at`, `updated_at` timestamps.
-    - `published_at` nullable timestamp.
-  - `content_version_changes`
-    - `id` uuid primary key.
-    - `version_id` (uuid) references `content_versions.id`.
-    - `field` text, `old_value` text, `new_value` text.
-    - `created_at` timestamp.
+- **Tables**: `content_versions`
+  - `id` (uuid default `gen_random_uuid()`) primary key.
+  - `entity_type` (text) constrained to `curriculum_node`, `curriculum_item`, `concept`, or `media_asset`.
+  - `entity_primary_key` (text) stores the upstream identifier (UUID or code) of the entity being versioned.
+  - `version` (integer, default 1) tracks monotonic revisions per entity.
+  - `status` (text) constrained to `draft`, `in_review`, `published`, `archived`.
+  - `change_summary` (text) provides human-readable context.
+  - `diff` (jsonb) captures serialized field deltas for tooling.
+  - `created_by` (text) captures author (Supabase UID or email until profile linkage arrives).
+  - `created_at` (timestamptz) default `timezone('utc', now())`.
+- **Indexes**:
+  - Unique composite index on `(entity_type, entity_primary_key, version)` to guarantee consistent revision ordering.
+  - Secondary index on `status` to accelerate workflow queues.
 - **Workflow**:
-  - Drafts created for every edit; publishing copies snapshot into `concepts` table via trigger/scheduled job.
-  - Add trigger to update `concepts.updated_at` when a new version reaches `published`.
+  - Draft rows represent proposed edits. Publishing logic (future trigger or service) will promote a draft to `published` and synchronize canonical tables.
+  - `diff` payload is optional for MVP; downstream services can parse it for review tooling.
 - **Policies**:
-  - Editors can insert drafts, reviewers can promote to `in_review`/`published`.
-  - Learners read only published versions alongside public `concepts` view.
+  - No RLS yet; inserts limited to service role. Introduce role-bound policies once admin/auth scaffolding lands.
 
 ## 2025-11-03 – Media Moderation
 
 - **Tables**: `media_assets`, `media_reviews`
   - `media_assets`
-    - `id` uuid primary key.
-    - `concept_slug` text references `concepts.slug`.
-    - `uploader_id` uuid references `profiles.id`.
-    - `storage_path` text not null.
-    - `kind` text enum `image|video|document|audio`.
-    - `status` text enum `pending|approved|rejected|archived` default `pending`.
-    - `metadata` jsonb for EXIF/dimensions.
-    - `created_at`, `updated_at` timestamps.
+    - `id` (uuid default `gen_random_uuid()`) primary key.
+    - `concept_id` (uuid, nullable) references `concepts.id` for concept-scoped media.
+    - `curriculum_node_code` (text, nullable) references `curriculum_nodes.code` for section-level media.
+    - `storage_path` (text, nullable) holds Supabase Storage object path when managed internally.
+    - `external_url` (text, nullable) for externally hosted assets.
+    - `media_type` (text) constrained to `image`, `video`, `pdf`, `audio`, `link`.
+    - `language` (text) default `lt` for localized captions.
+    - `title`, `caption_lt`, `caption_en`, `description` (text) metadata fields.
+    - `status` (text) constrained to `pending`, `approved`, `rejected`, `archived` with default `pending`.
+    - `submitted_by` (text) stores submitter identifier (email or Supabase UID placeholder).
+    - `metadata` (jsonb default `{}`) stores EXIF and processing details.
+    - `created_at`, `updated_at` (timestamptz) default `timezone('utc', now())`.
+    - Check constraint ensures either `storage_path` or `external_url` is present.
   - `media_reviews`
-    - `id` uuid primary key.
-    - `asset_id` uuid references `media_assets.id`.
-    - `reviewer_id` uuid references `profiles.id`.
-    - `decision` text enum `approved|rejected`.
-    - `notes` text.
-    - `created_at` timestamp.
+    - `id` (uuid default `gen_random_uuid()`) primary key.
+    - `media_id` (uuid) references `media_assets.id` on delete cascade.
+    - `reviewer` (text) records moderator identity.
+    - `decision` (text) constrained to `approved` or `rejected`.
+    - `notes` (text) optional moderator notes.
+    - `created_at` (timestamptz) default `timezone('utc', now())`.
+- **Indexes**:
+  - Lookup indexes on `concept_id`, `curriculum_node_code`, and `status` for moderation dashboards.
+  - `media_reviews_media_idx` orders reviews per asset by recency.
 - **Storage policy**:
-  - Use Supabase Storage bucket `concept-images` with folders `pending/<slug>/<uuid>` and `approved/<slug>/`.
-  - Only moderators can move files between folders.
+  - Keep Supabase bucket folders `pending/<concept-or-node>/<uuid>` and optional `approved/` mirror; policies will grant update/delete to moderators.
 - **Hooks**:
-  - Edge function trigger on `media_reviews` insert to notify uploader via email/webhook.
-  - Optional scheduled job to purge `rejected` assets older than 30 days.
+  - Future edge function will emit notifications on `media_reviews` insert.
+  - Scheduled cleanup job can archive or delete assets left in `rejected` beyond retention window.
 
 > Update this file whenever a schema decision is ratified. Link to associated migrations and PRs for traceability.

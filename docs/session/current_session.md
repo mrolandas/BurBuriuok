@@ -14,7 +14,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ### A. Backend Foundations (Supabase + API)
 
-- [ ] Finalise prerequisite `curriculum_dependencies` migration and seeds (link to `docs/references/SCHEMA_DECISIONS.md`).
+- [x] Finalise prerequisite `curriculum_dependencies` migration and seeds (link to `docs/references/SCHEMA_DECISIONS.md`).
 - [ ] Add content versioning tables/triggers (`content_versions`, `content_version_changes`).
 - [ ] Scaffold Express (or Supabase Edge) API with read endpoints: curriculum tree, concept by slug, dependency lookups.
 - [ ] Implement write endpoints for progress tracking (`concept_progress`) with validation and rate limiting stubs.
@@ -23,9 +23,9 @@ Kick-off session for actual backend and frontend implementation following the pl
 ### B. Frontend Learner Experience (SvelteKit)
 
 - [ ] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
-- [ ] Implement Section Board page consuming live Supabase data (issue LX-001).
-- [ ] Build collapsible curriculum tree component with lazy-loaded nodes (issue LX-002).
-- [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue LX-003).
+- [ ] Implement Section Board page consuming live Supabase data (issue [LX-001](https://github.com/mrolandas/BurBuriuok/issues/1)).
+- [ ] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)).
+- [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
 - [ ] Integrate Supabase client, environment config, and error handling patterns.
 
 ### C. Admin & Moderation Interface
@@ -38,9 +38,9 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ### D. Learner Practice & Progress
 
-- [ ] Implement local queue store for Ready/Needs Review/Completed lists (issue LX-004).
+- [ ] Implement local queue store for Ready/Needs Review/Completed lists (issue [LX-004](https://github.com/mrolandas/BurBuriuok/issues/4)).
 - [ ] Persist queue interactions to Supabase `concept_progress` via API.
-- [ ] Create study session runner MVP with timer and confidence capture (issue LX-005).
+- [ ] Create study session runner MVP with timer and confidence capture (issue [LX-005](https://github.com/mrolandas/BurBuriuok/issues/5)).
 - [ ] Define first batch of analytics event emissions in frontend aligned with `docs/references/ANALYTICS_EVENTS.md`.
 - [ ] Draft UX for spaced repetition scheduling (implementation optional this sprint).
 
@@ -63,14 +63,16 @@ Kick-off session for actual backend and frontend implementation following the pl
 ## Session Log
 
 - 2025-11-03: Build Sprint 1 created after planning merge; backlog seeded from `docs/references/ISSUE_TRACKER.md`.
+- 2025-11-03: Opened GitHub issues #1-#8 for Build Sprint 1 learner and backend slices.
+- 2025-11-03: Curriculum dependency migration + seed tooling drafted and logged (issue [DB-001](https://github.com/mrolandas/BurBuriuok/issues/6)).
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Spin out GitHub issues for backend and frontend slices (LX-001 to LX-005, DB-001 to DB-003, AUTO items already done).
+- Spin out GitHub issues for backend and frontend slices (LX-001 to LX-005, DB-001 to DB-003, AUTO items already done) – completed via issues #1-#8.
 - Establish project scaffolds: initialise SvelteKit app and backend service structure.
-- Draft prerequisite dependency migration for review before execution.
+- Finalise prerequisite dependency migration and seed automation (done).
 - Confirm Supabase credentials and environment setup for implementation contributors.
 
 ## Branching & Testing Strategy

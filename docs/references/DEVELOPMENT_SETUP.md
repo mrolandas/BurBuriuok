@@ -19,6 +19,7 @@ This document keeps the development environment expectations in one place. Updat
 - npm 10+ (bundled with Node 20).
 - Git 2.40+.
 - Supabase CLI (install once backend storage and image uploads are introduced in V2).
+- GitHub CLI `gh` (used for creating/backfilling sprint issues).
 
 ## Core Dependencies (install once project tooling is initialised)
 
@@ -66,7 +67,10 @@ This document keeps the development environment expectations in one place. Updat
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
 - `npm run content:seed:curriculum` – regenerate the normalized curriculum hierarchy seed (`supabase/seeds/seed_curriculum.sql`).
 - `npm run content:seed:generate` – regenerate concept seeds from `docs/static_info/LBS_concepts_master.md` via `content/scripts/build_seed_sql.mjs` (script annotates each concept with `is_required` and curriculum linkage metadata).
+- `npm run content:seed:dependencies` – regenerate `supabase/seeds/seed_curriculum_dependencies.sql` from `content/raw/curriculum_dependencies.json`.
 - `node content/scripts/extract_prototype_content.mjs` – rebuild JSON datasets from `first_draft/index.html` before regenerating seeds.
+- `gh issue list --state open` – quick snapshot of Build Sprint 1 backlog (#1-#8).
+- `gh issue create --title "<id>: <summary>" --body-file <path>` – open new work items while keeping Issue Tracker entries in sync.
 
 ### Supabase local push (developer note)
 
@@ -95,7 +99,7 @@ npx supabase link --project-ref zvlziltltbalebqpmuqs
 npx supabase db push --include-seed
 ```
 
-The `--include-seed` flag applies `supabase/seeds/seed_curriculum.sql` and `supabase/seeds/seed_concepts.sql` immediately after migrations so the hosted database always mirrors the generated content. Re-run the content scripts before pushing whenever curriculum data changes.
+The `--include-seed` flag applies `supabase/seeds/seed_curriculum.sql`, `supabase/seeds/seed_concepts.sql`, and `supabase/seeds/seed_curriculum_dependencies.sql` immediately after migrations so the hosted database always mirrors the generated content. Re-run the content scripts before pushing whenever curriculum data changes.
 
 > Store your Supabase CLI access token outside of `.env` (for example, run `supabase login --token <value>` or export `SUPABASE_ACCESS_TOKEN` in your shell session). Avoid committing the token to the repository.
 
