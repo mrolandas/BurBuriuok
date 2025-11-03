@@ -24,6 +24,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Specify API endpoints (read, progress, admin) and contract expectations.
 - [x] Plan audit logging strategy for content edits and approvals.
 - [x] Define gamification data model (XP, streaks, badges) for future phases.
+- [x] Consolidate curriculum concepts into a single markdown source and drive Supabase seeding from it.
 
 ### C. Admin & Moderation Tools
 
@@ -52,6 +53,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
 - [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
 - [ ] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap.
+- [x] Capture canonical concept content source and seed automation in docs (`SUPABASE.md`, `INFRASTRUCTURE.md`, `TESTING_GUIDE.md`).
 
 ## Session Log
 
@@ -62,6 +64,8 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
 - 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
 - 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
+- 2025-11-03: Authored `docs/static_info/LBS_concepts_master.md` as the single source of truth for curriculum concepts and linked it to seed automation.
+- 2025-11-03: Updated `content/scripts/build_seed_sql.mjs` to parse the master markdown and regenerate `supabase/seeds/seed_concepts.sql` (300 concepts synced with curriculum structure).
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.
@@ -71,6 +75,7 @@ Maintain this document during the active development session. Update checklists,
 - Finalise schema extension proposal (prerequisites, drafts, media states) and circulate for review.
 - Validate personas/permissions and map them to Auth roles/policies.
 - Break down frontend implementation tasks (navigation components, concept detail, study plan runner) into backlog issues.
+- Establish regression checks so future concept edits update `LBS_concepts_master.md` and regenerate Supabase seeds via CI.
 
 ## Branching & Testing Strategy
 

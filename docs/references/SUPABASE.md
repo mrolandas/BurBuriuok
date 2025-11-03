@@ -19,6 +19,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - **Tables (V1)**
   - `concepts` – canonical curriculum entries, including Lithuanian/English terms, curriculum alignment (`is_required`), and metadata.
     - Required entries trace directly to `docs/static_info/LBS_programa.md`; optional entries provide additional depth but are still surfaced by the same table.
+    - The seed content is now generated from the master markdown source `docs/static_info/LBS_concepts_master.md`, parsed by `content/scripts/build_seed_sql.mjs` so there is a single editable artifact for content changes.
     - Columns `curriculum_node_code`, `curriculum_item_ordinal`, and `curriculum_item_label` link each concept back to the normalized curriculum hierarchy.
   - `concept_progress` – learned/quiz tracking per (anonymous) device or user token.
   - `curriculum_nodes` – hierarchical outline of the LBS curriculum (codes, titles, summaries, parent links, ordinals).
@@ -35,7 +36,8 @@ This document captures how BurBuriuok uses Supabase during early development (st
 
 ### Data Exports & Validations
 
-- `content/raw/curriculum_structure.json` is the canonical JSON source for curriculum nodes/items.
+- `docs/static_info/LBS_concepts_master.md` is the authoritative content source. Any edits should flow through it, followed by regenerating `supabase/seeds/seed_concepts.sql` with `node content/scripts/build_seed_sql.mjs` (or `npm run content:seed:generate`).
+- `content/raw/curriculum_structure.json` remains the canonical JSON source for curriculum nodes/items (structure + ordinals) consumed during seed generation.
 - Run `node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv` to refresh the published curriculum snapshot used for doc reviews.
 - Run `node tests/exportCurriculumTree.mjs` without arguments for a quick on-screen tree view that matches the seeded structure in Supabase.
 
@@ -60,8 +62,9 @@ This document captures how BurBuriuok uses Supabase during early development (st
 2. Link the local repository to the hosted project (one-time per machine): `npx supabase link --project-ref zvlziltltbalebqpmuqs`.
 3. Regenerate curriculum data prior to deployment:
 
+- Update `docs/static_info/LBS_concepts_master.md` with any new or revised concepts.
 - `npm run content:seed:curriculum` to rebuild `supabase/seeds/seed_curriculum.sql`.
-- `npm run content:seed:generate` to rebuild `supabase/seeds/seed_concepts.sql` (uses the normalized curriculum JSON).
+- `npm run content:seed:generate` (wrapper for `node content/scripts/build_seed_sql.mjs`) to rebuild `supabase/seeds/seed_concepts.sql` directly from the master markdown.
 - Optional sanity check: `node tests/exportCurriculumTree.mjs --format tree` to verify hierarchy output before seeding.
 
 4. Push migrations and apply seeds in a single step: `npx supabase db push --include-seed`.
@@ -74,6 +77,7 @@ The Supabase CLI can run seeds when `--include-seed` is provided. Example workfl
 
 - **Hosted project**: `npx supabase db push --include-seed` (after linking), which applies migrations then executes every SQL file matching the `supabase/seeds/*.sql` glob.
 - **Local stack**: `npx supabase db push --local --include-seed` after launching `supabase start`.
+- Whenever the concept master file changes, re-run `npm run content:seed:generate` before invoking either workflow so Supabase receives the latest content.
 
 If manual execution is ever required, open the Supabase web console → SQL Editor → run `supabase/seeds/seed_curriculum.sql` followed by `supabase/seeds/seed_concepts.sql`.
 

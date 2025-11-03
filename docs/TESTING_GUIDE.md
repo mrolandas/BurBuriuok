@@ -12,6 +12,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Toggle learned state for several terms and confirm persistence via Supabase (`concept_progress`) with fallback caching on the client.
   - Perform searches in Lithuanian and English; validate filtering and results.
   - Run the quiz feature and confirm scoring logic works end-to-end.
+  - Regenerate `supabase/seeds/seed_concepts.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`) and spot-check a few records to ensure curriculum linkage remains intact before pushing seeds.
 
 ### Automated Connectivity Check
 
@@ -30,12 +31,13 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 - **Frontend** – component/unit tests with Vitest or Jest; end-to-end flows with Playwright.
 - **Backend** (V2) – API contract tests, schema validation, and data access integration tests.
-- **Content** – schema validation for glossary data files to ensure required fields are present.
+- **Content** – schema validation for glossary data files to ensure required fields are present, plus automated checks that confirm the markdown master file parses successfully before CI regenerates seeds.
 - **Media** – upload/delete flows respecting the 4-image quota per user per concept, file-type/size validation, and moderation queue handling once Supabase storage is active.
 
 ## Test Commands (to be defined)
 
 - `node tests/checkSupabaseConnection.mjs` – hosted Supabase availability check.
+- `npm run content:seed:generate` – rebuild seed SQL from the canonical markdown (treat failures as blockers before applying migrations/seeds).
 - `npm run test` – run the full suite locally.
 - `npm run test:unit` – unit tests only.
 - `npm run test:e2e` – end-to-end tests (requires local backend once available).

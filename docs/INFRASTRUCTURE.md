@@ -5,6 +5,7 @@
 - **Hosting** – GitHub Pages (static deployment from the `main` branch or a dedicated `gh-pages` branch once the build pipeline exists).
 - **Runtime** – Static frontend consuming Supabase REST endpoints; no custom server-side runtime yet.
 - **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content and progress data. Schema now includes normalized `curriculum_nodes`/`curriculum_items` tables alongside `concepts` (with curriculum linkage columns) and `concept_progress`. Browser storage still holds lightweight caches and notes. Local Supabase stack remains a fallback for offline work.
+- **Content Pipeline** – Curriculum concepts live in `docs/static_info/LBS_concepts_master.md` and are compiled into Supabase seeds via `content/scripts/build_seed_sql.mjs`, ensuring a single source of truth for terminology updates.
 - **Integrations** – Supabase REST/Realtime endpoints only (no auth, no storage bucket yet).
 - **Codebase Layout** – Modular filesystem: `frontend/` (SvelteKit UI), `backend/` (Express API-to-be), `data/` (Supabase client + repositories), `content/` (curriculum seed files), `infra/` (deployment scripts and migrations).
 
@@ -12,6 +13,7 @@
 
 - Establish automated build and deploy workflow (GitHub Actions) once the SvelteKit frontend is scaffolded.
 - Define content build steps to transform source JSON/Markdown into consumable bundles.
+- Automate seed regeneration (`npm run content:seed:generate`) whenever `LBS_concepts_master.md` changes so deployments stay in sync with Supabase.
 - Document environment variables needed for local development and future services.
 - Connect to the hosted Supabase project via CLI (`npx supabase login`, `npx supabase link --project-ref zvlziltltbalebqpmuqs`, `npx supabase db push --include-seed`) as described in `docs/references/SUPABASE.md`; retain guidance for spinning up the local stack if offline development becomes necessary.
 - Add per-module READMEs describing responsibilities and public interfaces for AI-friendly navigation.

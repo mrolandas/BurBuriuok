@@ -3,7 +3,7 @@
 // Generates Supabase seed SQL from raw concept JSON data.
 // Usage: `node content/scripts/build_seed_sql.mjs`
 
-import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -34,6 +34,10 @@ const STRUCTURE_PATH = path.resolve(
   __dirname,
   "../raw/curriculum_structure.json"
 );
+const MASTER_CONCEPT_PATH = path.resolve(
+  __dirname,
+  "../../docs/static_info/LBS_concepts_master.md"
+);
 
 const MANUAL_ITEM_OVERRIDES = new Map(
   [
@@ -52,8 +56,333 @@ const MANUAL_ITEM_OVERRIDES = new Map(
     ["dyzeliniai varikliai", { nodeCode: "1.3.3", ordinal: 1 }],
     ["benzininiai varikliai", { nodeCode: "1.3.3", ordinal: 1 }],
     ["elektriniai varikliai", { nodeCode: "1.3.3", ordinal: 1 }],
+    ["markonine bermudine bure", { nodeCode: "1.2.4", ordinal: 4 }],
+    ["dzonko bure", { nodeCode: "1.2.4", ordinal: 8 }],
+    ["bermudinio groto kampai krastines", { nodeCode: "1.2.4", ordinal: 13 }],
+    ["inkaru tipai", { nodeCode: "1.3.1", ordinal: 12 }],
+    ["sanitarines priemones", { nodeCode: "1.3.2", ordinal: 8 }],
+    ["varikliu rusys ir paruosimas", { nodeCode: "1.3.3", ordinal: 1 }],
+    ["vandens telkinio dugno gruntas", { nodeCode: "3.12.1", ordinal: 1 }],
+    ["povandeniniai kliuviniai", { nodeCode: "3.12.1", ordinal: 2 }],
+    ["meteorologiniai aspektai", { nodeCode: "3.12.1", ordinal: 5 }],
+    ["hidrologiniai aspektai", { nodeCode: "3.12.1", ordinal: 6 }],
+    ["teisiniai aspektai", { nodeCode: "3.12.1", ordinal: 7 }],
+    ["urbanistiniai aspektai", { nodeCode: "3.12.1", ordinal: 8 }],
+    ["vejo matuokliai", { nodeCode: "6.16", ordinal: 3 }],
+    ["garsiniai signalai", { nodeCode: "8.8", ordinal: 1 }],
+    ["velkantis laivas", { nodeCode: "9.3", ordinal: 4 }],
+    ["minu traluotojas", { nodeCode: "9.3", ordinal: 10 }],
   ].map(([key, value]) => [normalizeCurriculumString(key), value])
 );
+
+function slugify(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/\(.*?\)/g, "")
+    .replace(/[&/]/g, " ")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function sanitizeHeadingTitle(rawTitle) {
+  if (!rawTitle) {
+    return null;
+  }
+  return rawTitle.trim().replace(/\s*\([^)]*\)\s*$/, "");
+}
+
+function extractTopLevelCode(code) {
+  if (!code) {
+    return null;
+  }
+  const [first] = String(code).split(".");
+  return first ? first.replace(/\D/g, "") || first : null;
+}
+
+function toNullable(value) {
+  const trimmed = typeof value === "string" ? value.trim() : value;
+  if (trimmed === undefined || trimmed === null) {
+    return null;
+  }
+  return trimmed === "" ? null : trimmed;
+}
+
+function parseTableRow(line) {
+  if (!line || !line.trim().startsWith("|")) {
+    return null;
+  }
+  const parts = line.trim().split("|");
+  if (!parts.length) {
+    return null;
+  }
+  const cells = parts.slice(
+    1,
+    parts[parts.length - 1].trim() === "" ? -1 : undefined
+  );
+  return cells.map((cell) => cell.trim());
+}
+
+function resolveSectionFields(currentSection, currentTopLevel, nodesByCode) {
+  if (!currentSection) {
+    const topNode = currentTopLevel?.node ?? null;
+    return {
+      section_code: currentTopLevel?.code ?? null,
+      section_title: topNode?.title ?? currentTopLevel?.title ?? null,
+      subsection_code: null,
+      subsection_title: null,
+      metadataParentTitle: topNode?.title ?? currentTopLevel?.title ?? null,
+    };
+  }
+
+  const node = currentSection.node;
+  const parentNode = node?.parent_code
+    ? nodesByCode.get(String(node.parent_code))
+    : null;
+  const preferParent = Boolean(parentNode);
+
+  if (preferParent) {
+    return {
+      section_code: parentNode.code,
+      section_title: parentNode.title ?? currentSection.parentTitle ?? null,
+      subsection_code: node?.code ?? null,
+      subsection_title: currentSection.title ?? node?.title ?? null,
+      metadataParentTitle: node?.title ?? currentSection.title ?? null,
+    };
+  }
+
+  return {
+    section_code: node?.code ?? currentSection.code ?? null,
+    section_title: currentSection.title ?? node?.title ?? null,
+    subsection_code: null,
+    subsection_title: null,
+    metadataParentTitle: currentSection.title ?? node?.title ?? null,
+  };
+}
+
+function loadConceptRecordsFromMaster(structure) {
+  if (!structure || !structure.nodes || !structure.nodes.length) {
+    throw new Error(
+      "Curriculum structure is required to ingest the master concept document."
+    );
+  }
+
+  const nodesByCode = new Map(
+    structure.nodes.map((node) => [String(node.code), { ...node }])
+  );
+
+  const markdown = readFileSync(MASTER_CONCEPT_PATH, "utf8");
+  const lines = markdown.split(/\r?\n/);
+
+  const records = [];
+  const usedSlugs = new Set();
+
+  let currentTopLevel = null;
+  let currentSection = null;
+  let tableBuffer = [];
+
+  const sourceRef = path.basename(MASTER_CONCEPT_PATH);
+
+  const flushTable = () => {
+    if (!tableBuffer.length || !currentTopLevel) {
+      tableBuffer = [];
+      return;
+    }
+
+    const headerCells = parseTableRow(tableBuffer[0]) ?? [];
+    if (!headerCells.length) {
+      tableBuffer = [];
+      return;
+    }
+
+    const normalizedHeaders = headerCells.map((cell) =>
+      cell.toLowerCase().replace(/\s+/g, " ").trim()
+    );
+    const termLtIndex = normalizedHeaders.findIndex(
+      (cell) => cell.startsWith("term lt") || cell === "term lt"
+    );
+    const termEnIndex = normalizedHeaders.findIndex(
+      (cell) => cell.startsWith("term en") || cell === "term en"
+    );
+    const definitionIndex = normalizedHeaders.findIndex(
+      (cell) => cell.includes("apibr") || cell.includes("apras")
+    );
+
+    if (termLtIndex === -1) {
+      tableBuffer = [];
+      return;
+    }
+
+    for (let rowIndex = 1; rowIndex < tableBuffer.length; rowIndex += 1) {
+      const line = tableBuffer[rowIndex];
+      if (/^\|\s*[-:]+/.test(line)) {
+        continue;
+      }
+      const cells = parseTableRow(line);
+      if (!cells || !cells.length) {
+        continue;
+      }
+      const termLt = toNullable(cells[termLtIndex]);
+      if (!termLt) {
+        continue;
+      }
+      const termEn = termEnIndex >= 0 ? toNullable(cells[termEnIndex]) : null;
+      const descriptionLt =
+        definitionIndex >= 0 ? toNullable(cells[definitionIndex]) : null;
+
+      const baseSlug = slugify(termLt) || slugify(`${termLt}-${rowIndex}`);
+      let slug = baseSlug || `concept-${records.length + 1}`;
+      let counter = 2;
+      while (usedSlugs.has(slug)) {
+        slug = `${baseSlug}-${counter}`;
+        counter += 1;
+      }
+      usedSlugs.add(slug);
+
+      const sectionFields = resolveSectionFields(
+        currentSection,
+        currentTopLevel,
+        nodesByCode
+      );
+
+      const topicCode = extractTopLevelCode(
+        currentSection?.code ??
+          sectionFields.section_code ??
+          currentTopLevel.code
+      );
+      const topicNumber = topicCode ? Number.parseInt(topicCode, 10) : NaN;
+
+      const metadata = {};
+      if (!Number.isNaN(topicNumber)) {
+        metadata.topic_number = topicNumber;
+      }
+      if (sectionFields.metadataParentTitle) {
+        metadata.parent_section = sectionFields.metadataParentTitle;
+      }
+
+      const record = {
+        section_code: sectionFields.section_code ?? null,
+        section_title: sectionFields.section_title ?? null,
+        subsection_code: sectionFields.subsection_code ?? null,
+        subsection_title: sectionFields.subsection_title ?? null,
+        slug,
+        term_lt: termLt,
+        term_en: termEn,
+        description_lt: descriptionLt,
+        description_en: null,
+        source_ref: sourceRef,
+      };
+
+      if (Object.keys(metadata).length) {
+        record.metadata = metadata;
+      }
+
+      records.push(record);
+    }
+
+    tableBuffer = [];
+  };
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushTable();
+      return;
+    }
+
+    if (line.startsWith("## ") && !line.startsWith("###")) {
+      flushTable();
+      const match = line.match(/^##\s+([^\s]+)\s+(.*)$/);
+      if (match) {
+        const rawCode = match[1].replace(/\.$/, "");
+        const title = sanitizeHeadingTitle(match[2]);
+        const node = nodesByCode.get(rawCode) ?? null;
+        currentTopLevel = {
+          code: rawCode,
+          title,
+          node,
+        };
+        currentSection = null;
+      }
+      return;
+    }
+
+    if (line.startsWith("### ")) {
+      flushTable();
+      const match = line.match(/^###\s+([^\s]+)\s+(.*)$/);
+      if (match) {
+        const rawCode = match[1].replace(/\.$/, "");
+        const title = sanitizeHeadingTitle(match[2]);
+        const node = nodesByCode.get(rawCode) ?? null;
+        const parentTitle = node?.parent_code
+          ? nodesByCode.get(String(node.parent_code))?.title ?? null
+          : null;
+        currentSection = {
+          code: rawCode,
+          title,
+          node,
+          parentTitle,
+        };
+        if (!currentTopLevel) {
+          const inferredTopLevel = extractTopLevelCode(rawCode);
+          if (inferredTopLevel) {
+            const inferredNode = nodesByCode.get(inferredTopLevel) ?? null;
+            currentTopLevel = {
+              code: inferredTopLevel,
+              title: inferredNode?.title ?? null,
+              node: inferredNode,
+            };
+          }
+        }
+      }
+      return;
+    }
+
+    if (line.startsWith("|")) {
+      tableBuffer.push(rawLine);
+      return;
+    }
+
+    if (line.startsWith("---")) {
+      flushTable();
+      return;
+    }
+
+    flushTable();
+  });
+
+  flushTable();
+
+  if (!records.length) {
+    throw new Error(
+      `Master concept document at ${MASTER_CONCEPT_PATH} did not yield any records.`
+    );
+  }
+
+  const byTopic = new Map();
+  records.forEach((record) => {
+    const topic =
+      record.metadata?.topic_number ?? extractTopLevelCode(record.section_code);
+    if (!topic) {
+      return;
+    }
+    const key = String(topic);
+    byTopic.set(key, (byTopic.get(key) ?? 0) + 1);
+  });
+
+  return {
+    records: conceptSchema.array().parse(records),
+    summary: {
+      source: "master_markdown",
+      total: records.length,
+      topics: Object.fromEntries(Array.from(byTopic.entries()).sort()),
+    },
+  };
+}
 
 function escapeLiteral(value) {
   if (value === null || value === undefined) {
@@ -89,10 +418,10 @@ const conceptSchema = z.object({
   description_en: z.string().min(1).nullable().optional(),
   source_ref: z.string().min(1).nullable().optional(),
   is_required: z.boolean().optional(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
 });
 
-function loadConceptRecords() {
+function loadConceptRecordsFromRaw() {
   const files = readdirSync(RAW_DIR)
     .filter((file) => /^section_[a-z0-9_]+_concepts\.json$/i.test(file))
     .sort();
@@ -120,6 +449,21 @@ function loadConceptRecords() {
   });
 
   return combined;
+}
+
+function loadConceptRecords(structure) {
+  if (existsSync(MASTER_CONCEPT_PATH)) {
+    return loadConceptRecordsFromMaster(structure);
+  }
+
+  const records = loadConceptRecordsFromRaw();
+  return {
+    records,
+    summary: {
+      source: "legacy_raw",
+      total: records.length,
+    },
+  };
 }
 
 function loadCurriculumStructure() {
@@ -618,10 +962,11 @@ on conflict (slug) do update set
 }
 
 function main() {
-  const parsedRecords = loadConceptRecords();
   const curriculumStructure = loadCurriculumStructure();
+  const { records: sourceRecords, summary: sourceSummary } =
+    loadConceptRecords(curriculumStructure);
   const { records: enrichedRecords, summary } =
-    applyCurriculumRequirements(parsedRecords);
+    applyCurriculumRequirements(sourceRecords);
   const linkedRecords = linkConceptsToCurriculum(
     enrichedRecords,
     curriculumStructure
@@ -629,8 +974,21 @@ function main() {
 
   const sql = buildSeedSql(linkedRecords);
   writeFileSync(OUTPUT_FILE, `${sql}\n`, "utf8");
+  let sourceSummaryDetails = "source=unknown";
+  if (sourceSummary) {
+    const pieces = [`source=${sourceSummary.source}`];
+    if (sourceSummary.total !== undefined && sourceSummary.total !== null) {
+      pieces.push(`total=${sourceSummary.total}`);
+    }
+    if (sourceSummary.topics && Object.keys(sourceSummary.topics).length) {
+      pieces.push(
+        `topics=${JSON.stringify(sourceSummary.topics).replace(/"/g, "")}`
+      );
+    }
+    sourceSummaryDetails = pieces.join(", ");
+  }
   console.log(
-    `Seed SQL regenerated at ${OUTPUT_FILE} (required: ${summary.required}, optional: ${summary.optional})`
+    `Seed SQL regenerated at ${OUTPUT_FILE} (${sourceSummaryDetails}; required: ${summary.required}, optional: ${summary.optional})`
   );
 }
 
