@@ -39,6 +39,49 @@ const MASTER_CONCEPT_PATH = path.resolve(
   "../../docs/static_info/LBS_concepts_master.md"
 );
 
+function parseCliArgs(rawArgs) {
+  const options = {
+    checkOnly: false,
+    outputFile: OUTPUT_FILE,
+  };
+
+  for (let index = 0; index < rawArgs.length; index += 1) {
+    const arg = rawArgs[index];
+    if (arg === "--check") {
+      options.checkOnly = true;
+      continue;
+    }
+    if (arg === "--out") {
+      const candidate = rawArgs[index + 1];
+      if (!candidate) {
+        console.error("Expected a file path after --out.");
+        process.exit(1);
+      }
+      options.outputFile = path.resolve(process.cwd(), candidate);
+      index += 1;
+      continue;
+    }
+    if (arg === "--help" || arg === "-h") {
+      console.log(
+        `Usage: node content/scripts/build_seed_sql.mjs [--check] [--out <path>]`
+      );
+      console.log(
+        "--check    Generate SQL in-memory and verify it matches the existing output file."
+      );
+      console.log(
+        "--out      Write or compare against a different output path (default supabase/seeds/seed_concepts.sql)."
+      );
+      process.exit(0);
+    }
+    console.error(`Unknown argument '${arg}'. Use --help to view options.`);
+    process.exit(1);
+  }
+
+  return options;
+}
+
+const cliOptions = parseCliArgs(process.argv.slice(2));
+
 const MANUAL_ITEM_OVERRIDES = new Map(
   [
     ["zalingiai sprederiai", { nodeCode: "1.2.2", ordinal: 1 }],
@@ -961,7 +1004,14 @@ on conflict (slug) do update set
   return `${header}${buildValuesClause(records)}${footer}`;
 }
 
-function main() {
+function normalizeSqlForComparison(content) {
+  return content
+    .replace(/\r\n/g, "\n")
+    .replace(/^-- Generated .*$/m, "-- Generated <normalized>")
+    .trimEnd();
+}
+
+function main(options) {
   const curriculumStructure = loadCurriculumStructure();
   const { records: sourceRecords, summary: sourceSummary } =
     loadConceptRecords(curriculumStructure);
@@ -973,7 +1023,7 @@ function main() {
   );
 
   const sql = buildSeedSql(linkedRecords);
-  writeFileSync(OUTPUT_FILE, `${sql}\n`, "utf8");
+  const finalSql = `${sql}\n`;
   let sourceSummaryDetails = "source=unknown";
   if (sourceSummary) {
     const pieces = [`source=${sourceSummary.source}`];
@@ -987,9 +1037,32 @@ function main() {
     }
     sourceSummaryDetails = pieces.join(", ");
   }
+  if (options.checkOnly) {
+    if (!existsSync(options.outputFile)) {
+      console.error(
+        `Cannot perform --check because ${options.outputFile} does not exist. Run without --check first.`
+      );
+      process.exit(1);
+    }
+    const currentContent = readFileSync(options.outputFile, "utf8");
+    const normalizedCurrent = normalizeSqlForComparison(currentContent);
+    const normalizedGenerated = normalizeSqlForComparison(finalSql);
+    if (normalizedCurrent !== normalizedGenerated) {
+      console.error(
+        `Seed drift detected for ${options.outputFile}. Run without --check to update the file before committing.`
+      );
+      process.exit(1);
+    }
+    console.log(
+      `Seed SQL up to date (${options.outputFile}; ${sourceSummaryDetails}; required: ${summary.required}, optional: ${summary.optional})`
+    );
+    return;
+  }
+
+  writeFileSync(options.outputFile, finalSql, "utf8");
   console.log(
-    `Seed SQL regenerated at ${OUTPUT_FILE} (${sourceSummaryDetails}; required: ${summary.required}, optional: ${summary.optional})`
+    `Seed SQL regenerated at ${options.outputFile} (${sourceSummaryDetails}; required: ${summary.required}, optional: ${summary.optional})`
   );
 }
 
-main();
+main(cliOptions);

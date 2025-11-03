@@ -38,7 +38,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Break curriculum navigation into component-level backlog (section board, collapsible tree, dependency indicators).
 - [x] Specify concept view structure (definition, prerequisites, media carousel, actions).
 - [x] Define study queue interactions (“mark as mastered”, “study later”, “needs review”).
-- [ ] Determine analytics events required to monitor learner progression.
+- [x] Determine analytics events required to monitor learner progression (see `docs/references/ANALYTICS_EVENTS.md`).
 
 ### E. Engagement & Analytics
 
@@ -52,7 +52,7 @@ Maintain this document during the active development session. Update checklists,
 - [x] Refresh `docs/MASTER_PLAN.md` with the holistic strategy and phased roadmap.
 - [x] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
 - [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
-- [ ] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap.
+- [x] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap (see `docs/references/PHASE_BACKLOG.md`, `docs/references/ISSUE_TRACKER.md`).
 - [x] Capture canonical concept content source and seed automation in docs (`SUPABASE.md`, `INFRASTRUCTURE.md`, `TESTING_GUIDE.md`).
 
 ## Session Log
@@ -68,16 +68,19 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Updated `content/scripts/build_seed_sql.mjs` to parse the master markdown and regenerate `supabase/seeds/seed_concepts.sql` (300 concepts synced with curriculum structure).
 - 2025-11-03: Refreshed `docs/references/DEVELOPMENT_SETUP.md` with the markdown-driven seed workflow and canonical content guidance.
 - 2025-11-03: Published `docs/references/PHASE_BACKLOG.md` to outline Phase 0/Phase 1 engineering backlog and learner experience components.
-- [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
+- 2025-11-03: Logged schema decisions for prerequisites, draft content, and media moderation in `docs/references/SCHEMA_DECISIONS.md`.
+- 2025-11-03: Documented moderation SLA and notification plan in `docs/references/MODERATION_SLA.md`.
+- 2025-11-03: Defined learner analytics event catalog in `docs/references/ANALYTICS_EVENTS.md`.
+- [x] Record schema extension decisions after prerequisite + moderation tables are modelled (tracked in `docs/references/SCHEMA_DECISIONS.md`).
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
-- [ ] Document moderation SLA/notification strategy once agreed.
+- [x] Document moderation SLA/notification strategy once agreed (captured in `docs/references/MODERATION_SLA.md`).
 
 ## Immediate Focus
 
-- Finalise schema extension proposal (prerequisites, drafts, media states) and circulate for review.
+- Review the schema decision log (prerequisites, drafts, media states) with stakeholders before shipping migrations.
 - Validate personas/permissions and map them to Auth roles/policies.
 - Translate the new learner experience backlog (`docs/references/PHASE_BACKLOG.md`) into tracked issues for Section board, concept view, and study queue delivery.
-- Establish regression checks so future concept edits update `LBS_concepts_master.md` and regenerate Supabase seeds via CI (see Automation & Regression Guards backlog section).
+- Wire the new `npm run content:seed:check` guard into CI/pre-commit so markdown edits regenerate seeds automatically.
 
 ## Branching & Testing Strategy
 

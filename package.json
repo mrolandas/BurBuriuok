@@ -11,6 +11,7 @@
     "test": "node tests/checkSupabaseConnection.mjs",
     "content:seed:curriculum": "node content/scripts/build_curriculum_seed_sql.mjs",
     "content:seed:generate": "node content/scripts/build_seed_sql.mjs",
+    "content:seed:check": "node content/scripts/build_seed_sql.mjs --check",
     "test:supabase": "node tests/checkSupabaseConnection.mjs",
     "test:concepts": "ts-node --transpile-only tests/conceptsRepository.mapRow.test.ts"
   },

@@ -4,8 +4,8 @@ Use this backlog to spin issues or PR scopes. Keep items focused on thin slices 
 
 ## Phase 0 – Platform Foundation
 
-- [ ] **Prerequisite graph modelling** – finalise table design (`curriculum_dependencies`) and extend seed builder to populate edge data; include Supabase migration + regeneration workflow.
-- [ ] **Draft/publish workflow scaffolding** – create `content_versions` tables, triggers, and API contracts for status transitions; document moderation states.
+- [ ] **Prerequisite graph modelling** – finalise table design (`curriculum_dependencies`) and extend seed builder to populate edge data; include Supabase migration + regeneration workflow (ref: `docs/references/SCHEMA_DECISIONS.md`).
+- [ ] **Draft/publish workflow scaffolding** – create `content_versions` tables, triggers, and API contracts for status transitions; document moderation states (ref: `docs/references/SCHEMA_DECISIONS.md`).
 - [x] **Canonical concept pipeline** – centralise content in `docs/static_info/LBS_concepts_master.md`, ensure `npm run content:seed:generate` regenerates seeds, and document the workflow in setup guides.
 - [ ] **API surface spike** – stub backend endpoints for read/progress/admin access with contract tests.
 - [ ] **Developer experience hardening** – wire lint/test commands, seed scripts, and Supabase CLI workflows into CI (lint + seed regeneration gate).
@@ -14,8 +14,8 @@ Use this backlog to spin issues or PR scopes. Keep items focused on thin slices 
 
 - [ ] **Admin CRUD UI** – build editable grids/forms for nodes, items, concepts, and dependencies with validation feedback.
 - [ ] **Content versioning UX** – implement draft → review → publish flow, surfaced in admin dashboard with change history.
-- [ ] **Media ingestion pipeline** – allow uploads with metadata capture, pending-state gating, and storage bucket policies.
-- [ ] **Moderation queue** – queue view with approve/reject actions, audit trail, and notification hooks.
+- [ ] **Media ingestion pipeline** – allow uploads with metadata capture, pending-state gating, and storage bucket policies (ref: `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`).
+- [ ] **Moderation queue** – queue view with approve/reject actions, audit trail, and notification hooks (ref: `docs/references/MODERATION_SLA.md`).
 - [ ] **Automated validation suite** – server-side checks for duplicate ordinals, missing translations, orphan dependencies, and content diffs.
 - [ ] **Role-based controls** – enforce permissions per persona (`PERSONAS_PERMISSIONS.md`) within UI and API.
 
@@ -40,6 +40,6 @@ Use this backlog to spin issues or PR scopes. Keep items focused on thin slices 
 
 ## Automation & Regression Guards
 
-- [ ] **Seed regeneration check** – CI job to run `npm run content:seed:generate` and fail on diff, guaranteeing master markdown edits propagate.
+- [ ] **Seed regeneration check** – CI job to run `npm run content:seed:check` and fail on diff, guaranteeing master markdown edits propagate (workflow described in `docs/TESTING_GUIDE.md`).
 - [ ] **Curriculum snapshot** – nightly/CI task to refresh `docs/static_info/curriculum_in_supabase.csv` and surface drift vs Supabase.
 - [ ] **Concept content tests** – schema validation for master markdown tables to catch missing columns or malformed headings.
