@@ -19,6 +19,13 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Confirms the hosted Supabase REST endpoint responds with HTTP 200 using the service role key.
   - Requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to be available in the environment (the script falls back to `.env` if variables are unset).
 
+### Curriculum Export Snapshot
+
+- `node tests/exportCurriculumTree.mjs`
+  - Prints the authoritative curriculum hierarchy (nodes and items) exactly as seeded into Supabase.
+- `node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv`
+  - Refreshes the stored CSV snapshot at `docs/static_info/curriculum_in_supabase.csv`; the file uses a single `hierarchy_line` column to make diffs easy to review.
+
 ## Planned Automated Coverage
 
 - **Frontend** – component/unit tests with Vitest or Jest; end-to-end flows with Playwright.
