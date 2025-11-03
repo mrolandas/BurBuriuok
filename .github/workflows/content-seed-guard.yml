@@ -1,4 +1,4 @@
-name: Content Seed Guard
+name: Content Regression Guard
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  seed-guard:
-    name: Verify seed SQL matches markdown source
+  content-guard:
+    name: Verify content artifacts stay in sync
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,3 +27,9 @@ jobs:
 
       - name: Check seed drift
         run: npm run content:seed:check
+
+      - name: Check curriculum snapshot drift
+        run: npm run content:snapshot:check
+
+      - name: Validate canonical markdown tables
+        run: npm run content:markdown:validate

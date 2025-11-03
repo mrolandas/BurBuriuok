@@ -27,15 +27,20 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - `node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv`
   - Refreshes the stored CSV snapshot at `docs/static_info/curriculum_in_supabase.csv`; the file uses a single `hierarchy_line` column to make diffs easy to review.
 
-### Regression Guards for Markdown-Driven Seeds
+### Regression Guards for Content Artifacts
 
-- `npm run content:seed:check` (or `npm run content:seed:generate -- --check`)
+- **Seed SQL** – `npm run content:seed:check` (or `npm run content:seed:generate -- --check`)
   - Regenerates seed SQL in-memory and validates it against the committed `supabase/seeds/seed_concepts.sql`.
   - Fails when the canonical markdown produces drift (missing slugs, changed hierarchy codes, translation mismatches) so stale seeds can't slip through.
-- Git hook (`.husky/pre-commit`)
-  - Executes the seed check locally before commits, preventing out-of-date seeds from landing in the repository.
-- CI gate (`.github/workflows/content-seed-guard.yml`)
-  - GitHub Action `Content Seed Guard` installs dependencies with `npm ci` and runs `npm run content:seed:check` on pushes and pull requests targeting `main`.
+- **Curriculum snapshot** – `npm run content:snapshot:check`
+  - Regenerates `docs/static_info/curriculum_in_supabase.csv` and compares it to the committed snapshot so topology changes are caught immediately.
+  - Committers stage the refreshed CSV when legitimate curriculum edits occur.
+- **Markdown schema** – `npm run content:markdown:validate`
+  - Parses `docs/static_info/LBS_concepts_master.md` and ensures required columns (`Term LT`, `Term EN`, `Apibrėžimas`) exist, rows have matching cell counts, and definitions are populated.
+- **Git hook** – `.husky/pre-commit`
+  - Runs all three guards locally before commits to block stale seeds, snapshot drift, or malformed markdown tables.
+- **CI gate** – `.github/workflows/content-seed-guard.yml`
+  - GitHub Action `Content Regression Guard` runs the same trio of commands on pushes and pull requests targeting `main`.
 
 ## Planned Automated Coverage
 

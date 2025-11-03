@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Prevent commits when the markdown-driven seeds are stale
+# Prevent commits when the canonical curriculum artifacts are stale
 npm run content:seed:check
+npm run content:snapshot:check
+npm run content:markdown:validate
