@@ -4,7 +4,7 @@
 
 - **Hosting** – GitHub Pages (static deployment from the `main` branch or a dedicated `gh-pages` branch once the build pipeline exists).
 - **Runtime** – Static frontend consuming Supabase REST endpoints; no custom server-side runtime yet.
-- **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content and progress data, browser storage for lightweight caches and notes. Local Supabase stack remains a fallback for offline work.
+- **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content and progress data. Schema now includes normalized `curriculum_nodes`/`curriculum_items` tables alongside `concepts` (with curriculum linkage columns) and `concept_progress`. Browser storage still holds lightweight caches and notes. Local Supabase stack remains a fallback for offline work.
 - **Integrations** – Supabase REST/Realtime endpoints only (no auth, no storage bucket yet).
 - **Codebase Layout** – Modular filesystem: `frontend/` (SvelteKit UI), `backend/` (Express API-to-be), `data/` (Supabase client + repositories), `content/` (curriculum seed files), `infra/` (deployment scripts and migrations).
 
@@ -13,9 +13,10 @@
 - Establish automated build and deploy workflow (GitHub Actions) once the SvelteKit frontend is scaffolded.
 - Define content build steps to transform source JSON/Markdown into consumable bundles.
 - Document environment variables needed for local development and future services.
-- Connect to the hosted Supabase project via CLI (`npx supabase login`, `npx supabase db push --project-ref zvlziltltbalebqpmuqs`) as described in `docs/references/SUPABASE.md`; retain guidance for spinning up the local stack if offline development becomes necessary.
+- Connect to the hosted Supabase project via CLI (`npx supabase login`, `npx supabase link --project-ref zvlziltltbalebqpmuqs`, `npx supabase db push --include-seed`) as described in `docs/references/SUPABASE.md`; retain guidance for spinning up the local stack if offline development becomes necessary.
 - Add per-module READMEs describing responsibilities and public interfaces for AI-friendly navigation.
 - Introduce Supabase migrations and seed scripts under `infra/` to keep schema changes deterministic.
+- Maintain living specifications for service contracts (`docs/references/API_CONTRACTS.md`) and admin tooling (`docs/references/ADMIN_DASHBOARD.md`) so infra decisions stay aligned with product requirements.
 
 ## Future State (V2)
 
@@ -32,6 +33,7 @@
 - V2 must implement authentication (email magic links or OAuth) and encrypted storage for personal notes.
 - Plan content moderation for AI-generated explanations to avoid misinformation.
 - Implement upload validation (file size/type), user quotas, and moderation tooling for community-submitted images.
+- Enforce API rate limits and audit logging as defined in `docs/references/API_CONTRACTS.md` to keep operational risk low.
 
 ## Operational Checklist
 

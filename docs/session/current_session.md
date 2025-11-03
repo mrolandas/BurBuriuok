@@ -27,7 +27,7 @@ Maintain this document during the active development session. Update checklists,
 
 ### C. Admin & Moderation Tools
 
-- [ ] Map admin dashboard screens (overview, content CRUD, moderation queue).
+- [x] Map admin dashboard screens (overview, content CRUD, moderation queue).
 - [x] Capture validation rules (duplicates, orphan nodes, missing translations) for form submissions.
 - [x] Describe media approval workflow, notifications, and contributor feedback.
 - [x] Decide on rate limiting/quota policies for uploads and edits.
@@ -59,6 +59,7 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
 - 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
 - 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
+- 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
 - [ ] Record schema extension decisions after prerequisite + moderation tables are modelled.
 - [ ] Log outcomes from wireframing sessions (screenshots/links) for future reference.
 - [ ] Document moderation SLA/notification strategy once agreed.
