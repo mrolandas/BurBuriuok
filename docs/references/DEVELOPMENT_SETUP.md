@@ -50,6 +50,7 @@ This document keeps the development environment expectations in one place. Updat
 - ESLint + Prettier baseline (rules TBD).
 - Keep UI strings in Lithuanian; internal identifiers and comments in English.
 - In SvelteKit components, wrap internal `href` values with `$app/paths.resolve(...)` so lint (`svelte/no-navigation-without-resolve`) stays green and base paths work across adapters.
+- Close the loop on GitHub issues: leave a status comment and close the ticket when a slice merges so the tracker stays accurate.
 
 ## Reference Guides
 
