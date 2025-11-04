@@ -5,10 +5,10 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 ## Architecture Snapshot
 
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
-- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` now renders the LX-001 section board using live Supabase data and mock progress badges.
-- **Data Loading** – `+page.ts` uses `getSupabaseClient()` (SSR disabled) to query `curriculum_nodes` for the section board. Handle failures gracefully and surface an inline retry via `invalidateAll()`.
+- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 section board; `src/routes/sections/[code]/+page.svelte` hosts the collapsible curriculum tree (LX-002).
+- **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query `curriculum_nodes` and `curriculum_items`. The tree route lazy-loads child nodes/items when a branch expands.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
-- **Shared UI** – Components live in `src/lib/components/`. The initial primitives (`AppShell`, `PageHeading`, `Card`) establish typography, spacing, and navigation patterns.
+- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, and the recursive `CurriculumTree` + `CurriculumTreeBranch` pair for lazy-loaded navigation.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
@@ -48,6 +48,7 @@ Run all commands from the repository root:
 - Import `getSupabaseClient` from `src/lib/supabase/client.ts` to create a browser client.
 - Treat Supabase calls as asynchronous; colocate data fetching in page `load` functions or use SvelteKit server endpoints when server-side logic is required.
 - Record schema and API changes in `docs/references/SUPABASE.md` and update seeds via the scripts documented in `docs/references/DEVELOPMENT_SETUP.md`.
+- Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent.
 
 ## Testing & Quality
 
@@ -57,4 +58,5 @@ Run all commands from the repository root:
 ## Roadmap Notes
 
 - LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders).
+- LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and a placeholder analytics event (`console.info` on first expand). Replace with the real telemetry client once analytics is wired up.
 - Document any global stores, layout hierarchy changes, or design system additions here so new contributors understand the abstraction layers.

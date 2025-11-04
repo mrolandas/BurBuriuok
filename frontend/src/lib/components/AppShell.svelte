@@ -3,8 +3,10 @@
 	import { page } from '$app/stores';
 	import type { Snippet } from 'svelte';
 
+	type NavHref = '/' | `/sections/${string}`;
+
 	export type NavLink = {
-		href: string;
+		href: NavHref;
 		label: string;
 	};
 
@@ -20,7 +22,7 @@
 		footerNote = 'Supabase-powered curriculum explorer'
 	}: Props = $props();
 
-	const isActive = (href: string) => {
+	const isActive = (href: NavHref) => {
 		const path = $page.url.pathname;
 		if (href === '/') {
 			return path === '/';
@@ -43,7 +45,7 @@
 					<a
 						class="app-shell__nav-link"
 						class:active={isActive(item.href)}
-						href={resolve(item.href as unknown as Parameters<typeof resolve>[0])}
+						href={resolve(item.href)}
 						aria-current={isActive(item.href) ? 'page' : undefined}
 					>
 						{item.label}

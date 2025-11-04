@@ -94,7 +94,7 @@
 					</div>
 					<a
 						class="section-card__cta"
-						href={resolve(`/sections/${section.code}` as unknown as Parameters<typeof resolve>[0])}
+						href={resolve('/sections/[code]', { code: section.code })}
 					>
 						Atidaryti sekciją
 					</a>
