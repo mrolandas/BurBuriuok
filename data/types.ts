@@ -156,3 +156,34 @@ export interface CurriculumDependency {
   createdBy: string | null;
   createdAt: string;
 }
+
+export type ContentEntityType =
+  | "curriculum_node"
+  | "curriculum_item"
+  | "concept"
+  | "media_asset";
+
+export type ContentVersionStatus =
+  | "draft"
+  | "in_review"
+  | "published"
+  | "archived";
+
+export type ContentVersionChangeType = "create" | "update" | "delete";
+
+export interface ContentVersionChangeInput {
+  fieldPath: string;
+  oldValue: unknown;
+  newValue: unknown;
+  changeType?: ContentVersionChangeType;
+}
+
+export interface ContentVersionInput {
+  entityType: ContentEntityType;
+  entityPrimaryKey: string;
+  status?: ContentVersionStatus;
+  changeSummary?: string | null;
+  diff?: unknown;
+  actor?: string | null;
+  changes?: ContentVersionChangeInput[];
+}

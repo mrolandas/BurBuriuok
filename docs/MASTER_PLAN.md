@@ -90,6 +90,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Remote Supabase project refreshed on 2025-11-04 with migrations through `0008` and regenerated prerequisite seeds.
 - Express API scaffold landed under `backend/src/` with read-only routes for curriculum, concepts, and dependencies plus `npm run backend:*` scripts.
 - Progress write endpoints (`PUT`/`DELETE /api/v1/progress`) shipped with zod validation, device-key enforcement, and in-memory rate limiting.
+- Audit logging utility persists admin content mutations to `content_versions` and `content_version_changes` via Supabase service client.
 - `0007_content_versioning_history.sql` extends the schema with `content_version_changes` and triggers that auto-increment versions and stamp audit metadata.
 
 - Supabase Storage buckets segregated by media type with signed URL access.

@@ -31,6 +31,7 @@ Express-based API layer responsible for mediating access to Supabase and providi
 - Add integration tests (Vitest/Jest) under `tests/` as routes are implemented.
 - Supabase credentials are read from `.env` (see `data/supabaseClient.ts`).
 - Progress writes require callers to provide `x-device-key` and respect the in-memory 120 writes/hour limiter (stub for future Redis implementation).
+- Audit logging helper (`src/services/auditLogger.ts`) records admin content mutations to Supabase `content_versions` tables.
 
 ## Commands
 

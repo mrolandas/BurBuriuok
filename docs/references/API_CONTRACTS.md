@@ -114,6 +114,7 @@ Validation errors return HTTP 422 with `{ error: { code: 'VALIDATION_ERROR', fie
   - `version` auto-incremented per entity inside the service before insert.
   - `status` transitions (`draft` → `in_review` → `published` → `archived`).
   - `diff` storing JSON Patch-style deltas to aid review diffing.
+- Backend exposes `logContentMutation` helper that computes field-level changes and persists them to `content_versions` + `content_version_changes`.
 - Media decisions append to `media_reviews` capturing reviewer, decision, notes, and timestamp.
 - For high-risk operations (delete/archive), service emits structured logs (JSON) to stdout for ingestion by hosting provider.
 - Future improvement: add Supabase triggers to capture direct table edits (if any) and push to the same tables so the audit trail stays consistent.

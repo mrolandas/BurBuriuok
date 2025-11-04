@@ -18,7 +18,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - [x] Add content versioning tables/triggers (`content_versions`, `content_version_changes`).
 - [x] Scaffold Express (or Supabase Edge) API with read endpoints: curriculum tree, concept by slug, dependency lookups.
 - [x] Implement write endpoints for progress tracking (`concept_progress`) with validation and rate limiting stubs.
-- [ ] Add audit logging for admin content mutations.
+- [x] Add audit logging for admin content mutations.
 
 ### B. Frontend Learner Experience (SvelteKit)
 
@@ -68,6 +68,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Added `content_version_changes`, triggers, and Express read API scaffold (issue [DB-002](https://github.com/mrolandas/BurBuriuok/issues/7)).
 - 2025-11-04: Supabase hosted project updated through migration `0008` with refreshed prerequisite seeds.
 - 2025-11-04: Progress write API (`PUT/DELETE /api/v1/progress/:conceptId`) shipped with device-key validation and in-memory rate limiting stub.
+- 2025-11-04: Introduced audit logging service recording admin content mutations to `content_versions` and `content_version_changes`.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -77,7 +78,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - Establish project scaffolds: initialise SvelteKit app and backend service structure.
 - Finalise prerequisite dependency migration and seed automation (done).
 - Confirm Supabase credentials and environment setup for implementation contributors.
-- Add audit logging hooks for admin content mutations.
+- Scope admin mutation endpoints that will consume the audit logger service.
 
 ## Branching & Testing Strategy
 
