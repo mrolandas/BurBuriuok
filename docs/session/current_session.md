@@ -68,15 +68,15 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Added `content_version_changes`, triggers, and Express read API scaffold (issue [DB-002](https://github.com/mrolandas/BurBuriuok/issues/7)).
 - 2025-11-04: Supabase hosted project updated through migration `0008` with refreshed prerequisite seeds.
 - 2025-11-04: Progress write API (`PUT/DELETE /api/v1/progress/:conceptId`) shipped with device-key validation and in-memory rate limiting stub.
+- 2025-11-04: Backend foundations checklist closed; shifting focus to SvelteKit learner experience slice.
 - 2025-11-04: Introduced audit logging service recording admin content mutations to `content_versions` and `content_version_changes`.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Spin out GitHub issues for backend and frontend slices (LX-001 to LX-005, DB-001 to DB-003, AUTO items already done) – completed via issues #1-#8.
-- Establish project scaffolds: initialise SvelteKit app and backend service structure.
-- Finalise prerequisite dependency migration and seed automation (done).
+- Bootstrap SvelteKit app skeleton and align routing/layout conventions.
+- Kick off LX-001 Section Board implementation plan using live Supabase curriculum data.
 - Confirm Supabase credentials and environment setup for implementation contributors.
 - Scope admin mutation endpoints that will consume the audit logger service.
 
