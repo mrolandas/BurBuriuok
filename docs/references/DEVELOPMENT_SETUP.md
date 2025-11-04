@@ -54,6 +54,7 @@ This document keeps the development environment expectations in one place. Updat
 ## Reference Guides
 
 - `docs/references/API_CONTRACTS.md` – REST surface, validation rules, rate limits, and persona-level access expectations.
+- `docs/references/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and frontend-specific workflows.
 - `docs/references/ADMIN_DASHBOARD.md` – admin flows, moderation tasks, and analytics widgets that engineering must support.
 - `docs/references/UX_MOBILE_WIREFRAMES.md` – prioritized mobile-first layouts and interaction patterns.
 - `docs/references/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
