@@ -19,7 +19,7 @@ export const load = (async () => {
 	const supabase = getSupabaseClient();
 
 	const { data, error } = await supabase
-		.from('curriculum_nodes')
+		.from('burburiuok_curriculum_nodes')
 		.select('code,title,summary,ordinal')
 		.eq('level', 1)
 		.order('ordinal', { ascending: true });

@@ -15,6 +15,8 @@ export type CurriculumItem = {
 	label: string;
 };
 
+let hasWarnedAboutPrerequisiteCounts = false;
+
 async function fetchPrerequisiteCounts(nodeCodes: string[]): Promise<Map<string, number>> {
 	const supabase = getSupabaseClient();
 	const counts = new Map<string, number>();
@@ -31,6 +33,16 @@ async function fetchPrerequisiteCounts(nodeCodes: string[]): Promise<Map<string,
 		.in('source_node_code', nodeCodes);
 
 	if (error) {
+		if (error.code === 'PGRST205' || error.code === 'PGRST106') {
+			if (!hasWarnedAboutPrerequisiteCounts) {
+				console.warn(
+					'Prerequisite counts unavailable (schema not exposed to anon role). Returning zero values.',
+					error
+				);
+				hasWarnedAboutPrerequisiteCounts = true;
+			}
+			return counts;
+		}
 		throw new Error('Nepavyko įkelti priklausomybių duomenų.');
 	}
 
@@ -50,7 +62,7 @@ export async function fetchNodeByCode(code: string) {
 	const supabase = getSupabaseClient();
 
 	const { data, error } = await supabase
-		.from('curriculum_nodes')
+		.from('burburiuok_curriculum_nodes')
 		.select('code,title,summary,level,ordinal,parent_code')
 		.eq('code', code)
 		.maybeSingle();
@@ -66,7 +78,7 @@ export async function fetchChildNodes(parentCode: string): Promise<CurriculumNod
 	const supabase = getSupabaseClient();
 
 	const { data, error } = await supabase
-		.from('curriculum_nodes')
+		.from('burburiuok_curriculum_nodes')
 		.select('code,title,summary,level,ordinal')
 		.eq('parent_code', parentCode)
 		.order('ordinal', { ascending: true });
@@ -92,7 +104,7 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 	const supabase = getSupabaseClient();
 
 	const { data, error } = await supabase
-		.from('curriculum_items')
+		.from('burburiuok_curriculum_items')
 		.select('node_code,ordinal,label')
 		.eq('node_code', nodeCode)
 		.order('ordinal', { ascending: true });

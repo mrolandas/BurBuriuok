@@ -24,7 +24,7 @@ export const load = (async ({ params }) => {
 	const supabase = getSupabaseClient();
 
 	const { data: section, error: sectionError } = await supabase
-		.from('curriculum_nodes')
+		.from('burburiuok_curriculum_nodes')
 		.select('code,title,summary,level,parent_code')
 		.eq('code', params.code)
 		.maybeSingle();
