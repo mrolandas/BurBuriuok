@@ -2,15 +2,15 @@
 
 This document keeps the development environment expectations in one place. Update it whenever tooling changes so human contributors and AI assistants stay in sync. For Supabase-specific details, see `docs/references/SUPABASE.md`.
 
-## Repository Layout (Scaffold)
+## Repository Layout
 
-- `frontend/` – SvelteKit app (routes, components, stores, styles).
-- `backend/` – Express API service (controllers, services, validation, middlewares).
-- `data/` – Supabase client wrapper, repositories, shared data contracts.
+- `backend/` – Express API service (routes, middleware, services, validation, rate limiting).
+- `data/` – Supabase client wrapper, repositories, and shared type definitions.
 - `content/` – Curriculum seed data, CSV/JSON imports, transformation scripts.
-- `infra/` – Deployment scripts, Supabase migrations, automation tooling.
 - `docs/` – Project documentation (this folder).
+- `supabase/` – Managed migrations and generated seed SQL kept in sync with Supabase.
 - `first_draft/` – Legacy prototype kept for reference.
+- _(planned)_ `frontend/` – SvelteKit learner experience (Workstream B will add this scaffold).
 
 ## System Requirements
 
@@ -35,13 +35,12 @@ This document keeps the development environment expectations in one place. Updat
 1. Clone the repository: `git clone https://github.com/mrolandas/BurBuriuok.git`.
 2. Switch into the project directory: `cd BurBuriuok`.
 3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. Current local keys live in `.env` (not versioned).
-4. Install dependencies (placeholder until the SvelteKit/Express scaffold lands): `npm install`.
-5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` before pushing.
-6. Start the development servers:
-   - `npm run dev:frontend` – launch SvelteKit in development mode. _(stub; scaffold pending)_
-   - `npm run backend:dev` – launch the Express API locally with hot reload via `tsx`.
-   - `npm run backend:start` – run the backend once without watch mode.
-   - `npm run dev` – _(optional)_ configure a concurrent runner when the frontend scaffold exists.
+4. Install dependencies: `npm install`.
+5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` and `npm run content:seed:dependencies`; run `npm run content:seed:check` before pushing.
+6. Start the backend service when needed:
+   - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
+   - `npm run backend:start` – run the backend once without watch mode for smoke testing.
+   - Frontend dev command will be added once the SvelteKit scaffold lands.
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 
@@ -63,18 +62,18 @@ This document keeps the development environment expectations in one place. Updat
 
 ## Helpful Utilities
 
-- `npm run lint` – static analysis (to be configured).
-- `npm run test` – run automated tests (see `docs/TESTING_GUIDE.md`).
-- `npm run build` – production build for deployment.
-- `npm run backend:typecheck` – TypeScript compile check for `backend/`.
-- `npm run backend:dev` / `npm run backend:start` – convenience commands for the Express service.
-- `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
-- `npm run content:seed:curriculum` – regenerate the normalized curriculum hierarchy seed (`supabase/seeds/seed_curriculum.sql`).
-- `npm run content:seed:generate` – regenerate concept seeds from `docs/static_info/LBS_concepts_master.md` via `content/scripts/build_seed_sql.mjs` (script annotates each concept with `is_required` and curriculum linkage metadata).
-- `npm run content:seed:dependencies` – regenerate `supabase/seeds/seed_curriculum_dependencies.sql` from `content/raw/curriculum_dependencies.json`.
-- `node content/scripts/extract_prototype_content.mjs` – rebuild JSON datasets from `first_draft/index.html` before regenerating seeds.
-- `gh issue list --state open` – quick snapshot of Build Sprint 1 backlog (#1-#8).
-- `gh issue create --title "<id>: <summary>" --body-file <path>` – open new work items while keeping Issue Tracker entries in sync.
+- `npm run backend:dev` / `npm run backend:start` – run the Express API locally (watch / single-run).
+- `npm run backend:typecheck` – TypeScript compile check scoped to the backend project.
+- `npm run test` / `npm run test:supabase` – Supabase connectivity smoke test.
+- `npm run test:concepts` – focused unit test for concept row mapping.
+- `npm run content:seed:generate` – regenerate concept seeds from the canonical markdown.
+- `npm run content:seed:dependencies` – rebuild the curriculum dependency seed SQL.
+- `npm run content:seed:curriculum` – rebuild the curriculum hierarchy seed when nodes change.
+- `npm run content:seed:check` – guard script run locally (and via Husky/CI) to confirm seeds are fresh.
+- `npm run content:snapshot:check` – refresh `docs/static_info/curriculum_in_supabase.csv` and fail on drift.
+- `npm run content:markdown:validate` – ensure the markdown master file stays well-formed.
+- `node content/scripts/extract_prototype_content.mjs` – regenerate JSON snapshots from the legacy prototype when needed.
+- `gh issue list --state open` / `gh issue create ...` – manage Build Sprint 1 backlog.
 
 ### Supabase local push (developer note)
 

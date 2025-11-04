@@ -6,19 +6,24 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 ## Current Status (V1)
 
-- Automated tests: limited to a Supabase connectivity check.
-- Manual smoke tests:
-  - Load glossary sections and verify terminology renders in Lithuanian and English (data served from Supabase `concepts`).
-  - Toggle learned state for several terms and confirm persistence via Supabase (`concept_progress`) with fallback caching on the client.
-  - Perform searches in Lithuanian and English; validate filtering and results.
-  - Run the quiz feature and confirm scoring logic works end-to-end.
-  - Regenerate `supabase/seeds/seed_concepts.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`) and spot-check a few records to ensure curriculum linkage remains intact before pushing seeds.
+- Automated coverage focuses on Supabase connectivity and repository helpers.
+- Manual smoke tests target backend APIs and seed regeneration integrity:
+  - Hit `/health` to confirm the Express service boots (`curl -s http://localhost:4000/health`).
+  - Exercise curriculum read endpoints (`GET /api/v1/curriculum`, `/api/v1/concepts`, `/api/v1/dependencies`) and verify payload shape matches `docs/references/API_CONTRACTS.md`.
+  - Use a device key when testing progress endpoints (`GET/PUT/DELETE /api/v1/progress/:conceptId`) and validate rate-limit metadata headers.
+  - Regenerate `supabase/seeds/seed_concepts.sql` and `supabase/seeds/seed_curriculum_dependencies.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`, `npm run content:seed:dependencies`) and confirm `npm run content:seed:check` reports no drift before pushing.
 
 ### Automated Connectivity Check
 
 - `node tests/checkSupabaseConnection.mjs`
   - Confirms the hosted Supabase REST endpoint responds with HTTP 200 using the service role key.
   - Requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to be available in the environment (the script falls back to `.env` if variables are unset).
+
+### Backend Type Safety
+
+- `npm run backend:typecheck`
+  - Runs `tsc --project backend/tsconfig.json` to ensure the Express layer, middleware, and repositories compile against current type definitions.
+  - Husky + CI should run this once backend endpoints expand (hook wiring pending).
 
 ### Curriculum Export Snapshot
 

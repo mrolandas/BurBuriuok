@@ -2,23 +2,21 @@
 
 ## Current State (V1)
 
-- **Hosting** – GitHub Pages (static deployment from the `main` branch or a dedicated `gh-pages` branch once the build pipeline exists).
-- **Runtime** – Static frontend consuming Supabase REST endpoints; no custom server-side runtime yet.
-- **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content and progress data. Schema now includes normalized `curriculum_nodes`/`curriculum_items` tables alongside `concepts` (with curriculum linkage columns) and `concept_progress`. Browser storage still holds lightweight caches and notes. Local Supabase stack remains a fallback for offline work.
-- **Content Pipeline** – Curriculum concepts live in `docs/static_info/LBS_concepts_master.md` and are compiled into Supabase seeds via `content/scripts/build_seed_sql.mjs`, ensuring a single source of truth for terminology updates.
-- **Integrations** – Supabase REST/Realtime endpoints only (no auth, no storage bucket yet).
-- **Codebase Layout** – Modular filesystem: `frontend/` (SvelteKit UI), `backend/` (Express API-to-be), `data/` (Supabase client + repositories), `content/` (curriculum seed files), `infra/` (deployment scripts and migrations).
+- **Hosting** – GitHub Pages placeholder for the legacy `first_draft/` prototype; production deployment pipeline will be reworked once the SvelteKit scaffold lands.
+- **Runtime** – Express backend under `backend/` serves read/write curriculum + progress endpoints (`/api/v1/*`). No production frontend yet; consumers will be CLI experiments or forthcoming SvelteKit UI.
+- **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content, dependencies, concept progress, and audit logging (`content_versions`, `content_version_changes`). Seeds stay in sync via the content scripts and `supabase/seeds/*`.
+- **Content Pipeline** – Curriculum concepts live in `docs/static_info/LBS_concepts_master.md` and are compiled into Supabase seed SQL via `content/scripts/build_seed_sql.mjs` + `content/scripts/build_dependency_seed_sql.mjs`.
+- **Integrations** – Supabase REST only; device-key header authenticates learner progress writes. No auth or storage buckets yet.
+- **Codebase Layout** – `backend/`, `data/`, `content/`, `docs/`, `supabase/`, and `first_draft/`. Frontend directory will appear once SvelteKit workstream (Workstream B) starts.
 
 ## Near-Term Improvements
 
-- Establish automated build and deploy workflow (GitHub Actions) once the SvelteKit frontend is scaffolded.
-- Define content build steps to transform source JSON/Markdown into consumable bundles.
-- Automate seed regeneration (`npm run content:seed:generate`) whenever `LBS_concepts_master.md` changes so deployments stay in sync with Supabase.
-- Document environment variables needed for local development and future services.
-- Connect to the hosted Supabase project via CLI (`npx supabase login`, `npx supabase link --project-ref zvlziltltbalebqpmuqs`, `npx supabase db push --include-seed`) as described in `docs/references/SUPABASE.md`; retain guidance for spinning up the local stack if offline development becomes necessary.
-- Add per-module READMEs describing responsibilities and public interfaces for AI-friendly navigation.
-- Introduce Supabase migrations and seed scripts under `infra/` to keep schema changes deterministic.
-- Maintain living specifications for service contracts (`docs/references/API_CONTRACTS.md`) and admin tooling (`docs/references/ADMIN_DASHBOARD.md`) so infra decisions stay aligned with product requirements.
+- Automate backend deploy (GitHub Actions or Railway) once backend reaches MVP stability.
+- Add build pipeline for SvelteKit frontend after scaffold exists; capture deployment target decision.
+- Keep Supabase schema + seeds aligned by running `npm run content:seed:check` and `npx supabase db push --include-seed` before deploying.
+- Document service credentials (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`) and rotate policies once auth is introduced.
+- Publish per-module READMEs for `backend/` and `data/` to help AI agents/local developers navigate responsibilities.
+- Continue evolving API contract docs as endpoints expand (progress, admin audit logging already live).
 
 ## Future State (V2)
 
