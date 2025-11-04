@@ -5,7 +5,8 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 ## Architecture Snapshot
 
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
-- **Routing** – File-based routes under `src/routes`. The current shell provides a single `+page.svelte` placeholder ready for LX-001.
+- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` now renders the LX-001 section board using live Supabase data and mock progress badges.
+- **Data Loading** – `+page.ts` uses `getSupabaseClient()` (SSR disabled) to query `curriculum_nodes` for the section board. Handle failures gracefully and surface an inline retry via `invalidateAll()`.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
 - **Shared UI** – Components live in `src/lib/components/`. The initial primitives (`AppShell`, `PageHeading`, `Card`) establish typography, spacing, and navigation patterns.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
@@ -55,5 +56,5 @@ Run all commands from the repository root:
 
 ## Roadmap Notes
 
-- LX-001 Section Board will introduce the first data-bound route. Capture patterns (server data loading, optimistic UI, error surfaces) in this file as they stabilize.
+- LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders).
 - Document any global stores, layout hierarchy changes, or design system additions here so new contributors understand the abstraction layers.
