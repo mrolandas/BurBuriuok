@@ -8,6 +8,7 @@ import type {
 } from "../types";
 
 const TABLE = "concept_progress";
+const VIEW = "burburiuok_concept_progress";
 
 function mapRow(row: Partial<ConceptProgressRow>): ConceptProgress {
   return {
@@ -26,7 +27,7 @@ export async function listProgressByDevice(
 ): Promise<ConceptProgress[]> {
   const supabase = client ?? getSupabaseClient();
   const { data, error } = await (supabase as any)
-    .from(TABLE)
+    .from(VIEW)
     .select("*")
     .eq("device_key", deviceKey)
     .order("updated_at", { ascending: false });
@@ -48,7 +49,7 @@ export async function upsertProgress(
     return;
   }
 
-  const supabase = client ?? getSupabaseClient({ service: true });
+  const supabase = client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
   const payload = updates.map((update) => ({
     status: "learning",
     ...update,
@@ -69,7 +70,7 @@ export async function deleteProgressRecord(
   deviceKey: string,
   client: SupabaseClient | null = null
 ): Promise<void> {
-  const supabase = client ?? getSupabaseClient({ service: true });
+  const supabase = client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
   const { error } = await (supabase as any)
     .from(TABLE)
     .delete()

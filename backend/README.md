@@ -12,14 +12,17 @@ Express-based API layer responsible for mediating access to Supabase and providi
 
 ## Current Endpoints
 
-| Method | Path                       | Description                                            |
-| ------ | -------------------------- | ------------------------------------------------------ |
-| GET    | `/health`                  | Returns service liveness payload.                      |
-| GET    | `/api/v1/curriculum`       | Lists curriculum nodes/items with optional depth cap.  |
-| GET    | `/api/v1/curriculum/:code` | Returns a node, its children, items, and dependencies. |
-| GET    | `/api/v1/concepts`         | Lists concepts filtered by section/node/required flag. |
-| GET    | `/api/v1/concepts/:slug`   | Retrieves a single concept by slug.                    |
-| GET    | `/api/v1/dependencies`     | Lists curriculum dependencies with filters.            |
+| Method | Path                          | Description                                                      |
+| ------ | ----------------------------- | ---------------------------------------------------------------- |
+| GET    | `/health`                     | Returns service liveness payload.                                |
+| GET    | `/api/v1/curriculum`          | Lists curriculum nodes/items with optional depth cap.            |
+| GET    | `/api/v1/curriculum/:code`    | Returns a node, its children, items, and dependencies.           |
+| GET    | `/api/v1/concepts`            | Lists concepts filtered by section/node/required flag.           |
+| GET    | `/api/v1/concepts/:slug`      | Retrieves a single concept by slug.                              |
+| GET    | `/api/v1/dependencies`        | Lists curriculum dependencies with filters.                      |
+| GET    | `/api/v1/progress`            | Lists progress records for the provided device key.              |
+| PUT    | `/api/v1/progress/:conceptId` | Upserts learner progress status with validation + rate limiting. |
+| DELETE | `/api/v1/progress/:conceptId` | Removes a learner progress record.                               |
 
 ## Development Notes
 
@@ -27,6 +30,7 @@ Express-based API layer responsible for mediating access to Supabase and providi
 - Keep controllers thin; push logic into services for easier testing.
 - Add integration tests (Vitest/Jest) under `tests/` as routes are implemented.
 - Supabase credentials are read from `.env` (see `data/supabaseClient.ts`).
+- Progress writes require callers to provide `x-device-key` and respect the in-memory 120 writes/hour limiter (stub for future Redis implementation).
 
 ## Commands
 

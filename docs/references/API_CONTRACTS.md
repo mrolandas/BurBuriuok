@@ -47,17 +47,17 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
 
 ## Learner (Authenticated) Endpoints
 
-| Method | Path                      | Description                                                                                                   |
-| ------ | ------------------------- | ------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------- |
-| GET    | `/progress`               | Returns concept progress states for the requesting learner (`deviceKey` derived from profile/device binding). |
-| PUT    | `/progress/:conceptId`    | Body `{ status: "learning"                                                                                    | "known" | "review", lastReviewedAt? }`. Upserts `concept_progress` row. |
-| POST   | `/study-queue`            | Adds concept to personal queue. Later backed by dedicated table.                                              |
-| DELETE | `/study-queue/:conceptId` | Removes concept from queue.                                                                                   |
-| POST   | `/media-submissions`      | Upload metadata payload; signed upload URL returned for storage.                                              |
-| PATCH  | `/media-submissions/:id`  | Allow contributor to withdraw pending submission.                                                             |
+| Method | Path                      | Description                                                                            |
+| ------ | ------------------------- | -------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| GET    | `/progress`               | Returns concept progress states (requires `x-device-key` header or `deviceKey` query). |
+| PUT    | `/progress/:conceptId`    | Body `{ status: "learning"                                                             | "known" | "review", lastReviewedAt? }`. Upserts `concept_progress` row with 120 writes/hour limiter per device. |
+| DELETE | `/progress/:conceptId`    | Removes the progress record for the device/concept combination.                        |
+| POST   | `/study-queue`            | Adds concept to personal queue. Later backed by dedicated table.                       |
+| DELETE | `/study-queue/:conceptId` | Removes concept from queue.                                                            |
+| POST   | `/media-submissions`      | Upload metadata payload; signed upload URL returned for storage.                       |
+| PATCH  | `/media-submissions/:id`  | Allow contributor to withdraw pending submission.                                      |
 
-Progress endpoints accept optional `deviceKey` header to support offline caching; server falls back to authenticated user ID.
-Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/GAMIFICATION_MODEL.md`.
+Progress endpoints require a device binding: send `x-device-key` or `deviceKey` query when auth flow is absent. Rate limit (stubbed in-memory) caps progress writes at 120/hour per device. Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/GAMIFICATION_MODEL.md`.
 
 ## Admin Endpoints
 
