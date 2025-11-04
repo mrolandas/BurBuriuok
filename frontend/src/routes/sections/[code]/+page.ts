@@ -30,11 +30,11 @@ export const load = (async ({ params }) => {
 		.maybeSingle();
 
 	if (sectionError) {
-		console.error('Nepavyko įkelti sekcijos duomenų', sectionError);
+		console.error('Nepavyko įkelti skilties duomenų', sectionError);
 		const fallback: SectionPageData = {
 			section: null,
 			initialNodes: [],
-			loadError: 'Nepavyko įkelti sekcijos. Pabandykite dar kartą.'
+			loadError: 'Nepavyko įkelti skilties. Pabandykite dar kartą.'
 		};
 		return fallback;
 	}

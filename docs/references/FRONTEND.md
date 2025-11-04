@@ -5,10 +5,10 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 ## Architecture Snapshot
 
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
-- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 section board; `src/routes/sections/[code]/+page.svelte` hosts the collapsible curriculum tree (LX-002).
-- **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query `curriculum_nodes` and `curriculum_items`. The tree route lazy-loads child nodes/items when a branch expands.
+- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree.
+- **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes` and `burburiuok_curriculum_items`. The tree route lazy-loads child nodes/items when a branch expands.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
-- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, and the recursive `CurriculumTree` + `CurriculumTreeBranch` pair for lazy-loaded navigation.
+- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, and the recursive `CurriculumTree` + `CurriculumTreeBranch` pair for lazy-loaded navigation and Lithuanian learner copy.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
@@ -42,13 +42,14 @@ Run all commands from the repository root:
 - Co-locate stories or example usage in dedicated routes rather than inside the component tree.
 - Re-export shared modules through `src/lib/index.ts` when they should be consumed outside the app (e.g., future package extraction).
 - Keep learner-facing copy in Lithuanian; comments and internal identifiers remain in English.
+- Preserve Lithuanian terminology (“skiltis”, “Skilčių lenta”) when adding new UI or logging strings; audit new components before review.
 
 ## Supabase Usage
 
 - Import `getSupabaseClient` from `src/lib/supabase/client.ts` to create a browser client.
 - Treat Supabase calls as asynchronous; colocate data fetching in page `load` functions or use SvelteKit server endpoints when server-side logic is required.
 - Record schema and API changes in `docs/references/SUPABASE.md` and update seeds via the scripts documented in `docs/references/DEVELOPMENT_SETUP.md`.
-- Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent.
+- Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent. Prerequisite badges currently fall back to zero counts until a public dependency view is introduced; the helper logs a warning when the fallback triggers.
 
 ## Testing & Quality
 

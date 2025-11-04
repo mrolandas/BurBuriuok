@@ -39,8 +39,8 @@
 
 <PageHeading
 	kicker="LX-001"
-	title="Curriculum section board"
-	description="Peržiūrėkite pagrindines mokymo sekcijas, stebėkite pažangą ir pereikite prie detalizuotos medžiagos."
+	title="Mokymo skilčių lenta"
+	description="Peržiūrėkite pagrindines mokymo skiltis, stebėkite pažangą ir pereikite prie detalizuotos medžiagos."
 >
 	<svelte:fragment slot="actions">
 		<a class="cta" href="https://github.com/mrolandas/BurBuriuok/issues/1">Peržiūrėti užduotį</a>
@@ -58,7 +58,7 @@
 {#if data.loadError}
 	<section class="status-block status-block--error" role="alert">
 		<div>
-			<p class="status-block__title">Nepavyko įkelti sekcijų</p>
+			<p class="status-block__title">Nepavyko įkelti skilčių</p>
 			<p class="status-block__body">{data.loadError}</p>
 		</div>
 		<button class="status-block__action" type="button" onclick={() => void reloadSections()}>
@@ -70,14 +70,14 @@
 <section class="grid" aria-live="polite">
 	{#if !data.sections.length && !data.loadError}
 		<div class="grid__placeholder">
-			<p>Kraunama sekcijų lenta...</p>
+			<p>Kraunama skilčių lenta...</p>
 		</div>
 	{:else}
 		{#each data.sections as section (section.code)}
 			{@const progress = getProgress(section.code)}
 			{@const percent = progressPercent(progress.completed, progress.total)}
 
-			<Card subtitle={`Sekcija ${section.ordinal}`} title={section.title}>
+			<Card subtitle={`Skiltis ${section.ordinal}`} title={section.title}>
 				{#if section.summary}
 					<p>{section.summary}</p>
 				{:else}
@@ -96,7 +96,7 @@
 						class="section-card__cta"
 						href={resolve('/sections/[code]', { code: section.code })}
 					>
-						Atidaryti sekciją
+						Atidaryti skiltį
 					</a>
 				</div>
 			</Card>

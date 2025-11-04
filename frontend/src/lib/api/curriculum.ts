@@ -44,7 +44,7 @@ export async function fetchNodeByCode(code: string) {
 		.maybeSingle();
 
 	if (error) {
-		throw new Error('Nepavyko įkelti sekcijos duomenų.');
+		throw new Error('Nepavyko įkelti skilties duomenų.');
 	}
 
 	return data;

@@ -25,10 +25,10 @@ export const load = (async () => {
 		.order('ordinal', { ascending: true });
 
 	if (error) {
-		console.error('Failed to load section board data from Supabase', error);
+		console.error('Nepavyko įkelti skilčių lentos duomenų iš Supabase', error);
 		const fallback: PageData = {
 			sections: [],
-			loadError: 'Nepavyko įkelti sekcijų. Pabandykite dar kartą.'
+			loadError: 'Nepavyko įkelti skilčių. Pabandykite dar kartą.'
 		};
 		return fallback;
 	}

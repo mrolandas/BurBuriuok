@@ -24,7 +24,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 - [x] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
 - [x] Implement Section Board page consuming live Supabase data (issue [LX-001](https://github.com/mrolandas/BurBuriuok/issues/1)).
-- [x] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)).
+- [x] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)) – prerequisite badges currently show zero until a public dependency view ships.
 - [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
 - [ ] Integrate Supabase client, environment config, and error handling patterns.
 
@@ -74,14 +74,16 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Frontend lint baseline green after updating AppShell navigation to use `$app/paths.resolve` for internal links.
 - 2025-11-04: LX-001 Section board route renders live Supabase curriculum nodes with progress placeholders and inline retry control.
 - 2025-11-04: LX-002 Collapsible tree route delivers lazy-loaded curriculum branches, prerequisite badges, and analytics stub logging on expand.
+- 2025-11-04: Localised learner UI copy from “sekcija” to “skiltis” and removed remaining English strings across navigation and tree components.
+- 2025-11-04: Documented LX-002 completion (fallback prerequisite counts logged) and queued LX-003 concept detail slice.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Start LX-003 concept detail skeleton (Supabase fetch + UI scaffolding).
-- Define data loading strategy (load functions + caching) for learner-facing routes.
-- Document frontend environment requirements (`VITE_SUPABASE_*`) for contributors.
+- Kick off LX-003 concept detail skeleton (Supabase fetch + UI scaffolding).
+- Define data loading strategy and caching for concept detail plus shared curriculum queries.
+- Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
 
 ## Branching & Testing Strategy
 

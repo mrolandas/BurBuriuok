@@ -109,7 +109,7 @@
 	</header>
 
 	{#if !roots.length}
-		<p class="curriculum-tree__empty">Šioje sekcijoje dar nėra įkelto turinio.</p>
+		<p class="curriculum-tree__empty">Šioje skiltyje dar nėra įkelto turinio.</p>
 	{:else}
 		{#key renderKey}
 			<CurriculumTreeBranch nodes={roots} onToggle={toggleNode} onRetry={retryNode} />

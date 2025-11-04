@@ -19,7 +19,7 @@
 	let {
 		navLinks = [],
 		children,
-		footerNote = 'Supabase-powered curriculum explorer'
+		footerNote = 'Supabase valdomas mokymo turinys'
 	}: Props = $props();
 
 	const isActive = (href: NavHref) => {
@@ -34,9 +34,9 @@
 <div class="app-shell">
 	<header class="app-shell__header">
 		<div class="app-shell__brand">
-			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurBuriuok home">
+			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurBuriuok pradžia">
 				<span class="app-shell__brand-mark">BurBuriuok</span>
-				<span class="app-shell__brand-subtitle">Learning Companion</span>
+				<span class="app-shell__brand-subtitle">Mokymosi palydovas</span>
 			</a>
 		</div>
 		{#if navLinks.length}

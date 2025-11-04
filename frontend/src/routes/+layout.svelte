@@ -3,7 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/global.css';
 
-	const navLinks: NavLink[] = [{ href: '/', label: 'Section Board' }];
+	const navLinks: NavLink[] = [{ href: '/', label: 'Skilčių lenta' }];
 
 	let { children } = $props();
 </script>

@@ -13,22 +13,22 @@
 	<nav class="section-view__nav">
 		<a class="section-view__back" href={homeHref}>
 			<span aria-hidden="true">←</span>
-			Grįžti į sekcijų lentą
+			Grįžti į skilčių lentą
 		</a>
 	</nav>
 
 	{#if data.notFound}
-		<Card title="Sekcija nerasta" subtitle="Klaida 404">
-			<p>Ši sekcija nerasta. Patikrinkite nuorodą ir bandykite dar kartą.</p>
+		<Card title="Skiltis nerasta" subtitle="Klaida 404">
+			<p>Ši skiltis nerasta. Patikrinkite nuorodą ir bandykite dar kartą.</p>
 		</Card>
 	{:else if data.loadError}
-		<Card title="Nepavyko įkelti sekcijos" subtitle="Techninė klaida">
+		<Card title="Nepavyko įkelti skilties" subtitle="Techninė klaida">
 			<p>{data.loadError}</p>
 		</Card>
 	{:else if data.section}
 		<CurriculumTree section={data.section} initialNodes={data.initialNodes} />
 	{:else}
-		<Card title="Kraunama sekcija">
+		<Card title="Kraunama skiltis">
 			<p>Laukiame duomenų iš Supabase...</p>
 		</Card>
 	{/if}
