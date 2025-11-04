@@ -15,8 +15,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 ### A. Backend Foundations (Supabase + API)
 
 - [x] Finalise prerequisite `curriculum_dependencies` migration and seeds (link to `docs/references/SCHEMA_DECISIONS.md`).
-- [ ] Add content versioning tables/triggers (`content_versions`, `content_version_changes`).
-- [ ] Scaffold Express (or Supabase Edge) API with read endpoints: curriculum tree, concept by slug, dependency lookups.
+- [x] Add content versioning tables/triggers (`content_versions`, `content_version_changes`).
+- [x] Scaffold Express (or Supabase Edge) API with read endpoints: curriculum tree, concept by slug, dependency lookups.
 - [ ] Implement write endpoints for progress tracking (`concept_progress`) with validation and rate limiting stubs.
 - [ ] Add audit logging for admin content mutations.
 
@@ -65,6 +65,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-03: Build Sprint 1 created after planning merge; backlog seeded from `docs/references/ISSUE_TRACKER.md`.
 - 2025-11-03: Opened GitHub issues #1-#8 for Build Sprint 1 learner and backend slices.
 - 2025-11-03: Curriculum dependency migration + seed tooling drafted and logged (issue [DB-001](https://github.com/mrolandas/BurBuriuok/issues/6)).
+- 2025-11-04: Added `content_version_changes`, triggers, and Express read API scaffold (issue [DB-002](https://github.com/mrolandas/BurBuriuok/issues/7)).
+- 2025-11-04: Supabase hosted project updated through migration `0008` with refreshed prerequisite seeds.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -73,6 +75,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - Spin out GitHub issues for backend and frontend slices (LX-001 to LX-005, DB-001 to DB-003, AUTO items already done) – completed via issues #1-#8.
 - Establish project scaffolds: initialise SvelteKit app and backend service structure.
 - Finalise prerequisite dependency migration and seed automation (done).
+- Wire progress write endpoints and rate limiting stubs for Supabase `concept_progress`.
 - Confirm Supabase credentials and environment setup for implementation contributors.
 
 ## Branching & Testing Strategy

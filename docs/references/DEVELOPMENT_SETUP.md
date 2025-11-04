@@ -26,7 +26,8 @@ This document keeps the development environment expectations in one place. Updat
 - `@supabase/supabase-js`
 - `@types/node`
 - `typescript`
-- `ts-node` (or the chosen build tooling for running scripts)
+- `ts-node` / `tsx` for running TypeScript in development
+- `express`, `cors` for the backend HTTP layer
 - `zod` (or another schema validator) for data checks in content tooling
 
 ## Project Bootstrap
@@ -36,12 +37,13 @@ This document keeps the development environment expectations in one place. Updat
 3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. Current local keys live in `.env` (not versioned).
 4. Install dependencies (placeholder until the SvelteKit/Express scaffold lands): `npm install`.
 5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` before pushing.
-6. Start the development servers (to be defined once the scaffold is ready). Expected commands:
-   - `npm run dev:frontend` – launch SvelteKit in development mode.
-   - `npm run dev:backend` – launch the Express API locally.
-   - `npm run dev` – run both via a concurrent script.
+6. Start the development servers:
+   - `npm run dev:frontend` – launch SvelteKit in development mode. _(stub; scaffold pending)_
+   - `npm run backend:dev` – launch the Express API locally with hot reload via `tsx`.
+   - `npm run backend:start` – run the backend once without watch mode.
+   - `npm run dev` – _(optional)_ configure a concurrent runner when the frontend scaffold exists.
 
-> Update the command list as soon as the actual scripts exist in `package.json`.
+> Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 
 ## Coding Standards
 
@@ -64,6 +66,8 @@ This document keeps the development environment expectations in one place. Updat
 - `npm run lint` – static analysis (to be configured).
 - `npm run test` – run automated tests (see `docs/TESTING_GUIDE.md`).
 - `npm run build` – production build for deployment.
+- `npm run backend:typecheck` – TypeScript compile check for `backend/`.
+- `npm run backend:dev` / `npm run backend:start` – convenience commands for the Express service.
 - `supabase start` / `supabase status` – manage local Supabase services when working on authenticated features or image storage flows (available post-V2 scaffolding).
 - `npm run content:seed:curriculum` – regenerate the normalized curriculum hierarchy seed (`supabase/seeds/seed_curriculum.sql`).
 - `npm run content:seed:generate` – regenerate concept seeds from `docs/static_info/LBS_concepts_master.md` via `content/scripts/build_seed_sql.mjs` (script annotates each concept with `is_required` and curriculum linkage metadata).

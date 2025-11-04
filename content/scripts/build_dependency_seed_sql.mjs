@@ -248,7 +248,7 @@ function buildSql(dependencies) {
   );
 
   const conflictClause = allNodeToNode
-    ? "on conflict on constraint curriculum_dependencies_node_to_node_uniq do update set\n    notes = excluded.notes,\n    created_by = excluded.created_by;\n"
+    ? "on conflict (source_node_code, prerequisite_node_code)\n    where source_type = 'node' and prerequisite_type = 'node'\n    do update set\n    notes = excluded.notes,\n    created_by = excluded.created_by;\n"
     : "on conflict do nothing;\n";
 
   return (

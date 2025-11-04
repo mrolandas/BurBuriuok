@@ -87,6 +87,9 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Engineering is cleared to begin backend and frontend implementation using the backlog seeds in `docs/references/ISSUE_TRACKER.md` and the roadmap below.
 - Build Sprint 1 backlog items now exist as GitHub issues (#1-#8) opened via the GitHub CLI, with cross-links maintained in `docs/references/ISSUE_TRACKER.md`.
 - `npm run content:seed:dependencies` generates `supabase/seeds/seed_curriculum_dependencies.sql`, keeping prerequisite data aligned with the schema migration.
+- Remote Supabase project refreshed on 2025-11-04 with migrations through `0008` and regenerated prerequisite seeds.
+- Express API scaffold landed under `backend/src/` with read-only routes for curriculum, concepts, and dependencies plus `npm run backend:*` scripts.
+- `0007_content_versioning_history.sql` extends the schema with `content_version_changes` and triggers that auto-increment versions and stamp audit metadata.
 
 - Supabase Storage buckets segregated by media type with signed URL access.
 - Metadata tables track moderation state (`pending`, `approved`, `rejected`, `archived`).
@@ -98,7 +101,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 - [x] Generate canonical curriculum + concept seeds and push baseline Supabase schema.
 - [x] Model prerequisite relationships (node/concept dependency tables + seed alignment).
-- [ ] Define draft/published states and change history tables for content.
+- [x] Define draft/published states and change history tables for content.
 - [x] Outline API surface (read, progress, admin) with contracts documented (`docs/references/API_CONTRACTS.md`).
 - [x] Prepare baseline mobile wireframes for curriculum board and concept view (`docs/references/UX_MOBILE_WIREFRAMES.md`).
 

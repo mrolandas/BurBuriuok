@@ -124,3 +124,35 @@ export interface UpsertProgressInput {
   status?: ProgressStatus;
   last_reviewed_at?: string;
 }
+
+export type DependencyEntityType = "concept" | "node";
+
+export interface CurriculumDependencyRow {
+  id: string;
+  source_type: DependencyEntityType;
+  source_concept_id: string | null;
+  source_node_code: string | null;
+  prerequisite_type: DependencyEntityType;
+  prerequisite_concept_id: string | null;
+  prerequisite_node_code: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface CurriculumDependency {
+  id: string;
+  source: {
+    type: DependencyEntityType;
+    conceptId: string | null;
+    nodeCode: string | null;
+  };
+  prerequisite: {
+    type: DependencyEntityType;
+    conceptId: string | null;
+    nodeCode: string | null;
+  };
+  notes: string | null;
+  createdBy: string | null;
+  createdAt: string;
+}

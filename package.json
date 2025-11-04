@@ -13,6 +13,9 @@
     "content:seed:generate": "node content/scripts/build_seed_sql.mjs",
     "content:seed:dependencies": "node content/scripts/build_dependency_seed_sql.mjs",
     "content:seed:check": "node content/scripts/build_seed_sql.mjs --check && node content/scripts/build_dependency_seed_sql.mjs --check",
+    "backend:dev": "tsx watch backend/src/server.ts",
+    "backend:start": "tsx backend/src/server.ts",
+    "backend:typecheck": "tsc --project backend/tsconfig.json",
     "content:snapshot:refresh": "node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv",
     "content:snapshot:check": "npm run content:snapshot:refresh && git diff --exit-code docs/static_info/curriculum_in_supabase.csv",
     "content:markdown:validate": "node tests/validateConceptMarkdown.mjs",
@@ -32,12 +35,20 @@
   },
   "homepage": "https://mrolandas.github.io/BurBuriuok/",
   "dependencies": {
+    "@supabase/supabase-js": "^2.43.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "node-html-parser": "^7.0.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30",
     "husky": "^8.0.3",
     "ts-node": "^10.9.2",
+    "tsx": "^4.7.1",
     "typescript": "^5.4.0"
   }
 }

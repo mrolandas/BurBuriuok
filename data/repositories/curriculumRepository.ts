@@ -53,6 +53,31 @@ export async function listCurriculumNodes(
   return (data ?? []).map(mapNodeRow);
 }
 
+export async function getCurriculumNodeByCode(
+  code: string,
+  client: SupabaseClient | null = null
+): Promise<CurriculumNode | null> {
+  const supabase = client ?? getSupabaseClient();
+  const { data, error } = await (supabase as any)
+    .from(NODE_VIEW)
+    .select("*")
+    .eq("code", code)
+    .maybeSingle();
+
+  if (error) {
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new Error(`Failed to fetch curriculum node '${code}': ${error.message}`);
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return mapNodeRow(data);
+}
+
 type CurriculumItemOptions = {
   nodeCode?: string;
 };

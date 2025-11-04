@@ -7,6 +7,8 @@ const TABLE = "concepts";
 
 type ConceptsQueryOptions = {
   sectionCode?: string;
+  nodeCode?: string;
+  requiredOnly?: boolean;
 };
 
 export async function listConcepts(
@@ -23,6 +25,14 @@ export async function listConcepts(
 
   if (options.sectionCode) {
     query = query.eq("section_code", options.sectionCode);
+  }
+
+  if (options.nodeCode) {
+    query = query.eq("curriculum_node_code", options.nodeCode);
+  }
+
+  if (options.requiredOnly) {
+    query = query.eq("is_required", true);
   }
 
   const { data, error } = await query;

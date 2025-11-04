@@ -1,6 +1,6 @@
 # API & Moderation Contracts
 
-Defines the service surface area that sits in front of Supabase for BurBuriuok. These contracts stabilise the backend workstream and inform the mobile-first UI. Paths assume an Express instance mounted under `/api/v1` with Supabase Auth JWT validation.
+Defines the service surface area that sits in front of Supabase for BurBuriuok. These contracts stabilise the backend workstream and inform the mobile-first UI. Paths assume an Express instance mounted under `/api/v1` with Supabase Auth JWT validation. The initial Express scaffold (2025-11-04) now exposes the public read endpoints documented below.
 
 ## Roles & Authentication
 

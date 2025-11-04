@@ -18,9 +18,9 @@ This log captures authoritative decisions about the evolving Supabase schema so 
 - **Constraints & Indexes**:
   - `curriculum_dependencies_source_chk` / `curriculum_dependencies_prerequisite_chk` enforce that concept/node identifiers are mutually exclusive.
   - Filtered indexes for each lookup leg: `curriculum_dependencies_source_concept_idx`, `curriculum_dependencies_source_node_idx`, `curriculum_dependencies_prereq_concept_idx`, `curriculum_dependencies_prereq_node_idx`.
-  - Partial unique indexes on concept→concept (`curriculum_dependencies_concept_to_concept_uniq`) and node→node (`curriculum_dependencies_node_to_node_uniq`) edges prevent duplicate rows while keeping cross-type links flexible.
+  - Partial unique indexes on concept→concept (`curriculum_dependencies_concept_to_concept_uniq`) and node→node (`curriculum_dependencies_node_to_node_uniq`) edges prevent duplicate rows while keeping cross-type links flexible; migration `0008_curriculum_dependency_constraint_patch.sql` reasserts these indexes for the hosted project.
 - **Seed strategy**:
-  - `content/scripts/build_dependency_seed_sql.mjs` reads `content/raw/curriculum_dependencies.json` and generates `supabase/seeds/seed_curriculum_dependencies.sql` with idempotent inserts.
+  - `content/scripts/build_dependency_seed_sql.mjs` reads `content/raw/curriculum_dependencies.json` and generates `supabase/seeds/seed_curriculum_dependencies.sql` with idempotent inserts using a conflict target on `(source_node_code, prerequisite_node_code)` constrained to node→node edges.
   - Initial data focuses on top-level module prerequisites; expand the JSON when concept-level edges are ready.
 - **Policies**:
   - RLS remains disabled (service-role only). Once persona roles land, restrict inserts to admins and expose read-only views for learners.
@@ -31,18 +31,24 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - `id` (uuid default `gen_random_uuid()`) primary key.
   - `entity_type` (text) constrained to `curriculum_node`, `curriculum_item`, `concept`, or `media_asset`.
   - `entity_primary_key` (text) stores the upstream identifier (UUID or code) of the entity being versioned.
-  - `version` (integer, default 1) tracks monotonic revisions per entity.
-  - `status` (text) constrained to `draft`, `in_review`, `published`, `archived`.
+  - `version` (integer) auto-increments per entity via trigger (`content_versions_set_defaults`).
+  - `status` (text) constrained to `draft`, `in_review`, `published`, `archived` with default `draft`.
   - `change_summary` (text) provides human-readable context.
   - `diff` (jsonb) captures serialized field deltas for tooling.
-  - `created_by` (text) captures author (Supabase UID or email until profile linkage arrives).
+  - `created_by` (text) defaults to request JWT `sub` claim or `system` fallback in trigger.
   - `created_at` (timestamptz) default `timezone('utc', now())`.
-- **Indexes**:
-  - Unique composite index on `(entity_type, entity_primary_key, version)` to guarantee consistent revision ordering.
-  - Secondary index on `status` to accelerate workflow queues.
+- **Tables**: `content_version_changes`
+  - Stores field-level diffs linked to `content_versions.id` (`version_id` FK, cascade delete).
+  - `field_path` (text) records dotted JSON path; `change_type` (`create|update|delete`) defaults to `update`.
+  - `old_value` / `new_value` (jsonb) hold before/after payloads; `created_by` mirrors JWT fallback logic, `created_at` auto-stamped.
+  - Indexed on `version_id` for fast joins in history views.
+- **Triggers & functions (0007_content_versioning_history.sql)**:
+  - `content_versions_set_defaults` assigns sequential version numbers per entity and fills audit metadata when callers omit fields.
+  - `content_version_changes_set_defaults` ensures change rows capture actor/timestamp metadata consistently.
 - **Workflow**:
   - Draft rows represent proposed edits. Publishing logic (future trigger or service) will promote a draft to `published` and synchronize canonical tables.
   - `diff` payload is optional for MVP; downstream services can parse it for review tooling.
+  - `content_version_changes` is optional to populate from services until automated diffing lands.
 - **Policies**:
   - No RLS yet; inserts limited to service role. Introduce role-bound policies once admin/auth scaffolding lands.
 

@@ -5,7 +5,7 @@ type ClientContext = {
   schema?: string;
 };
 
-const DEFAULT_SCHEMA = "burburiuok";
+const DEFAULT_SCHEMA = "public";
 let cachedAnonClient: SupabaseClient | null = null;
 let cachedServiceClient: SupabaseClient | null = null;
 
