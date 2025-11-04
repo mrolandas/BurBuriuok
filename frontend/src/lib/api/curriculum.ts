@@ -18,41 +18,17 @@ export type CurriculumItem = {
 let hasWarnedAboutPrerequisiteCounts = false;
 
 async function fetchPrerequisiteCounts(nodeCodes: string[]): Promise<Map<string, number>> {
-	const supabase = getSupabaseClient();
 	const counts = new Map<string, number>();
 
 	if (!nodeCodes.length) {
 		return counts;
 	}
 
-	const { data, error } = await supabase
-		.from('curriculum_dependencies')
-		.select('source_node_code', { count: 'exact' })
-		.eq('source_type', 'node')
-		.eq('prerequisite_type', 'node')
-		.in('source_node_code', nodeCodes);
-
-	if (error) {
-		if (error.code === 'PGRST205' || error.code === 'PGRST106') {
-			if (!hasWarnedAboutPrerequisiteCounts) {
-				console.warn(
-					'Prerequisite counts unavailable (schema not exposed to anon role). Returning zero values.',
-					error
-				);
-				hasWarnedAboutPrerequisiteCounts = true;
-			}
-			return counts;
-		}
-		throw new Error('Nepavyko įkelti priklausomybių duomenų.');
-	}
-
-	if (!data) {
-		return counts;
-	}
-
-	for (const row of data) {
-		const code = row.source_node_code as string;
-		counts.set(code, (counts.get(code) ?? 0) + 1);
+	if (!hasWarnedAboutPrerequisiteCounts) {
+		console.info(
+			'[curriculum] Prerequisite counts unavailable in public schema; defaulting to zero until public view is exposed.'
+		);
+		hasWarnedAboutPrerequisiteCounts = true;
 	}
 
 	return counts;
