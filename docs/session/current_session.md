@@ -22,7 +22,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ### B. Frontend Learner Experience (SvelteKit)
 
-- [ ] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
+- [x] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
 - [ ] Implement Section Board page consuming live Supabase data (issue [LX-001](https://github.com/mrolandas/BurBuriuok/issues/1)).
 - [ ] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)).
 - [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
@@ -70,15 +70,16 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Progress write API (`PUT/DELETE /api/v1/progress/:conceptId`) shipped with device-key validation and in-memory rate limiting stub.
 - 2025-11-04: Backend foundations checklist closed; shifting focus to SvelteKit learner experience slice.
 - 2025-11-04: Introduced audit logging service recording admin content mutations to `content_versions` and `content_version_changes`.
+- 2025-11-04: SvelteKit learner experience shell scaffolded (`frontend/`) with shared UI primitives and Supabase config utilities.
+- 2025-11-04: Frontend lint baseline green after updating AppShell navigation to use `$app/paths.resolve` for internal links.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Bootstrap SvelteKit app skeleton and align routing/layout conventions.
-- Kick off LX-001 Section Board implementation plan using live Supabase curriculum data.
-- Confirm Supabase credentials and environment setup for implementation contributors.
-- Scope admin mutation endpoints that will consume the audit logger service.
+- Deliver LX-001 Section Board route backed by Supabase curriculum view.
+- Define data loading strategy (load functions + caching) for learner-facing routes.
+- Document frontend environment requirements (`VITE_SUPABASE_*`) for contributors.
 
 ## Branching & Testing Strategy
 

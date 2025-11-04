@@ -5,12 +5,12 @@ This document keeps the development environment expectations in one place. Updat
 ## Repository Layout
 
 - `backend/` – Express API service (routes, middleware, services, validation, rate limiting).
+- `frontend/` – SvelteKit learner experience shell (Workstream B).
 - `data/` – Supabase client wrapper, repositories, and shared type definitions.
 - `content/` – Curriculum seed data, CSV/JSON imports, transformation scripts.
 - `docs/` – Project documentation (this folder).
 - `supabase/` – Managed migrations and generated seed SQL kept in sync with Supabase.
 - `first_draft/` – Legacy prototype kept for reference.
-- _(planned)_ `frontend/` – SvelteKit learner experience (Workstream B will add this scaffold).
 
 ## System Requirements
 
@@ -37,10 +37,10 @@ This document keeps the development environment expectations in one place. Updat
 3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. Current local keys live in `.env` (not versioned).
 4. Install dependencies: `npm install`.
 5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` and `npm run content:seed:dependencies`; run `npm run content:seed:check` before pushing.
-6. Start the backend service when needed:
+6. Start local services when needed:
    - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
-   - Frontend dev command will be added once the SvelteKit scaffold lands.
+   - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server).
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 
@@ -49,6 +49,7 @@ This document keeps the development environment expectations in one place. Updat
 - TypeScript preferred for new application code (frontend and backend).
 - ESLint + Prettier baseline (rules TBD).
 - Keep UI strings in Lithuanian; internal identifiers and comments in English.
+- In SvelteKit components, wrap internal `href` values with `$app/paths.resolve(...)` so lint (`svelte/no-navigation-without-resolve`) stays green and base paths work across adapters.
 
 ## Reference Guides
 
@@ -64,6 +65,9 @@ This document keeps the development environment expectations in one place. Updat
 
 - `npm run backend:dev` / `npm run backend:start` – run the Express API locally (watch / single-run).
 - `npm run backend:typecheck` – TypeScript compile check scoped to the backend project.
+- `npm run frontend:dev` – start the SvelteKit dev server.
+- `npm run frontend:build` / `npm run frontend:preview` – production build & preview for the learner UI.
+- `npm run frontend:check` / `npm run frontend:lint` / `npm run frontend:format` – convenience wrappers for SvelteKit check, lint, and formatting.
 - `npm run test` / `npm run test:supabase` – Supabase connectivity smoke test.
 - `npm run test:concepts` – focused unit test for concept row mapping.
 - `npm run content:seed:generate` – regenerate concept seeds from the canonical markdown.

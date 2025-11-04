@@ -1,25 +1,38 @@
-# Frontend Module
+# sv
 
-SvelteKit-based user interface for BurBuriuok. The frontend consumes Supabase-backed data through the shared `data/` layer and renders Lithuanian-first UI components optimised for mobile users.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## Responsibilities
+## Creating a project
 
-- Client-side routing and layouts (`src/routes`).
-- UI components and widgets (`src/lib/components`).
-- State management/stores (`src/lib/state`).
-- Data access wrappers that import repositories from `data/`.
-- Styling assets (`src/lib/styles` and `styles/`).
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Development Notes
+```sh
+# create a new project in the current directory
+npx sv create
 
-- Keep components small (<200 lines where practical).
-- Place Lithuanian UI strings in dedicated localisation helpers.
-- Prefer TypeScript and strong typing against shared interfaces exported from `data/`.
+# create a new project in my-app
+npx sv create my-app
+```
 
-## Planned Commands
+## Developing
 
-- `npm run dev:frontend` – start SvelteKit in development mode.
-- `npm run build:frontend` – production build for deployment.
-- `npm run test:frontend` – component/unit tests (Vitest).
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-_Update this README as soon as the project scaffold is generated and commands become available._
+```sh
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+## Building
+
+To create a production version of your app:
+
+```sh
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

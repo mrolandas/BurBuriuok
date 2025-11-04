@@ -2,17 +2,17 @@
 
 ## Current State (V1)
 
-- **Hosting** – GitHub Pages placeholder for the legacy `first_draft/` prototype; production deployment pipeline will be reworked once the SvelteKit scaffold lands.
-- **Runtime** – Express backend under `backend/` serves read/write curriculum + progress endpoints (`/api/v1/*`). No production frontend yet; consumers will be CLI experiments or forthcoming SvelteKit UI.
+- **Hosting** – SvelteKit frontend lives under `frontend/` (local dev via Vite) and uses `$app/paths.resolve` for internal navigation so adapters with a base path stay healthy; production hosting target still tbd. Legacy `first_draft/` prototype remains on GitHub Pages for archival reference.
+- **Runtime** – Express backend under `backend/` exposes read/write curriculum + progress endpoints (`/api/v1/*`). The new SvelteKit UI consumes these routes; additional clients (CLI experiments, admin tools) can reuse the same surface.
 - **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content, dependencies, concept progress, and audit logging (`content_versions`, `content_version_changes`). Seeds stay in sync via the content scripts and `supabase/seeds/*`.
 - **Content Pipeline** – Curriculum concepts live in `docs/static_info/LBS_concepts_master.md` and are compiled into Supabase seed SQL via `content/scripts/build_seed_sql.mjs` + `content/scripts/build_dependency_seed_sql.mjs`.
 - **Integrations** – Supabase REST only; device-key header authenticates learner progress writes. No auth or storage buckets yet.
-- **Codebase Layout** – `backend/`, `data/`, `content/`, `docs/`, `supabase/`, and `first_draft/`. Frontend directory will appear once SvelteKit workstream (Workstream B) starts.
+- **Codebase Layout** – `backend/`, `frontend/`, `data/`, `content/`, `docs/`, `supabase/`, and `first_draft/` (legacy prototype).
 
 ## Near-Term Improvements
 
 - Automate backend deploy (GitHub Actions or Railway) once backend reaches MVP stability.
-- Add build pipeline for SvelteKit frontend after scaffold exists; capture deployment target decision.
+- Add build pipeline for the SvelteKit frontend and capture deployment target decision.
 - Keep Supabase schema + seeds aligned by running `npm run content:seed:check` and `npx supabase db push --include-seed` before deploying.
 - Document service credentials (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`) and rotate policies once auth is introduced.
 - Publish per-module READMEs for `backend/` and `data/` to help AI agents/local developers navigate responsibilities.
