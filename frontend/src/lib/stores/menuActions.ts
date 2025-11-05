@@ -9,7 +9,10 @@ export type MenuAction = {
 
 const { subscribe, update } = writable<MenuAction[]>([]);
 
-export const menuActionsStore = { subscribe };
+export const menuActionsStore = {
+	subscribe,
+	clear: () => update(() => [])
+};
 
 export function registerMenuAction(action: MenuAction): () => void {
 	update((current) => {
