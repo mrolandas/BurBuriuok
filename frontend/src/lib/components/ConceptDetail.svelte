@@ -18,55 +18,85 @@
 
 	let { concept, breadcrumbs = [], peerItems = [] }: Props = $props();
 
-	type ActionState = 'idle' | 'learning' | 'queued' | 'quiz';
+	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset' | 'quiz';
 
 	const dispatch = createEventDispatcher<{
-		startLearning: { conceptId: string };
-		addToQueue: { conceptId: string };
-		startQuiz: { conceptId: string };
+		setLearning: { conceptId: string; learning: boolean };
+		setKnown: { conceptId: string; known: boolean };
+		startSectionQuiz: { conceptId: string; sectionCode?: string };
 	}>();
 
-	let actionState = $state<ActionState>('idle');
+	let learningChecked = $state(false);
+	let knownChecked = $state(false);
+	let lastAction = $state<ActionStatus>('idle');
 	let actionMessage = $state('');
 
-	const setActionState = (next: ActionState) => {
+	const getMessageForAction = (action: ActionStatus) => {
 		if (!concept?.id) {
-			return;
+			return '';
 		}
 
-		actionState = next;
-		actionMessage = getMessageForState(next);
-	};
-
-	const getMessageForState = (state: ActionState) => {
-		switch (state) {
+		switch (action) {
 			case 'learning':
-				return 'Pažymėta kaip mokausi šią temą.';
-			case 'queued':
-				return 'Tema pridėta į pasiruošimo eilę.';
+				return 'Pažymėta kaip „mokausi“ – ši tema liks mokymosi sąraše.';
+			case 'known':
+				return 'Pažymėta kaip „moku“ – perkelsime į pasiruošimo patikros eilę.';
+			case 'reset':
+				return 'Tema grąžinta į „nežinau“ būseną.';
 			case 'quiz':
-				return 'Mini viktorina pradėta – stebime pažangą.';
+				return 'Atidarome skilties žinių patikrą (netrukus).';
 			default:
 				return '';
 		}
 	};
 
-	const handleStartLearning = () => {
-		if (!concept?.id) {
-			return;
-		}
-
-		setActionState('learning');
-		dispatch('startLearning', { conceptId: concept.id });
+	const setLastAction = (action: ActionStatus) => {
+		lastAction = action;
+		actionMessage = getMessageForAction(action);
 	};
 
-	const handleAddToQueue = () => {
+	const markLearning = (value: boolean) => {
 		if (!concept?.id) {
 			return;
 		}
 
-		setActionState('queued');
-		dispatch('addToQueue', { conceptId: concept.id });
+		learningChecked = value;
+		if (value) {
+			knownChecked = false;
+			setLastAction('learning');
+		} else if (!knownChecked) {
+			setLastAction('reset');
+		} else {
+			setLastAction('known');
+		}
+		dispatch('setLearning', { conceptId: concept.id, learning: value });
+	};
+
+	const markKnown = (value: boolean) => {
+		if (!concept?.id) {
+			return;
+		}
+
+		knownChecked = value;
+		if (value) {
+			learningChecked = false;
+			setLastAction('known');
+		} else if (!learningChecked) {
+			setLastAction('reset');
+		} else {
+			setLastAction('learning');
+		}
+		dispatch('setKnown', { conceptId: concept.id, known: value });
+	};
+
+	const handleLearningChange = (event: Event) => {
+		const target = event.currentTarget as HTMLInputElement | null;
+		markLearning(Boolean(target?.checked));
+	};
+
+	const handleKnownChange = (event: Event) => {
+		const target = event.currentTarget as HTMLInputElement | null;
+		markKnown(Boolean(target?.checked));
 	};
 
 	const handleStartQuiz = () => {
@@ -74,8 +104,8 @@
 			return;
 		}
 
-		setActionState('quiz');
-		dispatch('startQuiz', { conceptId: concept.id });
+		setLastAction('quiz');
+		dispatch('startSectionQuiz', { conceptId: concept.id, sectionCode: concept.sectionCode });
 	};
 
 	const boardHref = resolve('/');
@@ -154,28 +184,37 @@
 			<section class="concept-detail__panel">
 				<h2>Veiksmai</h2>
 				<p class="concept-detail__panel-intro">
-					Veiksmai fiksuoja tik vietinį statusą, kol LX-004 / LX-005 prijungs studijų eilę ir seansų
-					logiką.
+					Pasirinkite, kaip vertinate šią temą. Būsena kol kas saugoma tik vietoje – su Supabase ją
+					sinchronizuosime LX-004 / LX-005 metu.
 				</p>
-				<div class="concept-detail__actions">
-					<button
-						type="button"
-						onclick={handleStartLearning}
-						class:is-active={actionState === 'learning'}
-					>
-						Pažymėti kaip mokausi
-					</button>
-					<button
-						type="button"
-						onclick={handleAddToQueue}
-						class:is-active={actionState === 'queued'}
-					>
-						Pridėti į pasiruošimo eilę
-					</button>
-					<button type="button" onclick={handleStartQuiz} class:is-active={actionState === 'quiz'}>
-						Pradėti mini viktoriną
-					</button>
+				<div class="concept-detail__actions" data-last-action={lastAction}>
+					<label class="concept-detail__action-option">
+						<input
+							type="checkbox"
+							checked={learningChecked}
+							onchange={handleLearningChange}
+							aria-label="Pažymėti temą kaip mokausi"
+						/>
+						<span>Mokausi</span>
+					</label>
+					<label class="concept-detail__action-option">
+						<input
+							type="checkbox"
+							checked={knownChecked}
+							onchange={handleKnownChange}
+							aria-label="Pažymėti temą kaip moku"
+						/>
+						<span>Moku</span>
+					</label>
 				</div>
+				<button
+					type="button"
+					class="concept-detail__quiz-button"
+					onclick={handleStartQuiz}
+					disabled={!concept.sectionCode}
+				>
+					Pasitikrinti žinias
+				</button>
 				{#if actionMessage}
 					<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
 						{actionMessage}
@@ -359,12 +398,63 @@
 		gap: 0.5rem;
 	}
 
-	.concept-detail__actions button {
-		padding: 0.55rem 0.9rem;
+	.concept-detail__action-option {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.5rem 0.75rem;
 		border-radius: 0.75rem;
 		border: 1px solid rgba(148, 163, 184, 0.35);
-		background: rgba(148, 163, 184, 0.12);
-		color: rgba(226, 232, 240, 0.75);
+		background: rgba(148, 163, 184, 0.08);
+		color: rgba(226, 232, 240, 0.85);
+		font-weight: 600;
+		cursor: pointer;
+		user-select: none;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.concept-detail__action-option:hover,
+	.concept-detail__action-option:focus-within {
+		border-color: rgba(94, 234, 212, 0.5);
+		background: rgba(94, 234, 212, 0.12);
+	}
+
+	.concept-detail__action-option input {
+		appearance: none;
+		width: 1.05rem;
+		height: 1.05rem;
+		border-radius: 0.3rem;
+		border: 1px solid rgba(148, 163, 184, 0.45);
+		background: rgba(15, 23, 42, 0.35);
+		position: relative;
+	}
+
+	.concept-detail__action-option input:checked {
+		border-color: rgba(94, 234, 212, 0.7);
+		background: rgba(94, 234, 212, 0.2);
+	}
+
+	.concept-detail__action-option input:checked::after {
+		content: '✔';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -58%);
+		font-size: 0.75rem;
+		color: rgba(15, 23, 42, 0.92);
+	}
+
+	.concept-detail__quiz-button {
+		margin-top: 0.35rem;
+		align-self: flex-start;
+		padding: 0.55rem 0.9rem;
+		border-radius: 0.75rem;
+		border: 1px solid rgba(59, 130, 246, 0.35);
+		background: rgba(59, 130, 246, 0.14);
+		color: rgba(226, 232, 240, 0.85);
 		font-weight: 600;
 		cursor: pointer;
 		transition:
@@ -373,17 +463,15 @@
 			color 0.2s ease;
 	}
 
-	.concept-detail__actions button:hover,
-	.concept-detail__actions button:focus-visible {
-		border-color: rgba(94, 234, 212, 0.55);
-		background: rgba(94, 234, 212, 0.12);
-		color: rgba(226, 232, 240, 0.9);
+	.concept-detail__quiz-button:hover,
+	.concept-detail__quiz-button:focus-visible {
+		border-color: rgba(59, 130, 246, 0.65);
+		background: rgba(59, 130, 246, 0.22);
 	}
 
-	.concept-detail__actions button.is-active {
-		border-color: rgba(94, 234, 212, 0.7);
-		background: rgba(94, 234, 212, 0.18);
-		color: rgba(15, 23, 42, 0.92);
+	.concept-detail__quiz-button:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
 	}
 
 	.concept-detail__actions-feedback {
@@ -427,8 +515,9 @@
 			gap: 0.4rem;
 		}
 
-		.concept-detail__actions button {
+		.concept-detail__action-option {
 			font-size: 0.85rem;
+			padding: 0.45rem 0.65rem;
 		}
 	}
 </style>
