@@ -5,7 +5,8 @@
 
 	type Breadcrumb = {
 		label: string;
-		href: string | null;
+		routeId?: '/sections/[code]';
+		params?: { code: string };
 	};
 
 	export let concept: ConceptDetail;
@@ -22,10 +23,11 @@
 <section class="concept-detail">
 	<nav class="concept-detail__breadcrumbs" aria-label="Navigacija">
 		<a class="concept-detail__crumb" href={boardHref}>Skilčių lenta</a>
-		{#each breadcrumbs as crumb, index (crumb.label)}
+		{#each breadcrumbs as crumb (crumb.label)}
 			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-			{#if crumb.href}
-				<a class="concept-detail__crumb" href={crumb.href}>{crumb.label}</a>
+			{@const crumbHref = crumb.routeId && crumb.params ? resolve(crumb.routeId, crumb.params) : null}
+			{#if crumbHref}
+				<a class="concept-detail__crumb" href={crumbHref}>{crumb.label}</a>
 			{:else}
 				<span class="concept-detail__crumb concept-detail__crumb--static">{crumb.label}</span>
 			{/if}

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
-	 import Card from '$lib/components/Card.svelte';
 	import type { PageData } from './+page';
 
 	export let data: PageData;
@@ -34,6 +33,8 @@
 	const reloadSections = async () => {
 		await invalidateAll();
 	};
+
+	const cleanTitle = (title: string) => title.replace(/\s*\([^)]*\)\s*$/, '').trim();
 </script>
 
 {#if data.loadError}
@@ -57,30 +58,26 @@
 		{#each data.sections as section (section.code)}
 			{@const progress = getProgress(section.code)}
 			{@const percent = progressPercent(progress.completed, progress.total)}
+			{@const title = cleanTitle(section.title)}
 
-			<Card subtitle={`Skiltis ${section.ordinal}`} title={section.title}>
-				{#if section.summary}
-					<p>{section.summary}</p>
-				{:else}
-					<p class="muted">Santrauka ruošiama.</p>
-				{/if}
-				<div class="section-card__meta">
-					<div
+			<a
+				class="section-card"
+				href={resolve('/sections/[code]', { code: section.code })}
+				aria-label={`Atidaryti skiltį ${section.ordinal}`}
+			>
+				<div class="section-card__head">
+					<span class="section-card__ordinal">Skiltis {section.ordinal}</span>
+					<span
 						class="section-card__progress"
 						aria-label={`Pažanga ${progress.completed} iš ${progress.total}`}
 					>
 						<span class="section-card__progress-label">Pažanga</span>
-						<span class="section-card__progress-value">{progress.completed}/{progress.total}</span>
-						<span class="section-card__progress-percentage">{percent}%</span>
-					</div>
-					<a
-						class="section-card__cta"
-						href={resolve('/sections/[code]', { code: section.code })}
-					>
-						Atidaryti skiltį
-					</a>
+						<span>{progress.completed}/{progress.total}</span>
+						<span>{percent}%</span>
+					</span>
 				</div>
-			</Card>
+				<h2 class="section-card__title">{title}</h2>
+			</a>
 		{/each}
 	{/if}
 </section>
@@ -147,60 +144,78 @@
 		transform: translateY(-1px);
 	}
 
-	.section-card__meta {
+	.section-card {
+		position: relative;
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+		flex-direction: column;
+		gap: clamp(0.8rem, 2vw, 1rem);
+		padding: clamp(1.5rem, 3vw, 2rem);
+		min-height: 100%;
+		border-radius: 1.25rem;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		box-shadow: 0 20px 45px -20px rgba(8, 145, 178, 0.35);
+		text-decoration: none;
+		color: inherit;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.25s ease,
+			border-color 0.25s ease;
+	}
+
+	.section-card:hover,
+	.section-card:focus-visible {
+		transform: translateY(-3px);
+		border-color: rgba(56, 189, 248, 0.45);
+		box-shadow: 0 26px 55px -24px rgba(56, 189, 248, 0.55);
+	}
+
+	.section-card:focus-visible {
+		outline: 2px solid rgba(56, 189, 248, 0.65);
+		outline-offset: 4px;
+	}
+
+	.section-card__head {
+		display: flex;
 		justify-content: space-between;
-		gap: 1rem;
-		margin-top: clamp(0.75rem, 2vw, 1.1rem);
+		align-items: flex-start;
+		gap: 0.75rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--color-text-muted);
+	}
+
+	.section-card__ordinal {
+		color: var(--color-text);
+		font-weight: 600;
 	}
 
 	.section-card__progress {
-		display: grid;
-		gap: 0.15rem;
+		display: inline-flex;
+		gap: 0.45rem;
+		align-items: center;
+		white-space: nowrap;
+		font-weight: 600;
+		color: var(--color-text);
 	}
 
 	.section-card__progress-label {
+		font-weight: 500;
+		color: var(--color-text-muted);
+	}
+
+	.section-card__progress span:last-child {
+		color: var(--color-text-muted);
+		font-weight: 500;
+	}
+
+	.section-card__title {
+		margin: 0;
+		font-size: clamp(1.05rem, 3vw, 1.35rem);
+		line-height: 1.35;
 		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		font-size: 0.7rem;
-		color: var(--color-text-muted);
-	}
-
-	.section-card__progress-value {
-		font-weight: 600;
-		font-size: 1rem;
-	}
-
-	.section-card__progress-percentage {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-	}
-
-	.section-card__cta {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		padding: 0.55rem 1.05rem;
-		border-radius: 999px;
-		font-weight: 600;
-		text-decoration: none;
-		color: var(--color-text);
-		border: 1px solid rgba(148, 163, 184, 0.4);
-		transition:
-			transform 0.2s ease,
-			background 0.2s ease;
-	}
-
-	.section-card__cta:hover,
-	.section-card__cta:focus-visible {
-		transform: translateY(-1px);
-		background: rgba(148, 163, 184, 0.08);
-	}
-
-	.muted {
-		color: var(--color-text-muted);
+		letter-spacing: 0.04em;
 	}
 
 	@media (max-width: 640px) {

@@ -1,6 +1,6 @@
 <script lang="ts">
-	 import { resolve } from '$app/paths';
-	 import type { TreeNodeState } from './curriculumTreeTypes';
+	import { resolve } from '$app/paths';
+	import type { TreeNodeState } from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -61,7 +61,9 @@
 												<span class="tree-node__item-ordinal">{item.ordinal}.</span>
 												<span class="tree-node__item-label">{item.label}</span>
 												{#if item.isRequired}
-													<span class="tree-node__item-badge" aria-label="Privaloma tema">Būtina</span>
+													<span class="tree-node__item-badge" aria-label="Privaloma tema"
+														>Būtina</span
+													>
 												{/if}
 											</a>
 										{:else}

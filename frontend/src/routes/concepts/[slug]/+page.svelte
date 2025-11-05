@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import Card from '$lib/components/Card.svelte';
-	import ConceptDetail from '$lib/components/ConceptDetail.svelte';
-	import type { ConceptPageData } from './+page';
+import { resolve } from '$app/paths';
+import Card from '$lib/components/Card.svelte';
+import ConceptDetail from '$lib/components/ConceptDetail.svelte';
+import type { ConceptPageData } from './+page';
 
-	export let data: ConceptPageData;
-
-	const resolvedBreadcrumbs = data.breadcrumbs.map((crumb) => ({
-		label: crumb.label,
-		href: crumb.routeId && crumb.params ? resolve(crumb.routeId, crumb.params) : null
-	}));
+export let data: ConceptPageData;
 </script>
 
 <div class="concept-page">
@@ -22,7 +17,11 @@
 			<p>{data.loadError}</p>
 		</Card>
 	{:else if data.concept}
-		<ConceptDetail concept={data.concept} breadcrumbs={resolvedBreadcrumbs} peerItems={data.peerItems} />
+		<ConceptDetail
+			concept={data.concept}
+			breadcrumbs={data.breadcrumbs}
+			peerItems={data.peerItems}
+		/>
 	{:else}
 		<Card title="Kraunama tema">
 			<p>Laukiame duomenų iš Supabase...</p>

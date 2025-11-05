@@ -3,7 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/global.css';
 
-	const navLinks: NavLink[] = [{ href: '/', label: 'Skilčių lenta' }];
+	const navLinks: NavLink[] = [{ href: '/', label: 'Pagrindinis' }];
 
 	let { children } = $props();
 </script>

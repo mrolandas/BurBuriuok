@@ -132,8 +132,7 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 				continue;
 			}
 
-			const ordinalKey =
-				typeof ordinalValue === 'number' ? ordinalValue : Number(ordinalValue);
+			const ordinalKey = typeof ordinalValue === 'number' ? ordinalValue : Number(ordinalValue);
 			if (Number.isNaN(ordinalKey)) {
 				continue;
 			}
@@ -147,11 +146,8 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 	}
 
 	return (data ?? []).map((item) => {
-		const ordinalNumber =
-			typeof item.ordinal === 'number' ? item.ordinal : Number(item.ordinal);
-		const conceptKey = Number.isNaN(ordinalNumber)
-			? String(item.ordinal)
-			: String(ordinalNumber);
+		const ordinalNumber = typeof item.ordinal === 'number' ? item.ordinal : Number(item.ordinal);
+		const conceptKey = Number.isNaN(ordinalNumber) ? String(item.ordinal) : String(ordinalNumber);
 		const concept = conceptByOrdinal.get(conceptKey) ?? null;
 		const fallbackSlug = slugifyConceptLabel(item.label);
 		return {
