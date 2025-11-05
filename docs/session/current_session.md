@@ -27,6 +27,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - [x] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)) – prerequisite badges currently show zero until a public dependency view ships.
 - [x] Deliver concept detail view skeleton showing definitions, prerequisite placeholders, and action stubs (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
 - [x] Integrate Supabase client, environment config, and error handling patterns.
+- [ ] Add global search bar beneath header that surfaces concepts by title/term and matches within descriptions, prioritising direct concept hits before description snippets and returning linked results with snippet context.
 
 ### C. Admin & Moderation Interface
 
