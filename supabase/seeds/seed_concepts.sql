@@ -1,5 +1,5 @@
 -- seed_concepts.sql
--- Generated 2025-11-03T17:47:26.411Z
+-- Generated 2025-11-05T11:57:51.836Z
 
 insert into burburiuok.concepts (
     section_code,
@@ -95,7 +95,7 @@ insert into burburiuok.concepts (
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'sotai', 'Šotai', 'Sheets', 'Virvės, reguliuojančios burės kampą į vėją.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 6, 'šotai'),
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'brasai', 'Brasai', 'Braces', 'Virvės, naudojamos skersinėms burėms pasukti vėjo atžvilgiu.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 7, 'brasai'),
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'halsai', 'Halsai', 'Tacks', 'Virvės, fiksuojančios burės priekinį kampą prie karčio ar denio.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 8, 'halsai'),
-    ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'rifstertai', 'Rifštertai', 'Reefing lines', 'Virvės, sutrumpinančios burės plotą stipraus vėjo metu.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 9, 'rifštertai'),
+    ('1.2', 'Burlaivio sandara', '1.2.4', 'Burių tipai', 'rifstertai-2', 'Rifštertai', 'Reefing lines', 'Virvės, naudojamos sutrumpinti burę (sutampa su takelažo sąvoka).', NULL, 'LBS_concepts_master.md', true, '1.2.4', 23, 'rifštertai.'),
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'topenantai', 'Topenantai', 'Topping lifts', 'Virvės, keliančios karčius (pvz., giko galo) kai burė nuleista.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 10, 'topenantai'),
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'atotampos', 'Atotampos', 'Preventers', 'Virvės, ribojančios karčio judėjimą (groto giko, spinakerio barberio atotampos) ir apsaugančios nuo nekontroliuoto vento gūsio.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 11, 'atotampos (groto giko, spinakerio giko barberio). Takelažo detalės: raksai'),
     ('1.2', 'Burlaivio sandara', '1.2.3', 'Takelažas', 'raksai', 'Raksai', 'Slides', 'Takelažo detalės, kuriomis burė pritvirtinta prie stiebo ar karčio bėgelio.', NULL, 'LBS_concepts_master.md', true, '1.2.3', 11, 'atotampos (groto giko, spinakerio giko barberio). Takelažo detalės: raksai'),
@@ -133,7 +133,6 @@ insert into burburiuok.concepts (
     ('1.2', 'Burlaivio sandara', '1.2.4', 'Burių tipai', 'laciu-kisenes', 'Lačių kišenės', 'Batten pockets', 'Kišenės, į kurias įstatomos latės.', NULL, 'LBS_concepts_master.md', true, '1.2.4', 20, 'lačių kišenės'),
     ('1.2', 'Burlaivio sandara', '1.2.4', 'Burių tipai', 'rifbantai', 'Rifbantai', 'Reef bands', 'Sutvirtintos burės zonos, kuriose pritvirtinami rifai.', NULL, 'LBS_concepts_master.md', true, '1.2.4', 21, 'rifbantai'),
     ('1.2', 'Burlaivio sandara', '1.2.4', 'Burių tipai', 'rifsezeniai', 'Rifsezeniai', 'Reef points', 'Virvės ar dirželiai rifams surišti.', NULL, 'LBS_concepts_master.md', true, '1.2.4', 22, 'rifsezeniai'),
-    ('1.2', 'Burlaivio sandara', '1.2.4', 'Burių tipai', 'rifstertai-2', 'Rifštertai', 'Reefing lines', 'Virvės, naudojamos sutrumpinti burę (sutampa su takelažo sąvoka).', NULL, 'LBS_concepts_master.md', true, '1.2.4', 23, 'rifštertai.'),
     ('1.3', 'Jachtos įranga', '1.3.1', 'Švartavimo ir inkaravimo priemonės', 'kliuzai', 'Kliuzai', 'Fairleads', 'Metalinės ar plastikinės angos, nukreipiančios lynus per bortą.', NULL, 'LBS_concepts_master.md', true, '1.3.1', 1, 'kliuzai'),
     ('1.3', 'Jachtos įranga', '1.3.1', 'Švartavimo ir inkaravimo priemonės', 'klampes-2', 'Klampės', 'Cleats', 'Tvirtinimo dvilaikės virvėms rišti prie denio ar borto.', NULL, 'LBS_concepts_master.md', true, '1.3.1', 2, 'klampės'),
     ('1.3', 'Jachtos įranga', '1.3.1', 'Švartavimo ir inkaravimo priemonės', 'knechtai', 'Knechtai', 'Bollards', 'Tvirtinimo stulpai laivuose ar krantinėse lynams prisirišti.', NULL, 'LBS_concepts_master.md', true, '1.3.1', 3, 'knechtai'),
@@ -205,13 +204,8 @@ insert into burburiuok.concepts (
     ('3.15', 'Avarijos ir jų likvidavimas', '3.15.1', 'Nutrūkus', 'forstagui', 'Forštagui', 'Forestay failure', 'Priekinio stovo nutrūkimas kelia pavojų stiebo stabilumui ir stakseliui.', NULL, 'LBS_concepts_master.md', true, '3.15.1', 3, 'forštagui'),
     ('3.15', 'Avarijos ir jų likvidavimas', '3.15.1', 'Nutrūkus', 'achterstagui', 'Achterštagui', 'Backstay failure', 'Galinio stovo praradimas leidžia stiebui pasvirti į priekį.', NULL, 'LBS_concepts_master.md', true, '3.15.1', 4, 'achterštagui'),
     ('3.15', 'Avarijos ir jų likvidavimas', '3.15.1', 'Nutrūkus', 'stakselio-falui', 'Stakselio falui', 'Jib halyard failure', 'Praradus falą priekis burė nusileidžia, reikia atsarginio kėlimo.', NULL, 'LBS_concepts_master.md', true, '3.15.1', 5, 'stakselio falui'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.1', 'Nutrūkus', 'groto-falui', 'Groto falui', 'Main halyard failure', 'Groto nuleidimas dėl falo gedimo, būtina fiksuoti burę.', NULL, 'LBS_concepts_master.md', true, '3.15.1', 6, 'groto falui.'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'pavejiniam-vantui', 'Pavėjiniam vantui', 'Leeward shroud slip', 'Atsikabinęs pavėjinės pusės vantas praranda įtempimą, stiebas gali vibruoti.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 1, 'pavėjiniam vantui'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'bakstagui-2', 'Bakštagui', 'Runner slip', 'Bakštagas nuslysta nuo tvirtinimo, reikia iš naujo įtempti.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 2, 'bakštagui'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'forstagui-2', 'Forštagui', 'Forestay slip', 'Forštagas atsilaisvina, pablogėja stakselio profilis.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 3, 'forštagui'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'achterstagui-2', 'Achterštagui', 'Backstay slip', 'Achterštagas praranda įtempimą, stiebas pasvyra į priekį.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 4, 'achterštagui'),
-    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'stakselio-falui-2', 'Stakselio falui', 'Jib halyard slip', 'Falas išslysta iš fiksatoriaus ir burė nusileidžia.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 5, 'stakselio falui'),
     ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'groto-falui-2', 'Groto falui', 'Main halyard slip', 'Groto falas atsilaisvina, sumažėja burės įtempimas ir profilis.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 6, 'groto falui.'),
+    ('3.15', 'Avarijos ir jų likvidavimas', '3.15.2', 'Atsikabinus', 'pavejiniam-vantui', 'Pavėjiniam vantui', 'Leeward shroud slip', 'Atsikabinęs pavėjinės pusės vantas praranda įtempimą, stiebas gali vibruoti.', NULL, 'LBS_concepts_master.md', true, '3.15.2', 1, 'pavėjiniam vantui'),
     ('4', 'SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)', '4.9', 'Pagalbos iškvietimas', 'mob-tel-nr-112', 'Mob. tel. Nr. 112', 'Emergency phone 112', 'Bendras Europos skubios pagalbos numeris.', NULL, 'LBS_concepts_master.md', true, '4.9', 1, 'mob. tel. Nr. 112'),
     ('4', 'SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)', '4.9', 'Pagalbos iškvietimas', 'vhf-radijo-rysiu', 'VHF radijo ryšiu', 'VHF distress', 'Skubios pagalbos kanalai (CH16), naudojant MAYDAY/PAN-PAN signalus.', NULL, 'LBS_concepts_master.md', true, '4.9', 2, 'VHF radijo ryšiu'),
     ('4', 'SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)', '4.9', 'Pagalbos iškvietimas', 'gestais-matomumo-ribose', 'Gestais matomumo ribose', 'Visual signals', 'Rankiniai signalai ar vėliavos, kai ryšys matomas iš arti.', NULL, 'LBS_concepts_master.md', true, '4.9', 3, 'gestais matomumo ribose'),

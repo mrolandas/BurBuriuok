@@ -400,14 +400,16 @@ function loadConceptRecordsFromMaster(structure) {
 
   flushTable();
 
-  if (!records.length) {
+  const dedupedRecords = deduplicateConceptRecords(records);
+
+  if (!dedupedRecords.length) {
     throw new Error(
       `Master concept document at ${MASTER_CONCEPT_PATH} did not yield any records.`
     );
   }
 
   const byTopic = new Map();
-  records.forEach((record) => {
+  dedupedRecords.forEach((record) => {
     const topic =
       record.metadata?.topic_number ?? extractTopLevelCode(record.section_code);
     if (!topic) {
@@ -418,10 +420,10 @@ function loadConceptRecordsFromMaster(structure) {
   });
 
   return {
-    records: conceptSchema.array().parse(records),
+    records: conceptSchema.array().parse(dedupedRecords),
     summary: {
       source: "master_markdown",
-      total: records.length,
+      total: dedupedRecords.length,
       topics: Object.fromEntries(Array.from(byTopic.entries()).sort()),
     },
   };
@@ -447,6 +449,38 @@ function formatInteger(value) {
     throw new Error(`Unable to format integer value: ${value}`);
   }
   return String(Math.trunc(numeric));
+}
+
+function deduplicateConceptRecords(records) {
+  const deduped = [];
+  const indexByKey = new Map();
+
+  const buildKey = (record) =>
+    `${record.section_code}::${record.term_lt.trim().toLowerCase()}`;
+
+  records.forEach((record) => {
+    const key = buildKey(record);
+    if (!indexByKey.has(key)) {
+      indexByKey.set(key, deduped.length);
+      deduped.push(record);
+      return;
+    }
+
+    const existingIndex = indexByKey.get(key);
+    const existing = deduped[existingIndex];
+    const existingDescriptionLength = existing?.description_lt?.length ?? 0;
+    const candidateDescriptionLength = record.description_lt?.length ?? 0;
+
+    if (candidateDescriptionLength > existingDescriptionLength) {
+      deduped[existingIndex] = record;
+    }
+
+    console.warn(
+      `Duplicate concept detected for section ${record.section_code} term "${record.term_lt}". Keeping entry with the richer description.`
+    );
+  });
+
+  return deduped;
 }
 
 const conceptSchema = z.object({

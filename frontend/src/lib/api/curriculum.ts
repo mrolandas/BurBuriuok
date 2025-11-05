@@ -1,5 +1,26 @@
 import { getSupabaseClient } from '$lib/supabase/client';
 
+const diacriticRegex = /[\u0300-\u036f]/g;
+
+function slugifyConceptLabel(label: string | null | undefined): string | null {
+	if (!label) {
+		return null;
+	}
+
+	const slug = label
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(diacriticRegex, '')
+		.replace(/\(.*?\)/g, '')
+		.replace(/[&/]/g, ' ')
+		.replace(/[^a-z0-9\s-]/g, ' ')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-|-$/g, '');
+
+	return slug || null;
+}
+
 export type CurriculumNode = {
 	code: string;
 	title: string;
@@ -92,7 +113,10 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 		throw new Error('Nepavyko įkelti temų sąrašo.');
 	}
 
-	const conceptByOrdinal = new Map<number, { slug: string | null; term: string | null; isRequired: boolean | null }>();
+	const conceptByOrdinal = new Map<
+		string,
+		{ slug: string | null; term: string | null; isRequired: boolean | null }
+	>();
 
 	const { data: concepts, error: conceptError } = await supabase
 		.from('burburiuok_concepts')
@@ -108,12 +132,13 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 				continue;
 			}
 
-			const ordinalKey = Number(ordinalValue);
+			const ordinalKey =
+				typeof ordinalValue === 'number' ? ordinalValue : Number(ordinalValue);
 			if (Number.isNaN(ordinalKey)) {
 				continue;
 			}
 
-			conceptByOrdinal.set(ordinalKey, {
+			conceptByOrdinal.set(String(ordinalKey), {
 				slug: concept.slug ?? null,
 				term: concept.term_lt ?? null,
 				isRequired: concept.is_required ?? null
@@ -122,13 +147,19 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 	}
 
 	return (data ?? []).map((item) => {
-		const concept = conceptByOrdinal.get(item.ordinal) ?? null;
+		const ordinalNumber =
+			typeof item.ordinal === 'number' ? item.ordinal : Number(item.ordinal);
+		const conceptKey = Number.isNaN(ordinalNumber)
+			? String(item.ordinal)
+			: String(ordinalNumber);
+		const concept = conceptByOrdinal.get(conceptKey) ?? null;
+		const fallbackSlug = slugifyConceptLabel(item.label);
 		return {
 			nodeCode: item.node_code,
-			ordinal: item.ordinal,
+			ordinal: ordinalNumber,
 			label: item.label,
-			conceptSlug: concept?.slug ?? null,
-			conceptTerm: concept?.term ?? null,
+			conceptSlug: concept?.slug ?? fallbackSlug,
+			conceptTerm: concept?.term ?? item.label,
 			isRequired: concept?.isRequired ?? null
 		};
 	});
