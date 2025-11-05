@@ -26,6 +26,7 @@
 
 	let menuOpen = $state(false);
 	let activePath = $state($page.url.pathname);
+	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
@@ -65,6 +66,7 @@
 			activePath = nextPath;
 			closeMenu();
 		}
+		searchTerm = url.searchParams.get('q') ?? '';
 	});
 
 	const openQuizModal = () => {
@@ -139,6 +141,25 @@
 		</nav>
 	</header>
 
+	<div class="app-shell__search" role="search">
+		<form class="app-shell__search-form" action={resolve('/search')} method="get">
+			<label class="app-shell__search-label" for="global-search">Paieška</label>
+			<div class="app-shell__search-controls">
+				<input
+					id="global-search"
+					type="search"
+					name="q"
+					placeholder="Ieškokite tematinių sąvokų ar aprašymų…"
+					autocomplete="off"
+					spellcheck="false"
+					bind:value={searchTerm}
+					aria-label="Paieška temose"
+				/>
+				<button class="app-shell__search-button" type="submit">Ieškoti</button>
+			</div>
+		</form>
+	</div>
+
 	<main class="app-shell__main" id="main-content">
 		{@render children()}
 	</main>
@@ -165,6 +186,96 @@
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.app-shell__search {
+		padding: 0 clamp(1rem, 3vw, 2.5rem);
+		border-bottom: 1px solid var(--color-border);
+		background: rgba(15, 23, 42, 0.4);
+	}
+
+	@media (prefers-color-scheme: light) {
+		.app-shell__search {
+			background: rgba(255, 255, 255, 0.85);
+		}
+	}
+
+	.app-shell__search-form {
+		max-width: var(--layout-max-width);
+		margin: 0 auto;
+		padding: clamp(1rem, 3vw, 1.5rem) 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.app-shell__search-label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.app-shell__search-controls {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+	}
+
+	.app-shell__search-controls input {
+		flex: 1;
+		border-radius: 999px;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		padding: 0.65rem 1rem;
+		font-size: 1rem;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.app-shell__search-controls input:focus-visible {
+		outline: none;
+		border-color: rgba(56, 189, 248, 0.6);
+		box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+	}
+
+	.app-shell__search-button {
+		border-radius: 999px;
+		border: 1px solid rgba(56, 189, 248, 0.4);
+		background: rgba(56, 189, 248, 0.18);
+		color: var(--color-text);
+		padding: 0.65rem 1.15rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.app-shell__search-button:hover,
+	.app-shell__search-button:focus-visible {
+		background: rgba(56, 189, 248, 0.28);
+		border-color: rgba(56, 189, 248, 0.6);
+		transform: translateY(-1px);
+	}
+
+	@media (max-width: 640px) {
+		.app-shell__search-controls {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.app-shell__search-button {
+			width: 100%;
+		}
 	}
 
 	.app-shell__header {
