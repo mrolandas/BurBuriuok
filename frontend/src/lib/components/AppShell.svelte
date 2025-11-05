@@ -22,7 +22,7 @@
 	let {
 		navLinks = [],
 		children,
-		footerNote = 'BurBuriuok – mokymosi padėjėjas pasiruošti Lietuvos Buriavimo Asociacijos vidaus vandenų burinės jachtos vado egzaminui.'
+		footerNote = 'Įtvirtink ir patikrink buriavimo teorijos žinias '
 	}: Props = $props();
 
 	let menuOpen = $state(false);
@@ -106,7 +106,7 @@
 		<div class="app-shell__brand">
 			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurBuriuok pradžia">
 				<span class="app-shell__brand-mark">BurBuriuok</span>
-				<span class="app-shell__brand-subtitle">Mokymosi palydovas</span>
+				<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
 			</a>
 		</div>
 		<button
