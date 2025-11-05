@@ -27,7 +27,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - [x] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)) – prerequisite badges currently show zero until a public dependency view ships.
 - [x] Deliver concept detail view skeleton showing definitions, prerequisite placeholders, and action stubs (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
 - [x] Integrate Supabase client, environment config, and error handling patterns.
-- [ ] Add global search bar beneath header that surfaces concepts by title/term and matches within descriptions, prioritising direct concept hits before description snippets and returning linked results with snippet context.
+- [x] Add global search bar beneath header that surfaces concepts by title/term and matches within descriptions, prioritising direct concept hits before description snippets and returning linked results with snippet context.
 
 ### C. Admin & Moderation Interface
 
@@ -85,6 +85,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-05: Introduced a global knowledge-check modal – the “Pasitikrinti žinias” button now appears in the menu and concept view, currently showing placeholder copy until the LX-00x quiz work begins.
 - 2025-11-05: Promoted quiz blueprint to `docs/references/QUIZ.md`, defined dedicated `learner_quiz_metrics` table linked to `auth.users`, and opened LX-006 issue [#9](https://github.com/mrolandas/BurBuriuok/issues/9).
 - 2025-11-05: Confirmed Supabase client helper, env guards, and frontend error messaging are in place; FE checklist item closed.
+- 2025-11-05: Global paieška realizuota – viršuje įdėtas laukelis, `/search` puslapis rodo sąvokų ir aprašymų rezultatus su fragmentais.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
