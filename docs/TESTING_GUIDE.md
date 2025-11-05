@@ -37,6 +37,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 - **Seed SQL** – `npm run content:seed:check` (or `npm run content:seed:generate -- --check`)
   - Regenerates seed SQL in-memory and validates it against the committed `supabase/seeds/seed_concepts.sql`.
+  - Emits info-level warnings when duplicate section/term pairs are collapsed (e.g., tables that repeat “Rifštertai”); this is expected after introducing the deduplication pass in `content/scripts/build_seed_sql.mjs`.
   - Fails when the canonical markdown produces drift (missing slugs, changed hierarchy codes, translation mismatches) so stale seeds can't slip through.
 - **Curriculum snapshot** – `npm run content:snapshot:check`
   - Regenerates `docs/static_info/curriculum_in_supabase.csv` and compares it to the committed snapshot so topology changes are caught immediately.

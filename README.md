@@ -1,51 +1,49 @@
 # BurBuriuok
 
-BurBuriuok is a Lithuanian-first learning companion that helps prepare for the Lithuanian Sailing Association skipper curriculum. User-facing copy will stay in Lithuanian, while source code, internal documentation, and developer discussions remain in English for clarity.
+BurBuriuok is a Lithuanian-first learning companion that helps novice skippers prepare for the Lithuanian Sailing Association curriculum. The product UI and learner-facing copy stay in Lithuanian, while code, internal documentation, and developer conversations remain in English.
 
-## Lithuanian Overview
+## Overview
 
-### Tikslas
+BurBuriuok guides learners through the "Lietuvos Buriavimo Asociacijos vidaus vandenų burinės jachtos vado mokymo programa (20241015d_redakcija_241024_112644-1)". The canonical list of required concepts lives in `docs/static_info/LBS_programa.md`. The product concentrates on the theoretical exam and offers practical checklists to support on-water preparation.
 
-"BurBuriuok" web programa skirta padėti vartotojui mokytis, suprasti ir pasiruošti išlaikyti egzaminus pagal "Lietuvos Buriavimo Asociacijos Vidaus vandenu burines jachtos vado mokymo programa (20241015d_redakcija_241024_112644-1)". Joje nurodytų žinotinų sąvokų sąrašas yra `docs/static_info/LBS_programa.md` dokumente. Ši programa padeda teoriniam egzaminui, o praktiniam egzaminui pasiruošti pateikia patarimų sąrašą.
+## Goals
 
-### Naudotojo poreikiai
+- Help learners build fluency with every concept required by the national curriculum.
+- Provide quick knowledge checks to reinforce progress.
+- Stay mobile-first: ~70% phone, 20% tablet, 10% desktop usage assumptions drive design decisions.
+- Offer note-taking hooks (hashtags, mentions, or similar affordances) that let learners map class notes back to curriculum sections and individual concepts.
 
-- mokysis visų būtinų žinoti sąvokų
-- pasitikrins išmoktas žinias
-- dažniausiai naudos vieną ir tą patį telefoną (70%) arba planšetę (20%), arba kompiuterį (10%), todėl dizainas turi būti draugiškas mobiliesiems įrenginiams
-- galės vesti užrašus ir susieti informaciją su programos skiltimis bei sąvokomis (pvz., naudojant dinamiškai kuriamas žymes `#` arba `@` tekstuose), kad paskaitų metu gautos žinios būtų lengvai pritaikomos ir peržiūrimos
+## Release Roadmap
 
-### Versijų gairės
+- **Version 1:** Supabase stores core content and learner progress. No authentication or media uploads. The static build continues to deploy via GitHub Pages.
+- **Version 2:** Add Supabase authentication and wire the assistant workflow to either Ollama or other publicly accessible models for concept Q&A.
+- **Post-V2:** Introduce concept media uploads (up to four illustrations per concept), community sharing, and curator workflows for highlighting the best visuals.
 
-- Pirmoje BurBuriuok versijoje Supabase naudojama pagrindiniam turiniui ir pažangos duomenims saugoti, tačiau nėra autentifikacijos ar vaizdų įkėlimo; sprendimas vis dar publikuojamas „GitHub Pages“ aplinkoje.
-- Antroje BurBuriuok versijoje planuojama integruoti Supabase autentifikaciją ir sąsajas su (1) Ollama arba (2) viešai prieinamais modeliais internete, kad atsirastų virtualus asistentas, galintis paaiškinti sąvokas ir atsakyti į klausimus.
-- Po Supabase išplėtimo planuojama sudaryti galimybes naudotojams kelti iki keturių iliustracijų kiekvienam sąvokos įrašui, dalintis jomis su bendruomene ir administratoriui atrinkti geriausius vaizdus būsimam numatytajam rodymui.
+## Language Policy
 
-### Kalbos politika
-
-- BurBuriuok skirta mokytis lietuviškai, tačiau žinojimas tų pačių terminų anglų kalba yra itin svarbus, todėl sąvokos pateikiamos ir anglų kalba.
-- BurBuriuok kodas ir komentarai bus anglų kalba; tik naudotojo sąsaja išliks lietuviška.
+- Learners study in Lithuanian, but we expose English terminology alongside the Lithuanian copy to support bilingual exam prep.
+- Code, commit messages, and documentation stay in English. Only the user interface persists in Lithuanian.
 
 ## Architecture Guidelines
 
-- SvelteKit frontend: komponentinis, prieinamumą užtikrinantis UI, optimizuotas mobiliesiems.
-- Modular Express backend: aiškiai atskirtos funkcijos, ruošiantis daugiausia REST/JSON sąveikai su ateities klientais.
-- Supabase duomenų sluoksnis: V1 laiko terminų sąrašą ir naudotojo pažangos duomenis Supabase lentelėse, pasiruošus vėlesniems funkcionalumams.
-- Vaizdų (images) valdymas: V1 be įkėlimo, V2 planas naudoti Supabase Storage su pernaudojamais kontrolės sluoksniais (per-user kvotos, moderavimo įrankiai).
-- CSS sluoksnis laikomas `styles/` kataloge; pirmenybė moduliniam stilių paskirstymui.
-- Dokumentacija (išskyrus šį README) saugoma `docs/`, kad būtų lengva rasti produktinius, infrastruktūrinius ir procesinius dokumentus.
+- SvelteKit frontend with component-driven, accessible UI tailored for small screens first.
+- Modular Express backend that keeps boundaries clean and prepares for REST/JSON integrations with future clients.
+- Supabase data layer: Version 1 stores concept catalog and progress metrics; the schema already accounts for future feature growth.
+- Media management: No uploads in V1; V2 plans to rely on Supabase Storage with reusable governance controls (per-user quotas, moderation review).
+- Shared styles live in `styles/` with a preference toward modular CSS organization.
+- All non-README documentation belongs in `docs/` for fast discovery of product, infrastructure, and process materials.
 
 ## Prototype Reference
 
-- Katalogas `first_draft/` talpina pradinį HTML/JS/CSS prototipą, apimantį tik dalį (1 skyrių) viso terminų sąrašo. Jis skirtas kaip UX bei turinio pateikimo nuoroda, bet architektūriškai nosa reikalaujama komponentinio, plačiai plečiamo sprendimo.
+- The `first_draft/` directory contains the initial HTML/JS/CSS prototype for the first curriculum section. Use it as a UX and content reference; the production implementation is component-based and designed for long-term maintainability.
 
 ## Documentation
 
-- Išsami dokumentacija prasideda nuo `docs/README.md`, kur rasite nuorodas į planavimo, infrastruktūros ir nuorodų dokumentus.
-- Statinis sąvokų sąrašas visada pasiekiamas `docs/static_info/LBS_programa.md`.
+- Start with `docs/README.md` for navigation across planning notes, infrastructure runbooks, and reference guides.
+- The static curriculum export is always available in `docs/static_info/LBS_programa.md`.
 
 ## Version Control and Releases
 
-- Naudojame Git (pagrindinis branch `main`).
-- Esminius etapus pažymime žymomis arba išskirstome į atskiras šakas pagal funkcijas.
-- Pagrindinius leidimus (releases) stumiame į GitHub.
+- Git powers version control with `main` as the default branch.
+- Major efforts land via feature branches or annotated tags capturing release snapshots.
+- Releases deploy from GitHub, with Supabase migrations tracked alongside application code.

@@ -8,7 +8,7 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 - **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree; `src/routes/concepts/[slug]/+page.svelte` delivers the LX-003 concept detail workspace.
 - **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes`, `burburiuok_curriculum_items`, and `burburiuok_concepts`. The tree route lazy-loads child nodes/items when a branch expands and enriches items with concept slugs for deep links.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
-- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links and required badges), and `ConceptDetail` for the LX-003 workspace shell.
+- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links and required badges), `ConceptDetail` for the LX-003 workspace shell, and optional layout helpers such as `PageHeading` when a view needs hero-style framing.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
@@ -61,6 +61,6 @@ Run all commands from the repository root:
 ## Roadmap Notes
 
 - LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders).
-- LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and a placeholder analytics event (`console.info` on first expand). Replace with the real telemetry client once analytics is wired up. Tree leaf items now open concept detail pages when a slug is available and tag required topics inline.
+- LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and deep links into LX-003. Analytics instrumentation is currently disabled; wire up the real telemetry client once analytics is ready. Tree leaf items now open concept detail pages when a slug is available and tag required topics inline.
 - LX-003 Concept Detail provides the learner workspace with breadcrumbs, Lithuanian copy, peer-topic suggestions, and disabled action buttons awaiting LX-004/LX-005 integrations.
 - Document any global stores, layout hierarchy changes, or design system additions here so new contributors understand the abstraction layers.
