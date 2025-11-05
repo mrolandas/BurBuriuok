@@ -78,18 +78,18 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Documented LX-002 completion (fallback prerequisite counts logged) and queued LX-003 concept detail slice.
 - 2025-11-05: Reconfirmed modular frontend approach (separate loaders, Supabase helpers, and UI components) so future UX iterations remain low-risk.
 - 2025-11-05: Mapped learner flow beyond LX-003—concept workspace → study queue (LX-004) → timed runner (LX-005) with gamification hooks following practice features.
-- 2025-11-05: LX-003 concept page online with breadcrumbs, Lithuanian copy, peer-topic links, and disabled action buttons pending LX-004/LX-005.
+- 2025-11-05: LX-003 concept page uždarytas – veiksmai atnaujina vietinę būseną ir siunčia įvykius laukdami LX-004/LX-005 integracijos.
 - 2025-11-05: Curriculum tree items now deep-link into concept detail pages when Supabase exposes a matching slug, flagging required concepts inline.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Poliruoti LX-003 koncepto pateikimą (terminologija, bandomieji veiksmai, turinio peržiūra).
+- Uždaryti LX-004 – sukurti vietinę eilės saugyklą ir susieti ją su naujais koncepto veiksmų įvykiais.
 - Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
-- Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while wiring LX-003 to minimise rework later.
-- Start LX-004 discovery: outline study queue store API and how concept actions will drive state updates once buttons are activated.
+- Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while ruošiamės jungti prie naujų veiksmų įvykių.
+- Start LX-004 discovery: outline study queue store API and kaip nauji veiksmų signalai judins būseną tarp sąrašų.
 
 ## Branching & Testing Strategy
 

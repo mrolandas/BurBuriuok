@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
+	import { createEventDispatcher } from 'svelte';
 
 	type Breadcrumb = {
 		label: string;
@@ -9,9 +10,73 @@
 		params?: { code: string };
 	};
 
-	export let concept: ConceptDetail;
-	export let breadcrumbs: Breadcrumb[] = [];
-	export let peerItems: CurriculumItem[] = [];
+	type Props = {
+		concept: ConceptDetail;
+		breadcrumbs?: Breadcrumb[];
+		peerItems?: CurriculumItem[];
+	};
+
+	let { concept, breadcrumbs = [], peerItems = [] }: Props = $props();
+
+	type ActionState = 'idle' | 'learning' | 'queued' | 'quiz';
+
+	const dispatch = createEventDispatcher<{
+		startLearning: { conceptId: string };
+		addToQueue: { conceptId: string };
+		startQuiz: { conceptId: string };
+	}>();
+
+	let actionState = $state<ActionState>('idle');
+	let actionMessage = $state('');
+
+	const setActionState = (next: ActionState) => {
+		if (!concept?.id) {
+			return;
+		}
+
+		actionState = next;
+		actionMessage = getMessageForState(next);
+	};
+
+	const getMessageForState = (state: ActionState) => {
+		switch (state) {
+			case 'learning':
+				return 'Pažymėta kaip mokausi šią temą.';
+			case 'queued':
+				return 'Tema pridėta į pasiruošimo eilę.';
+			case 'quiz':
+				return 'Mini viktorina pradėta – stebime pažangą.';
+			default:
+				return '';
+		}
+	};
+
+	const handleStartLearning = () => {
+		if (!concept?.id) {
+			return;
+		}
+
+		setActionState('learning');
+		dispatch('startLearning', { conceptId: concept.id });
+	};
+
+	const handleAddToQueue = () => {
+		if (!concept?.id) {
+			return;
+		}
+
+		setActionState('queued');
+		dispatch('addToQueue', { conceptId: concept.id });
+	};
+
+	const handleStartQuiz = () => {
+		if (!concept?.id) {
+			return;
+		}
+
+		setActionState('quiz');
+		dispatch('startQuiz', { conceptId: concept.id });
+	};
 
 	const boardHref = resolve('/');
 
@@ -89,14 +154,33 @@
 			<section class="concept-detail__panel">
 				<h2>Veiksmai</h2>
 				<p class="concept-detail__panel-intro">
-					Mygtukai kol kas neveikia – jie taps aktyvūs kartu su LX-004 / LX-005 studijų seanso
-					funkcionalumu.
+					Veiksmai fiksuoja tik vietinį statusą, kol LX-004 / LX-005 prijungs studijų eilę ir seansų
+					logiką.
 				</p>
 				<div class="concept-detail__actions">
-					<button type="button" disabled>Pažymėti kaip mokausi</button>
-					<button type="button" disabled>Pridėti į pasiruošimo eilę</button>
-					<button type="button" disabled>Pradėti mini viktoriną</button>
+					<button
+						type="button"
+						onclick={handleStartLearning}
+						class:is-active={actionState === 'learning'}
+					>
+						Pažymėti kaip mokausi
+					</button>
+					<button
+						type="button"
+						onclick={handleAddToQueue}
+						class:is-active={actionState === 'queued'}
+					>
+						Pridėti į pasiruošimo eilę
+					</button>
+					<button type="button" onclick={handleStartQuiz} class:is-active={actionState === 'quiz'}>
+						Pradėti mini viktoriną
+					</button>
 				</div>
+				{#if actionMessage}
+					<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
+						{actionMessage}
+					</p>
+				{/if}
 			</section>
 
 			{#if peerItems.length}
@@ -282,7 +366,31 @@
 		background: rgba(148, 163, 184, 0.12);
 		color: rgba(226, 232, 240, 0.75);
 		font-weight: 600;
-		cursor: not-allowed;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.concept-detail__actions button:hover,
+	.concept-detail__actions button:focus-visible {
+		border-color: rgba(94, 234, 212, 0.55);
+		background: rgba(94, 234, 212, 0.12);
+		color: rgba(226, 232, 240, 0.9);
+	}
+
+	.concept-detail__actions button.is-active {
+		border-color: rgba(94, 234, 212, 0.7);
+		background: rgba(94, 234, 212, 0.18);
+		color: rgba(15, 23, 42, 0.92);
+	}
+
+	.concept-detail__actions-feedback {
+		margin: 0;
+		margin-top: 0.6rem;
+		font-size: 0.85rem;
+		color: rgba(94, 234, 212, 0.85);
 	}
 
 	.concept-detail__panel--list ul {
