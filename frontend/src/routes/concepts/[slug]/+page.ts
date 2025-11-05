@@ -56,7 +56,15 @@ export const load = (async ({ params }) => {
 		}
 
 		if (concept.subsectionTitle) {
-			breadcrumbs.push({ label: concept.subsectionTitle });
+			if (concept.sectionCode) {
+				breadcrumbs.push({
+					label: concept.subsectionTitle,
+					routeId: '/sections/[code]',
+					params: { code: concept.sectionCode }
+				});
+			} else {
+				breadcrumbs.push({ label: concept.subsectionTitle });
+			}
 		}
 
 		if (concept.curriculumItemLabel) {

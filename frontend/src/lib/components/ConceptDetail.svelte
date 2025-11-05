@@ -131,17 +131,9 @@
 	</nav>
 
 	<header class="concept-detail__header">
-		{#if concept.isRequired}
-			<span class="concept-detail__badge">Būtina tema</span>
-		{:else}
-			<span class="concept-detail__badge concept-detail__badge--optional">Pasirenkama tema</span>
-		{/if}
 		<h1 class="concept-detail__title">{concept.termLt}</h1>
 		{#if concept.termEn}
 			<p class="concept-detail__subtitle">{concept.termEn}</p>
-		{/if}
-		{#if concept.curriculumItemLabel}
-			<p class="concept-detail__context">{concept.curriculumItemLabel}</p>
 		{/if}
 	</header>
 
@@ -183,10 +175,6 @@
 
 			<section class="concept-detail__panel">
 				<h2>Veiksmai</h2>
-				<p class="concept-detail__panel-intro">
-					Pasirinkite, kaip vertinate šią temą. Būsena kol kas saugoma tik vietoje – su Supabase ją
-					sinchronizuosime LX-004 / LX-005 metu.
-				</p>
 				<div class="concept-detail__actions" data-last-action={lastAction}>
 					<label class="concept-detail__action-option">
 						<input
@@ -275,28 +263,7 @@
 
 	.concept-detail__header {
 		display: grid;
-		gap: 0.4rem;
-	}
-
-	.concept-detail__badge {
-		align-self: flex-start;
-		display: inline-flex;
-		gap: 0.35rem;
-		align-items: center;
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		font-size: 0.7rem;
-		padding: 0.2rem 0.6rem;
-		border-radius: 999px;
-		background: rgba(34, 197, 94, 0.15);
-		color: #bbf7d0;
-		border: 1px solid rgba(34, 197, 94, 0.35);
-	}
-
-	.concept-detail__badge--optional {
-		background: rgba(96, 165, 250, 0.16);
-		color: #dbeafe;
-		border-color: rgba(96, 165, 250, 0.35);
+		gap: 0.3rem;
 	}
 
 	.concept-detail__title {
@@ -309,12 +276,6 @@
 		margin: 0;
 		color: rgba(148, 163, 184, 0.9);
 		font-size: clamp(1rem, 2.8vw, 1.2rem);
-	}
-
-	.concept-detail__context {
-		margin: 0;
-		color: rgba(226, 232, 240, 0.78);
-		font-size: 0.95rem;
 	}
 
 	.concept-detail__layout {
@@ -387,10 +348,6 @@
 		margin: 0;
 		font-size: 0.9rem;
 		line-height: 1.6;
-	}
-
-	.concept-detail__panel-intro {
-		color: rgba(226, 232, 240, 0.7);
 	}
 
 	.concept-detail__actions {
@@ -507,10 +464,6 @@
 	}
 
 	@media (max-width: 640px) {
-		.concept-detail__badge {
-			font-size: 0.65rem;
-		}
-
 		.concept-detail__actions {
 			gap: 0.4rem;
 		}
