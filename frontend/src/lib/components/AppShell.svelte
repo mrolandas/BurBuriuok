@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import type { Snippet } from 'svelte';
 	import { onDestroy } from 'svelte';
+	import { menuActionsStore, type MenuAction } from '$lib/stores/menuActions';
 
 	type NavHref = '/' | `/sections/${string}`;
 
@@ -25,9 +26,13 @@
 
 	let menuOpen = $state(false);
 	let activePath = $state($page.url.pathname);
+	let menuActions = $state<MenuAction[]>([]);
 	const visibleNavLinks = $derived(
-		navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
+		navLinks.length <= 1
+			? navLinks
+			: navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
 	);
+	const hasMenuToggle = $derived(visibleNavLinks.length > 0 || menuActions.length > 0);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 
 	const toggleMenu = () => {
@@ -56,7 +61,7 @@
 		}
 	};
 
-	const unsubscribe = page.subscribe(({ url }) => {
+	const unsubscribePage = page.subscribe(({ url }) => {
 		const nextPath = url.pathname;
 		if (nextPath !== activePath) {
 			activePath = nextPath;
@@ -64,7 +69,28 @@
 		}
 	});
 
-	onDestroy(unsubscribe);
+	const unsubscribeMenuActions = menuActionsStore.subscribe((items) => {
+		menuActions = items;
+	});
+
+	const handleActionSelect = (action: MenuAction) => {
+		closeMenu();
+
+		if (action.disabled) {
+			return;
+		}
+
+		try {
+			action.onSelect();
+		} catch (error) {
+			console.error('Nepavyko įvykdyti meniu veiksmo', error);
+		}
+	};
+
+	onDestroy(() => {
+		unsubscribePage();
+		unsubscribeMenuActions();
+	});
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -77,7 +103,7 @@
 				<span class="app-shell__brand-subtitle">Mokymosi palydovas</span>
 			</a>
 		</div>
-		{#if visibleNavLinks.length}
+		{#if hasMenuToggle}
 			<button
 				type="button"
 				class="app-shell__menu-toggle"
@@ -94,10 +120,10 @@
 				<span class="app-shell__menu-label">Meniu</span>
 			</button>
 		{/if}
-		{#if menuOpen && visibleNavLinks.length}
+		{#if menuOpen && hasMenuToggle}
 			<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
 		{/if}
-		{#if visibleNavLinks.length}
+		{#if hasMenuToggle}
 			<nav
 				id="app-shell-menu"
 				class="app-shell__menu"
@@ -116,6 +142,23 @@
 							>
 								{item.label}
 							</a>
+						</li>
+					{/each}
+
+					{#if visibleNavLinks.length && menuActions.length}
+						<li class="app-shell__menu-divider" aria-hidden="true"></li>
+					{/if}
+
+					{#each menuActions as action (action.id)}
+						<li>
+							<button
+								class="app-shell__menu-action"
+								type="button"
+								onclick={() => handleActionSelect(action)}
+								disabled={action.disabled}
+							>
+								{action.label}
+							</button>
 						</li>
 					{/each}
 				</ul>
@@ -283,6 +326,12 @@
 		gap: 0.35rem;
 	}
 
+	.app-shell__menu-divider {
+		border-top: 1px solid var(--color-border);
+		margin: 0.4rem 0;
+		height: 0;
+	}
+
 	.app-shell__menu-link {
 		display: flex;
 		align-items: center;
@@ -304,6 +353,36 @@
 	.app-shell__menu-link.active {
 		background: rgba(56, 189, 248, 0.22);
 		color: var(--color-text);
+	}
+
+	.app-shell__menu-action {
+		width: 100%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.45rem;
+		padding: 0.55rem 0.75rem;
+		border-radius: 0.75rem;
+		border: 1px solid rgba(59, 130, 246, 0.25);
+		background: rgba(59, 130, 246, 0.14);
+		color: var(--color-text);
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.app-shell__menu-action:hover,
+	.app-shell__menu-action:focus-visible {
+		background: rgba(59, 130, 246, 0.22);
+		border-color: rgba(59, 130, 246, 0.45);
+	}
+
+	.app-shell__menu-action:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
 	}
 
 	.app-shell__main {

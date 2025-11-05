@@ -2,7 +2,10 @@
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { registerMenuAction } from '$lib/stores/menuActions';
+
+	const conceptActionState: Record<string, { learning: boolean; known: boolean }> = {};
 
 	type Breadcrumb = {
 		label: string;
@@ -10,13 +13,25 @@
 		params?: { code: string };
 	};
 
+	type NeighborLink = {
+		label: string;
+		slug: string;
+		ordinal: number | null;
+	};
+
+	type NeighborSet = {
+		previous?: NeighborLink | null;
+		next?: NeighborLink | null;
+	};
+
 	type Props = {
 		concept: ConceptDetail;
 		breadcrumbs?: Breadcrumb[];
 		peerItems?: CurriculumItem[];
+		neighbors?: NeighborSet;
 	};
 
-	let { concept, breadcrumbs = [], peerItems = [] }: Props = $props();
+	let { concept, breadcrumbs = [], peerItems = [], neighbors }: Props = $props();
 
 	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset' | 'quiz';
 
@@ -55,6 +70,17 @@
 		actionMessage = getMessageForAction(action);
 	};
 
+	const persistActionState = () => {
+		if (!concept?.id) {
+			return;
+		}
+
+		conceptActionState[concept.id] = {
+			learning: learningChecked,
+			known: knownChecked
+		};
+	};
+
 	const markLearning = (value: boolean) => {
 		if (!concept?.id) {
 			return;
@@ -70,6 +96,7 @@
 			setLastAction('known');
 		}
 		dispatch('setLearning', { conceptId: concept.id, learning: value });
+		persistActionState();
 	};
 
 	const markKnown = (value: boolean) => {
@@ -87,6 +114,7 @@
 			setLastAction('learning');
 		}
 		dispatch('setKnown', { conceptId: concept.id, known: value });
+		persistActionState();
 	};
 
 	const handleLearningChange = (event: Event) => {
@@ -108,9 +136,42 @@
 		dispatch('startSectionQuiz', { conceptId: concept.id, sectionCode: concept.sectionCode });
 	};
 
+	let unregisterQuizAction: (() => void) | null = null;
+
 	const boardHref = resolve('/');
 
-	const description = concept.descriptionLt?.trim() ?? '';
+	const description = $derived(concept.descriptionLt?.trim() ?? '');
+
+	$effect(() => {
+		const currentId = concept?.id;
+		const stored = currentId ? conceptActionState[currentId] : null;
+		learningChecked = stored?.learning ?? false;
+		knownChecked = stored?.known ?? false;
+		lastAction = 'idle';
+		actionMessage = '';
+	});
+
+	$effect(() => {
+		// Ensure the quiz menu action tracks the active concept.
+		unregisterQuizAction?.();
+
+		if (!concept?.id) {
+			unregisterQuizAction = null;
+			return;
+		}
+
+		unregisterQuizAction = registerMenuAction({
+			id: `concept-quiz-${concept.id}`,
+			label: 'Pasitikrinti žinias',
+			onSelect: handleStartQuiz,
+			disabled: !concept.sectionCode
+		});
+	});
+
+	onDestroy(() => {
+		unregisterQuizAction?.();
+		unregisterQuizAction = null;
+	});
 </script>
 
 <section class="concept-detail">
@@ -135,6 +196,34 @@
 		{/if}
 	</header>
 
+	{#if neighbors?.previous || neighbors?.next}
+		<nav class="concept-detail__pager" aria-label="Temų naršymas">
+			{#if neighbors?.previous}
+				<a
+					class="concept-detail__pager-link concept-detail__pager-link--prev"
+					href={resolve('/concepts/[slug]', { slug: neighbors.previous.slug })}
+				>
+					<span aria-hidden="true">‹</span>
+					<span>
+						<span class="concept-detail__pager-label">{neighbors.previous.label}</span>
+					</span>
+				</a>
+			{/if}
+
+			{#if neighbors?.next}
+				<a
+					class="concept-detail__pager-link concept-detail__pager-link--next"
+					href={resolve('/concepts/[slug]', { slug: neighbors.next.slug })}
+				>
+					<span>
+						<span class="concept-detail__pager-label">{neighbors.next.label}</span>
+					</span>
+					<span aria-hidden="true">›</span>
+				</a>
+			{/if}
+		</nav>
+	{/if}
+
 	<div class="concept-detail__layout">
 		<article class="concept-detail__content">
 			<h2 class="concept-detail__section-title">Apibrėžimas</h2>
@@ -156,8 +245,7 @@
 		</article>
 
 		<aside class="concept-detail__sidebar">
-			<section class="concept-detail__panel">
-				<h2>Veiksmai</h2>
+			<section class="concept-detail__panel concept-detail__panel--actions" aria-label="Veiksmai">
 				<div class="concept-detail__actions" data-last-action={lastAction}>
 					<label class="concept-detail__action-option">
 						<input
@@ -178,14 +266,6 @@
 						<span>Moku</span>
 					</label>
 				</div>
-				<button
-					type="button"
-					class="concept-detail__quiz-button"
-					onclick={handleStartQuiz}
-					disabled={!concept.sectionCode}
-				>
-					Pasitikrinti žinias
-				</button>
 				{#if actionMessage}
 					<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
 						{actionMessage}
@@ -257,6 +337,47 @@
 		gap: 0.3rem;
 	}
 
+	.concept-detail__pager {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.6rem;
+	}
+
+	.concept-detail__pager-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.35rem 0.6rem;
+		border-radius: 0.75rem;
+		background: rgba(148, 163, 184, 0.12);
+		border: 1px solid rgba(148, 163, 184, 0.25);
+		color: rgba(226, 232, 240, 0.85);
+		text-decoration: none;
+		font-size: 0.85rem;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.concept-detail__pager-link:hover,
+	.concept-detail__pager-link:focus-visible {
+		border-color: rgba(94, 234, 212, 0.45);
+		background: rgba(94, 234, 212, 0.18);
+		color: rgba(226, 232, 240, 1);
+	}
+
+	.concept-detail__pager-link--next {
+		margin-left: auto;
+	}
+
+	.concept-detail__pager-label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+	}
+
 	.concept-detail__title {
 		margin: 0;
 		font-size: clamp(1.6rem, 4vw, 2.3rem);
@@ -324,6 +445,10 @@
 		background: rgba(15, 23, 42, 0.24);
 	}
 
+	.concept-detail__panel--actions {
+		gap: 0.75rem;
+	}
+
 	.concept-detail__panel h2 {
 		margin: 0;
 		font-size: clamp(1rem, 2.5vw, 1.2rem);
@@ -336,8 +461,9 @@
 	}
 
 	.concept-detail__actions {
-		display: grid;
-		gap: 0.5rem;
+		display: flex;
+		gap: 0.6rem;
+		flex-wrap: wrap;
 	}
 
 	.concept-detail__action-option {
@@ -356,6 +482,8 @@
 			border-color 0.2s ease,
 			background 0.2s ease,
 			color 0.2s ease;
+		flex: 1 1 9rem;
+		justify-content: center;
 	}
 
 	.concept-detail__action-option:hover,
@@ -387,33 +515,6 @@
 		transform: translate(-50%, -58%);
 		font-size: 0.75rem;
 		color: rgba(15, 23, 42, 0.92);
-	}
-
-	.concept-detail__quiz-button {
-		margin-top: 0.35rem;
-		align-self: flex-start;
-		padding: 0.55rem 0.9rem;
-		border-radius: 0.75rem;
-		border: 1px solid rgba(59, 130, 246, 0.35);
-		background: rgba(59, 130, 246, 0.14);
-		color: rgba(226, 232, 240, 0.85);
-		font-weight: 600;
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease,
-			background 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.concept-detail__quiz-button:hover,
-	.concept-detail__quiz-button:focus-visible {
-		border-color: rgba(59, 130, 246, 0.65);
-		background: rgba(59, 130, 246, 0.22);
-	}
-
-	.concept-detail__quiz-button:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
 	}
 
 	.concept-detail__actions-feedback {
@@ -450,7 +551,7 @@
 
 	@media (max-width: 640px) {
 		.concept-detail__actions {
-			gap: 0.4rem;
+			gap: 0.45rem;
 		}
 
 		.concept-detail__action-option {

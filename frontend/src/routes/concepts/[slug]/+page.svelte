@@ -20,6 +20,7 @@
 			concept={data.concept}
 			breadcrumbs={data.breadcrumbs}
 			peerItems={data.peerItems}
+			neighbors={data.neighbors}
 		/>
 	{:else}
 		<Card title="Kraunama tema">

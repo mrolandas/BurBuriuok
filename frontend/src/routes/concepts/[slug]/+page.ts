@@ -10,10 +10,22 @@ export type ConceptBreadcrumb = {
 	params?: { code: string };
 };
 
+export type ConceptNeighbor = {
+	label: string;
+	slug: string;
+	ordinal: number | null;
+};
+
+export type ConceptNeighbors = {
+	previous?: ConceptNeighbor | null;
+	next?: ConceptNeighbor | null;
+};
+
 export type ConceptPageData = {
 	concept: ConceptDetail | null;
 	peerItems: CurriculumItem[];
 	breadcrumbs: ConceptBreadcrumb[];
+	neighbors: ConceptNeighbors;
 	notFound?: boolean;
 	loadError?: string;
 };
@@ -29,17 +41,40 @@ export const load = (async ({ params }) => {
 				concept: null,
 				peerItems: [],
 				breadcrumbs: [],
+				neighbors: {},
 				notFound: true
 			};
 			return fallback;
 		}
 
 		let peerItems: CurriculumItem[] = [];
+		const neighbors: ConceptNeighbors = {};
 
 		if (concept.curriculumNodeCode) {
 			try {
 				const items = await fetchNodeItems(concept.curriculumNodeCode);
 				peerItems = items.filter((item) => item.conceptSlug && item.conceptSlug !== concept.slug);
+
+				const currentIndex = items.findIndex((item) => item.conceptSlug === concept.slug);
+				if (currentIndex !== -1) {
+					const previousCandidate = items[currentIndex - 1];
+					if (previousCandidate?.conceptSlug) {
+						neighbors.previous = {
+							label: previousCandidate.label,
+							slug: previousCandidate.conceptSlug,
+							ordinal: previousCandidate.ordinal ?? null
+						};
+					}
+
+					const nextCandidate = items[currentIndex + 1];
+					if (nextCandidate?.conceptSlug) {
+						neighbors.next = {
+							label: nextCandidate.label,
+							slug: nextCandidate.conceptSlug,
+							ordinal: nextCandidate.ordinal ?? null
+						};
+					}
+				}
 			} catch (itemError) {
 				console.warn('Nepavyko įkelti susijusių temų', itemError);
 			}
@@ -74,7 +109,8 @@ export const load = (async ({ params }) => {
 		const payload: ConceptPageData = {
 			concept,
 			peerItems,
-			breadcrumbs
+			breadcrumbs,
+			neighbors
 		};
 
 		return payload;
@@ -84,6 +120,7 @@ export const load = (async ({ params }) => {
 			concept: null,
 			peerItems: [],
 			breadcrumbs: [],
+			neighbors: {},
 			loadError: error instanceof Error ? error.message : 'Nepavyko įkelti temos duomenų.'
 		};
 		return fallback;
