@@ -60,11 +60,6 @@
 											>
 												<span class="tree-node__item-ordinal">{item.ordinal}.</span>
 												<span class="tree-node__item-label">{item.label}</span>
-												{#if item.isRequired}
-													<span class="tree-node__item-badge" aria-label="Privaloma tema"
-														>Būtina</span
-													>
-												{/if}
 											</a>
 										{:else}
 											<span class="tree-node__item-text">
@@ -244,17 +239,6 @@
 	.tree-node__item-ordinal {
 		font-variant-numeric: tabular-nums;
 		color: rgba(148, 163, 184, 0.9);
-	}
-
-	.tree-node__item-badge {
-		background: rgba(59, 130, 246, 0.18);
-		color: #bfdbfe;
-		font-size: 0.7rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		padding: 0.2rem 0.45rem;
-		border-radius: 999px;
-		border: 1px solid rgba(59, 130, 246, 0.35);
 	}
 
 	@media (max-width: 640px) {

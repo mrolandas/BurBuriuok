@@ -110,8 +110,6 @@
 
 	const boardHref = resolve('/');
 
-	const formattedSource = concept.sourceRef?.trim() ?? '';
-
 	const description = concept.descriptionLt?.trim() ?? '';
 </script>
 
@@ -155,24 +153,9 @@
 					<p>{concept.descriptionEn}</p>
 				</div>
 			{/if}
-
-			{#if formattedSource}
-				<footer class="concept-detail__source">
-					<h3>Šaltinis</h3>
-					<p>{formattedSource}</p>
-				</footer>
-			{/if}
 		</article>
 
 		<aside class="concept-detail__sidebar">
-			<section class="concept-detail__panel">
-				<h2>Prieraišos</h2>
-				<p>
-					Tikros prielaidos atsiras, kai viešoje schemoje publikavimo metas suteiks priklausomybių
-					duomenis. Kol kas žymime, kad ši sritis laukia backend atnaujinimo.
-				</p>
-			</section>
-
 			<section class="concept-detail__panel">
 				<h2>Veiksmai</h2>
 				<div class="concept-detail__actions" data-last-action={lastAction}>
@@ -226,6 +209,14 @@
 					</ul>
 				</section>
 			{/if}
+
+			<section class="concept-detail__panel">
+				<h2>Prieraišos</h2>
+				<p>
+					Tikros prielaidos atsiras, kai viešoje schemoje publikavimo metas suteiks priklausomybių
+					duomenis. Kol kas žymime, kad ši sritis laukia backend atnaujinimo.
+				</p>
+			</section>
 		</aside>
 	</div>
 </section>
@@ -311,18 +302,12 @@
 		border: 1px solid rgba(59, 130, 246, 0.25);
 	}
 
-	.concept-detail__translation h3,
-	.concept-detail__source h3 {
+	.concept-detail__translation h3 {
 		margin: 0;
 		font-size: 0.85rem;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: rgba(148, 163, 184, 0.85);
-	}
-
-	.concept-detail__source p {
-		margin: 0;
-		font-size: 0.85rem;
 	}
 
 	.concept-detail__sidebar {
