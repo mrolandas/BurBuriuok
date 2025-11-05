@@ -25,7 +25,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - [x] Bootstrap SvelteKit app structure with routing, layout, and shared UI primitives.
 - [x] Implement Section Board page consuming live Supabase data (issue [LX-001](https://github.com/mrolandas/BurBuriuok/issues/1)).
 - [x] Build collapsible curriculum tree component with lazy-loaded nodes (issue [LX-002](https://github.com/mrolandas/BurBuriuok/issues/2)) – prerequisite badges currently show zero until a public dependency view ships.
-- [ ] Deliver concept detail view skeleton showing definitions, prerequisite badges, and placeholder actions (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
+- [x] Deliver concept detail view skeleton showing definitions, prerequisite placeholders, and action stubs (issue [LX-003](https://github.com/mrolandas/BurBuriuok/issues/3)).
 - [ ] Integrate Supabase client, environment config, and error handling patterns.
 
 ### C. Admin & Moderation Interface
@@ -78,15 +78,18 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: Documented LX-002 completion (fallback prerequisite counts logged) and queued LX-003 concept detail slice.
 - 2025-11-05: Reconfirmed modular frontend approach (separate loaders, Supabase helpers, and UI components) so future UX iterations remain low-risk.
 - 2025-11-05: Mapped learner flow beyond LX-003—concept workspace → study queue (LX-004) → timed runner (LX-005) with gamification hooks following practice features.
+- 2025-11-05: LX-003 concept page online with breadcrumbs, Lithuanian copy, peer-topic links, and disabled action buttons pending LX-004/LX-005.
+- 2025-11-05: Curriculum tree items now deep-link into concept detail pages when Supabase exposes a matching slug, flagging required concepts inline.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Kick off LX-003 concept detail skeleton (Supabase fetch + UI scaffolding).
-- Define data loading strategy and caching for concept detail plus shared curriculum queries.
+- Poliruoti LX-003 koncepto pateikimą (terminologija, bandomieji veiksmai, turinio peržiūra).
+- Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
 - Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while wiring LX-003 to minimise rework later.
+- Start LX-004 discovery: outline study queue store API and how concept actions will drive state updates once buttons are activated.
 
 ## Branching & Testing Strategy
 

@@ -5,10 +5,10 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 ## Architecture Snapshot
 
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
-- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree.
-- **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes` and `burburiuok_curriculum_items`. The tree route lazy-loads child nodes/items when a branch expands.
+- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree; `src/routes/concepts/[slug]/+page.svelte` delivers the LX-003 concept detail workspace.
+- **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes`, `burburiuok_curriculum_items`, and `burburiuok_concepts`. The tree route lazy-loads child nodes/items when a branch expands and enriches items with concept slugs for deep links.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
-- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, and the recursive `CurriculumTree` + `CurriculumTreeBranch` pair for lazy-loaded navigation and Lithuanian learner copy.
+- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `PageHeading`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links and required badges), and `ConceptDetail` for the LX-003 workspace shell.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
@@ -43,13 +43,15 @@ Run all commands from the repository root:
 - Re-export shared modules through `src/lib/index.ts` when they should be consumed outside the app (e.g., future package extraction).
 - Keep learner-facing copy in Lithuanian; comments and internal identifiers remain in English.
 - Preserve Lithuanian terminology (“skiltis”, “Skilčių lenta”) when adding new UI or logging strings; audit new components before review.
+- Ensure new learner flows (concept actions, study queue) wire through existing helpers instead of embedding Supabase queries directly in components.
 
 ## Supabase Usage
 
 - Import `getSupabaseClient` from `src/lib/supabase/client.ts` to create a browser client.
 - Treat Supabase calls as asynchronous; colocate data fetching in page `load` functions or use SvelteKit server endpoints when server-side logic is required.
 - Record schema and API changes in `docs/references/SUPABASE.md` and update seeds via the scripts documented in `docs/references/DEVELOPMENT_SETUP.md`.
-- Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent. Prerequisite badges currently fall back to zero counts until a public dependency view is introduced; the helper logs a warning when the fallback triggers.
+- Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent. `fetchNodeItems` now enriches list entries with concept slugs/flags so the tree can link into the LX-003 view. Prerequisite badges currently fall back to zero counts until a public dependency view is introduced; the helper logs a warning when the fallback triggers.
+- Use `src/lib/api/concepts.ts::fetchConceptBySlug` when loading concept detail routes to avoid duplicating Supabase queries.
 
 ## Testing & Quality
 
@@ -59,5 +61,6 @@ Run all commands from the repository root:
 ## Roadmap Notes
 
 - LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders).
-- LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and a placeholder analytics event (`console.info` on first expand). Replace with the real telemetry client once analytics is wired up.
+- LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and a placeholder analytics event (`console.info` on first expand). Replace with the real telemetry client once analytics is wired up. Tree leaf items now open concept detail pages when a slug is available and tag required topics inline.
+- LX-003 Concept Detail provides the learner workspace with breadcrumbs, Lithuanian copy, peer-topic suggestions, and disabled action buttons awaiting LX-004/LX-005 integrations.
 - Document any global stores, layout hierarchy changes, or design system additions here so new contributors understand the abstraction layers.

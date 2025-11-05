@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { TreeNodeState } from './curriculumTreeTypes';
+	 import { resolve } from '$app/paths';
+	 import type { TreeNodeState } from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -52,8 +53,23 @@
 							<ul class="tree-node__items">
 								{#each state.items as item (item.ordinal)}
 									<li>
-										<span class="tree-node__item-ordinal">{item.ordinal}.</span>
-										<span>{item.label}</span>
+										{#if item.conceptSlug}
+											<a
+												class="tree-node__item-link"
+												href={resolve('/concepts/[slug]', { slug: item.conceptSlug })}
+											>
+												<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+												<span class="tree-node__item-label">{item.label}</span>
+												{#if item.isRequired}
+													<span class="tree-node__item-badge" aria-label="Privaloma tema">Būtina</span>
+												{/if}
+											</a>
+										{:else}
+											<span class="tree-node__item-text">
+												<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+												<span>{item.label}</span>
+											</span>
+										{/if}
 									</li>
 								{/each}
 							</ul>
@@ -186,15 +202,51 @@
 	}
 
 	.tree-node__items li {
+		list-style: none;
+	}
+
+	.tree-node__item-link,
+	.tree-node__item-text {
 		display: inline-flex;
-		gap: 0.4rem;
+		align-items: center;
+		gap: 0.5rem;
 		font-size: 0.9rem;
 		color: rgba(226, 232, 240, 0.95);
+	}
+
+	.tree-node__item-link {
+		border: 1px solid rgba(94, 234, 212, 0.25);
+		background: rgba(45, 212, 191, 0.08);
+		padding: 0.35rem 0.6rem;
+		border-radius: 0.75rem;
+		text-decoration: none;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.tree-node__item-link:hover,
+	.tree-node__item-link:focus-visible {
+		border-color: rgba(94, 234, 212, 0.55);
+		background: rgba(45, 212, 191, 0.15);
+		transform: translateY(-1px);
 	}
 
 	.tree-node__item-ordinal {
 		font-variant-numeric: tabular-nums;
 		color: rgba(148, 163, 184, 0.9);
+	}
+
+	.tree-node__item-badge {
+		background: rgba(59, 130, 246, 0.18);
+		color: #bfdbfe;
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		padding: 0.2rem 0.45rem;
+		border-radius: 999px;
+		border: 1px solid rgba(59, 130, 246, 0.35);
 	}
 
 	@media (max-width: 640px) {

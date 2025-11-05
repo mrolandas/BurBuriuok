@@ -4,7 +4,7 @@
 
 - **Hosting** – SvelteKit frontend lives under `frontend/` (local dev via Vite) and uses `$app/paths.resolve` for internal navigation so adapters with a base path stay healthy; production hosting target still tbd. Legacy `first_draft/` prototype remains on GitHub Pages for archival reference.
 - **Runtime** – Express backend under `backend/` exposes read/write curriculum + progress endpoints (`/api/v1/*`). The new SvelteKit UI consumes these routes; additional clients (CLI experiments, admin tools) can reuse the same surface.
-- **Frontend slices** – Section board (`/`) lists top-level curriculum nodes, while `/sections/[code]` renders the collapsible curriculum tree with lazy Supabase fetches and prerequisite badges (analytics event currently logged via `console.info`).
+- **Frontend slices** – Section board (`/`) lists top-level curriculum nodes, while `/sections/[code]` renders the collapsible curriculum tree with lazy Supabase fetches, prerequisite badges, and deep links into the new concept workspace. `/concepts/[slug]` hosts the LX-003 concept detail page (breadcrumbs, Lithuanian copy, disabled action buttons until LX-004/LX-005).
 - **Data Storage** – Hosted Supabase project (`zvlziltltbalebqpmuqs`) for curriculum content, dependencies, concept progress, and audit logging (`content_versions`, `content_version_changes`). Seeds stay in sync via the content scripts and `supabase/seeds/*`.
 - **Content Pipeline** – Curriculum concepts live in `docs/static_info/LBS_concepts_master.md` and are compiled into Supabase seed SQL via `content/scripts/build_seed_sql.mjs` + `content/scripts/build_dependency_seed_sql.mjs`.
 - **Integrations** – Supabase REST only; device-key header authenticates learner progress writes. No auth or storage buckets yet.

@@ -12,13 +12,13 @@ JWTs are verified with Supabase public keys. Requests without a valid token are 
 
 ## Public Read Endpoints
 
-| Method | Path                | Query Params                                                                       | Description                                                                                     |
-| ------ | ------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| GET    | `/curriculum`       | `level?` – optional depth filter (`1` = topic, `2` = section, `3+` = sub-sections) | Returns all curriculum nodes ordered by ordinal. Includes nested items for the requested depth. |
-| GET    | `/curriculum/:code` |                                                                                    | Returns a single node by code with parent, children, items, and dependencies.                   |
-| GET    | `/concepts`         | `sectionCode?`, `nodeCode?`, `requiredOnly?`                                       | Lists concepts with pagination (`page`, `pageSize` to add later).                               |
-| GET    | `/concepts/:slug`   |                                                                                    | Returns concept detail plus prerequisite and next-step summaries.                               |
-| GET    | `/search`           | `q`, `limit?`                                                                      | Full-text search across concepts, nodes, and media captions.                                    |
+| Method | Path                | Query Params                                                                       | Description                                                                                                                                         |
+| ------ | ------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/curriculum`       | `level?` – optional depth filter (`1` = topic, `2` = section, `3+` = sub-sections) | Returns all curriculum nodes ordered by ordinal. Includes nested items for the requested depth.                                                     |
+| GET    | `/curriculum/:code` |                                                                                    | Returns a single node by code with parent, children, items, and dependencies.                                                                       |
+| GET    | `/concepts`         | `sectionCode?`, `nodeCode?`, `requiredOnly?`                                       | Lists concepts with pagination (`page`, `pageSize` to add later).                                                                                   |
+| GET    | `/concepts/:slug`   |                                                                                    | Returns concept detail plus prerequisite and next-step summaries (front-end currently shows placeholders until the public dependency view arrives). |
+| GET    | `/search`           | `q`, `limit?`                                                                      | Full-text search across concepts, nodes, and media captions.                                                                                        |
 
 ### Response Shapes
 

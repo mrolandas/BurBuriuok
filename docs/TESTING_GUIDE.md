@@ -12,6 +12,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Exercise curriculum read endpoints (`GET /api/v1/curriculum`, `/api/v1/concepts`, `/api/v1/dependencies`) and verify payload shape matches `docs/references/API_CONTRACTS.md`.
   - Use a device key when testing progress endpoints (`GET/PUT/DELETE /api/v1/progress/:conceptId`) and validate rate-limit metadata headers.
   - Regenerate `supabase/seeds/seed_concepts.sql` and `supabase/seeds/seed_curriculum_dependencies.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`, `npm run content:seed:dependencies`) and confirm `npm run content:seed:check` reports no drift before pushing.
+  - Navigate from the curriculum tree to a concept detail page (`/concepts/[slug]`) to confirm breadcrumbs, Lithuanian copy, placeholder actions, and peer-topic links render without console errors.
 
 ### Automated Connectivity Check
 

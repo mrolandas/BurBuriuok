@@ -13,6 +13,9 @@ export type CurriculumItem = {
 	nodeCode: string;
 	ordinal: number;
 	label: string;
+	conceptSlug: string | null;
+	conceptTerm: string | null;
+	isRequired: boolean | null;
 };
 
 let hasWarnedAboutPrerequisiteCounts = false;
@@ -89,9 +92,44 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 		throw new Error('Nepavyko įkelti temų sąrašo.');
 	}
 
-	return (data ?? []).map((item) => ({
-		nodeCode: item.node_code,
-		ordinal: item.ordinal,
-		label: item.label
-	}));
+	const conceptByOrdinal = new Map<number, { slug: string | null; term: string | null; isRequired: boolean | null }>();
+
+	const { data: concepts, error: conceptError } = await supabase
+		.from('burburiuok_concepts')
+		.select('slug,curriculum_item_ordinal,term_lt,is_required')
+		.eq('curriculum_node_code', nodeCode);
+
+	if (conceptError) {
+		console.warn('Nepavyko susieti temų su koncepcijomis', conceptError);
+	} else {
+		for (const concept of concepts ?? []) {
+			const ordinalValue = concept.curriculum_item_ordinal;
+			if (ordinalValue == null) {
+				continue;
+			}
+
+			const ordinalKey = Number(ordinalValue);
+			if (Number.isNaN(ordinalKey)) {
+				continue;
+			}
+
+			conceptByOrdinal.set(ordinalKey, {
+				slug: concept.slug ?? null,
+				term: concept.term_lt ?? null,
+				isRequired: concept.is_required ?? null
+			});
+		}
+	}
+
+	return (data ?? []).map((item) => {
+		const concept = conceptByOrdinal.get(item.ordinal) ?? null;
+		return {
+			nodeCode: item.node_code,
+			ordinal: item.ordinal,
+			label: item.label,
+			conceptSlug: concept?.slug ?? null,
+			conceptTerm: concept?.term ?? null,
+			isRequired: concept?.isRequired ?? null
+		};
+	});
 }
