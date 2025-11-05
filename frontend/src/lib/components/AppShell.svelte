@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
 	import { onDestroy } from 'svelte';
 	import { quizModal } from '$lib/stores/quizModal';
@@ -27,6 +28,7 @@
 	let menuOpen = $state(false);
 	let activePath = $state($page.url.pathname);
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
+	let searchInput: HTMLInputElement | null = null;
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
@@ -68,6 +70,24 @@
 		}
 		searchTerm = url.searchParams.get('q') ?? '';
 	});
+
+	const clearSearch = () => {
+		if (!searchTerm) {
+			return;
+		}
+		searchTerm = '';
+		searchInput?.focus();
+		void goto(resolve('/'), { replaceState: true });
+	};
+
+	const handleSearchButtonClick = (event: MouseEvent) => {
+		if (!searchTerm.trim()) {
+			return;
+		}
+
+		event.preventDefault();
+		clearSearch();
+	};
 
 	const openQuizModal = () => {
 		closeMenu();
@@ -144,18 +164,26 @@
 	<div class="app-shell__search" role="search">
 		<form class="app-shell__search-form" action={resolve('/search')} method="get">
 			<label class="app-shell__search-label" for="global-search">Paieška</label>
-			<div class="app-shell__search-controls">
+			<div class="app-shell__search-field">
 				<input
 					id="global-search"
 					type="search"
 					name="q"
-					placeholder="Ieškokite tematinių sąvokų ar aprašymų…"
+					placeholder="Ieškokite sąvokose ir aprašymuose..."
 					autocomplete="off"
 					spellcheck="false"
+					bind:this={searchInput}
 					bind:value={searchTerm}
 					aria-label="Paieška temose"
 				/>
-				<button class="app-shell__search-button" type="submit">Ieškoti</button>
+				<button
+					class="app-shell__search-action"
+					type={searchTerm ? 'button' : 'submit'}
+					onclick={handleSearchButtonClick}
+					aria-label={searchTerm ? 'Išvalyti paiešką' : 'Ieškoti'}
+				>
+					<span aria-hidden="true">{searchTerm ? '✕' : '🔍'}</span>
+				</button>
 			</div>
 		</form>
 	</div>
@@ -204,9 +232,6 @@
 		max-width: var(--layout-max-width);
 		margin: 0 auto;
 		padding: clamp(1rem, 3vw, 1.5rem) 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
 	}
 
 	.app-shell__search-label {
@@ -221,18 +246,18 @@
 		border: 0;
 	}
 
-	.app-shell__search-controls {
+	.app-shell__search-field {
+		position: relative;
 		display: flex;
-		gap: 0.75rem;
 		align-items: center;
 	}
 
-	.app-shell__search-controls input {
+	.app-shell__search-field input {
 		flex: 1;
 		border-radius: 999px;
 		border: 1px solid var(--color-border);
 		background: var(--color-surface);
-		padding: 0.65rem 1rem;
+		padding: 0.65rem 3.5rem 0.65rem 1rem;
 		font-size: 1rem;
 		transition:
 			background-color 0.2s ease,
@@ -240,41 +265,62 @@
 			box-shadow 0.2s ease;
 	}
 
-	.app-shell__search-controls input:focus-visible {
+	.app-shell__search-field input:focus-visible {
 		outline: none;
 		border-color: rgba(56, 189, 248, 0.6);
 		box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
 	}
 
-	.app-shell__search-button {
-		border-radius: 999px;
-		border: 1px solid rgba(56, 189, 248, 0.4);
-		background: rgba(56, 189, 248, 0.18);
-		color: var(--color-text);
-		padding: 0.65rem 1.15rem;
-		font-weight: 600;
-		cursor: pointer;
-		transition:
-			background-color 0.2s ease,
-			border-color 0.2s ease,
-			transform 0.2s ease;
+	.app-shell__search-field input::-webkit-search-decoration,
+	.app-shell__search-field input::-webkit-search-cancel-button,
+	.app-shell__search-field input::-webkit-search-results-button,
+	.app-shell__search-field input::-webkit-search-results-decoration {
+		display: none;
 	}
 
-	.app-shell__search-button:hover,
-	.app-shell__search-button:focus-visible {
-		background: rgba(56, 189, 248, 0.28);
-		border-color: rgba(56, 189, 248, 0.6);
-		transform: translateY(-1px);
+	.app-shell__search-field input::-ms-clear {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+
+	.app-shell__search-action {
+		position: absolute;
+		top: 50%;
+		right: 0.5rem;
+		transform: translateY(-50%);
+		border: none;
+		background: transparent;
+		color: var(--color-text-muted);
+		width: 2.25rem;
+		height: 2.25rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 50%;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.app-shell__search-action:hover,
+	.app-shell__search-action:focus-visible {
+		background: rgba(56, 189, 248, 0.16);
+		color: var(--color-text);
+	}
+
+	.app-shell__search-action span {
+		font-size: 1rem;
 	}
 
 	@media (max-width: 640px) {
-		.app-shell__search-controls {
-			flex-direction: column;
-			align-items: stretch;
+		.app-shell__search-field input {
+			padding-right: 3rem;
 		}
 
-		.app-shell__search-button {
-			width: 100%;
+		.app-shell__search-action {
+			right: 0.6rem;
 		}
 	}
 

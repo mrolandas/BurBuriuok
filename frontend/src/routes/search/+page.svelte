@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import PageHeading from '$lib/components/PageHeading.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -8,11 +7,6 @@
 	const query = data.query;
 	const totalResults = data.conceptHits.length + data.descriptionHits.length;
 </script>
-
-<PageHeading
-	title="Paieška"
-	description="Suraskite temas pagal pavadinimą arba tekste paminėtus terminus."
-/>
 
 <section class="search-results" aria-live="polite">
 	{#if !query}
@@ -32,9 +26,9 @@
 	{/if}
 
 	{#if data.conceptHits.length}
-		<section class="search-results__section" aria-label="Temų atitikimai">
+		<section class="search-results__section" aria-label="Rasta sąvokų pavadinimuose">
 			<h2 class="search-results__heading">
-				Temų atitikimai
+				Rasta sąvokų pavadinimuose
 				<span aria-hidden="true">({data.conceptHits.length})</span>
 			</h2>
 			<ul class="search-results__list">
@@ -56,9 +50,9 @@
 	{/if}
 
 	{#if data.descriptionHits.length}
-		<section class="search-results__section" aria-label="Aprašymų atitikimai">
+		<section class="search-results__section" aria-label="Rasta aprašymuose">
 			<h2 class="search-results__heading">
-				Aprašymų atitikimai
+				Rasta aprašymuose
 				<span aria-hidden="true">({data.descriptionHits.length})</span>
 			</h2>
 			<ul class="search-results__list">
