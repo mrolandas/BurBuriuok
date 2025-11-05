@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { quizModal } from '$lib/stores/quizModal';
 
 	type NavHref = '/' | `/sections/${string}`;
@@ -35,6 +35,71 @@
 			: navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
 	);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
+
+	const themeOptions = [
+		{
+			id: 'marine',
+			label: 'Jūrinė naktis',
+			description: 'Subtili tamsi su melsvais akcentais',
+			preview: ['#0f172a', '#38bdf8', '#0ea5e9']
+		},
+		{
+			id: 'dawn',
+			label: 'Rytmečio dangus',
+			description: 'Šviesi schema su sodria mėlyna',
+			preview: ['#e0f2fe', '#2563eb', '#1d4ed8']
+		},
+		{
+			id: 'sand',
+			label: 'Smėlio krantai',
+			description: 'Šilta pastelė su gintaro akcentais',
+			preview: ['#fff7ed', '#f97316', '#ea580c']
+		}
+	] as const;
+
+	type ThemeOption = (typeof themeOptions)[number];
+	type ThemeId = ThemeOption['id'];
+
+	let activeTheme = $state<ThemeId>(themeOptions[0].id);
+
+	const isKnownTheme = (value: string | null): value is ThemeId =>
+		Boolean(value && themeOptions.some((option) => option.id === value));
+
+	const syncThemeToDocument = (theme: ThemeId) => {
+		if (typeof document === 'undefined') {
+			return;
+		}
+		document.documentElement.dataset.theme = theme;
+	};
+
+	const persistTheme = (theme: ThemeId) => {
+		if (typeof window === 'undefined') {
+			return;
+		}
+		window.localStorage.setItem('burburiuok-theme', theme);
+	};
+
+	const setTheme = (theme: ThemeId) => {
+		if (activeTheme === theme) {
+			return;
+		}
+		activeTheme = theme;
+		syncThemeToDocument(theme);
+		persistTheme(theme);
+	};
+
+	onMount(() => {
+		if (typeof window === 'undefined') {
+			return;
+		}
+		const stored = window.localStorage.getItem('burburiuok-theme');
+		const initial: ThemeId = isKnownTheme(stored) ? stored : themeOptions[0].id;
+		activeTheme = initial;
+		syncThemeToDocument(initial);
+		if (!isKnownTheme(stored)) {
+			persistTheme(initial);
+		}
+	});
 
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
@@ -157,6 +222,37 @@
 						Pasitikrinti žinias
 					</button>
 				</li>
+
+				<li class="app-shell__menu-divider" aria-hidden="true"></li>
+
+				<li class="app-shell__menu-theme">
+					<div class="app-shell__menu-theme-heading">
+						<span class="app-shell__menu-theme-title">Spalvų schema</span>
+						<span class="app-shell__menu-theme-hint">Pasirinkite nuotaiką</span>
+					</div>
+					<div class="app-shell__theme-choices">
+						{#each themeOptions as theme (theme.id)}
+							<button
+								type="button"
+								class="app-shell__theme-choice"
+								class:active={activeTheme === theme.id}
+								onclick={() => setTheme(theme.id)}
+							>
+								<span
+									class="app-shell__theme-swatch"
+									style={`--preview-primary: ${theme.preview[0]}; --preview-accent: ${theme.preview[1]}; --preview-secondary: ${
+										theme.preview[2] ?? theme.preview[1]
+									};`}
+									aria-hidden="true"
+								></span>
+								<div class="app-shell__theme-copy">
+									<span class="app-shell__theme-label">{theme.label}</span>
+									<small>{theme.description}</small>
+								</div>
+							</button>
+						{/each}
+					</div>
+				</li>
 			</ul>
 		</nav>
 	</header>
@@ -219,13 +315,8 @@
 	.app-shell__search {
 		padding: 0 clamp(1rem, 3vw, 2.5rem);
 		border-bottom: 1px solid var(--color-border);
-		background: rgba(15, 23, 42, 0.4);
-	}
-
-	@media (prefers-color-scheme: light) {
-		.app-shell__search {
-			background: rgba(255, 255, 255, 0.85);
-		}
+		background: var(--color-search);
+		backdrop-filter: blur(24px);
 	}
 
 	.app-shell__search-form {
@@ -331,17 +422,11 @@
 		justify-content: space-between;
 		gap: 1rem;
 		padding: 1.25rem clamp(1rem, 3vw, 2.5rem);
-		background: rgba(15, 23, 42, 0.55);
+		background: var(--color-header);
 		backdrop-filter: blur(24px);
 		border-bottom: 1px solid var(--color-border);
 		position: relative;
-	}
-
-	@media (prefers-color-scheme: light) {
-		.app-shell__header {
-			background: rgba(255, 255, 255, 0.9);
-			backdrop-filter: blur(18px);
-		}
+		z-index: 30;
 	}
 
 	.app-shell__brand-link {
@@ -430,7 +515,8 @@
 	.app-shell__menu-overlay {
 		position: fixed;
 		inset: 0;
-		background: transparent;
+		background: var(--color-overlay, rgba(15, 23, 42, 0.45));
+		backdrop-filter: blur(3px);
 		z-index: 10;
 	}
 
@@ -438,13 +524,28 @@
 		position: absolute;
 		top: calc(100% + 0.75rem);
 		right: clamp(1rem, 3vw, 2.5rem);
-		min-width: 220px;
-		padding: 0.75rem;
+		min-width: 240px;
+		max-width: min(360px, calc(100vw - 3rem));
+		padding: clamp(0.75rem, 3vw, 1rem);
 		border-radius: 1rem;
-		background: var(--color-surface);
+		background: var(--color-popover, var(--color-surface));
 		border: 1px solid var(--color-border);
-		box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.45);
+		box-shadow: 0 22px 55px -25px var(--color-overlay, rgba(15, 23, 42, 0.55));
+		backdrop-filter: blur(26px);
 		z-index: 20;
+		transform: none;
+	}
+
+	@media (max-width: 720px) {
+		.app-shell__menu {
+			left: clamp(1rem, 6vw, 2rem);
+			right: clamp(1rem, 6vw, 2rem);
+			top: calc(100% + 1rem);
+			min-width: auto;
+			max-width: none;
+			max-height: calc(100vh - clamp(7rem, 18vw, 9rem));
+			overflow-y: auto;
+		}
 	}
 
 	.app-shell__menu-list {
@@ -477,11 +578,11 @@
 
 	.app-shell__menu-link:hover,
 	.app-shell__menu-link:focus-visible {
-		background: rgba(56, 189, 248, 0.14);
+		background: var(--color-accent-faint, rgba(56, 189, 248, 0.14));
 	}
 
 	.app-shell__menu-link.active {
-		background: rgba(56, 189, 248, 0.22);
+		background: var(--color-accent-faint-strong, rgba(56, 189, 248, 0.22));
 		color: var(--color-text);
 	}
 
@@ -493,8 +594,8 @@
 		gap: 0.45rem;
 		padding: 0.55rem 0.75rem;
 		border-radius: 0.75rem;
-		border: 1px solid rgba(59, 130, 246, 0.25);
-		background: rgba(59, 130, 246, 0.14);
+		border: 1px solid var(--color-accent-border, rgba(59, 130, 246, 0.25));
+		background: var(--color-accent-faint, rgba(59, 130, 246, 0.14));
 		color: var(--color-text);
 		font-weight: 600;
 		cursor: pointer;
@@ -506,13 +607,127 @@
 
 	.app-shell__menu-action:hover,
 	.app-shell__menu-action:focus-visible {
-		background: rgba(59, 130, 246, 0.22);
-		border-color: rgba(59, 130, 246, 0.45);
+		background: var(--color-accent-faint-strong, rgba(59, 130, 246, 0.22));
+		border-color: var(--color-accent-border-strong, rgba(59, 130, 246, 0.45));
 	}
 
 	.app-shell__menu-action:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.app-shell__menu-theme {
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+		padding-top: 0.2rem;
+	}
+
+	.app-shell__menu-theme-heading {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.app-shell__menu-theme-title {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		font-weight: 600;
+		color: var(--color-text-muted);
+	}
+
+	.app-shell__menu-theme-hint {
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+	}
+
+	.app-shell__theme-choices {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.app-shell__theme-choice {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		width: 100%;
+		padding: 0.55rem 0.6rem;
+		border: 1px solid transparent;
+		border-radius: 0.8rem;
+		background: transparent;
+		color: var(--color-text);
+		text-align: left;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.app-shell__theme-choice:hover,
+	.app-shell__theme-choice:focus-visible {
+		background: var(--color-accent-faint, rgba(56, 189, 248, 0.14));
+		border-color: var(--color-accent-border, rgba(56, 189, 248, 0.3));
+		transform: translateY(-1px);
+	}
+
+	.app-shell__theme-choice.active {
+		border-color: var(--color-accent-border-strong, rgba(56, 189, 248, 0.45));
+		background: var(--color-accent-faint-strong, rgba(56, 189, 248, 0.22));
+	}
+
+	.app-shell__theme-choice:focus-visible {
+		outline: 2px solid var(--color-accent-border-strong, rgba(56, 189, 248, 0.45));
+		outline-offset: 3px;
+	}
+
+	.app-shell__theme-swatch {
+		--preview-primary: transparent;
+		--preview-accent: transparent;
+		--preview-secondary: transparent;
+		flex-shrink: 0;
+		width: 2.2rem;
+		height: 2.2rem;
+		border-radius: 0.6rem;
+		background:
+			linear-gradient(
+				135deg,
+				var(--preview-primary) 0%,
+				var(--preview-accent) 55%,
+				var(--preview-secondary) 100%
+			);
+		position: relative;
+		box-shadow:
+			inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+			0 6px 12px -8px var(--color-overlay, rgba(15, 23, 42, 0.35));
+	}
+
+	.app-shell__theme-swatch::after {
+		content: '';
+		position: absolute;
+		inset: 18%;
+		border-radius: 0.45rem;
+		background: radial-gradient(circle at top, rgba(255, 255, 255, 0.5), transparent 60%);
+		opacity: 0.75;
+	}
+
+	.app-shell__theme-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+	}
+
+	.app-shell__theme-label {
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+
+	.app-shell__theme-copy small {
+		font-size: 0.75rem;
+		color: var(--color-text-muted);
 	}
 
 	.app-shell__main {
@@ -526,15 +741,9 @@
 	.app-shell__footer {
 		padding: 1.5rem clamp(1rem, 3vw, 2.5rem);
 		border-top: 1px solid var(--color-border);
-		background: rgba(15, 23, 42, 0.5);
+		background: var(--color-footer);
 		color: var(--color-text-muted);
 		font-size: 0.85rem;
-	}
-
-	@media (prefers-color-scheme: light) {
-		.app-shell__footer {
-			background: rgba(248, 250, 252, 0.92);
-		}
 	}
 
 	.app-shell__footer p {

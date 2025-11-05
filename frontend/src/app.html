@@ -3,6 +3,18 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+			(() => {
+				try {
+					const storedTheme = localStorage.getItem('burburiuok-theme');
+					if (storedTheme) {
+						document.documentElement.dataset.theme = storedTheme;
+					}
+				} catch (error) {
+					// Ignore preference retrieval issues
+				}
+			})();
+		</script>
 		<script src="%sveltekit.assets%/env.js" crossorigin="anonymous"></script>
 		%sveltekit.head%
 	</head>
