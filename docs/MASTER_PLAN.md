@@ -28,20 +28,24 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 ### Learner Journey
 
 - Landing screen highlights curriculum sections as “boards” with progress meters and estimated study time.
-- Expanding a section reveals a collapsible tree; each node advertises prerequisites and next steps so learners can navigate depth without losing context.
+- Expanding a section reveals a collapsible tree; each node advertises prerequisites and next steps so learners can navigate depth without losing context. Prerequisite badges currently show zero counts until the public dependency view is exposed.
+- Concept detail pages act as the learner “workspace,” keeping definition, media, and progression controls in one stay-put view.
+- Guided study sessions advance learners through Ready/Needs Review/Completed queues without hopping back to the tree.
 - Quick search lives in a persistent bottom navigation item, clustering results by concept/module/media.
 
 ### Concept View
 
 - Definition and translation front and center, followed by prerequisite badges that open inline drawers (no back-navigation needed).
-- “Next concepts” suggestions nudge learners through recommended sequences.
+- “Next concepts” suggestions nudge learners through recommended sequences and queue shortcuts.
 - Media carousel (images, videos, PDFs) is swipe-friendly and lazy loaded.
 - Immediate actions: mark mastered, add to study queue, launch micro-quiz.
+- Local session state tracks current concept progress so learners can move through a run without revisiting the tree.
 
 ### Guided Study & Practice
 
 - Curated “study paths” bundle concepts into manageable runs with embedded quizzes and reflections.
 - Adaptive review targets concepts marked as unclear or missed in quizzes, scheduling flashcards automatically.
+- Ready/Needs Review/Completed queues power continuous study sessions with minimal navigation friction.
 - Gentle nudges (push/email later) celebrate streaks and remind learners when progress stalls.
 
 ### Admin Workspace
@@ -76,6 +80,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - SvelteKit (or equivalent) mobile-first UI with offline-friendly caching for content and progress snapshots.
 - Persistent menu supporting quick access to curriculum, search, practice, and profile areas.
 - Context-aware drawers and overlays to show prerequisite content without destructive navigation.
+- Modular component library (AppShell, curriculum board/tree, concept view, study runner) keeps data fetching, layout, and interaction logic separated for easy iteration.
 
 ### Media Handling
 
@@ -118,7 +123,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Phase 2 – Learner Experience
 
-- [ ] Implement curriculum navigation (section boards, collapsible tree, dependency indicators).
+- [x] Implement curriculum navigation (section boards, collapsible tree, dependency indicators – prerequisite counts fallback to zero until public view lands).
 - [ ] Build concept detail view with prerequisite/next concept drawers and media carousel.
 - [ ] Create study path runner (sequence UI + progress HUD).
 - [ ] Wire up progress tracking and “study later” queue synced to Supabase.

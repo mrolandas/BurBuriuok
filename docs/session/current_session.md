@@ -76,6 +76,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-04: LX-002 Collapsible tree route delivers lazy-loaded curriculum branches, prerequisite badges, and analytics stub logging on expand.
 - 2025-11-04: Localised learner UI copy from “sekcija” to “skiltis” and removed remaining English strings across navigation and tree components.
 - 2025-11-04: Documented LX-002 completion (fallback prerequisite counts logged) and queued LX-003 concept detail slice.
+- 2025-11-05: Reconfirmed modular frontend approach (separate loaders, Supabase helpers, and UI components) so future UX iterations remain low-risk.
+- 2025-11-05: Mapped learner flow beyond LX-003—concept workspace → study queue (LX-004) → timed runner (LX-005) with gamification hooks following practice features.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -84,6 +86,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - Kick off LX-003 concept detail skeleton (Supabase fetch + UI scaffolding).
 - Define data loading strategy and caching for concept detail plus shared curriculum queries.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
+- Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while wiring LX-003 to minimise rework later.
 
 ## Branching & Testing Strategy
 
