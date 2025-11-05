@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import type { Snippet } from 'svelte';
 	import { onDestroy } from 'svelte';
-	import { menuActionsStore, type MenuAction } from '$lib/stores/menuActions';
+	import { quizModal } from '$lib/stores/quizModal';
 
 	type NavHref = '/' | `/sections/${string}`;
 
@@ -26,13 +26,11 @@
 
 	let menuOpen = $state(false);
 	let activePath = $state($page.url.pathname);
-	let menuActions = $state<MenuAction[]>([]);
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
 			: navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
 	);
-	const hasMenuToggle = $derived(visibleNavLinks.length > 0 || menuActions.length > 0);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 
 	const toggleMenu = () => {
@@ -69,27 +67,13 @@
 		}
 	});
 
-	const unsubscribeMenuActions = menuActionsStore.subscribe((items) => {
-		menuActions = items;
-	});
-
-	const handleActionSelect = (action: MenuAction) => {
+	const openQuizModal = () => {
 		closeMenu();
-
-		if (action.disabled) {
-			return;
-		}
-
-		try {
-			action.onSelect();
-		} catch (error) {
-			console.error('Nepavyko įvykdyti meniu veiksmo', error);
-		}
+		quizModal.open();
 	};
 
 	onDestroy(() => {
 		unsubscribePage();
-		unsubscribeMenuActions();
 	});
 </script>
 
@@ -103,67 +87,56 @@
 				<span class="app-shell__brand-subtitle">Mokymosi palydovas</span>
 			</a>
 		</div>
-		{#if hasMenuToggle}
-			<button
-				type="button"
-				class="app-shell__menu-toggle"
-				aria-haspopup="true"
-				aria-expanded={menuOpen}
-				aria-controls="app-shell-menu"
-				onclick={toggleMenu}
-			>
-				<span class="app-shell__menu-icon" aria-hidden="true">
-					<span></span>
-					<span></span>
-					<span></span>
-				</span>
-				<span class="app-shell__menu-label">Meniu</span>
-			</button>
-		{/if}
-		{#if menuOpen && hasMenuToggle}
+		<button
+			type="button"
+			class="app-shell__menu-toggle"
+			aria-haspopup="true"
+			aria-expanded={menuOpen}
+			aria-controls="app-shell-menu"
+			onclick={toggleMenu}
+		>
+			<span class="app-shell__menu-icon" aria-hidden="true">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+			<span class="app-shell__menu-label">Meniu</span>
+		</button>
+		{#if menuOpen}
 			<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
 		{/if}
-		{#if hasMenuToggle}
-			<nav
-				id="app-shell-menu"
-				class="app-shell__menu"
-				aria-label="Global navigation"
-				hidden={!menuOpen}
-			>
-				<ul class="app-shell__menu-list">
-					{#each visibleNavLinks as item (item.href)}
-						<li>
-							<a
-								class="app-shell__menu-link"
-								class:active={isActive(item.href)}
-								href={resolve(item.href)}
-								aria-current={isActive(item.href) ? 'page' : undefined}
-								onclick={handleLinkClick}
-							>
-								{item.label}
-							</a>
-						</li>
-					{/each}
+		<nav
+			id="app-shell-menu"
+			class="app-shell__menu"
+			aria-label="Global navigation"
+			hidden={!menuOpen}
+		>
+			<ul class="app-shell__menu-list">
+				{#each visibleNavLinks as item (item.href)}
+					<li>
+						<a
+							class="app-shell__menu-link"
+							class:active={isActive(item.href)}
+							href={resolve(item.href)}
+							aria-current={isActive(item.href) ? 'page' : undefined}
+							onclick={handleLinkClick}
+						>
+							{item.label}
+						</a>
+					</li>
+				{/each}
 
-					{#if visibleNavLinks.length && menuActions.length}
-						<li class="app-shell__menu-divider" aria-hidden="true"></li>
-					{/if}
+				{#if visibleNavLinks.length}
+					<li class="app-shell__menu-divider" aria-hidden="true"></li>
+				{/if}
 
-					{#each menuActions as action (action.id)}
-						<li>
-							<button
-								class="app-shell__menu-action"
-								type="button"
-								onclick={() => handleActionSelect(action)}
-								disabled={action.disabled}
-							>
-								{action.label}
-							</button>
-						</li>
-					{/each}
-				</ul>
-			</nav>
-		{/if}
+				<li>
+					<button class="app-shell__menu-action" type="button" onclick={openQuizModal}>
+						Pasitikrinti žinias
+					</button>
+				</li>
+			</ul>
+		</nav>
 	</header>
 
 	<main class="app-shell__main" id="main-content">

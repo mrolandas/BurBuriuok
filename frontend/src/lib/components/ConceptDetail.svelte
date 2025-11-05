@@ -2,8 +2,8 @@
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
-	import { createEventDispatcher, onDestroy } from 'svelte';
-	import { registerMenuAction } from '$lib/stores/menuActions';
+	import { createEventDispatcher } from 'svelte';
+	import { quizModal } from '$lib/stores/quizModal';
 
 	const conceptActionState: Record<string, { learning: boolean; known: boolean }> = {};
 
@@ -33,7 +33,7 @@
 
 	let { concept, breadcrumbs = [], peerItems = [], neighbors }: Props = $props();
 
-	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset' | 'quiz';
+	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset';
 
 	const dispatch = createEventDispatcher<{
 		setLearning: { conceptId: string; learning: boolean };
@@ -58,8 +58,6 @@
 				return 'Pažymėta kaip „moku“ – perkelsime į pasiruošimo patikros eilę.';
 			case 'reset':
 				return 'Tema grąžinta į „nežinau“ būseną.';
-			case 'quiz':
-				return 'Atidarome skilties žinių patikrą (netrukus).';
 			default:
 				return '';
 		}
@@ -132,11 +130,9 @@
 			return;
 		}
 
-		setLastAction('quiz');
+		quizModal.open({ conceptId: concept.id, sectionCode: concept.sectionCode });
 		dispatch('startSectionQuiz', { conceptId: concept.id, sectionCode: concept.sectionCode });
 	};
-
-	let unregisterQuizAction: (() => void) | null = null;
 
 	const boardHref = resolve('/');
 
@@ -149,28 +145,6 @@
 		knownChecked = stored?.known ?? false;
 		lastAction = 'idle';
 		actionMessage = '';
-	});
-
-	$effect(() => {
-		// Ensure the quiz menu action tracks the active concept.
-		unregisterQuizAction?.();
-
-		if (!concept?.id) {
-			unregisterQuizAction = null;
-			return;
-		}
-
-		unregisterQuizAction = registerMenuAction({
-			id: `concept-quiz-${concept.id}`,
-			label: 'Pasitikrinti žinias',
-			onSelect: handleStartQuiz,
-			disabled: !concept.sectionCode
-		});
-	});
-
-	onDestroy(() => {
-		unregisterQuizAction?.();
-		unregisterQuizAction = null;
 	});
 </script>
 
@@ -266,6 +240,9 @@
 						<span>Moku</span>
 					</label>
 				</div>
+				<button type="button" class="concept-detail__quiz-button" onclick={handleStartQuiz}>
+					Pasitikrinti žinias
+				</button>
 				{#if actionMessage}
 					<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
 						{actionMessage}
@@ -492,6 +469,29 @@
 		background: rgba(94, 234, 212, 0.12);
 	}
 
+	.concept-detail__quiz-button {
+		margin-top: 0.35rem;
+		align-self: flex-start;
+		padding: 0.55rem 0.9rem;
+		border-radius: 0.75rem;
+		border: 1px solid rgba(59, 130, 246, 0.35);
+		background: rgba(59, 130, 246, 0.14);
+		color: rgba(226, 232, 240, 0.85);
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.concept-detail__quiz-button:hover,
+	.concept-detail__quiz-button:focus-visible {
+		border-color: rgba(59, 130, 246, 0.65);
+		background: rgba(59, 130, 246, 0.22);
+		color: rgba(226, 232, 240, 1);
+	}
+
 	.concept-detail__action-option input {
 		appearance: none;
 		width: 1.05rem;
@@ -557,6 +557,11 @@
 		.concept-detail__action-option {
 			font-size: 0.85rem;
 			padding: 0.45rem 0.65rem;
+		}
+
+		.concept-detail__quiz-button {
+			width: 100%;
+			text-align: center;
 		}
 	}
 </style>

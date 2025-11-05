@@ -81,6 +81,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-05: LX-003 concept page uždarytas – veiksmai atnaujina vietinę būseną ir siunčia įvykius laukdami LX-004/LX-005 integracijos.
 - 2025-11-05: Mokymosi modelis perskaičiuotas – visos temos startuoja kaip „nežinau“, „Mokausi“ ir „Moku“ žymos valdomos vietoje iki Supabase sinchronizacijos LX-004/LX-005 metu.
 - 2025-11-05: Curriculum tree items now deep-link into concept detail pages when Supabase exposes a matching slug, flagging required concepts inline.
+- 2025-11-05: Introduced a global knowledge-check modal – the “Pasitikrinti žinias” button now appears in the menu and concept view, currently showing placeholder copy until the LX-00x quiz work begins.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -90,8 +91,9 @@ Kick-off session for actual backend and frontend implementation following the pl
 - Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
 - Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while ruošiamės jungti prie naujų veiksmų įvykių.
-- Start LX-004 discovery: outline study queue store API and kaip nauji veiksmų signalai judins būseną tarp sąrašų.
-- Sutarti dėl vadovaujamo mokymosi kelio: kaip „nežinau → mokausi → moku“ bus pristatoma UI ir dokumentacijoje.
+- Start LX-004 discovery: outline the study queue store API and how the new action signals will move items between lists.
+- Align on the guided learning path narrative: how the “nežinau → mokausi → moku” model appears in UI and supporting docs.
+- Plan the knowledge-check module (section vs. whole-course options) – schedule after LX-005 once the study-session experience solidifies.
 
 ## Branching & Testing Strategy
 
