@@ -82,6 +82,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-05: Mokymosi modelis perskaičiuotas – visos temos startuoja kaip „nežinau“, „Mokausi“ ir „Moku“ žymos valdomos vietoje iki Supabase sinchronizacijos LX-004/LX-005 metu.
 - 2025-11-05: Curriculum tree items now deep-link into concept detail pages when Supabase exposes a matching slug, flagging required concepts inline.
 - 2025-11-05: Introduced a global knowledge-check modal – the “Pasitikrinti žinias” button now appears in the menu and concept view, currently showing placeholder copy until the LX-00x quiz work begins.
+- 2025-11-05: Promoted quiz blueprint to `docs/references/QUIZ.md`, defined dedicated `learner_quiz_metrics` table linked to `auth.users`, and opened LX-006 issue [#9](https://github.com/mrolandas/BurBuriuok/issues/9).
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
