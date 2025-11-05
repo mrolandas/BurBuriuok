@@ -42,9 +42,24 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
-      - name: Create SPA 404 fallback
+      - name: Prepare static assets
         working-directory: frontend
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Supabase environment variables are missing"
+            exit 1
+          fi
+
+          cat <<EOF > build/env.js
+          window.__BURBURIUOK_CONFIG__ = Object.assign(window.__BURBURIUOK_CONFIG__ ?? {}, {
+            supabaseUrl: "${SUPABASE_URL}",
+            supabaseAnonKey: "${SUPABASE_ANON_KEY}"
+          });
+          EOF
+
           cp build/index.html build/404.html
 
       - name: Configure Pages
