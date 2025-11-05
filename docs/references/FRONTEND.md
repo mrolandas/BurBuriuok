@@ -7,19 +7,24 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
 - **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree; `src/routes/concepts/[slug]/+page.svelte` delivers the LX-003 concept detail workspace.
 - **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes`, `burburiuok_curriculum_items`, and `burburiuok_concepts`. The tree route lazy-loads child nodes/items when a branch expands and enriches items with concept slugs for deep links.
-- **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component.
+- **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component (now hosting the global theme picker and quiz modal entry point).
 - **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links and required badges), `ConceptDetail` for the LX-003 workspace shell, and optional layout helpers such as `PageHeading` when a view needs hero-style framing.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients.
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
 ## Environment Configuration
 
-Populate the following variables in `frontend/.env.example` and copy to a local `.env` file when running the app:
+- Local development: keep Supabase credentials in the repo root `.env`. The Vite config (`frontend/vite.config.ts`) reads those values and exposes them to the SvelteKit dev server automatically, so no extra `frontend/.env` maintenance is required.
+- Production builds: GitHub Actions writes `frontend/static/env.js` with `supabaseUrl` and `supabaseAnonKey`. `src/lib/config/appConfig.ts` consumes `window.__BURBURIUOK_CONFIG__` at runtime, falling back to `import.meta.env.VITE_*` values when present.
+- Browser hydration uses a small inline script in `src/app.html` to apply the cached theme before SvelteKit boots, avoiding a flash of incorrect theming.
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+Development builds still log a warning if credentials are missing so contributors can spot misconfiguration early.
 
-Values propagate via `src/lib/config/appConfig.ts` and are consumed by the Supabase client helper. Development builds log a warning if the values are missing to help contributors spot misconfiguration early.
+## Theming
+
+- Global tokens live in `src/lib/styles/global.css` and now expose per-theme variants (Marine, Dawn, Sand).
+- `AppShell` persists the selected theme in `localStorage` and reflects it via `data-theme` on `<html>`; the theme picker appears in the hamburger menu.
+- GitHub Pages reads the saved theme during boot (via `src/app.html`) to prevent a flash between visits.
 
 ## Navigation Guidelines
 

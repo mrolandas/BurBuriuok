@@ -34,13 +34,13 @@ This document keeps the development environment expectations in one place. Updat
 
 1. Clone the repository: `git clone https://github.com/mrolandas/BurBuriuok.git`.
 2. Switch into the project directory: `cd BurBuriuok`.
-3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. Current local keys live in `.env` (not versioned).
+3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. The repo root `.env` continues to store Supabase URL/keys for backend scripts; the frontend dev server now mirrors those values automatically, so you do not need to maintain a separate `frontend/.env` unless you want overrides.
 4. Install dependencies: `npm install`.
 5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` and `npm run content:seed:dependencies`; run `npm run content:seed:check` before pushing.
 6. Start local services when needed:
    - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
-   - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server).
+   - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server). Supabase URL/anon key are loaded from the repo root `.env`, keeping local preview identical to production credentials.
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 

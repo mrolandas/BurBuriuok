@@ -9,6 +9,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - **Anon Key** – `SUPABASE_ANON_KEY` (client-side requests once auth is enabled).
 - **Service Role Key** – `SUPABASE_SERVICE_ROLE_KEY` (server-side only; keep out of client bundles). Stored locally in `.env` for now.
 - **Local fallback** – prior local-stack variables remain commented in `.env` in case we need to bring back the on-device Supabase instance for offline work.
+- **Runtime config** – GitHub Actions writes `frontend/static/env.js` with the production URL + anon key during deploy; the browser reads these values from `window.__BURBURIUOK_CONFIG__` so the static bundle stays credentials-free.
 - **Dashboard access** – global admin logs into https://app.supabase.com → project `burburiuok` → Database/Storage/Auth tabs. Only the owner account currently has admin rights; invite additional maintainers directly from the Supabase UI.
 
 > Make sure `.env` is never committed. The repo `.gitignore` already excludes it.
@@ -68,7 +69,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - Optional sanity check: `node tests/exportCurriculumTree.mjs --format tree` to verify hierarchy output before seeding.
 
 4. Push migrations and apply seeds in a single step: `npx supabase db push --include-seed`.
-5. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`).
+5. Keep `.env` up to date with the hosted project keys for local development servers (frontend/backend will consume `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and backend-only `SUPABASE_SERVICE_ROLE_KEY`). The SvelteKit dev server mirrors these values automatically, so no additional `frontend/.env` upkeep is required.
 6. If you need to work offline, uncomment the local-stack variables in `.env`, run `npx supabase start`, and apply migrations with `npx supabase db push --local --include-seed`.
 
 ### Applying seeds via CLI
