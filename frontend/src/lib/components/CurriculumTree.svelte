@@ -18,7 +18,6 @@
 		expanded: false,
 		loading: false,
 		loaded: false,
-		hasTrackedOpen: false,
 		children: [],
 		items: [],
 		error: null
@@ -34,18 +33,6 @@
 
 	const bump = () => {
 		renderKey += 1;
-	};
-
-	const trackNodeOpen = (state: TreeNodeState) => {
-		if (state.hasTrackedOpen) {
-			return;
-		}
-		state.hasTrackedOpen = true;
-		console.info('[analytics] curriculum_tree_node_open', {
-			nodeCode: state.node.code,
-			level: state.node.level,
-			prerequisiteCount: state.node.prerequisiteCount
-		});
 	};
 
 	const ensureChildren = async (state: TreeNodeState, { force = false } = {}) => {
@@ -86,7 +73,6 @@
 		}
 
 		state.expanded = true;
-		trackNodeOpen(state);
 		bump();
 		await ensureChildren(state);
 	};

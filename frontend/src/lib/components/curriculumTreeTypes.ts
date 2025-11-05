@@ -5,7 +5,6 @@ export type TreeNodeState = {
 	expanded: boolean;
 	loading: boolean;
 	loaded: boolean;
-	hasTrackedOpen: boolean;
 	children: TreeNodeState[];
 	items: CurriculumItem[];
 	error: string | null;

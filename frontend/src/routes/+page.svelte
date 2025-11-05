@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
-	import Card from '$lib/components/Card.svelte';
-	import PageHeading from '$lib/components/PageHeading.svelte';
+	 import Card from '$lib/components/Card.svelte';
 	import type { PageData } from './+page';
 
 	export let data: PageData;
@@ -36,24 +35,6 @@
 		await invalidateAll();
 	};
 </script>
-
-<PageHeading
-	kicker="LX-001"
-	title="Mokymo skilčių lenta"
-	description="Peržiūrėkite pagrindines mokymo skiltis, stebėkite pažangą ir pereikite prie detalizuotos medžiagos."
->
-	<svelte:fragment slot="actions">
-		<a class="cta" href="https://github.com/mrolandas/BurBuriuok/issues/1">Peržiūrėti užduotį</a>
-		<a
-			class="cta ghost"
-			href="https://github.com/mrolandas/BurBuriuok/blob/main/docs/references/UX_MOBILE_WIREFRAMES.md"
-			target="_blank"
-			rel="noreferrer"
-		>
-			UX gairės
-		</a>
-	</svelte:fragment>
-</PageHeading>
 
 {#if data.loadError}
 	<section class="status-block status-block--error" role="alert">
@@ -105,36 +86,6 @@
 </section>
 
 <style>
-	.cta {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4rem;
-		padding: 0.6rem 1.1rem;
-		border-radius: 999px;
-		font-weight: 600;
-		text-decoration: none;
-		background: linear-gradient(120deg, var(--color-accent), var(--color-accent-strong));
-		color: white;
-		box-shadow: 0 18px 38px -20px rgba(8, 145, 178, 0.55);
-		transition:
-			transform 0.2s ease,
-			box-shadow 0.2s ease;
-	}
-
-	.cta:hover,
-	.cta:focus-visible {
-		transform: translateY(-1px);
-		box-shadow: 0 24px 44px -18px rgba(3, 105, 161, 0.6);
-	}
-
-	.cta.ghost {
-		background: transparent;
-		color: var(--color-text);
-		border: 1px solid rgba(56, 189, 248, 0.35);
-		box-shadow: none;
-	}
-
 	.grid {
 		width: min(100%, var(--layout-max-width));
 		margin: 0 auto;
