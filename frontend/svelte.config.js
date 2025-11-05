@@ -1,6 +1,9 @@
 import { mdsvex } from 'mdsvex';
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const dev = process.argv.includes('dev');
+const basePath = process.env.VITE_APP_BASE_PATH ?? '/BurBuriuok';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,10 +11,16 @@ const config = {
 	// for more information about preprocessors
 	preprocess: [vitePreprocess(), mdsvex()],
 	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
-		adapter: adapter()
+		// Use a static site adapter to generate GitHub Pages output with SPA fallback.
+		adapter: adapter({
+			fallback: '200.html'
+		}),
+		paths: {
+			base: dev ? '' : basePath
+		},
+		prerender: {
+			handleMissingId: 'ignore'
+		}
 	},
 	extensions: ['.svelte', '.svx']
 };

@@ -47,3 +47,10 @@ BurBuriuok guides learners through the "Lietuvos Buriavimo Asociacijos vidaus va
 - Git powers version control with `main` as the default branch.
 - Major efforts land via feature branches or annotated tags capturing release snapshots.
 - Releases deploy from GitHub, with Supabase migrations tracked alongside application code.
+
+## Deployment
+
+- The `deploy/github-pages` branch publishes the static frontend to GitHub Pages using the workflow in `.github/workflows/deploy-frontend-gh-pages.yml`.
+- The workflow expects `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` repository secrets so the Supabase client works in production.
+- Override the base path with `VITE_APP_BASE_PATH` when testing locally; the default (`/BurBuriuok`) matches the GitHub Pages project URL.
+- Trigger a deployment by pushing to `deploy/github-pages` or launching the workflow manually from the Actions tab.
