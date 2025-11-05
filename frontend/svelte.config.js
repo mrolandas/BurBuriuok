@@ -13,13 +13,14 @@ const config = {
 	kit: {
 		// Use a static site adapter to generate GitHub Pages output with SPA fallback.
 		adapter: adapter({
-			fallback: '200.html'
+			fallback: 'index.html'
 		}),
 		paths: {
 			base: dev ? '' : basePath
 		},
 		prerender: {
-			handleMissingId: 'ignore'
+			handleMissingId: 'ignore',
+			entries: []
 		}
 	},
 	extensions: ['.svelte', '.svx']
