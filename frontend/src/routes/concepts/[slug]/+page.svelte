@@ -1,10 +1,9 @@
 <script lang="ts">
-import { resolve } from '$app/paths';
-import Card from '$lib/components/Card.svelte';
-import ConceptDetail from '$lib/components/ConceptDetail.svelte';
-import type { ConceptPageData } from './+page';
+	import Card from '$lib/components/Card.svelte';
+	import ConceptDetail from '$lib/components/ConceptDetail.svelte';
+	import type { ConceptPageData } from './+page';
 
-export let data: ConceptPageData;
+	export let data: ConceptPageData;
 </script>
 
 <div class="concept-page">

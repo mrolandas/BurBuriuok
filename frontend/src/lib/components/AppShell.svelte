@@ -20,11 +20,15 @@
 	let {
 		navLinks = [],
 		children,
-		footerNote = 'Supabase valdomas mokymo turinys'
+		footerNote = 'BurBuriuok – mokymosi padėjėjas pasiruošti Lietuvos Buriavimo Asociacijos vidaus vandenų burinės jachtos vado egzaminui.'
 	}: Props = $props();
 
 	let menuOpen = $state(false);
-	let activePath = '';
+	let activePath = $state($page.url.pathname);
+	const visibleNavLinks = $derived(
+		navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
+	);
+	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
@@ -73,7 +77,7 @@
 				<span class="app-shell__brand-subtitle">Mokymosi palydovas</span>
 			</a>
 		</div>
-		{#if navLinks.length}
+		{#if visibleNavLinks.length}
 			<button
 				type="button"
 				class="app-shell__menu-toggle"
@@ -90,10 +94,10 @@
 				<span class="app-shell__menu-label">Meniu</span>
 			</button>
 		{/if}
-		{#if menuOpen}
+		{#if menuOpen && visibleNavLinks.length}
 			<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
 		{/if}
-		{#if navLinks.length}
+		{#if visibleNavLinks.length}
 			<nav
 				id="app-shell-menu"
 				class="app-shell__menu"
@@ -101,7 +105,7 @@
 				hidden={!menuOpen}
 			>
 				<ul class="app-shell__menu-list">
-					{#each navLinks as item (item.href)}
+					{#each visibleNavLinks as item (item.href)}
 						<li>
 							<a
 								class="app-shell__menu-link"
@@ -124,7 +128,19 @@
 	</main>
 
 	<footer class="app-shell__footer">
-		<p>{footerNote}</p>
+		<p>
+			{#if hasFooterNote}
+				<span>{footerNote}</span>
+			{/if}
+			<a
+				class="app-shell__footer-link"
+				href="https://lbs.lt/wp-content/uploads/2025/08/LBS-mokymu-programu-2024.10.15d.-redakcija.pdf"
+				target="_blank"
+				rel="noreferrer noopener"
+			>
+				Oficiali LBS mokymų programa (PDF)
+			</a>
+		</p>
 	</footer>
 </div>
 
@@ -314,5 +330,22 @@
 
 	.app-shell__footer p {
 		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		align-items: baseline;
+	}
+
+	.app-shell__footer-link {
+		color: var(--color-accent);
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-thickness: 0.12em;
+		text-underline-offset: 0.18em;
+	}
+
+	.app-shell__footer-link:hover,
+	.app-shell__footer-link:focus-visible {
+		color: var(--color-accent-strong);
 	}
 </style>

@@ -25,9 +25,10 @@
 		<a class="concept-detail__crumb" href={boardHref}>Skilčių lenta</a>
 		{#each breadcrumbs as crumb (crumb.label)}
 			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-			{@const crumbHref = crumb.routeId && crumb.params ? resolve(crumb.routeId, crumb.params) : null}
-			{#if crumbHref}
-				<a class="concept-detail__crumb" href={crumbHref}>{crumb.label}</a>
+			{#if crumb.routeId && crumb.params}
+				<a class="concept-detail__crumb" href={resolve(crumb.routeId, crumb.params)}
+					>{crumb.label}</a
+				>
 			{:else}
 				<span class="concept-detail__crumb concept-detail__crumb--static">{crumb.label}</span>
 			{/if}

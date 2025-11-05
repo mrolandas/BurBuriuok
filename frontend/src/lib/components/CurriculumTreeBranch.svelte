@@ -122,9 +122,8 @@
 
 	.tree-node__header {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: 0.6rem;
-		justify-content: space-between;
 	}
 
 	.tree-node__toggle {
@@ -132,13 +131,16 @@
 		border: 0;
 		padding: 0;
 		margin: 0;
-		display: inline-flex;
-		align-items: center;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
 		gap: 0.5rem;
 		font-size: clamp(0.95rem, 2vw, 1.05rem);
 		font-weight: 600;
 		color: inherit;
 		cursor: pointer;
+		width: 100%;
+		text-align: left;
 	}
 
 	.tree-node__toggle:hover,
@@ -162,6 +164,7 @@
 		padding: 0.2rem 0.6rem;
 		border-radius: 999px;
 		border: 1px solid rgba(250, 204, 21, 0.35);
+		margin-left: auto;
 	}
 
 	.tree-node__panel {
@@ -209,11 +212,14 @@
 
 	.tree-node__item-link,
 	.tree-node__item-text {
-		display: inline-flex;
-		align-items: center;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
 		gap: 0.5rem;
 		font-size: 0.9rem;
 		color: rgba(226, 232, 240, 0.95);
+		text-align: left;
+		width: 100%;
 	}
 
 	.tree-node__item-link {
