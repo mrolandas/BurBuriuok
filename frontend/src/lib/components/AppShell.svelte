@@ -38,16 +38,16 @@
 
 	const themeOptions = [
 		{
-			id: 'marine',
-			label: 'Jūrinė naktis',
-			description: 'Subtili tamsi su melsvais akcentais',
-			preview: ['#0f172a', '#38bdf8', '#0ea5e9']
-		},
-		{
 			id: 'dawn',
 			label: 'Rytmečio dangus',
 			description: 'Šviesi schema su sodria mėlyna',
 			preview: ['#e0f2fe', '#2563eb', '#1d4ed8']
+		},
+		{
+			id: 'marine',
+			label: 'Jūrinė naktis',
+			description: 'Subtili tamsi su melsvais akcentais',
+			preview: ['#0f172a', '#38bdf8', '#0ea5e9']
 		},
 		{
 			id: 'sand',
@@ -61,6 +61,10 @@
 	type ThemeId = ThemeOption['id'];
 
 	let activeTheme = $state<ThemeId>(themeOptions[0].id);
+	let themeMenuOpen = $state(false);
+	const activeThemeLabel = $derived(
+		themeOptions.find((theme) => theme.id === activeTheme)?.label ?? ''
+	);
 
 	const isKnownTheme = (value: string | null): value is ThemeId =>
 		Boolean(value && themeOptions.some((option) => option.id === value));
@@ -107,6 +111,16 @@
 
 	const closeMenu = () => {
 		menuOpen = false;
+		themeMenuOpen = false;
+	};
+
+	const toggleThemeMenu = () => {
+		themeMenuOpen = !themeMenuOpen;
+	};
+
+	const chooseTheme = (theme: ThemeId) => {
+		setTheme(theme);
+		themeMenuOpen = false;
 	};
 
 	const handleLinkClick = () => {
@@ -223,32 +237,51 @@
 				<li class="app-shell__menu-divider" aria-hidden="true"></li>
 
 				<li class="app-shell__menu-theme">
-					<div class="app-shell__menu-theme-heading">
-						<span class="app-shell__menu-theme-title">Spalvų schema</span>
-						<span class="app-shell__menu-theme-hint">Pasirinkite nuotaiką</span>
-					</div>
-					<div class="app-shell__theme-choices">
-						{#each themeOptions as theme (theme.id)}
-							<button
-								type="button"
-								class="app-shell__theme-choice"
-								class:active={activeTheme === theme.id}
-								onclick={() => setTheme(theme.id)}
-							>
-								<span
-									class="app-shell__theme-swatch"
-									style={`--preview-primary: ${theme.preview[0]}; --preview-accent: ${theme.preview[1]}; --preview-secondary: ${
-										theme.preview[2] ?? theme.preview[1]
-									};`}
-									aria-hidden="true"
-								></span>
-								<div class="app-shell__theme-copy">
-									<span class="app-shell__theme-label">{theme.label}</span>
-									<small>{theme.description}</small>
-								</div>
-							</button>
-						{/each}
-					</div>
+					<button
+						id="app-shell-theme-toggle"
+						class="app-shell__menu-action app-shell__menu-theme-toggle"
+						type="button"
+						onclick={toggleThemeMenu}
+						aria-expanded={themeMenuOpen}
+						aria-controls="app-shell-theme-options"
+					>
+						<span class="app-shell__menu-theme-text">
+							<span>Spalvų derinys</span>
+							{#if activeThemeLabel}
+								<small>{activeThemeLabel}</small>
+							{/if}
+						</span>
+						<span class="app-shell__menu-theme-icon" aria-hidden="true"></span>
+					</button>
+					{#if themeMenuOpen}
+						<div
+							id="app-shell-theme-options"
+							class="app-shell__theme-choices"
+							role="group"
+							aria-label="Pasirinkite spalvų derinį"
+						>
+							{#each themeOptions as theme (theme.id)}
+								<button
+									type="button"
+									class="app-shell__theme-choice"
+									class:active={activeTheme === theme.id}
+									onclick={() => chooseTheme(theme.id)}
+								>
+									<span
+										class="app-shell__theme-swatch"
+										style={`--preview-primary: ${theme.preview[0]}; --preview-accent: ${theme.preview[1]}; --preview-secondary: ${
+											theme.preview[2] ?? theme.preview[1]
+										};`}
+										aria-hidden="true"
+									></span>
+									<div class="app-shell__theme-copy">
+										<span class="app-shell__theme-label">{theme.label}</span>
+										<small>{theme.description}</small>
+									</div>
+								</button>
+							{/each}
+						</div>
+					{/if}
 				</li>
 			</ul>
 		</nav>
@@ -626,27 +659,57 @@
 	.app-shell__menu-theme {
 		display: flex;
 		flex-direction: column;
-		gap: 0.65rem;
+		gap: 0.5rem;
 		padding-top: 0.2rem;
 	}
 
-	.app-shell__menu-theme-heading {
+	.app-shell__menu-theme-toggle {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		gap: 0.75rem;
+	}
+
+	.app-shell__menu-theme-text {
 		display: flex;
 		flex-direction: column;
+		align-items: flex-start;
 		gap: 0.15rem;
-	}
-
-	.app-shell__menu-theme-title {
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
 		font-weight: 600;
+	}
+
+	.app-shell__menu-theme-text small {
+		font-weight: 500;
+		font-size: 0.8rem;
 		color: var(--color-text-muted);
 	}
 
-	.app-shell__menu-theme-hint {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
+	.app-shell__menu-theme-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.4rem;
+		height: 1.4rem;
+		border-radius: 999px;
+		background: var(--color-surface-alt);
+		color: var(--color-text);
+		transition: transform 0.2s ease;
+	}
+
+	.app-shell__menu-theme-icon::before {
+		content: '';
+		display: block;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg);
+		transition: transform 0.2s ease;
+	}
+
+	.app-shell__menu-theme-toggle[aria-expanded='true'] .app-shell__menu-theme-icon::before {
+		transform: rotate(-135deg);
 	}
 
 	.app-shell__theme-choices {
