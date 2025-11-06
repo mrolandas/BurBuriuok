@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
+	import type { Snippet } from 'svelte';
 
 	export type Breadcrumb = {
 		label: string;
@@ -20,19 +21,16 @@
 		next?: NeighborLink | null;
 	};
 
-	export interface $$Slots {
-		meta?: unknown;
-		actions?: unknown;
-	}
-
 	type Props = {
 		concept: ConceptDetailData;
 		breadcrumbs?: Breadcrumb[];
 		peerItems?: CurriculumItem[];
 		neighbors?: NeighborSet;
+		meta?: Snippet;
+		actions?: Snippet;
 	};
 
-	let { concept, breadcrumbs = [], peerItems = [], neighbors }: Props = $props();
+	let { concept, breadcrumbs = [], peerItems = [], neighbors, meta, actions }: Props = $props();
 
 	let showAllBreadcrumbs = $state(false);
 
@@ -116,9 +114,9 @@
 				</h1>
 			</header>
 
-			{#if $$slots.meta}
+			{#if meta}
 				<div class="concept-detail__meta-slot">
-					<slot name="meta" />
+					{@render meta()}
 				</div>
 			{/if}
 
@@ -131,8 +129,8 @@
 				</p>
 			{/if}
 
-			{#if $$slots.actions}
-				<slot name="actions" />
+			{#if actions}
+				{@render actions()}
 			{/if}
 
 			{#if concept.descriptionEn}

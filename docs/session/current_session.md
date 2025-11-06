@@ -45,8 +45,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 1. **Component extraction**
 
-   - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
-      - [ ] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
+    - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
+       - [x] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
    - [ ] Centralise concept detail load logic so both `/concepts/[slug]` and admin entry points use a shared loader/store.
 
 2. **Admin session plumbing**
@@ -126,6 +126,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: Opened GitHub issues #10-#14 (ADM-001…ADM-005), logged backend middleware coordination in ADM-001, and published implementation checklist to unblock development handoff.
 - 2025-11-06: ADM-002 concept editor MVP landed – `/api/v1/admin/concepts` routes plus SvelteKit drawer shipped with shared validation; docs refreshed (`BACKEND.md`, `API_CONTRACTS.md`, `ADMIN_DASHBOARD.md`, `FRONTEND.md`, `SCHEMA_DECISIONS.md`).
 - 2025-11-06: Concept layout extracted into shared `ConceptDisplay` component; learner view now delegates layout while preserving action state, and we logged a follow-up to adopt Svelte 5 snippets to remove slot warnings before inline admin editing ships.
+- 2025-11-06: ConceptDetail/ConceptDisplay now use Svelte 5 snippets with `{@render ...}` so learner actions render without deprecated `<slot>` usage, clearing frontend check warnings and paving the way for admin inline controls.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 

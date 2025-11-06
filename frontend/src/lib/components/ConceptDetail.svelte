@@ -133,36 +133,42 @@
 	});
 </script>
 
-<ConceptDisplay {concept} {breadcrumbs} {peerItems} {neighbors}>
-	<svelte:fragment slot="actions">
-		<section class="concept-detail__actions-panel" aria-label="Veiksmai" data-last-action={lastAction}>
-			<label class="concept-detail__action-option">
-				<input
-					type="checkbox"
-					checked={learningChecked}
-					onchange={handleLearningChange}
-					aria-label="Pažymėti temą kaip mokausi"
-				/>
-				<span>Mokausi</span>
-			</label>
-			<label class="concept-detail__action-option">
-				<input
-					type="checkbox"
-					checked={knownChecked}
-					onchange={handleKnownChange}
-					aria-label="Pažymėti temą kaip moku"
-				/>
-				<span>Moku</span>
-			</label>
-		</section>
+{#snippet conceptActions()}
+	<section class="concept-detail__actions-panel" aria-label="Veiksmai" data-last-action={lastAction}>
+		<label class="concept-detail__action-option">
+			<input
+				type="checkbox"
+				checked={learningChecked}
+				onchange={handleLearningChange}
+				aria-label="Pažymėti temą kaip mokausi"
+			/>
+			<span>Mokausi</span>
+		</label>
+		<label class="concept-detail__action-option">
+			<input
+				type="checkbox"
+				checked={knownChecked}
+				onchange={handleKnownChange}
+				aria-label="Pažymėti temą kaip moku"
+			/>
+			<span>Moku</span>
+		</label>
+	</section>
 
-		{#if actionMessage}
-			<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
-				{actionMessage}
-			</p>
-		{/if}
-	</svelte:fragment>
-</ConceptDisplay>
+	{#if actionMessage}
+		<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
+			{actionMessage}
+		</p>
+	{/if}
+{/snippet}
+
+<ConceptDisplay
+	{concept}
+	{breadcrumbs}
+	{peerItems}
+	{neighbors}
+	actions={conceptActions}
+/>
 
 <style>
 	.concept-detail__actions-panel {
