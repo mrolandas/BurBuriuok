@@ -88,12 +88,13 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-05: Global paieška realizuota – viršuje įdėtas laukelis, `/search` puslapis rodo sąvokų ir aprašymų rezultatus su fragmentais.
 - 2025-11-06: GitHub Pages deploy stabilized with runtime Supabase config written to `env.js`, frontend now merges repo `.env` for local preview, and AppShell ships with a persistent theme picker (Marine, Dawn, Sand) to smooth mobile navigation.
 - 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
+- 2025-11-06: AppShell menu refined – theme picker collapses into the "Spalvų derinys" button, option order updated (Rytmečio dangus, Jūrinė naktis, Smėlio krantai), and the Dawn scheme now loads by default across devices.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
 ## Immediate Focus
 
-- Patobulinti šviesių temų teksto kontrastą ir ekrano šrifto spalvas (rytoj).
+- Patikrinti „Rytmečio dangaus“ kontrastą po numatytojo nustatymo ir, jei reikia, sukalibruoti šviesių temų tipografiją.
 - Uždaryti LX-004 – sukurti vietinę eilės saugyklą ir susieti ją su naujais koncepto veiksmų įvykiais.
 - Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.

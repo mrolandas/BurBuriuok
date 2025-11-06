@@ -22,9 +22,9 @@ Development builds still log a warning if credentials are missing so contributor
 
 ## Theming
 
-- Global tokens live in `src/lib/styles/global.css` and now expose per-theme variants (Marine, Dawn, Sand).
-- `AppShell` persists the selected theme in `localStorage` and reflects it via `data-theme` on `<html>`; the theme picker appears in the hamburger menu.
-- GitHub Pages reads the saved theme during boot (via `src/app.html`) to prevent a flash between visits.
+- Global tokens live in `src/lib/styles/global.css`; Dawn (`Rytmečio dangus`) provides the base `:root` palette while Marine and Sand override tokens through `data-theme` attributes.
+- `AppShell` persists the selected theme in `localStorage`, reflects it via `data-theme` on `<html>`, and exposes the selector as a compact `Spalvų derinys` disclosure in the hamburger menu (ordered Dawn → Marine → Sand).
+- GitHub Pages reads the saved theme during boot (via `src/app.html`) to prevent a flash between visits and defaults to Dawn when no preference exists.
 
 ## Navigation Guidelines
 
