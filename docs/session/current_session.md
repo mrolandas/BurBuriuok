@@ -94,6 +94,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
 - 2025-11-06: AppShell menu refined – theme picker collapses into the "Spalvų derinys" button, option order updated (Rytmečio dangus, Jūrinė naktis, Smėlio krantai), and the Dawn scheme now loads by default across devices.
 - 2025-11-06: Admin & moderation discovery kicked off – seeded ADM-001…ADM-005 issues for guarded admin shell, concept editor MVP, moderation queue, notification stubs, and analytics mapping; updated references to reflect Sprint 1 deliverables.
+- 2025-11-06: Opened GitHub issues #10-#14 (ADM-001…ADM-005), logged backend middleware coordination in ADM-001, and published implementation checklist to unblock development handoff.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -108,8 +109,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - LX-006 planas: apibrėžti modulinių viktorinų tipų tvarkyklę, kuri leis nurodyti klausimų tipų proporcijas vienai sesijai.
 - Align on the guided learning path narrative: how the “nežinau → mokausi → moku” model appears in UI and supporting docs.
 - Plan the knowledge-check module (section vs. whole-course options) – schedule after LX-005 once the study-session experience solidifies.
-- Parengti ADM-001/ADM-002 diegimo backlogą: nustatyti SvelteKit admin maršruto skeletoną, patikrinti Supabase RLS taisykles ir suderinti validacijos schemų dalinimąsi tarp `frontend/` ir `backend/`.
-- Paruošti ADM-003/ADM-004 reikalavimų santrauką: moderavimo sąrašo stulpeliai, SLA signalizacijų žinutės ir pseudo integracijos su Slack/email webhookais.
+- Parengti ADM-001/ADM-002 diegimo backlogą: nustatyti SvelteKit admin maršruto skeletoną, patikrinti Supabase RLS taisykles ir suderinti validacijos schemų dalinimąsi tarp `frontend/` ir `backend/` (nuoroda į [#10](https://github.com/mrolandas/BurBuriuok/issues/10) ir [#11](https://github.com/mrolandas/BurBuriuok/issues/11)).
+- Paruošti ADM-003/ADM-004 reikalavimų santrauką: moderavimo sąrašo stulpeliai, SLA signalizacijų žinutės ir pseudo integracijos su Slack/email webhookais (nuoroda į [#12](https://github.com/mrolandas/BurBuriuok/issues/12) ir [#13](https://github.com/mrolandas/BurBuriuok/issues/13)).
 
 ## Branching & Testing Strategy
 
