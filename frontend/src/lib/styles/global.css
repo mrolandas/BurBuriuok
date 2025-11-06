@@ -14,6 +14,23 @@
 	--body-background:
 		radial-gradient(circle at top, rgba(15, 118, 110, 0.12), transparent 55%),
 		radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.14), transparent 40%), var(--color-bg);
+	--color-panel: rgba(15, 23, 42, 0.48);
+	--color-panel-soft: rgba(15, 23, 42, 0.36);
+	--color-pill-bg: rgba(148, 163, 184, 0.18);
+	--color-pill-border: rgba(148, 163, 184, 0.32);
+	--color-pill-text: rgba(226, 232, 240, 0.88);
+	--color-pill-hover-bg: rgba(56, 189, 248, 0.18);
+	--color-pill-hover-border: rgba(56, 189, 248, 0.45);
+	--color-breadcrumb: rgba(226, 232, 240, 0.82);
+	--color-link-subtle: rgba(148, 197, 253, 0.85);
+	--color-link-subtle-hover: rgba(56, 189, 248, 0.85);
+	--color-badge-warning-bg: rgba(250, 204, 21, 0.18);
+	--color-badge-warning-border: rgba(250, 204, 21, 0.35);
+	--color-badge-warning-text: #facc15;
+	--color-status-error-text: #fecaca;
+	--color-status-error-bg: rgba(248, 113, 113, 0.14);
+	--color-status-error-border: rgba(248, 113, 113, 0.35);
+	--color-text-soft: rgba(226, 232, 240, 0.7);
 	background-color: var(--color-bg);
 	color: var(--color-text);
 	transition:
@@ -69,6 +86,23 @@
 		--body-background:
 			radial-gradient(circle at top, rgba(125, 211, 252, 0.25), transparent 55%),
 			radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.14), transparent 45%), var(--color-bg);
+		--color-panel: rgba(255, 255, 255, 0.95);
+		--color-panel-soft: rgba(255, 255, 255, 0.86);
+		--color-pill-bg: rgba(2, 132, 199, 0.08);
+		--color-pill-border: rgba(15, 23, 42, 0.14);
+		--color-pill-text: rgba(15, 23, 42, 0.78);
+		--color-pill-hover-bg: rgba(2, 132, 199, 0.18);
+		--color-pill-hover-border: rgba(2, 132, 199, 0.35);
+		--color-breadcrumb: rgba(71, 85, 105, 0.75);
+		--color-link-subtle: rgba(37, 99, 235, 0.78);
+		--color-link-subtle-hover: rgba(29, 78, 216, 0.85);
+		--color-badge-warning-bg: rgba(250, 204, 21, 0.26);
+		--color-badge-warning-border: rgba(202, 138, 4, 0.32);
+		--color-badge-warning-text: #b45309;
+		--color-status-error-text: #b91c1c;
+		--color-status-error-bg: rgba(248, 113, 113, 0.15);
+		--color-status-error-border: rgba(248, 113, 113, 0.32);
+		--color-text-soft: rgba(71, 85, 105, 0.68);
 	}
 }
 
@@ -93,6 +127,23 @@
 	--color-search: rgba(241, 245, 255, 0.92);
 	--color-footer: rgba(224, 231, 255, 0.92);
 	--body-background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+	--color-panel: rgba(255, 255, 255, 0.96);
+	--color-panel-soft: rgba(241, 245, 255, 0.9);
+	--color-pill-bg: rgba(37, 99, 235, 0.08);
+	--color-pill-border: rgba(37, 99, 235, 0.24);
+	--color-pill-text: rgba(23, 37, 84, 0.8);
+	--color-pill-hover-bg: rgba(37, 99, 235, 0.18);
+	--color-pill-hover-border: rgba(37, 99, 235, 0.35);
+	--color-breadcrumb: rgba(30, 64, 175, 0.68);
+	--color-link-subtle: rgba(37, 99, 235, 0.72);
+	--color-link-subtle-hover: rgba(29, 78, 216, 0.82);
+	--color-badge-warning-bg: rgba(250, 204, 21, 0.22);
+	--color-badge-warning-border: rgba(217, 119, 6, 0.28);
+	--color-badge-warning-text: #b45309;
+	--color-status-error-text: #b91c1c;
+	--color-status-error-bg: rgba(248, 113, 113, 0.16);
+	--color-status-error-border: rgba(248, 113, 113, 0.32);
+	--color-text-soft: rgba(30, 64, 175, 0.64);
 }
 
 :root[data-theme='sand'] {
@@ -116,6 +167,23 @@
 	--color-search: rgba(255, 247, 237, 0.95);
 	--color-footer: rgba(253, 244, 215, 0.92);
 	--body-background: linear-gradient(160deg, #fff7ed 0%, #fef3c7 55%, #fde68a 100%);
+	--color-panel: rgba(255, 255, 240, 0.96);
+	--color-panel-soft: rgba(253, 244, 215, 0.9);
+	--color-pill-bg: rgba(249, 115, 22, 0.08);
+	--color-pill-border: rgba(124, 45, 18, 0.22);
+	--color-pill-text: rgba(124, 45, 18, 0.82);
+	--color-pill-hover-bg: rgba(249, 115, 22, 0.18);
+	--color-pill-hover-border: rgba(249, 115, 22, 0.32);
+	--color-breadcrumb: rgba(120, 53, 15, 0.68);
+	--color-link-subtle: rgba(217, 119, 6, 0.75);
+	--color-link-subtle-hover: rgba(194, 65, 12, 0.85);
+	--color-badge-warning-bg: rgba(250, 204, 21, 0.28);
+	--color-badge-warning-border: rgba(202, 138, 4, 0.36);
+	--color-badge-warning-text: #92400e;
+	--color-status-error-text: #b91c1c;
+	--color-status-error-bg: rgba(248, 113, 113, 0.2);
+	--color-status-error-border: rgba(248, 113, 113, 0.35);
+	--color-text-soft: rgba(120, 53, 15, 0.66);
 }
 
 *,

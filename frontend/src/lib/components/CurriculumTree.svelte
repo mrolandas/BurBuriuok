@@ -129,8 +129,8 @@
 		margin: 0;
 		padding: 1.5rem;
 		border-radius: 1rem;
-		border: 1px dashed rgba(148, 163, 184, 0.4);
+		border: 1px dashed var(--color-border);
 		color: var(--color-text-muted);
-		background: rgba(15, 23, 42, 0.3);
+		background: var(--color-panel-soft);
 	}
 </style>

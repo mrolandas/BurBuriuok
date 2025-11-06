@@ -51,18 +51,23 @@
 		gap: 0.35rem;
 		text-decoration: none;
 		font-weight: 600;
-		color: var(--color-text);
-		border: 1px solid rgba(148, 163, 184, 0.35);
+		color: var(--color-pill-text);
+		border: 1px solid var(--color-pill-border);
+		background: var(--color-pill-bg);
 		padding: 0.35rem 0.8rem;
 		border-radius: 999px;
 		transition:
 			transform 0.2s ease,
-			background 0.2s ease;
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
 	}
 
 	.section-view__back:hover,
 	.section-view__back:focus-visible {
 		transform: translateY(-1px);
-		background: rgba(148, 163, 184, 0.1);
+		background: var(--color-pill-hover-bg);
+		border-color: var(--color-pill-hover-border);
+		color: var(--color-text);
 	}
 </style>

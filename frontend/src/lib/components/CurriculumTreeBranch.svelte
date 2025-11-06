@@ -107,9 +107,9 @@
 	}
 
 	.tree-node {
-		border: 1px solid rgba(148, 163, 184, 0.35);
+		border: 1px solid var(--color-border);
 		border-radius: 0.9rem;
-		background: rgba(15, 23, 42, 0.4);
+		background: var(--color-panel);
 		padding: 0.75rem 1rem;
 		display: grid;
 		gap: 0.8rem;
@@ -154,11 +154,11 @@
 		font-size: 0.7rem;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		background: rgba(250, 204, 21, 0.18);
-		color: #facc15;
+		background: var(--color-badge-warning-bg);
+		color: var(--color-badge-warning-text);
 		padding: 0.2rem 0.6rem;
 		border-radius: 999px;
-		border: 1px solid rgba(250, 204, 21, 0.35);
+		border: 1px solid var(--color-badge-warning-border);
 		margin-left: auto;
 	}
 
@@ -170,22 +170,22 @@
 	.tree-node__status {
 		margin: 0;
 		font-size: 0.85rem;
-		color: var(--color-text-muted);
+		color: var(--color-text-soft);
 	}
 
 	.tree-node__status--error {
-		color: #fca5a5;
+		color: var(--color-status-error-text);
 	}
 
 	.tree-node__status--muted {
-		color: rgba(148, 163, 184, 0.85);
+		color: var(--color-text-soft);
 	}
 
 	.tree-node__retry {
 		justify-self: flex-start;
-		border: 1px solid rgba(248, 113, 113, 0.45);
-		background: rgba(248, 113, 113, 0.1);
-		color: #fecaca;
+		border: 1px solid var(--color-status-error-border);
+		background: var(--color-status-error-bg);
+		color: var(--color-status-error-text);
 		border-radius: 999px;
 		font-size: 0.8rem;
 		font-weight: 600;
@@ -212,14 +212,14 @@
 		justify-content: flex-start;
 		gap: 0.5rem;
 		font-size: 0.9rem;
-		color: rgba(226, 232, 240, 0.95);
+		color: var(--color-text);
 		text-align: left;
 		width: 100%;
 	}
 
 	.tree-node__item-link {
-		border: 1px solid rgba(94, 234, 212, 0.25);
-		background: rgba(45, 212, 191, 0.08);
+		border: 1px solid var(--color-accent-border);
+		background: var(--color-accent-faint);
 		padding: 0.35rem 0.6rem;
 		border-radius: 0.75rem;
 		text-decoration: none;
@@ -231,14 +231,14 @@
 
 	.tree-node__item-link:hover,
 	.tree-node__item-link:focus-visible {
-		border-color: rgba(94, 234, 212, 0.55);
-		background: rgba(45, 212, 191, 0.15);
+		border-color: var(--color-accent-border-strong);
+		background: var(--color-accent-faint-strong);
 		transform: translateY(-1px);
 	}
 
 	.tree-node__item-ordinal {
 		font-variant-numeric: tabular-nums;
-		color: rgba(148, 163, 184, 0.9);
+		color: var(--color-text-soft);
 	}
 
 	@media (max-width: 640px) {
