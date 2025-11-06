@@ -136,6 +136,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ## Immediate Focus
 
+- Kitą sesiją pradėti nuodugniu administratoriaus sąrankos testavimu, užfiksuoti radinius ir pakoreguoti stilių bei funkcionalumą pagal pastebėtus trūkumus.
 - Patikrinti „Rytmečio dangaus“ kontrastą po numatytojo nustatymo ir, jei reikia, sukalibruoti šviesių temų tipografiją.
 - Uždaryti LX-004 – sukurti vietinę eilės saugyklą ir susieti ją su naujais koncepto veiksmų įvykiais.
 - Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
