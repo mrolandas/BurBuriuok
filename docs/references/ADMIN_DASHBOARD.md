@@ -13,6 +13,18 @@ Captured screens and flows for the first release of the BurBuriuok admin console
 
 A persistent sidebar highlights counters (e.g., Pending media: 5). Admins can collapse it on mobile; each module provides quick actions at the top.
 
+## Sprint 1 Deliverables
+
+The initial admin milestone targets a thin vertical slice that exercises authentication, CRUD, and moderation workflows.
+
+1. **ADM-001 – Secure Admin Shell**: Gate `/admin` routes via Supabase session claims (`app_role='admin'`), provide fallback copy for non-admins, and surface a lightweight status banner showing active persona/role.
+2. **ADM-002 – Concept Editor MVP**: Render the Concepts data grid with create/edit drawer, Zod validation shared with backend, draft/publish toggle, and audit-log hook firing `content_versions` entries.
+3. **ADM-003 – Moderation Queue List**: Deliver the Media Queue list with status tabs, SLA priority badges (P0/P1/P2), bulk-select skeleton, and empty-state guidance.
+4. **ADM-004 – Notification Stubs**: Log Slack/email events when moderation decisions occur, mapping to `docs/references/MODERATION_SLA.md` (real integrations deferred).
+5. **ADM-005 – Analytics Mapping Notes**: Document which admin actions emit analytics events so instrumentation can follow once the concept editor and queue are interactive.
+
+Each deliverable should land behind feature flags where possible so the learner experience remains unaffected while the admin surface evolves.
+
 ## Screen Details
 
 ### 1. Overview
@@ -58,6 +70,13 @@ A persistent sidebar highlights counters (e.g., Pending media: 5). Admins can co
 - Optimistic updates where safe; roll back on Supabase error.
 - Unsaved changes guard when navigating between forms.
 - Inline RLS status indicator (if a save fails due to policy).
+
+## Access Control & Routing
+
+- **SvelteKit Layout Guard**: Wrap `/admin/+layout.svelte` with a load function that reads the Supabase session, verifies `app_role`, and redirects to `/` with a friendly message when access is denied. During development, allow a query flag (`?impersonate=admin`) gated behind `VITE_ENABLE_ADMIN_IMPERSONATION` to preview layouts without real credentials.
+- **Backend Assertion**: All `/admin/**` API calls must re-check the role server-side (Express middleware) to prevent forged client state from bypassing policies.
+- **Allowlist**: Maintain the initial admin list inside Supabase Auth (dashboard-managed). Document the steps in `docs/references/PERSONAS_PERMISSIONS.md` and keep a fallback JSON allowlist for local development.
+- **Telemetry**: Emit `admin_session_checked` events (ADM-005) when access is granted or denied to monitor health.
 
 ## Technical Dependencies
 

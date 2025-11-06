@@ -31,11 +31,15 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ### C. Admin & Moderation Interface
 
-- [ ] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`).
-- [ ] Implement concept management form (create/edit) with draft/publish toggle and validation.
-- [ ] Surface moderation queue list with status filters (`pending`, `approved`, `rejected`).
-- [ ] Wire Slack/email notification stubs in backend per `docs/references/MODERATION_SLA.md` (placeholder logs until integration exists).
-- [ ] Document how admin actions map to analytics events for future instrumentation.
+- [ ] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`). _Status: discovery – guard architecture drafted; implementation queued for ADM-001 (target 2025-11-08)._
+  - Outline SvelteKit layout gate (`/admin`) with Supabase session claim check and graceful downgrade for non-admins.
+  - Capture allowlist management steps (Supabase dashboard vs. profiles table) and fallback to local mocked admin user for Storybook-style previews.
+- [ ] Implement concept management form (create/edit) with draft/publish toggle and validation. _Status: scoping – UX mapped in `docs/references/ADMIN_DASHBOARD.md`; backend contract confirmed in `docs/references/API_CONTRACTS.md`._
+  - Break work into form shell, validation layer (Zod), audit log hook, and optimistic UI patterns.
+- [ ] Surface moderation queue list with status filters (`pending`, `approved`, `rejected`). _Status: discovery – column set finalised; SLA priorities tied to queue ordering (ADM-003)._
+  - Define lightweight REST filter params and UI empty/error states before engineering kickoff.
+- [ ] Wire Slack/email notification stubs in backend per `docs/references/MODERATION_SLA.md` (placeholder logs until integration exists). _Status: discovery – ADM-004 seeds Slack webhook + email template stubs._
+- [ ] Document how admin actions map to analytics events for future instrumentation. _Status: not started – depends on ADM-002/003 event taxonomy hand-off to analytics._
 
 ### D. Learner Practice & Progress
 
@@ -89,6 +93,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: GitHub Pages deploy stabilized with runtime Supabase config written to `env.js`, frontend now merges repo `.env` for local preview, and AppShell ships with a persistent theme picker (Marine, Dawn, Sand) to smooth mobile navigation.
 - 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
 - 2025-11-06: AppShell menu refined – theme picker collapses into the "Spalvų derinys" button, option order updated (Rytmečio dangus, Jūrinė naktis, Smėlio krantai), and the Dawn scheme now loads by default across devices.
+- 2025-11-06: Admin & moderation discovery kicked off – seeded ADM-001…ADM-005 issues for guarded admin shell, concept editor MVP, moderation queue, notification stubs, and analytics mapping; updated references to reflect Sprint 1 deliverables.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -103,6 +108,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - LX-006 planas: apibrėžti modulinių viktorinų tipų tvarkyklę, kuri leis nurodyti klausimų tipų proporcijas vienai sesijai.
 - Align on the guided learning path narrative: how the “nežinau → mokausi → moku” model appears in UI and supporting docs.
 - Plan the knowledge-check module (section vs. whole-course options) – schedule after LX-005 once the study-session experience solidifies.
+- Parengti ADM-001/ADM-002 diegimo backlogą: nustatyti SvelteKit admin maršruto skeletoną, patikrinti Supabase RLS taisykles ir suderinti validacijos schemų dalinimąsi tarp `frontend/` ir `backend/`.
+- Paruošti ADM-003/ADM-004 reikalavimų santrauką: moderavimo sąrašo stulpeliai, SLA signalizacijų žinutės ir pseudo integracijos su Slack/email webhookais.
 
 ## Branching & Testing Strategy
 

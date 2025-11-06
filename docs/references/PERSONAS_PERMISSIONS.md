@@ -60,3 +60,10 @@ Legend: ✅ full access; ❌ denied; ⚠️ constrained to own submissions.
 - Do we allow self-service upgrade from learner to contributor, or is it invite-only?
 - Should guests have limited progress saving via device key without auth? (Potential for future anonymous progress mode.)
 - How do we expire inactive admin accounts (policy & automation)?
+
+## Admin Route Enforcement
+
+- **Frontend Guard**: The `/admin` SvelteKit layout will read the Supabase session during `load()`, assert `app_role === 'admin'`, and redirect non-admin users to a friendly access-denied page. When `VITE_ENABLE_ADMIN_IMPERSONATION=true`, developers may pass `?impersonate=admin` to preview the shell without a privileged session; the flag must never be enabled in production.
+- **Backend Middleware**: Express middleware `requireAdminRole` checks the decoded JWT claim (`app_role`) for every `/admin/**` endpoint. Requests failing the check return HTTP 403 and log the denial for analytics (ADM-001).
+- **Allowlist Management**: Short term, maintain admin emails via Supabase dashboard (Auth → Users → Add user). Longer term, mirror the list inside a `profiles` table with `role` column so onboarding/offboarding can be automated.
+- **Local Development Story**: Provide a `.env.local` setting (e.g., `VITE_ADMIN_BYPASS_EMAIL=test@local`) to automatically treat a known email as admin when running against stubbed auth. Document the toggle in `docs/references/DEVELOPMENT_SETUP.md` once the implementation lands.
