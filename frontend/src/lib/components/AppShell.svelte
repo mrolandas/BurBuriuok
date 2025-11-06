@@ -5,6 +5,7 @@
 	import type { Snippet } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { quizModal } from '$lib/stores/quizModal';
+	import { adminMode, ensureAdminImpersonation } from '$lib/stores/adminMode';
 
 	type NavHref = '/' | `/sections/${string}`;
 
@@ -29,6 +30,9 @@
 	let activePath = $state($page.url.pathname);
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
 	let searchInput: HTMLInputElement | null = null;
+	let adminModeEnabled = $state(adminMode.value);
+	let adminModeUnsubscribe: (() => void) | null = null;
+	let allowAdminSync = false;
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
@@ -93,8 +97,24 @@
 	};
 
 	onMount(() => {
+		adminMode.initialize();
+		adminModeUnsubscribe = adminMode.subscribe((value) => {
+			adminModeEnabled = value;
+			if (allowAdminSync) {
+				void syncAdminModeToUrl(value);
+			}
+		});
+
 		if (typeof window === 'undefined') {
 			return;
+		}
+
+		const currentUrl = new URL(window.location.href);
+		const impersonatingAdmin = currentUrl.searchParams.get('impersonate') === 'admin';
+		if (adminMode.value && !impersonatingAdmin) {
+			void syncAdminModeToUrl(true);
+		} else if (!adminMode.value && impersonatingAdmin) {
+			adminMode.enable();
 		}
 		const stored = window.localStorage.getItem('burburiuok-theme');
 		const initial: ThemeId = isKnownTheme(stored) ? stored : themeOptions[0].id;
@@ -103,6 +123,9 @@
 		if (!isKnownTheme(stored)) {
 			persistTheme(initial);
 		}
+
+		allowAdminSync = true;
+		void syncAdminModeToUrl(adminModeEnabled);
 	});
 
 	const toggleMenu = () => {
@@ -141,6 +164,23 @@
 		}
 	};
 
+	const syncAdminModeToUrl = async (enabled: boolean) => {
+		if (typeof window === 'undefined') {
+			return;
+		}
+
+		const url = new URL(window.location.href);
+		if (!ensureAdminImpersonation(url, enabled)) {
+			return;
+		}
+
+		await goto(`${url.pathname}${url.search}${url.hash}`, {
+			replaceState: true,
+			noScroll: true,
+			keepFocus: true
+		});
+	};
+
 	const unsubscribePage = page.subscribe(({ url }) => {
 		const nextPath = url.pathname;
 		if (nextPath !== activePath) {
@@ -148,6 +188,9 @@
 			closeMenu();
 		}
 		searchTerm = url.searchParams.get('q') ?? '';
+		if (allowAdminSync) {
+			void syncAdminModeToUrl(adminModeEnabled);
+		}
 	});
 
 	const clearSearch = () => {
@@ -173,8 +216,15 @@
 		quizModal.open();
 	};
 
+	const handleAdminModeToggle = () => {
+		adminMode.toggle();
+		closeMenu();
+	};
+
 	onDestroy(() => {
 		unsubscribePage();
+		adminModeUnsubscribe?.();
+		adminModeUnsubscribe = null;
 	});
 </script>
 
@@ -227,6 +277,18 @@
 				{#if visibleNavLinks.length}
 					<li class="app-shell__menu-divider" aria-hidden="true"></li>
 				{/if}
+
+				<li class="app-shell__menu-admin">
+					<button
+						type="button"
+						class="app-shell__menu-action app-shell__menu-action--admin"
+						onclick={handleAdminModeToggle}
+					>
+						{adminModeEnabled ? 'Deaktyvuoti Admin' : 'Aktyvuoti Admin'}
+					</button>
+				</li>
+
+				<li class="app-shell__menu-divider" aria-hidden="true"></li>
 
 				<li>
 					<button class="app-shell__menu-action" type="button" onclick={openQuizModal}>
@@ -654,6 +716,16 @@
 	.app-shell__menu-action:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.app-shell__menu-admin {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.app-shell__menu-action--admin {
+		justify-content: space-between;
 	}
 
 	.app-shell__menu-theme {
