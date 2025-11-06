@@ -471,6 +471,12 @@
 		transform: translateY(-1px);
 	}
 
+	.app-shell__menu-toggle[aria-expanded='true'] {
+		background: var(--color-surface-alt);
+		border-color: var(--color-border);
+		transform: none;
+	}
+
 	.app-shell__menu-toggle:focus-visible {
 		outline: 2px solid rgba(56, 189, 248, 0.6);
 		outline-offset: 3px;
@@ -517,7 +523,7 @@
 		inset: 0;
 		background: var(--color-overlay, rgba(15, 23, 42, 0.45));
 		backdrop-filter: blur(3px);
-		z-index: 10;
+		z-index: 120;
 	}
 
 	.app-shell__menu {
