@@ -11,6 +11,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - **Local fallback** – prior local-stack variables remain commented in `.env` in case we need to bring back the on-device Supabase instance for offline work.
 - **Runtime config** – GitHub Actions writes `frontend/static/env.js` with the production URL + anon key during deploy; the browser reads these values from `window.__BURBURIUOK_CONFIG__` so the static bundle stays credentials-free.
 - **Dashboard access** – global admin logs into https://app.supabase.com → project `burburiuok` → Database/Storage/Auth tabs. Only the owner account currently has admin rights; invite additional maintainers directly from the Supabase UI.
+- **Impersonation toggle** – the learner shell uses the `impersonate=admin` query string to unlock inline editing. Local development requires `VITE_ENABLE_ADMIN_IMPERSONATION`/`ADMIN_DEV_IMPERSONATION` flags so Supabase RLS continues to guard real production sessions.
 
 > Make sure `.env` is never committed. The repo `.gitignore` already excludes it.
 

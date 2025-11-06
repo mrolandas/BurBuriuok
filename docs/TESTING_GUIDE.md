@@ -13,6 +13,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Use a device key when testing progress endpoints (`GET/PUT/DELETE /api/v1/progress/:conceptId`) and validate rate-limit metadata headers.
   - Regenerate `supabase/seeds/seed_concepts.sql` and `supabase/seeds/seed_curriculum_dependencies.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`, `npm run content:seed:dependencies`) and confirm `npm run content:seed:check` reports no drift before pushing.
   - Navigate from the curriculum tree to a concept detail page (`/concepts/[slug]`) to confirm breadcrumbs, Lithuanian copy, placeholder actions, and peer-topic links render without console errors.
+  - Toggle the AppShell admin control (“Aktyvuoti Admin” / “Deaktyvuoti Admin”) and follow a few concept links to confirm the impersonation query flag persists and inline edit affordances stay visible without requiring a page refresh.
 
 ### Automated Connectivity Check
 
@@ -61,6 +62,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - `node tests/checkSupabaseConnection.mjs` – hosted Supabase availability check.
 - `npm run content:seed:generate` – rebuild seed SQL from the canonical markdown (treat failures as blockers before applying migrations/seeds).
 - `npm run test` – run the full suite locally.
+- `npm run backend:typecheck` / `npm run frontend:check` / `npm run content:markdown:validate` / `npm run content:seed:check` – combined “complete test” set exercised before releases to cover backend types, Svelte diagnostics, markdown integrity, and seed drift.
 - `npm run test:unit` – unit tests only.
 - `npm run test:e2e` – end-to-end tests (requires local backend once available).
 

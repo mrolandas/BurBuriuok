@@ -10,5 +10,6 @@ Use this directory to keep the working knowledge for BurBuriuok organised and ea
 - `references/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and the new theming workflow.
 - `references/SUPABASE.md` – connection details and usage plan for the shared Supabase stack.
 - `references/ISSUE_TRACKER.md` – backlog-ready issue seeds grouped by workstream with status to accelerate GitHub issue creation.
+- `references/ADMIN_SETUP.md` – admin personas, access toggles, inline editing entry points, and dashboard roadmap.
 
 > Tip: When adding a new document inside `docs/`, link it here with a short description so contributors can discover it quickly.

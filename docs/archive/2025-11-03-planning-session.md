@@ -67,7 +67,7 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
 - 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
 - 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
-- 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_DASHBOARD.md`, outlining screens, workflows, and open UX questions.
+- 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_SETUP.md`, outlining screens, workflows, and open UX questions.
 - 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
 - 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
 - 2025-11-03: Authored `docs/static_info/LBS_concepts_master.md` as the single source of truth for curriculum concepts and linked it to seed automation.

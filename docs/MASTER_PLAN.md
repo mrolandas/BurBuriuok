@@ -52,6 +52,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 - Dashboard summarises pending media submissions, draft content, and high-impact concepts (e.g., high failure rate).
 - Editors can add/edit/delete nodes, items, and concepts inline with validation, dependency linking, and preview diffs prior to publish.
+- Inline concept editing is now accessible straight from `/concepts/[slug]` when the global “Aktyvuoti Admin” toggle is active, reflecting the persistent `adminMode` store shared across the shell.
 - Versioning supports draft vs published states plus basic history for rollback.
 
 ### Media Moderation Flow

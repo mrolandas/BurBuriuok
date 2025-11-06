@@ -9,6 +9,7 @@ This document keeps the development environment expectations in one place. Updat
 - `data/` – Supabase client wrapper, repositories, and shared type definitions.
 - `content/` – Curriculum seed data, CSV/JSON imports, transformation scripts.
 - `docs/` – Project documentation (this folder).
+- `shared/` – Cross-cutting TypeScript utilities (currently admin validation schemas shared by frontend and backend).
 - `supabase/` – Managed migrations and generated seed SQL kept in sync with Supabase.
 - `first_draft/` – Legacy prototype kept for reference.
 
@@ -41,7 +42,8 @@ This document keeps the development environment expectations in one place. Updat
    - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
    - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server). Supabase URL/anon key are loaded from the repo root `.env`, keeping local preview identical to production credentials.
-   - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env` (or shell) and append `?impersonate=admin` to `/admin` routes. Reset the flag to `false` before committing.
+   - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env.local` (or shell) and `ADMIN_DEV_IMPERSONATION=true` in the repo root `.env`, then append `?impersonate=admin` to `/admin` routes. Remove or disable both flags before committing or deploying so the bypass never ships upstream. With the flags enabled, the AppShell menu shows the persistent “Aktyvuoti Admin” toggle that flips the global `adminMode` store and syncs the impersonation query parameter on navigation.
+   - Override the admin API base when the Express server is hosted externally by exporting `VITE_ADMIN_API_BASE` (defaults to `/api/admin`).
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 
@@ -56,8 +58,9 @@ This document keeps the development environment expectations in one place. Updat
 ## Reference Guides
 
 - `docs/references/API_CONTRACTS.md` – REST surface, validation rules, rate limits, and persona-level access expectations.
+- `docs/references/BACKEND.md` – Express service layout, admin endpoints, shared validation helpers, and audit logging guidance.
 - `docs/references/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and frontend-specific workflows.
-- `docs/references/ADMIN_DASHBOARD.md` – admin flows, moderation tasks, and analytics widgets that engineering must support.
+- `docs/references/ADMIN_SETUP.md` – admin flows, impersonation toggle behaviour, moderation tasks, and analytics widgets that engineering must support.
 - `docs/references/UX_MOBILE_WIREFRAMES.md` – prioritized mobile-first layouts and interaction patterns.
 - `docs/references/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
 - `docs/references/STUDY_PATHS.md` – curated learner journeys, unlock criteria, and backlog items.
