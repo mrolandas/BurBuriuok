@@ -189,9 +189,6 @@
 			</span>
 			<span class="app-shell__menu-label">Meniu</span>
 		</button>
-		{#if menuOpen}
-			<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
-		{/if}
 		<nav
 			id="app-shell-menu"
 			class="app-shell__menu"
@@ -256,6 +253,10 @@
 			</ul>
 		</nav>
 	</header>
+
+	{#if menuOpen}
+		<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
+	{/if}
 
 	<div class="app-shell__search" role="search">
 		<form class="app-shell__search-form" action={resolve('/search')} method="get">
@@ -523,7 +524,7 @@
 		inset: 0;
 		background: var(--color-overlay, rgba(15, 23, 42, 0.45));
 		backdrop-filter: blur(3px);
-		z-index: 120;
+		z-index: 20;
 	}
 
 	.app-shell__menu {
@@ -538,7 +539,7 @@
 		border: 1px solid var(--color-border);
 		box-shadow: 0 22px 55px -25px var(--color-overlay, rgba(15, 23, 42, 0.55));
 		backdrop-filter: blur(26px);
-		z-index: 20;
+		z-index: 90;
 		transform: none;
 	}
 
