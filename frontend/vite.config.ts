@@ -26,6 +26,18 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [sveltekit()],
-		base
+		base,
+		server: {
+			fs: {
+				allow: [process.cwd(), repoRoot]
+			},
+			proxy: {
+				'/api/v1': {
+					target: 'http://localhost:4000',
+					changeOrigin: true,
+					secure: false
+				}
+			}
+		}
 	};
 });

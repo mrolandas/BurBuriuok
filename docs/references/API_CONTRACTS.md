@@ -63,21 +63,25 @@ Progress endpoints require a device binding: send `x-device-key` or `deviceKey` 
 
 ### Curriculum & Concepts
 
-| Method | Path                                           | Body                                                           | Notes                                                                                          |
-| ------ | ---------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| POST   | `/admin/curriculum/nodes`                      | `{ code, title, summary?, parentCode?, ordinal }`              | Creates node; enforces unique code and ordinal-within-parent.                                  |
-| PATCH  | `/admin/curriculum/nodes/:code`                | Partial fields                                                 | Updates node; writes entry to `content_versions`.                                              |
-| DELETE | `/admin/curriculum/nodes/:code`                |                                                                | Soft delete by setting status to `archived`; cascade handled via Supabase RLS.                 |
-| POST   | `/admin/curriculum/nodes/:code/items`          | `{ ordinal, label }`                                           | Validates ordinal uniqueness for the node.                                                     |
-| PATCH  | `/admin/curriculum/nodes/:code/items/:ordinal` | Partial                                                        | Allows label edits or ordinal swaps.                                                           |
-| POST   | `/admin/curriculum/dependencies`               | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
-| DELETE | `/admin/curriculum/dependencies/:id`           |                                                                | Removes mapping, writes audit row.                                                             |
+| Method | Path                                           | Body                                                           | Status  | Notes                                                                                          |
+| ------ | ---------------------------------------------- | -------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| POST   | `/admin/curriculum/nodes`                      | `{ code, title, summary?, parentCode?, ordinal }`              | Planned | Creates node; enforces unique code and ordinal-within-parent.                                  |
+| PATCH  | `/admin/curriculum/nodes/:code`                | Partial fields                                                 | Planned | Updates node; writes entry to `content_versions`.                                              |
+| DELETE | `/admin/curriculum/nodes/:code`                |                                                                | Planned | Soft delete by setting status to `archived`; cascade handled via Supabase RLS.                 |
+| POST   | `/admin/curriculum/nodes/:code/items`          | `{ ordinal, label }`                                           | Planned | Validates ordinal uniqueness for the node.                                                     |
+| PATCH  | `/admin/curriculum/nodes/:code/items/:ordinal` | Partial                                                        | Planned | Allows label edits or ordinal swaps.                                                           |
+| POST   | `/admin/curriculum/dependencies`               | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Planned | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
+| DELETE | `/admin/curriculum/dependencies/:id`           |                                                                | Planned | Removes mapping, writes audit row.                                                             |
 
-| Method | Path                  | Body                 | Notes                                                                           |
-| ------ | --------------------- | -------------------- | ------------------------------------------------------------------------------- |
-| POST   | `/admin/concepts`     | `UpsertConceptInput` | Auto-generates slug if missing; ensures slug uniqueness.                        |
-| PATCH  | `/admin/concepts/:id` | Partial              | All writes recorded in `content_versions` with diff snapshot.                   |
-| DELETE | `/admin/concepts/:id` |                      | Soft delete only; actual removal requires archived state + manual confirmation. |
+#### Concepts (shipped ADM-002 slice)
+
+| Method | Path                    | Query/Body                                                         | Notes                                                                                                        |
+| ------ | ----------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| GET    | `/admin/concepts`       | Query: `sectionCode?`, `status?`                                   | Returns concept collection; status resolves from `metadata.status` (`draft` fallback when absent).           |
+| GET    | `/admin/concepts/:slug` |                                                                    | Loads concept for editing; responds with 404 when slug is missing.                                           |
+| POST   | `/admin/concepts`       | Body must satisfy `AdminConceptMutationInput` (shared Zod schema). | Creates or updates a concept (Supabase `onConflict` on slug). Persists audit trail via `logContentMutation`. |
+
+Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once archive semantics and RLS policies are finalised. Until then `POST` handles create and update in a single flow.
 
 ### Media Moderation
 

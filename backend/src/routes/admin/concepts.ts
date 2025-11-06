@@ -1,0 +1,272 @@
+import { Router } from "express";
+import { listConcepts, getConceptBySlug, upsertConcepts } from "../../../../data/repositories/conceptsRepository.ts";
+import { listContentVersionsForEntity } from "../../../../data/repositories/contentVersionsRepository.ts";
+import type { Concept, ContentVersionStatus, UpsertConceptInput } from "../../../../data/types.ts";
+import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { logContentMutation } from "../../services/auditLogger.ts";
+import {
+  adminConceptMutationSchema,
+  adminConceptStatusSchema,
+  type AdminConceptMutationInput,
+} from "../../../../shared/validation/adminConceptSchema.ts";
+
+const router = Router();
+
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const sectionCode =
+      typeof req.query.sectionCode === "string"
+        ? req.query.sectionCode.trim()
+        : undefined;
+
+    const statusQuery =
+      typeof req.query.status === "string"
+        ? req.query.status.trim().toLowerCase()
+        : undefined;
+
+    const options: { sectionCode?: string } = {};
+
+    if (sectionCode) {
+      options.sectionCode = sectionCode;
+    }
+
+    const concepts = await listConcepts(null, options);
+
+    const statusFilter = statusQuery
+      ? adminConceptStatusSchema.safeParse(statusQuery)
+      : null;
+
+    const filteredConcepts =
+      statusFilter && statusFilter.success
+        ? concepts.filter((concept) => extractStatus(concept) === statusFilter.data)
+        : concepts;
+
+    res.json({
+      data: {
+        concepts: filteredConcepts.map(mapConceptForResponse),
+      },
+      meta: {
+        count: filteredConcepts.length,
+        fetchedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.get(
+  "/:slug/history",
+  asyncHandler(async (req, res) => {
+    const slug = req.params.slug?.trim();
+
+    if (!slug) {
+      res.status(400).json({
+        error: {
+          message: "Slug parameter is required.",
+        },
+      });
+      return;
+    }
+
+    const limitParam =
+      typeof req.query.limit === "string" ? Number.parseInt(req.query.limit, 10) : undefined;
+    const limit = Number.isFinite(limitParam) && limitParam ? Math.min(Math.max(limitParam, 1), 50) : 20;
+
+    const versions = await listContentVersionsForEntity("concept", slug, limit);
+
+    res.json({
+      data: {
+        versions: versions.map(mapVersionForResponse),
+      },
+      meta: {
+        count: versions.length,
+        fetchedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.get(
+  "/:slug",
+  asyncHandler(async (req, res) => {
+    const slug = req.params.slug?.trim();
+
+    if (!slug) {
+      res.status(400).json({
+        error: {
+          message: "Slug parameter is required.",
+        },
+      });
+      return;
+    }
+
+    const concept = await getConceptBySlug(slug);
+
+    if (!concept) {
+      res.status(404).json({
+        error: {
+          message: `Concept with slug '${slug}' was not found.`,
+        },
+      });
+      return;
+    }
+
+    res.json({
+      data: {
+        concept: mapConceptForResponse(concept),
+      },
+      meta: {
+        fetchedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    const validation = adminConceptMutationSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      res.status(400).json({
+        error: {
+          message: "Invalid concept payload.",
+          details: validation.error.flatten(),
+        },
+      });
+      return;
+    }
+
+    const payload = validation.data;
+
+    const existing = await getConceptBySlug(payload.slug);
+
+    const upsertPayload = toUpsertConceptInput(payload, existing?.metadata ?? {});
+
+    await upsertConcepts([upsertPayload]);
+
+    const updated = await getConceptBySlug(payload.slug);
+
+    if (!updated) {
+      throw new Error(
+        `Concept '${payload.slug}' could not be reloaded after upsert.`
+      );
+    }
+
+    await logContentMutation({
+      entityType: "concept",
+      entityId: payload.slug,
+      before: existing ? mapConceptForResponse(existing) : null,
+      after: mapConceptForResponse(updated),
+      actor: req.authUser?.email ?? req.authUser?.id ?? null,
+      status: payload.status,
+      changeSummary: existing
+        ? `Concept '${payload.slug}' updated via admin console.`
+        : `Concept '${payload.slug}' created via admin console.`,
+    });
+
+    res.status(existing ? 200 : 201).json({
+      data: {
+        concept: mapConceptForResponse(updated),
+      },
+      meta: {
+        savedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+export default router;
+
+type ConceptStatus = "draft" | "published";
+
+function extractStatus(concept: Concept): ConceptStatus {
+  const raw = concept.metadata?.status;
+  if (typeof raw === "string" && raw === "published") {
+    return "published";
+  }
+  return "draft";
+}
+
+function mapConceptForResponse(concept: Concept) {
+  return {
+    id: concept.id,
+    slug: concept.slug,
+    termLt: concept.termLt,
+    termEn: concept.termEn,
+    descriptionLt: concept.descriptionLt,
+    descriptionEn: concept.descriptionEn,
+    sectionCode: concept.sectionCode,
+    sectionTitle: concept.sectionTitle,
+    subsectionCode: concept.subsectionCode,
+    subsectionTitle: concept.subsectionTitle,
+    curriculumNodeCode: concept.curriculumNodeCode,
+    curriculumItemOrdinal: concept.curriculumItemOrdinal,
+    curriculumItemLabel: concept.curriculumItemLabel,
+    sourceRef: concept.sourceRef,
+    isRequired: concept.isRequired,
+    metadata: concept.metadata ?? {},
+    status: extractStatus(concept),
+    createdAt: concept.createdAt,
+    updatedAt: concept.updatedAt,
+  } satisfies Record<string, unknown>;
+}
+
+function toUpsertConceptInput(
+  payload: AdminConceptMutationInput,
+  existingMetadata: Record<string, unknown>
+): UpsertConceptInput {
+  const metadata = {
+    ...existingMetadata,
+    ...(payload.metadata ?? {}),
+    status: payload.status,
+  } as Record<string, unknown>;
+
+  return {
+    section_code: payload.sectionCode,
+    section_title: payload.sectionTitle,
+    subsection_code: payload.subsectionCode ?? null,
+    subsection_title: payload.subsectionTitle ?? null,
+    slug: payload.slug,
+    term_lt: payload.termLt,
+    term_en: payload.termEn ?? null,
+    description_lt: payload.descriptionLt,
+    description_en: payload.descriptionEn ?? null,
+    source_ref: payload.sourceRef ?? null,
+    metadata,
+    is_required: payload.isRequired,
+    curriculum_node_code: payload.curriculumNodeCode ?? null,
+    curriculum_item_ordinal: payload.curriculumItemOrdinal ?? null,
+    curriculum_item_label: payload.curriculumItemLabel ?? null,
+  } satisfies UpsertConceptInput;
+}
+
+type ConceptVersionResponse = {
+  id: string;
+  status: ContentVersionStatus | null;
+  changeSummary: string | null;
+  diff: unknown;
+  createdAt: string;
+  createdBy: string | null;
+  version: number | null;
+};
+
+function mapVersionForResponse(row: {
+  id: string;
+  status: ContentVersionStatus | null;
+  change_summary: string | null;
+  diff: unknown;
+  created_at: string;
+  created_by: string | null;
+  version: number | null;
+}): ConceptVersionResponse {
+  return {
+    id: row.id,
+    status: row.status ?? null,
+    changeSummary: row.change_summary,
+    diff: row.diff ?? null,
+    createdAt: row.created_at,
+    createdBy: row.created_by ?? null,
+    version: row.version ?? null,
+  } satisfies ConceptVersionResponse;
+}

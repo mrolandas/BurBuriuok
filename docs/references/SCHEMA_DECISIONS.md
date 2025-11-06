@@ -2,6 +2,16 @@
 
 This log captures authoritative decisions about the evolving Supabase schema so migrations, seeds, and docs stay aligned.
 
+## 2025-11-06 – Concept Draft Status Metadata
+
+- **Tables**: `concepts`
+  - Draft/published state stores inside the `metadata` JSON column under the `status` key.
+  - Service defaults the value to `draft` when absent so legacy rows remain editable without migration.
+  - Admin API normalises optional metadata fields while preserving unknown keys for forward compatibility.
+- **Validation**: Shared schema (`shared/validation/adminConceptSchema.ts`) requires the request body to provide an explicit `status` (`draft` or `published`) and rejects mismatched `metadata.status` values.
+- **Audit logging**: Concept saves continue to write a row to `content_versions` with the requested `status` so moderation workflows can track promotion from draft to published.
+- **Follow-up**: Revisit once Supabase RLS rules enforce per-status visibility; until then, learners keep reading from the public view and ignore draft flag.
+
 ## 2025-11-03 – Curriculum Dependencies
 
 - **Tables**: `curriculum_dependencies`

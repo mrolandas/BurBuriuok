@@ -1,9 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient";
 import type {
+  ContentEntityType,
   ContentVersionInput,
   ContentVersionChangeInput,
   ContentVersionChangeType,
+  ContentVersionStatus,
 } from "../types";
 
 const VERSIONS_TABLE = "content_versions";
@@ -11,6 +13,18 @@ const CHANGES_TABLE = "content_version_changes";
 
 interface VersionRow {
   id: string;
+}
+
+interface ContentVersionRow {
+  id: string;
+  entity_type: string;
+  entity_primary_key: string;
+  status: ContentVersionStatus | null;
+  change_summary: string | null;
+  diff: unknown;
+  created_by: string | null;
+  created_at: string;
+  version: number | null;
 }
 
 export async function recordContentVersion(
@@ -60,6 +74,34 @@ export async function recordContentVersion(
   }
 
   return versionId;
+}
+
+export async function listContentVersionsForEntity(
+  entityType: ContentEntityType,
+  entityPrimaryKey: string,
+  limit = 20,
+  client: SupabaseClient | null = null
+): Promise<ContentVersionRow[]> {
+  const supabase =
+    client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
+
+  const { data, error } = await (supabase as any)
+    .from(VERSIONS_TABLE)
+    .select(
+      "id, entity_type, entity_primary_key, status, change_summary, diff, created_by, created_at, version"
+    )
+    .eq("entity_type", entityType)
+    .eq("entity_primary_key", entityPrimaryKey)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(
+      `Failed to list content versions for ${entityType} ${entityPrimaryKey}: ${error.message}`
+    );
+  }
+
+  return (data ?? []) as ContentVersionRow[];
 }
 
 function toChangeRow(

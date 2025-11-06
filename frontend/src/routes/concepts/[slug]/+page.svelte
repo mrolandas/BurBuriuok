@@ -21,6 +21,7 @@
 			breadcrumbs={data.breadcrumbs}
 			peerItems={data.peerItems}
 			neighbors={data.neighbors}
+			adminContext={data.adminContext}
 		/>
 	{:else}
 		<Card title="Kraunama tema">

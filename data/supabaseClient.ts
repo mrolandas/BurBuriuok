@@ -6,8 +6,8 @@ type ClientContext = {
 };
 
 const DEFAULT_SCHEMA = "public";
-let cachedAnonClient: SupabaseClient | null = null;
-let cachedServiceClient: SupabaseClient | null = null;
+const anonClients = new Map<string, SupabaseClient>();
+const serviceClients = new Map<string, SupabaseClient>();
 
 function assertEnv(value: string | undefined, name: string): string {
   if (!value) {
@@ -35,21 +35,29 @@ function buildClient({
 }
 
 export function getSupabaseClient(context: ClientContext = {}): SupabaseClient {
+  const schema = context.schema ?? DEFAULT_SCHEMA;
+
   if (context.service) {
-    if (!cachedServiceClient) {
-      cachedServiceClient = buildClient({ ...context, service: true });
+    const cached = serviceClients.get(schema);
+    if (cached) {
+      return cached;
     }
-    return cachedServiceClient;
+    const client = buildClient({ ...context, service: true, schema });
+    serviceClients.set(schema, client);
+    return client;
   }
 
-  if (!cachedAnonClient) {
-    cachedAnonClient = buildClient({ ...context, service: false });
+  const cached = anonClients.get(schema);
+  if (cached) {
+    return cached;
   }
 
-  return cachedAnonClient;
+  const client = buildClient({ ...context, service: false, schema });
+  anonClients.set(schema, client);
+  return client;
 }
 
 export function resetSupabaseClients(): void {
-  cachedAnonClient = null;
-  cachedServiceClient = null;
+  anonClients.clear();
+  serviceClients.clear();
 }

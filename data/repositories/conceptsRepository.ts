@@ -3,7 +3,8 @@ import { getSupabaseClient } from "../supabaseClient";
 import type { Concept, UpsertConceptInput } from "../types";
 import { mapConceptRow } from "./conceptsMapper";
 
-const TABLE = "concepts";
+const PUBLIC_VIEW = "burburiuok_concepts";
+const PRIVATE_TABLE = "concepts";
 
 type ConceptsQueryOptions = {
   sectionCode?: string;
@@ -17,7 +18,7 @@ export async function listConcepts(
 ): Promise<Concept[]> {
   const supabase = client ?? getSupabaseClient();
   let query = (supabase as any)
-    .from(TABLE)
+    .from(PUBLIC_VIEW)
     .select("*")
     .order("section_code", { ascending: true })
     .order("subsection_code", { ascending: true })
@@ -49,7 +50,7 @@ export async function getConceptBySlug(
 ): Promise<Concept | null> {
   const supabase = client ?? getSupabaseClient();
   const { data, error } = await (supabase as any)
-    .from(TABLE)
+    .from(PUBLIC_VIEW)
     .select("*")
     .eq("slug", slug)
     .single();
@@ -74,13 +75,13 @@ export async function upsertConcepts(
     return 0;
   }
 
-  const supabase = client ?? getSupabaseClient({ service: true });
+  const supabase = client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
   const payload = concepts.map((concept) => ({
     ...concept,
     metadata: concept.metadata ?? {},
   }));
 
-  const { error, count } = await (supabase as any).from(TABLE).upsert(payload, {
+  const { error, count } = await (supabase as any).from(PRIVATE_TABLE).upsert(payload, {
     onConflict: "slug",
     ignoreDuplicates: false,
     count: "exact",
