@@ -31,9 +31,9 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 ### C. Admin & Moderation Interface
 
-- [ ] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`). _Status: discovery – guard architecture drafted; implementation queued for ADM-001 (target 2025-11-08)._
-  - Outline SvelteKit layout gate (`/admin`) with Supabase session claim check and graceful downgrade for non-admins.
-  - Capture allowlist management steps (Supabase dashboard vs. profiles table) and fallback to local mocked admin user for Storybook-style previews.
+- [x] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`). _Status: done – ADM-001 guard landed 2025-11-06; SvelteKit layout checks Supabase `app_role`, provides impersonation flag for devs, and backend middleware revalidates._
+  - `/admin/+layout` now renders persona banner for admins, falls back to guidance copy for learners, and emits `admin_session_checked` telemetry events.
+  - Backend Express middleware `requireAdminRole` validates Supabase JWTs via service client and exposes placeholder `/api/v1/admin/status` endpoint.
 - [ ] Implement concept management form (create/edit) with draft/publish toggle and validation. _Status: scoping – UX mapped in `docs/references/ADMIN_DASHBOARD.md`; backend contract confirmed in `docs/references/API_CONTRACTS.md`._
   - Break work into form shell, validation layer (Zod), audit log hook, and optimistic UI patterns.
 - [ ] Surface moderation queue list with status filters (`pending`, `approved`, `rejected`). _Status: discovery – column set finalised; SLA priorities tied to queue ordering (ADM-003)._
@@ -94,6 +94,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
 - 2025-11-06: AppShell menu refined – theme picker collapses into the "Spalvų derinys" button, option order updated (Rytmečio dangus, Jūrinė naktis, Smėlio krantai), and the Dawn scheme now loads by default across devices.
 - 2025-11-06: Concept detail screen polish shipped – sidebar alignment tightened, pager spacing balanced, and breadcrumb home label confirmed; discovery tasks marked complete in session notes.
+- 2025-11-06: ADM-001 uždaryta – `/admin` maršrutas saugomas SvelteKit sargybiniu, backend middleware tikrina Supabase `app_role`, o abu sluoksniai emituoja `admin_session_checked` įvykius stebėsenai.
 - 2025-11-06: Admin & moderation discovery kicked off – seeded ADM-001…ADM-005 issues for guarded admin shell, concept editor MVP, moderation queue, notification stubs, and analytics mapping; updated references to reflect Sprint 1 deliverables.
 - 2025-11-06: Opened GitHub issues #10-#14 (ADM-001…ADM-005), logged backend middleware coordination in ADM-001, and published implementation checklist to unblock development handoff.
 
@@ -110,7 +111,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - LX-006 planas: apibrėžti modulinių viktorinų tipų tvarkyklę, kuri leis nurodyti klausimų tipų proporcijas vienai sesijai.
 - Align on the guided learning path narrative: how the “nežinau → mokausi → moku” model appears in UI and supporting docs.
 - Plan the knowledge-check module (section vs. whole-course options) – schedule after LX-005 once the study-session experience solidifies.
-- Parengti ADM-001/ADM-002 diegimo backlogą: nustatyti SvelteKit admin maršruto skeletoną, patikrinti Supabase RLS taisykles ir suderinti validacijos schemų dalinimąsi tarp `frontend/` ir `backend/` (nuoroda į [#10](https://github.com/mrolandas/BurBuriuok/issues/10) ir [#11](https://github.com/mrolandas/BurBuriuok/issues/11)).
+- Parengti ADM-002 diegimo backlogą: nustatyti SvelteKit admin formos skeletoną, patikrinti Supabase RLS taisykles ir suderinti validacijos schemų dalinimąsi tarp `frontend/` ir `backend/` (nuoroda į [#11](https://github.com/mrolandas/BurBuriuok/issues/11)).
 - Paruošti ADM-003/ADM-004 reikalavimų santrauką: moderavimo sąrašo stulpeliai, SLA signalizacijų žinutės ir pseudo integracijos su Slack/email webhookais (nuoroda į [#12](https://github.com/mrolandas/BurBuriuok/issues/12) ir [#13](https://github.com/mrolandas/BurBuriuok/issues/13)).
 
 ## Branching & Testing Strategy

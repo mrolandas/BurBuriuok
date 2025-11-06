@@ -41,6 +41,7 @@ This document keeps the development environment expectations in one place. Updat
    - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
    - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server). Supabase URL/anon key are loaded from the repo root `.env`, keeping local preview identical to production credentials.
+   - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env` (or shell) and append `?impersonate=admin` to `/admin` routes. Reset the flag to `false` before committing.
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 

@@ -25,6 +25,8 @@ The initial admin milestone targets a thin vertical slice that exercises authent
 
 Each deliverable should land behind feature flags where possible so the learner experience remains unaffected while the admin surface evolves.
 
+_Update 2025-11-06:_ ADM-001 guard is live – `/admin` layout now displays persona banner for authorised users, renders guidance for learners, and pairs with the Express `requireAdminRole` middleware + telemetry hook.
+
 ## Screen Details
 
 ### 1. Overview

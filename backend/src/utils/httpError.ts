@@ -13,3 +13,11 @@ export class HttpError extends Error {
 export function notFound(message: string): HttpError {
   return new HttpError(404, message, "NOT_FOUND");
 }
+
+export function unauthorized(message: string): HttpError {
+  return new HttpError(401, message, "UNAUTHORIZED");
+}
+
+export function forbidden(message: string): HttpError {
+  return new HttpError(403, message, "FORBIDDEN");
+}

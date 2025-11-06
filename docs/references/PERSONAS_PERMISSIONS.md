@@ -63,7 +63,8 @@ Legend: ✅ full access; ❌ denied; ⚠️ constrained to own submissions.
 
 ## Admin Route Enforcement
 
-- **Frontend Guard**: The `/admin` SvelteKit layout will read the Supabase session during `load()`, assert `app_role === 'admin'`, and redirect non-admin users to a friendly access-denied page. When `VITE_ENABLE_ADMIN_IMPERSONATION=true`, developers may pass `?impersonate=admin` to preview the shell without a privileged session; the flag must never be enabled in production.
-- **Backend Middleware**: Express middleware `requireAdminRole` checks the decoded JWT claim (`app_role`) for every `/admin/**` endpoint. Requests failing the check return HTTP 403 and log the denial for analytics (ADM-001).
+- **Frontend Guard**: The `/admin` SvelteKit layout reads the Supabase session during `load()`, asserts `app_role === 'admin'`, renders persona banner for authorised users, and surfaces friendly guidance for everyone else. When `VITE_ENABLE_ADMIN_IMPERSONATION=true`, developers may pass `?impersonate=admin` to preview the shell without a privileged session; never enable this flag in production.
+- **Backend Middleware**: Express middleware `requireAdminRole` checks the decoded JWT claim (`app_role`) for every `/admin/**` endpoint. Requests failing the check return HTTP 401/403 and are logged for analytics (ADM-001).
+- **Telemetry**: Both layers emit `admin_session_checked` events (console + `CustomEvent`) containing decision outcome, role, and email to support upcoming ADM-005 analytics work.
 - **Allowlist Management**: Short term, maintain admin emails via Supabase dashboard (Auth → Users → Add user). Longer term, mirror the list inside a `profiles` table with `role` column so onboarding/offboarding can be automated.
-- **Local Development Story**: Provide a `.env.local` setting (e.g., `VITE_ADMIN_BYPASS_EMAIL=test@local`) to automatically treat a known email as admin when running against stubbed auth. Document the toggle in `docs/references/DEVELOPMENT_SETUP.md` once the implementation lands.
+- **Local Development Story**: For UI previews without Supabase auth, enable `VITE_ENABLE_ADMIN_IMPERSONATION=true` locally and append `?impersonate=admin` to the `/admin` URL. Remove/disable before committing or deploying.
