@@ -45,24 +45,24 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 1. **Component extraction**
 
-    - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
-       - [x] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
+   - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
+     - [x] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
    - [ ] Centralise concept detail load logic so both `/concepts/[slug]` and admin entry points use a shared loader/store.
 
 2. **Admin session plumbing**
 
-   - [ ] Expose an `adminEditMode` flag in `+page.ts` derived from the Supabase session (true for admins / impersonation).
-   - [ ] Ensure route guards continue to block learners while allowing admins to access `/concepts/[slug]` with edit rights.
+   - [x] Expose an `adminEditMode` flag in `+page.ts` derived from the Supabase session (true for admins / impersonation).
+   - [x] Ensure route guards continue to block learners while allowing admins to access `/concepts/[slug]` with edit rights.
 
 3. **Editable UI behaviours**
 
-   - [ ] Add prop-driven edit affordances (inline edit buttons, status chips, metadata badges) when `adminEditMode` is true.
-   - [ ] Wire inline save/publish/archive actions to the existing admin API; add optimistic updates and toast feedback.
+   - [x] Add prop-driven edit affordances (inline edit buttons, status chips, metadata badges) when `adminEditMode` is true.
+   - [x] Wire inline save/publish/archive actions to the existing admin API; add optimistic updates and toast feedback.
 
 4. **Entry points & navigation**
 
-   - [ ] Update the admin concept list to deep-link into `/concepts/[slug]?admin=1` (or similar) for quick immersion into edit mode.
-   - [ ] Provide an in-page “Admin mode” toggle so editors can switch between read-only and edit states without leaving the concept view.
+   - [x] Update the admin concept list to deep-link into `/concepts/[slug]?admin=1` (or similar) for quick immersion into edit mode.
+   - [x] Provide an in-page “Admin mode” toggle so editors can switch between read-only and edit states without leaving the concept view.
 
 5. **Cleanup & docs**
    - [ ] Deprecate the redundant `/admin/concepts/[slug]` form once inline editing handles the full workflow (retain list/filter view only).
@@ -127,6 +127,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: ADM-002 concept editor MVP landed – `/api/v1/admin/concepts` routes plus SvelteKit drawer shipped with shared validation; docs refreshed (`BACKEND.md`, `API_CONTRACTS.md`, `ADMIN_DASHBOARD.md`, `FRONTEND.md`, `SCHEMA_DECISIONS.md`).
 - 2025-11-06: Concept layout extracted into shared `ConceptDisplay` component; learner view now delegates layout while preserving action state, and we logged a follow-up to adopt Svelte 5 snippets to remove slot warnings before inline admin editing ships.
 - 2025-11-06: ConceptDetail/ConceptDisplay now use Svelte 5 snippets with `{@render ...}` so learner actions render without deprecated `<slot>` usage, clearing frontend check warnings and paving the way for admin inline controls.
+- 2025-11-06: Inline concept editing UI shipped – admin toolbar exposes mode toggle, metadata badges, and inline form with validation plus save/publish actions; admin concept list now deep-links into `/concepts/[slug]?admin=1` for rapid entry.
+- 2025-11-06: Added shared admin session resolver, wired `/concepts/[slug]` to expose `adminEditMode`, and surfaced inline admin banners so non-admin requests fall back gracefully while admin/impersonation sessions enable future edit controls.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 

@@ -28,9 +28,10 @@
 		neighbors?: NeighborSet;
 		meta?: Snippet;
 		actions?: Snippet;
+		content?: Snippet;
 	};
 
-	let { concept, breadcrumbs = [], peerItems = [], neighbors, meta, actions }: Props = $props();
+	let { concept, breadcrumbs = [], peerItems = [], neighbors, meta, actions, content }: Props = $props();
 
 	let showAllBreadcrumbs = $state(false);
 
@@ -120,24 +121,28 @@
 				</div>
 			{/if}
 
-			{#if description}
-				<p>{description}</p>
+			{#if content}
+				{@render content()}
 			{:else}
-				<p>
-					Apibrėžimas šiai temai dar nepateiktas. Papildysime turinį, kai tik jis bus paruoštas
-					recenzijai.
-				</p>
-			{/if}
+				{#if description}
+					<p>{description}</p>
+				{:else}
+					<p>
+						Apibrėžimas šiai temai dar nepateiktas. Papildysime turinį, kai tik jis bus paruoštas
+						recenzijai.
+					</p>
+				{/if}
 
-			{#if actions}
-				{@render actions()}
-			{/if}
+				{#if actions}
+					{@render actions()}
+				{/if}
 
-			{#if concept.descriptionEn}
-				<div class="concept-detail__translation">
-					<h3>Anglų kalbos užuomina</h3>
-					<p>{concept.descriptionEn}</p>
-				</div>
+				{#if concept.descriptionEn}
+					<div class="concept-detail__translation">
+						<h3>Anglų kalbos užuomina</h3>
+						<p>{concept.descriptionEn}</p>
+					</div>
+				{/if}
 			{/if}
 		</article>
 
