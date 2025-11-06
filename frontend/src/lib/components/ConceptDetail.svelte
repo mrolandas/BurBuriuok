@@ -3,7 +3,6 @@
 	import type { ConceptDetail } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
 	import { createEventDispatcher } from 'svelte';
-	import { quizModal } from '$lib/stores/quizModal';
 
 	const conceptActionState: Record<string, { learning: boolean; known: boolean }> = {};
 
@@ -38,7 +37,6 @@
 	const dispatch = createEventDispatcher<{
 		setLearning: { conceptId: string; learning: boolean };
 		setKnown: { conceptId: string; known: boolean };
-		startSectionQuiz: { conceptId: string; sectionCode?: string };
 	}>();
 
 	let learningChecked = $state(false);
@@ -123,15 +121,6 @@
 	const handleKnownChange = (event: Event) => {
 		const target = event.currentTarget as HTMLInputElement | null;
 		markKnown(Boolean(target?.checked));
-	};
-
-	const handleStartQuiz = () => {
-		if (!concept?.id) {
-			return;
-		}
-
-		quizModal.open({ conceptId: concept.id, sectionCode: concept.sectionCode });
-		dispatch('startSectionQuiz', { conceptId: concept.id, sectionCode: concept.sectionCode });
 	};
 
 	const boardHref = resolve('/');
@@ -240,9 +229,6 @@
 						<span>Moku</span>
 					</label>
 				</div>
-				<button type="button" class="concept-detail__quiz-button" onclick={handleStartQuiz}>
-					Pasitikrinti žinias
-				</button>
 				{#if actionMessage}
 					<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
 						{actionMessage}
@@ -470,29 +456,6 @@
 		color: var(--color-text);
 	}
 
-	.concept-detail__quiz-button {
-		margin-top: 0.35rem;
-		align-self: flex-start;
-		padding: 0.55rem 0.9rem;
-		border-radius: 0.75rem;
-		border: 1px solid var(--color-accent-border);
-		background: var(--color-accent-faint);
-		color: var(--color-pill-text);
-		font-weight: 600;
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease,
-			background 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.concept-detail__quiz-button:hover,
-	.concept-detail__quiz-button:focus-visible {
-		border-color: var(--color-accent-border-strong);
-		background: var(--color-accent-faint-strong);
-		color: var(--color-text);
-	}
-
 	.concept-detail__action-option input {
 		appearance: none;
 		width: 1.05rem;
@@ -561,9 +524,5 @@
 			padding: 0.45rem 0.65rem;
 		}
 
-		.concept-detail__quiz-button {
-			width: 100%;
-			text-align: center;
-		}
 	}
 </style>
