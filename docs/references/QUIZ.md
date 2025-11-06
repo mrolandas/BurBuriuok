@@ -20,18 +20,31 @@ This document captures the initial scope for the learner knowledge-check experie
    - Session recap shows pass/fail counts per state and highlights weak areas.
    - Provide entry points to "review unknown" or launch another quiz.
 
-## 2. Question Formats (Phase 1)
+## 2. Question Types & Modularity
+
+- Sessions are assembled through a **question orchestrator** that receives the learner's filters plus a mix policy (e.g., 60% multiple choice, 30% open response, 10% hotspot).
+- Mix policies can be predefined presets or learner-configurable sliders (values must sum to 100%).
+- Each question type registers a generator interface: `pickConcepts()`, `buildPrompt()`, `gradeResponse()`, and optional `mediaRequirements`.
+- Orchestrator iterates the session length, sampling the next question type according to the mix policy and ensuring per-session spacing (no immediate repeats of the same concept/type combo).
+
+### Supported Types (Phase 1)
 
 - **Definition → Term (Type A)**
-  - Present a concept definition; learner chooses the correct term from multiple options.
+   - Prompt: concept definition.
+   - Response: learner picks the correct term from multiple choice options.
+   - Distractors: concepts from the same section with similar taxonomy.
 - **Term → Definition (Type B)**
-  - Present a concept term; learner selects the matching definition.
-- Distractor options should preferentially come from the same section to reinforce related knowledge and increase difficulty.
+   - Prompt: concept term.
+   - Response: learner selects the matching definition from multiple options.
+- **Image Hotspot Identification (Type C)**
+   - Prompt: labelled or illustrative image (e.g., sail diagram).
+   - Response: learner taps/clicks the correct location; answer is valid if the pointer falls inside a predefined polygon/rectangle.
+   - Feedback: highlight the expected hotspot, optionally reveal the correct boundaries and show textual reinforcement.
 
-Future extensions:
+Backlog types remain in scope for later phases:
 
 - Custom, scenario-based questions authored by admins (potentially with media attachments).
-- Additional formats (multiple-correct answers, ordering, short answers) once content coverage improves.
+- Multiple-correct answers, ordering, and short-form open answers once content coverage improves.
 
 ## 3. Selection & Randomisation
 
@@ -48,6 +61,7 @@ Store quiz metrics in a dedicated `learner_quiz_metrics` table keyed by `user_id
 - `quiz_last_checked_at`
 - `quiz_pass_streak`
 - Optional: `quiz_history` JSON (lightweight recent outcomes for analytics)
+- Optional (Type C support): `latest_hotspot_accuracy` (percentage of submissions landing inside the hotspot) and `media_variant_id` referencing the image used.
 
 Usage:
 
@@ -62,7 +76,8 @@ Usage:
   - Provide "Review unknown" quick action that launches a targeted session on concepts with low pass streaks.
 - **Admin review tools**:
   - Allow admins to browse question performance, identify problematic items, and flag content for revision.
-  - Support "mark question as broken" feedback from learners during a quiz session (records the question ID, user note, timestamp).
+   - Support "mark question as broken" feedback from learners during a quiz session (records the question ID, user note, timestamp).
+   - Surface hotspot accuracy metrics so admins can tune polygon tolerances or update imagery.
 
 ## 6. Admin-authored Questions (Backlog)
 
@@ -70,15 +85,16 @@ Usage:
   - Rich-text prompts and optional media (image/video).
   - Tagged correct answer(s) and distractors.
   - Section/Concept linkage for analytics and targeted delivery.
+- Extend the builder to support hotspot questions (upload base image, draw polygon(s), attach concept metadata, and define acceptable tolerance).
 - Moderation workflow to approve or suppress learner-submitted flags.
 
 ## 7. Implementation Phasing
 
 1. **LX-006 – Quiz Foundation (current scope)**
    - Supabase migration for `learner_quiz_metrics` table and relations to `auth.users` and `concepts`.
-   - Modal configuration (section picker, concept state filters).
-   - Question generation for Type A/B using existing concept data.
-   - Persistence of per-concept quiz metrics.
+   - Modal configuration (section picker, concept state filters, optional mix preset selector).
+   - Question orchestrator scaffolding plus generators for Types A, B, and C.
+   - Persistence of per-concept quiz metrics (including hotspot accuracy where applicable).
    - Basic session summary screen.
    - Feedback hook to flag questions.
 2. **Later milestones**
@@ -92,5 +108,6 @@ Usage:
 - Desired session length defaults (fixed question count vs. continuous until user stops).
 - Whether to allow mixed-format sessions vs. single-format selection.
 - How learner-generated flags should be triaged (auto-created admin tickets, email notifications, etc.).
+- How to manage asset preloading and fallback variants for hotspot questions on low-bandwidth devices.
 
-Document last updated: 2025-11-05.
+Document last updated: 2025-11-06.

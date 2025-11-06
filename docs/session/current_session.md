@@ -87,6 +87,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-05: Confirmed Supabase client helper, env guards, and frontend error messaging are in place; FE checklist item closed.
 - 2025-11-05: Global paieška realizuota – viršuje įdėtas laukelis, `/search` puslapis rodo sąvokų ir aprašymų rezultatus su fragmentais.
 - 2025-11-06: GitHub Pages deploy stabilized with runtime Supabase config written to `env.js`, frontend now merges repo `.env` for local preview, and AppShell ships with a persistent theme picker (Marine, Dawn, Sand) to smooth mobile navigation.
+- 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
@@ -98,6 +99,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
 - Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while ruošiamės jungti prie naujų veiksmų įvykių.
 - Start LX-004 discovery: outline the study queue store API and how the new action signals will move items between lists (po spalvų atnaujinimo).
+- LX-006 planas: apibrėžti modulinių viktorinų tipų tvarkyklę, kuri leis nurodyti klausimų tipų proporcijas vienai sesijai.
 - Align on the guided learning path narrative: how the “nežinau → mokausi → moku” model appears in UI and supporting docs.
 - Plan the knowledge-check module (section vs. whole-course options) – schedule after LX-005 once the study-session experience solidifies.
 
