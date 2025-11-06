@@ -93,6 +93,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: GitHub Pages deploy stabilized with runtime Supabase config written to `env.js`, frontend now merges repo `.env` for local preview, and AppShell ships with a persistent theme picker (Marine, Dawn, Sand) to smooth mobile navigation.
 - 2025-11-06: Quiz discovery update – decided to keep question formats modular so sessions can mix configurable percentages (multiple choice, open response, image hotspot) and captured the new hotspot-on-image question concept in `docs/references/QUIZ.md`.
 - 2025-11-06: AppShell menu refined – theme picker collapses into the "Spalvų derinys" button, option order updated (Rytmečio dangus, Jūrinė naktis, Smėlio krantai), and the Dawn scheme now loads by default across devices.
+- 2025-11-06: Concept detail screen polish shipped – sidebar alignment tightened, pager spacing balanced, and breadcrumb home label confirmed; discovery tasks marked complete in session notes.
 - 2025-11-06: Admin & moderation discovery kicked off – seeded ADM-001…ADM-005 issues for guarded admin shell, concept editor MVP, moderation queue, notification stubs, and analytics mapping; updated references to reflect Sprint 1 deliverables.
 - 2025-11-06: Opened GitHub issues #10-#14 (ADM-001…ADM-005), logged backend middleware coordination in ADM-001, and published implementation checklist to unblock development handoff.
 
