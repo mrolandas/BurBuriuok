@@ -47,7 +47,7 @@ Kick-off session for actual backend and frontend implementation following the pl
 
    - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
      - [x] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
-   - [ ] Centralise concept detail load logic so both `/concepts/[slug]` and admin entry points use a shared loader/store.
+   - [x] Centralise concept detail load logic so both `/concepts/[slug]` and admin entry points use a shared loader/store.
 
 2. **Admin session plumbing**
 
