@@ -34,12 +34,39 @@ Kick-off session for actual backend and frontend implementation following the pl
 - [x] Create secured admin route with persona-based access guards (`docs/references/PERSONAS_PERMISSIONS.md`). _Status: done – ADM-001 guard landed 2025-11-06; SvelteKit layout checks Supabase `app_role`, provides impersonation flag for devs, and backend middleware revalidates._
   - `/admin/+layout` now renders persona banner for admins, falls back to guidance copy for learners, and emits `admin_session_checked` telemetry events.
   - Backend Express middleware `requireAdminRole` validates Supabase JWTs via service client and exposes placeholder `/api/v1/admin/status` endpoint.
-- [ ] Implement concept management form (create/edit) with draft/publish toggle and validation. _Status: scoping – UX mapped in `docs/references/ADMIN_DASHBOARD.md`; backend contract confirmed in `docs/references/API_CONTRACTS.md`._
-  - Break work into form shell, validation layer (Zod), audit log hook, and optimistic UI patterns.
+- [x] Implement concept management form (create/edit) with draft/publish toggle and validation. _Status: MVP shipped – admin concept endpoints + SvelteKit drawer live; tracking polish items (data grid filters, optimistic UI, history sidebar)._
+  - Break work into form shell, validation layer (Zod), audit log hook, and optimistic UI patterns. _In progress – optimistic updates/history sidebar outstanding._
 - [ ] Surface moderation queue list with status filters (`pending`, `approved`, `rejected`). _Status: discovery – column set finalised; SLA priorities tied to queue ordering (ADM-003)._
   - Define lightweight REST filter params and UI empty/error states before engineering kickoff.
 - [ ] Wire Slack/email notification stubs in backend per `docs/references/MODERATION_SLA.md` (placeholder logs until integration exists). _Status: discovery – ADM-004 seeds Slack webhook + email template stubs._
 - [ ] Document how admin actions map to analytics events for future instrumentation. _Status: not started – depends on ADM-002/003 event taxonomy hand-off to analytics._
+
+#### C1. Inline Concept Editing Rollout (ADM-002 follow-up)
+
+1. **Component extraction**
+
+   - [x] Break out the learner-facing concept layout into a reusable `ConceptDisplay` (content, metadata, navigation).
+      - [ ] Follow up: migrate `ConceptDisplay`/`ConceptDetail` slots to the Svelte 5 snippet API to clear the deprecation warnings.
+   - [ ] Centralise concept detail load logic so both `/concepts/[slug]` and admin entry points use a shared loader/store.
+
+2. **Admin session plumbing**
+
+   - [ ] Expose an `adminEditMode` flag in `+page.ts` derived from the Supabase session (true for admins / impersonation).
+   - [ ] Ensure route guards continue to block learners while allowing admins to access `/concepts/[slug]` with edit rights.
+
+3. **Editable UI behaviours**
+
+   - [ ] Add prop-driven edit affordances (inline edit buttons, status chips, metadata badges) when `adminEditMode` is true.
+   - [ ] Wire inline save/publish/archive actions to the existing admin API; add optimistic updates and toast feedback.
+
+4. **Entry points & navigation**
+
+   - [ ] Update the admin concept list to deep-link into `/concepts/[slug]?admin=1` (or similar) for quick immersion into edit mode.
+   - [ ] Provide an in-page “Admin mode” toggle so editors can switch between read-only and edit states without leaving the concept view.
+
+5. **Cleanup & docs**
+   - [ ] Deprecate the redundant `/admin/concepts/[slug]` form once inline editing handles the full workflow (retain list/filter view only).
+   - [ ] Refresh `docs/references/ADMIN_DASHBOARD.md` and user guides to explain the new inline editing flow.
 
 ### D. Learner Practice & Progress
 
@@ -97,6 +124,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 - 2025-11-06: ADM-001 uždaryta – `/admin` maršrutas saugomas SvelteKit sargybiniu, backend middleware tikrina Supabase `app_role`, o abu sluoksniai emituoja `admin_session_checked` įvykius stebėsenai.
 - 2025-11-06: Admin & moderation discovery kicked off – seeded ADM-001…ADM-005 issues for guarded admin shell, concept editor MVP, moderation queue, notification stubs, and analytics mapping; updated references to reflect Sprint 1 deliverables.
 - 2025-11-06: Opened GitHub issues #10-#14 (ADM-001…ADM-005), logged backend middleware coordination in ADM-001, and published implementation checklist to unblock development handoff.
+- 2025-11-06: ADM-002 concept editor MVP landed – `/api/v1/admin/concepts` routes plus SvelteKit drawer shipped with shared validation; docs refreshed (`BACKEND.md`, `API_CONTRACTS.md`, `ADMIN_DASHBOARD.md`, `FRONTEND.md`, `SCHEMA_DECISIONS.md`).
+- 2025-11-06: Concept layout extracted into shared `ConceptDisplay` component; learner view now delegates layout while preserving action state, and we logged a follow-up to adopt Svelte 5 snippets to remove slot warnings before inline admin editing ships.
 
 > Continue logging milestones (feature slices, migrations, deployments) as they land.
 
