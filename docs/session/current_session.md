@@ -10,18 +10,18 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - Check `docs/references/ISSUE_TRACKER.md` for the latest issue seeds and status links; sync it after creating/updating GitHub issues.
 - Scan this file’s `Session Log` and the previous archive (`docs/archive/2025-11-07-current-session.md`) for context.
 
-## Trimmed Scope Objectives
+## Phase 1 Objectives (Admin Content Management & Moderation Foundations)
 
-- Deliver production-ready learner and admin slices that match the narrowed launch plan.
-- Preserve the architectural seams for deferred moderation, notifications, and practice work.
-- Keep automation, documentation, and release processes aligned with the updated scope.
+- Deliver the admin CRUD + hierarchy experience so editors can manage curriculum nodes, items, and concepts safely.
+- Establish the content versioning workflow, media submission pipeline, and moderation queue skeleton backed by documented seams.
+- Keep automation, documentation, and validation aligned so deferred phases can plug in without rework.
 
 ## Deliverable Slices
 
-- [ ] **Admin authoring + hierarchy control** – extend inline concept editing with hierarchy management (drag/drop, promote/demote) guarded by admin personas.
-- [ ] **Learner core surfaces** – section board, collapsible curriculum tree, concept workspace, and global search backed by Supabase.
-- [ ] **Backend foundations** – curriculum/progress read APIs, progress write endpoint with rate limiting, audit logging, deployable migrations/seeds.
-- [ ] **Automation baseline** – lint/unit/content guards, CI wiring, and a release checklist covering backend + frontend deployment.
+- [ ] **Curriculum CRUD + hierarchy controls** – extend inline concept editing with tree management, shared validation, and backend reparenting rules.
+- [ ] **Content versioning workflow** – implement draft/review/publish flow with audit logging, rollback notes, and documentation updates.
+- [ ] **Media intake pipeline** – expose upload/metadata flow, define storage strategy, and queue submissions for review.
+- [ ] **Moderation queue & notification stubs** – build approve/reject UI with SLA signalling, dispatcher-backed Slack/email hooks, and tightened RLS/persona guards.
 
 ## Seam Preservation Checklist (must complete inside trimmed scope)
 
@@ -34,11 +34,11 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 
 ## Immediate Focus
 
-- Run end-to-end admin setup tests and log gaps before layering tree management on the inline editor.
-- Align hierarchy reparenting rules across backend + frontend (ordering, prerequisite inheritance, soft delete decisions).
-- Wire the event dispatcher stub while touching admin save logic; document the hook in `docs/references/infrastructure/BACKEND.md`.
-- Finalise learner progression data shape and backfill notes to `docs/references/infrastructure/SUPABASE.md`.
-- Write down media handling decisions to unblock future moderation/asset storage work.
+- Re-test admin shell & inline editing flows, document gaps, then layer tree management UX + backend reparenting.
+- Finalise the content versioning actions (draft/review/publish) and ensure audit history captures actor + summary.
+- Prototype media intake (UI + API), choose interim storage approach, and note schema updates in references.
+- Build moderation queue skeleton with SLA badges and wire dispatcher stubs to Slack/email logging.
+- Lock down RLS, validation, and persona gating updates; reflect changes in `PERSONAS_PERMISSIONS.md` and related references.
 - Keep CI guardrails (`npm test`, `npm run backend:typecheck`, `npm run frontend:check`, `npm run content:seed:check`) green after each slice.
 
 ## Documentation & Maintenance Rules
@@ -76,10 +76,10 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 
 ## Wrap-up Checklist
 
-- [ ] Admin authoring + hierarchy management shipped and documented.
-- [ ] Learner core surfaces production-ready with live data.
-- [ ] Backend foundations deployed with migrations/seeds and event dispatcher stub.
-- [ ] Automation and release checklist updated; CI guardrails passing.
+- [ ] Curriculum CRUD + hierarchy controls shipped (frontend + backend) and documented.
+- [ ] Content versioning workflow live with audit history and reference docs updated.
+- [ ] Media intake pipeline and storage plan documented; submissions queue available for moderation.
+- [ ] Moderation queue + notification stubs operating with dispatcher hooks and validated RLS.
 - [ ] Seam preservation checklist documented in the relevant reference docs.
 - [ ] `references/ISSUE_TRACKER.md` synced with final issue statuses and links.
 - [ ] Session archived with outcomes noted and next plan drafted.

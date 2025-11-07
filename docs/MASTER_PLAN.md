@@ -133,40 +133,38 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [x] Outline API surface (read, progress, admin) with contracts documented (`docs/references/API_CONTRACTS.md`).
 - [x] Prepare baseline mobile wireframes for curriculum board and concept view (`docs/references/UX_MOBILE_WIREFRAMES.md`).
 
-### Phase 1 – Content Management & Moderation
+### Phase 1 – Admin Content Management & Moderation Foundations
 
-- [ ] Build admin CRUD UI for nodes, items, concepts, and dependencies.
-- [ ] Implement content versioning workflow (draft → review → publish).
-- [ ] Ship media submission pipeline (upload, metadata capture, queued status).
-- [ ] Deliver admin moderation queue with approve/reject actions and notifications.
-- [ ] Add automated validation checks (missing fields, duplicate ordinals, orphan dependencies).
-- [ ] Finalise role-based UI controls according to `docs/references/PERSONAS_PERMISSIONS.md`.
+- [ ] Complete admin CRUD + hierarchy management (drag/drop, promote/demote) for nodes, items, and concepts, sharing validation between frontend and backend.
+- [ ] Ship the content versioning workflow (draft → review → publish) with audit logging, rollback notes, and documentation updates.
+- [ ] Stand up the media submission pipeline (upload surface, metadata capture, queued states) and record storage decisions.
+- [ ] Build the initial moderation queue with approve/reject actions, SLA signalling, and Slack/email notification stubs wired to the dispatcher seam.
+- [ ] Harden validation, Supabase policies, and persona-based UI controls per `docs/references/PERSONAS_PERMISSIONS.md`.
+- [ ] Document every schema change in `SCHEMA_DECISIONS.md` and update reference guides as features land.
 
-### Phase 2 – Learner Experience
+### Phase 2 – Learner Experience Core Flows
 
-- [x] Implement curriculum navigation (section boards, collapsible tree, dependency indicators – prerequisite counts fallback to zero until public view lands).
-- [ ] Build concept detail view with prerequisite/next concept drawers and media carousel.
-- [ ] Create study path runner (sequence UI + progress HUD).
-- [ ] Wire up progress tracking and “study later” queue synced to Supabase.
-- [ ] Ship global search with grouped results and filters.
-- [ ] Personalise recommendations based on gamification/study path data.
+- [x] Ship curriculum navigation (section boards, collapsible tree, prerequisite indicators – counts currently placeholder until public dependency view).
+- [ ] Finish concept detail view (prerequisite/next drawers, media carousel, inline admin hooks) and polish UX copy.
+- [ ] Create the study session runner with progress HUD, confidence capture, and queue transitions.
+- [ ] Persist Ready/Needs Review/Completed queues to Supabase and sync with local state.
+- [ ] Deliver global search with grouped results, filters, and deep links into concept/admin views.
+- [ ] Kick off personalised recommendations leveraging progression and queue data.
 
-### Phase 3 – Engagement & Analytics
+### Phase 3 – Engagement & Analytics Layer
 
-- [ ] Introduce streaks, XP, and badge attribution tables + UI surfaces.
-- [ ] Launch adaptive review loop (spaced repetition service + flashcard UI).
-- [ ] Configure nudges/notifications for streak breaks and path completions.
-- [ ] Instrument analytics events for curriculum traversal and practice outcomes.
-- [ ] Build lightweight insights dashboard for admins (e.g., most-missed concepts).
-- [ ] Operationalise gamification rules defined in `docs/references/features/ideas/GAMIFICATION_MODEL.md`.
+- [ ] Implement gamification tables and UI (streaks, XP, badges) per `references/features/ideas/GAMIFICATION_MODEL.md`.
+- [ ] Launch adaptive review/spaced repetition scheduler with learner-facing flashcard UI.
+- [ ] Add nudges/notifications for streak breaks, study gaps, and path completion milestones.
+- [ ] Instrument analytics events (curriculum traversal, practice outcomes) and surface admin dashboards.
+- [ ] Strengthen telemetry pipelines, logging, and monitoring before scaling engagement.
 
-### Phase 4 – Social Layer (Post-MVP)
+### Phase 4 – Social & Community Features
 
-- [ ] Design concept-level discussion threads with moderation hooks.
-- [ ] Enable upvote/downvote + flag mechanisms.
-- [ ] Create forum channels (navigation, safety, community tips) with tagging.
-- [ ] Integrate notifications for replies/mentions.
-- [ ] Establish long-term moderation policies and tooling.
+- [ ] Introduce concept-level discussions, replies, reactions, and moderation controls.
+- [ ] Create forum channels with tagging for broader navigation/safety/community topics.
+- [ ] Wire notifications for mentions/replies and unify moderation workflows.
+- [ ] Establish long-term community guidelines, escalation tooling, and analytics for social health.
 
 ## Content Development Approach
 
