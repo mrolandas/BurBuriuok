@@ -10,16 +10,13 @@
 	} from '$lib/api/admin/concepts';
 	import type { ConceptAdminEditContext } from '$lib/admin/session';
 	import {
-		collectMetadataBadges,
 		conceptToInlineForm,
 		deriveConceptStatus,
 		inlineFormToPayload,
 		resourceToConceptDetail,
-		type InlineConceptForm,
-		type MetadataBadge
+		type InlineConceptForm
 	} from '$lib/admin/conceptInlineEdit';
 	import { type InlineFieldErrors } from '$lib/admin/inlineAdvancedSummary';
-	import { isMeaningfulSourceRef } from '$lib/admin/sourceReference';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
@@ -61,28 +58,6 @@
 		setKnown: { conceptId: string; known: boolean };
 	}>();
 
-	const statusLabels: Record<AdminConceptStatus, string> = {
-		draft: 'Juodraštis',
-		published: 'Publikuota'
-	};
-	const statusOptions: AdminConceptStatus[] = ['draft', 'published'];
-
-	function buildAdminBadges(
-		badges: MetadataBadge[],
-		source: string | null | undefined
-	): MetadataBadge[] {
-		if (!isMeaningfulSourceRef(source)) {
-			return badges;
-		}
-
-		const trimmed = source.trim();
-		return [...badges, { key: 'Šaltinis', value: trimmed } as MetadataBadge];
-	}
-
-	const metadataBadges = $derived(
-		concept ? collectMetadataBadges(concept.metadata ?? null) : ([] as MetadataBadge[])
-	);
-	const adminBadges = $derived(buildAdminBadges(metadataBadges, concept?.sourceRef));
 	const descriptionLt = $derived(concept?.descriptionLt?.trim() ?? '');
 	const descriptionEn = $derived(concept?.descriptionEn?.trim() ?? '');
 	const initialInlineForm = concept ? conceptToInlineForm(concept) : createEmptyInlineForm();
@@ -90,7 +65,6 @@
 		concept ? deriveConceptStatus(concept.metadata ?? {}) : ('draft' satisfies AdminConceptStatus)
 	);
 
-	let adminEditing = $state(false);
 	let inlineForm = $state<InlineConceptForm>(initialInlineForm);
 	let inlineErrors = $state<InlineFieldErrors>({});
 	let inlineErrorMessage = $state<string | null>(null);
@@ -102,19 +76,6 @@
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
 
-	let previousAdminEnabled = false;
-
-	$effect(() => {
-		const current = adminEditEnabled;
-
-		if (!current) {
-			adminEditing = false;
-		} else if (!previousAdminEnabled && current) {
-			adminEditing = true;
-		}
-
-		previousAdminEnabled = current;
-	});
 
 	let currentUrl = $state($page.url);
 	const unsubscribePage = page.subscribe(({ url }) => {
@@ -186,11 +147,6 @@
 		lastConceptId = concept.id;
 	});
 
-	$effect(() => {
-		if (!adminEditEnabled && adminEditing) {
-			adminEditing = false;
-		}
-	});
 
 	const getInlineError = (field: string): string | null => {
 		const list = inlineErrors[field];
@@ -274,12 +230,6 @@
 			url.searchParams.set('admin', '1');
 		} else {
 			url.searchParams.delete('admin');
-		}
-
-		if (enabled) {
-			adminEditing = true;
-		} else {
-			adminEditing = false;
 		}
 
 		await goto(`${url.pathname}${url.search}${url.hash}`, {
@@ -412,61 +362,12 @@
 					</p>
 				{/if}
 			</div>
-
-			{#if adminEditEnabled}
-				<div class="concept-detail__admin-toolbar">
-					<div class="concept-detail__admin-toolbar-main">
-						<label class="concept-detail__admin-field">
-							<span>Būsena</span>
-							<select bind:value={inlineForm.status} onchange={() => handleInlineInput('status')}>
-								{#each statusOptions as option}
-									<option value={option}>{statusLabels[option]}</option>
-								{/each}
-							</select>
-							{#if getInlineError('status')}
-								<p class="concept-detail__field-error concept-detail__field-error--inline">
-									{getInlineError('status')}
-								</p>
-							{/if}
-						</label>
-
-						<label class="concept-detail__admin-checkbox">
-							<input
-								type="checkbox"
-								bind:checked={inlineForm.isRequired}
-								onchange={() => handleInlineInput('isRequired')}
-							/>
-							<span>Privaloma tema</span>
-						</label>
-
-						<div class="concept-detail__admin-toolbar-actions">
-							<button type="button" onclick={() => (adminEditing = !adminEditing)}>
-								{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
-							</button>
-						</div>
-					</div>
-
-					{#if adminBadges.length}
-						<div class="concept-detail__admin-toolbar-meta">
-							<span class="concept-detail__admin-toolbar-label">Papildoma informacija</span>
-							<ul class="concept-detail__badge-list concept-detail__badge-list--meta">
-								{#each adminBadges as badge (badge.key)}
-									<li class="concept-detail__badge-item">
-										<span class="concept-detail__badge-key">{badge.key}</span>
-										<span class="concept-detail__badge-value">{badge.value}</span>
-									</li>
-								{/each}
-							</ul>
-						</div>
-					{/if}
-				</div>
-			{/if}
 		</div>
 	{/if}
 {/snippet}
 
 {#snippet conceptContent()}
-	{#if adminEditEnabled && adminEditing}
+	{#if adminEditEnabled}
 		<form class="concept-detail__admin-form" onsubmit={submitInlineDraft} novalidate>
 			{#if inlineErrorMessage}
 				<div class="concept-detail__admin-alert concept-detail__admin-alert--error">
@@ -786,12 +687,6 @@
 		color: #b3474d;
 	}
 
-	.concept-detail__field-error--inline {
-		margin: 0;
-		font-size: 0.78rem;
-		color: #b3474d;
-	}
-
 	.concept-detail__admin-actions {
 		display: flex;
 		flex-wrap: wrap;
@@ -833,137 +728,6 @@
 		cursor: not-allowed;
 	}
 
-	.concept-detail__admin-toolbar {
-		display: grid;
-		gap: 1.1rem;
-		align-items: start;
-		padding: 0.9rem 1rem;
-		border: 1px solid var(--color-border-light);
-		border-radius: 0.9rem;
-		background: var(--color-panel);
-		box-shadow: 0 16px 32px -20px var(--color-overlay);
-	}
-
-	.concept-detail__admin-toolbar-main {
-		display: grid;
-		gap: 0.9rem;
-		align-items: end;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	}
-
-	.concept-detail__admin-field {
-		display: grid;
-		gap: 0.45rem;
-		font-size: 0.82rem;
-	}
-
-	.concept-detail__admin-field select {
-		border: 1px solid var(--color-border-light);
-		border-radius: 0.65rem;
-		padding: 0.55rem 0.85rem;
-		font: inherit;
-		min-width: 11rem;
-		background: var(--color-panel);
-		color: inherit;
-		transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-		box-shadow: 0 0 0 0 transparent;
-	}
-
-	.concept-detail__admin-field select:hover {
-		border-color: var(--color-border);
-		background: var(--color-panel-hover);
-	}
-
-	.concept-detail__admin-field select:focus-visible {
-		outline: none;
-		border-color: var(--color-accent-strong);
-		background: var(--color-popover);
-		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
-	}
-
-	.concept-detail__admin-checkbox {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-weight: 600;
-		font-size: 0.85rem;
-	}
-
-	.concept-detail__admin-checkbox input[type='checkbox'] {
-		width: 1.1rem;
-		height: 1.1rem;
-		accent-color: var(--color-accent);
-		border-radius: 0.25rem;
-	}
-
-	.concept-detail__badge-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.concept-detail__badge-item {
-		display: inline-flex;
-		gap: 0.35rem;
-		align-items: baseline;
-		font-size: 0.82rem;
-	}
-
-	.concept-detail__badge-key {
-		font-weight: 600;
-		color: var(--color-text-subtle);
-	}
-
-	.concept-detail__badge-value {
-		color: var(--color-text);
-	}
-
-	.concept-detail__admin-toolbar-actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.6rem;
-		justify-content: flex-end;
-		grid-column: 1 / -1;
-	}
-	.concept-detail__admin-toolbar-meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		align-items: baseline;
-	}
-
-	.concept-detail__admin-toolbar-label {
-		font-size: 0.78rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--color-text-subtle);
-	}
-
-	.concept-detail__badge-list--meta {
-		gap: 0.5rem;
-	}
-
-	.concept-detail__admin-toolbar-actions button {
-		border: 1px solid var(--color-border-light);
-		background: var(--color-panel-secondary);
-		padding: 0.35rem 0.75rem;
-		border-radius: 0.6rem;
-		font-size: 0.82rem;
-		color: inherit;
-		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease;
-	}
-
-	.concept-detail__admin-toolbar-actions button:hover,
-	.concept-detail__admin-toolbar-actions button:focus-visible {
-		border-color: var(--color-border);
-		background: var(--color-panel);
-	}
-
 	@media (max-width: 640px) {
 		.concept-detail__admin-form {
 			padding: 1rem;
@@ -971,10 +735,6 @@
 
 		.concept-detail__admin-form > .concept-detail__form-grid {
 			padding: 0.75rem;
-		}
-
-		.concept-detail__admin-toolbar {
-			padding: 0.8rem;
 		}
 
 		.concept-detail__actions-panel {
