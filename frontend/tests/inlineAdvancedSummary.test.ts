@@ -58,6 +58,14 @@ test('buildAdvancedSummary omits duplicated node codes when they match the secti
 	);
 });
 
+test('buildAdvancedSummary ignores default source reference placeholder', () => {
+	const summary = buildAdvancedSummary({ ...baseForm, sourceRef: 'LBS_concepts_master.md' });
+	assert.equal(
+		summary,
+		'Skyrius SEC-1 (I skyrius) • Poskyris SUB-1 (II poskyris) • Eilė Nr. 3 • Mazgas NODE-7'
+	);
+});
+
 test('buildAdvancedSummary falls back to default label when no structural values exist', () => {
 	assert.equal(buildAdvancedSummary(emptyForm), 'Struktūros nustatymai');
 });

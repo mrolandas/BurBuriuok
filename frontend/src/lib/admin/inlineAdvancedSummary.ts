@@ -1,4 +1,5 @@
 import type { InlineConceptForm } from '$lib/admin/conceptInlineEdit';
+import { normalizeSourceRef } from '$lib/admin/sourceReference';
 
 export type InlineFieldErrors = Record<string, string[]>;
 
@@ -34,8 +35,9 @@ export function buildAdvancedSummary(form: InlineConceptForm): string {
 		parts.push(`Mazgas ${form.curriculumNodeCode}`);
 	}
 
-	if (form.sourceRef) {
-		parts.push(`Šaltinis ${form.sourceRef}`);
+	const normalizedSource = normalizeSourceRef(form.sourceRef);
+	if (normalizedSource) {
+		parts.push(`Šaltinis ${normalizedSource}`);
 	}
 
 	if (!parts.length) {

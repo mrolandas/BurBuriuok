@@ -1,6 +1,7 @@
 import type { ConceptDetail } from '$lib/api/concepts';
 import type { AdminConceptResource, AdminConceptStatus } from '$lib/api/admin/concepts';
 import type { AdminConceptMutationInput } from '../../../../shared/validation/adminConceptSchema';
+import { normalizeSourceRef } from '$lib/admin/sourceReference';
 
 const STATUS_FALLBACK: AdminConceptStatus = 'draft';
 const STATUS_SET = new Set<AdminConceptStatus>(['draft', 'published']);
@@ -43,7 +44,7 @@ export function conceptToInlineForm(concept: ConceptDetail): InlineConceptForm {
 		termEn: concept.termEn ?? '',
 		descriptionLt: concept.descriptionLt ?? '',
 		descriptionEn: concept.descriptionEn ?? '',
-		sourceRef: concept.sourceRef ?? '',
+		sourceRef: normalizeSourceRef(concept.sourceRef) ?? '',
 		sectionCode: concept.sectionCode,
 		sectionTitle: concept.sectionTitle,
 		subsectionCode: concept.subsectionCode ?? '',
@@ -82,7 +83,7 @@ export function inlineFormToPayload(
 		curriculumNodeCode: optionalString(form.curriculumNodeCode),
 		curriculumItemOrdinal: optionalNumber(form.curriculumItemOrdinal),
 		curriculumItemLabel: optionalString(form.curriculumItemLabel),
-		sourceRef: optionalString(form.sourceRef),
+		sourceRef: normalizeSourceRef(form.sourceRef),
 		isRequired: form.isRequired,
 		metadata,
 		status

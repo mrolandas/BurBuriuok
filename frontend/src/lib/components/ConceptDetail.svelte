@@ -23,6 +23,7 @@
 		hasAdvancedErrors,
 		type InlineFieldErrors
 	} from '$lib/admin/inlineAdvancedSummary';
+	import { isMeaningfulSourceRef } from '$lib/admin/sourceReference';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
@@ -71,14 +72,22 @@
 	};
 	const statusOptions: AdminConceptStatus[] = ['draft', 'published'];
 
+	function buildAdminBadges(
+		badges: MetadataBadge[],
+		source: string | null | undefined
+	): MetadataBadge[] {
+		if (!isMeaningfulSourceRef(source)) {
+			return badges;
+		}
+
+		const trimmed = source.trim();
+		return [...badges, { key: 'Šaltinis', value: trimmed } as MetadataBadge];
+	}
+
 	const metadataBadges = $derived(
 		concept ? collectMetadataBadges(concept.metadata ?? null) : ([] as MetadataBadge[])
 	);
-	const adminBadges = $derived(
-		concept?.sourceRef
-			? ([...metadataBadges, { key: 'Šaltinis', value: concept.sourceRef } as MetadataBadge] as MetadataBadge[])
-			: metadataBadges
-	);
+	const adminBadges = $derived(buildAdminBadges(metadataBadges, concept?.sourceRef));
 	const descriptionLt = $derived(concept?.descriptionLt?.trim() ?? '');
 	const descriptionEn = $derived(concept?.descriptionEn?.trim() ?? '');
 	const initialInlineForm = concept ? conceptToInlineForm(concept) : createEmptyInlineForm();
@@ -102,11 +111,25 @@
 
 	let advancedOpen = $state(false);
 	const advancedHasErrors = $derived(hasAdvancedErrors(inlineErrors));
+	let previousAdminEnabled = false;
 
 	$effect(() => {
 		if (advancedHasErrors) {
 			advancedOpen = true;
 		}
+	});
+
+	$effect(() => {
+		const current = adminEditEnabled;
+
+		if (!current) {
+			adminEditing = false;
+			advancedOpen = false;
+		} else if (!previousAdminEnabled && current) {
+			adminEditing = true;
+		}
+
+		previousAdminEnabled = current;
 	});
 
 	let currentUrl = $state($page.url);
@@ -258,6 +281,10 @@
 	}
 
 	function openAdvancedSection(): void {
+		if (!adminEditing) {
+			adminEditing = true;
+		}
+
 		advancedOpen = true;
 
 		requestAnimationFrame(() => {
@@ -277,6 +304,13 @@
 			url.searchParams.set('admin', '1');
 		} else {
 			url.searchParams.delete('admin');
+		}
+
+		if (enabled) {
+			adminEditing = true;
+		} else {
+			adminEditing = false;
+			advancedOpen = false;
 		}
 
 		await goto(`${url.pathname}${url.search}${url.hash}`, {
@@ -415,7 +449,7 @@
 						onclick={() => void setAdminMode(!adminEditEnabled)}
 						disabled={inlineSaving}
 					>
-						{adminEditEnabled ? 'Išjungti admin režimą' : 'Įjungti admin režimą'}
+						{adminEditEnabled ? 'Baigti redagavimą' : 'Redaguoti'}
 					</button>
 				{/if}
 			</div>
@@ -462,17 +496,9 @@
 						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
 							{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
 						</button>
-						<button type="button" onclick={openAdvancedSection}>
+						<button type="button" onclick={openAdvancedSection} disabled={!adminEditing}>
 							Struktūros nustatymai
 						</button>
-						<a
-							href="/admin/concepts"
-							target="_blank"
-							rel="noreferrer"
-							class="concept-detail__admin-link"
-						>
-							Admin sąsaja
-						</a>
 					</div>
 				</div>
 			{:else if adminHasAccess}
@@ -501,20 +527,6 @@
 							{/each}
 						</ul>
 					{/if}
-
-					<div class="concept-detail__admin-toolbar-actions">
-						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
-							Redaguoti turinį
-						</button>
-						<a
-							href="/admin/concepts"
-							target="_blank"
-							rel="noreferrer"
-							class="concept-detail__admin-link"
-						>
-							Admin sąsaja
-						</a>
-					</div>
 				</div>
 			{/if}
 		</div>
@@ -730,8 +742,6 @@
 					Atstatyti
 				</button>
 			</div>
-
-			{@render conceptActions()}
 		</form>
 	{:else}
 		{#if descriptionLt}
@@ -1176,6 +1186,7 @@
 		font-size: 0.82rem;
 		font-weight: 600;
 		color: var(--color-text-subtle);
+		cursor: default;
 	}
 
 	.concept-detail__status--published {
@@ -1195,6 +1206,7 @@
 		font-size: 0.8rem;
 		font-weight: 500;
 		color: var(--color-text-subtle);
+		cursor: default;
 	}
 
 	.concept-detail__badge--optional {
@@ -1235,8 +1247,7 @@
 		margin-left: auto;
 	}
 
-	.concept-detail__admin-toolbar-actions button,
-	.concept-detail__admin-link {
+	.concept-detail__admin-toolbar-actions button {
 		border: 1px solid var(--color-border-light);
 		background: var(--color-panel-secondary);
 		padding: 0.35rem 0.75rem;
@@ -1244,14 +1255,11 @@
 		font-size: 0.82rem;
 		color: inherit;
 		cursor: pointer;
-		text-decoration: none;
 		transition: background 0.2s ease, border-color 0.2s ease;
 	}
 
 	.concept-detail__admin-toolbar-actions button:hover,
-	.concept-detail__admin-toolbar-actions button:focus-visible,
-	.concept-detail__admin-link:hover,
-	.concept-detail__admin-link:focus-visible {
+	.concept-detail__admin-toolbar-actions button:focus-visible {
 		border-color: var(--color-border);
 		background: var(--color-panel);
 	}
