@@ -50,7 +50,7 @@ BurBuriuok guides learners through the "Lietuvos Buriavimo Asociacijos vidaus va
 
 ## Deployment
 
-- The `deploy/github-pages` branch publishes the static frontend to GitHub Pages using the workflow in `.github/workflows/deploy-frontend-gh-pages.yml`.
+- The `deploy/github-pages` branch (and `main`) trigger the Pages deployment workflow in `.github/workflows/deploy-frontend-gh-pages.yml`; every push to `main` automatically rebuilds and publishes the static frontend.
 - The workflow expects `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` repository secrets so the Supabase client works in production.
 - Override the base path with `VITE_APP_BASE_PATH` when testing locally; the default (`/BurBuriuok`) matches the GitHub Pages project URL.
-- Trigger a deployment by pushing to `deploy/github-pages` or launching the workflow manually from the Actions tab.
+- Trigger a deployment by pushing to `main`, pushing to `deploy/github-pages`, or launching the workflow manually from the Actions tab.

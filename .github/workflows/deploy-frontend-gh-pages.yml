@@ -3,6 +3,7 @@ name: Deploy Frontend to GitHub Pages
 on:
   push:
     branches:
+      - main
       - deploy/github-pages
   workflow_dispatch:
 
@@ -33,6 +34,40 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Verify Supabase anonymous access
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          node <<'NODE'
+          const url = process.env.SUPABASE_URL?.replace(/\/$/, '');
+          const anonKey = process.env.SUPABASE_ANON_KEY;
+
+          if (!url || !anonKey) {
+            console.error('Supabase environment variables are missing');
+            process.exit(1);
+          }
+
+          const testUrl = `${url}/rest/v1/burburiuok_curriculum_nodes?select=code&limit=1`;
+          const response = await fetch(testUrl, {
+            headers: {
+              apikey: anonKey,
+              Authorization: `Bearer ${anonKey}`
+            }
+          });
+
+          if (!response.ok) {
+            const snippet = (await response.text()).slice(0, 200);
+            console.error(`Supabase read check failed (${response.status} ${response.statusText}).`);
+            if (snippet) {
+              console.error(snippet);
+            }
+            process.exit(1);
+          }
+
+          console.log(`Supabase read check succeeded (status ${response.status}).`);
+          NODE
 
       - name: Build static output
         working-directory: frontend
