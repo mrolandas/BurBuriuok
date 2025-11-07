@@ -3,6 +3,7 @@ import { listConcepts, getConceptBySlug, upsertConcepts } from "../../../../data
 import { listContentVersionsForEntity } from "../../../../data/repositories/contentVersionsRepository.ts";
 import type { Concept, ContentVersionStatus, UpsertConceptInput } from "../../../../data/types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { unauthorized } from "../../utils/httpError.ts";
 import { logContentMutation } from "../../services/auditLogger.ts";
 import {
   adminConceptMutationSchema,
@@ -143,7 +144,16 @@ router.post(
 
     const upsertPayload = toUpsertConceptInput(payload, existing?.metadata ?? {});
 
-    await upsertConcepts([upsertPayload]);
+    try {
+      await upsertConcepts([upsertPayload]);
+    } catch (error) {
+      if (isSupabaseAuthError(error)) {
+        throw unauthorized(
+          "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
+        );
+      }
+      throw error;
+    }
 
     const updated = await getConceptBySlug(payload.slug);
 
@@ -153,17 +163,25 @@ router.post(
       );
     }
 
-    await logContentMutation({
-      entityType: "concept",
-      entityId: payload.slug,
-      before: existing ? mapConceptForResponse(existing) : null,
-      after: mapConceptForResponse(updated),
-      actor: req.authUser?.email ?? req.authUser?.id ?? null,
-      status: payload.status,
-      changeSummary: existing
-        ? `Concept '${payload.slug}' updated via admin console.`
-        : `Concept '${payload.slug}' created via admin console.`,
-    });
+    try {
+      await logContentMutation({
+        entityType: "concept",
+        entityId: payload.slug,
+        before: existing ? mapConceptForResponse(existing) : null,
+        after: mapConceptForResponse(updated),
+        actor: req.authUser?.email ?? req.authUser?.id ?? null,
+        status: payload.status,
+        changeSummary: existing
+          ? `Concept '${payload.slug}' updated via admin console.`
+          : `Concept '${payload.slug}' created via admin console.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log concept mutation", {
+        slug: payload.slug,
+        error,
+      });
+    }
 
     res.status(existing ? 200 : 201).json({
       data: {
@@ -269,4 +287,25 @@ function mapVersionForResponse(row: {
     createdBy: row.created_by ?? null,
     version: row.version ?? null,
   } satisfies ConceptVersionResponse;
+}
+
+function isSupabaseAuthError(error: unknown): boolean {
+  if (!error) {
+    return false;
+  }
+
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+      ? error
+      : typeof (error as { message?: unknown }).message === "string"
+      ? String((error as { message: string }).message)
+      : null;
+
+  if (!message) {
+    return false;
+  }
+
+  return message.toLowerCase().includes("invalid api key");
 }
