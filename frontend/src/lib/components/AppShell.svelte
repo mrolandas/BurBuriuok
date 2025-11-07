@@ -466,19 +466,9 @@
 	</main>
 
 	<footer class="app-shell__footer">
-		<p>
-			{#if hasFooterNote}
-				<span>{footerNote}</span>
-			{/if}
-			<a
-				class="app-shell__footer-link"
-				href="https://lbs.lt/wp-content/uploads/2025/08/LBS-mokymu-programu-2024.10.15d.-redakcija.pdf"
-				target="_blank"
-				rel="noreferrer noopener"
-			>
-				Oficiali LBS mokymų programa (PDF)
-			</a>
-		</p>
+		{#if hasFooterNote}
+			<p>{footerNote}</p>
+		{/if}
 	</footer>
 </div>
 
@@ -1088,32 +1078,4 @@
 		align-items: stretch;
 	}
 
-	.app-shell__footer {
-		padding: 1.5rem clamp(1rem, 3vw, 2.5rem);
-		border-top: 1px solid var(--color-border);
-		background: var(--color-footer);
-		color: var(--color-text-muted);
-		font-size: 0.85rem;
-	}
-
-	.app-shell__footer p {
-		margin: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.35rem;
-		align-items: baseline;
-	}
-
-	.app-shell__footer-link {
-		color: var(--color-accent);
-		font-weight: 600;
-		text-decoration: underline;
-		text-decoration-thickness: 0.12em;
-		text-underline-offset: 0.18em;
-	}
-
-	.app-shell__footer-link:hover,
-	.app-shell__footer-link:focus-visible {
-		color: var(--color-accent-strong);
-	}
 </style>
