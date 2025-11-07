@@ -467,7 +467,7 @@
 
 	<footer class="app-shell__footer">
 		{#if hasFooterNote}
-			<p>{footerNote}</p>
+			<p class="app-shell__footer-note">{footerNote}</p>
 		{/if}
 	</footer>
 </div>
@@ -1076,6 +1076,21 @@
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
+	}
+
+	.app-shell__footer {
+		margin-top: auto;
+		padding: 1.5rem clamp(1rem, 4vw, 3rem) 2.5rem;
+		background: var(--color-surface-alt);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.app-shell__footer-note {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		line-height: 1.4;
+		text-align: center;
 	}
 
 </style>
