@@ -249,9 +249,12 @@
 				title={impersonatingAdmin
 					? 'Administratoriaus režimas įjungtas (imitacija)'
 					: 'Administratoriaus režimas įjungtas'}
+				aria-label={impersonatingAdmin
+					? 'Administratoriaus režimas įjungtas (imitacija)'
+					: 'Administratoriaus režimas įjungtas'}
 			>
 				<span class="app-shell__admin-indicator-dot" aria-hidden="true"></span>
-				<span>{impersonatingAdmin ? 'Admin · imitacija' : 'Admin aktyvus'}</span>
+				<span>{impersonatingAdmin ? 'Admin imitacija' : 'Admin'}</span>
 			</span>
 		{/if}
 		<button
@@ -529,16 +532,20 @@
 
 	.app-shell__header {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
+		gap: clamp(0.5rem, 2vw, 1rem);
 		padding: 1.25rem clamp(1rem, 3vw, 2.5rem);
 		background: var(--color-header);
 		backdrop-filter: blur(24px);
 		border-bottom: 1px solid var(--color-border);
 		position: relative;
 		z-index: 30;
+	}
+
+	.app-shell__brand {
+		flex: 1 1 auto;
+		min-width: 0;
 	}
 
 	.app-shell__brand-link {
@@ -562,17 +569,15 @@
 	.app-shell__admin-indicator {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.45rem;
-		padding: 0.35rem 0.75rem;
+		gap: 0.35rem;
+		padding: 0.2rem 0.4rem;
 		border-radius: 999px;
-		background: var(--color-accent-faint);
-		border: 1px solid var(--color-accent-border-strong);
+		border: 1px solid transparent;
 		color: var(--color-accent-strong);
 		font-size: 0.78rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		box-shadow: 0 6px 18px -12px var(--color-overlay);
+		letter-spacing: 0.04em;
+		white-space: nowrap;
 	}
 
 	.app-shell__admin-indicator-dot {
@@ -580,7 +585,7 @@
 		height: 0.45rem;
 		border-radius: 50%;
 		background: currentColor;
-		box-shadow: 0 0 0 4px var(--color-accent-faint-strong);
+		box-shadow: 0 0 0 3px var(--color-accent-faint-strong);
 	}
 
 	.app-shell__menu-toggle {
@@ -598,6 +603,7 @@
 			background-color 0.2s ease,
 			border-color 0.2s ease,
 			transform 0.2s ease;
+		margin-left: auto;
 	}
 
 	.app-shell__menu-toggle:hover,

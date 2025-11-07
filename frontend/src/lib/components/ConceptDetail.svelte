@@ -438,7 +438,7 @@
 					class="concept-detail__admin-button concept-detail__admin-button--primary"
 					disabled={inlineSaving || !inlineDirty}
 				>
-					{inlineSaving ? 'Saugoma…' : 'Išsaugoti juodraštį'}
+					{inlineSaving ? 'Saugoma…' : 'Į juodraštį'}
 				</button>
 				<button
 					type="button"
@@ -453,8 +453,9 @@
 					class="concept-detail__admin-button"
 					onclick={resetInlineForm}
 					disabled={inlineSaving || !inlineDirty}
+					aria-label="Atmesti neįrašytus pakeitimus"
 				>
-					Atstatyti
+					Atmesti
 				</button>
 			</div>
 		</form>
@@ -528,6 +529,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
+		justify-content: center;
 		border: 1px dashed var(--color-border-light);
 		padding: 1rem;
 		border-radius: 0.8rem;
@@ -539,11 +541,15 @@
 		align-items: center;
 		gap: 0.6rem;
 		font-weight: 600;
+		flex: 1 1 0;
+		justify-content: center;
+		min-width: 6rem;
 	}
 
 	.concept-detail__action-option input[type='checkbox'] {
 		width: 1.1rem;
 		height: 1.1rem;
+		flex-shrink: 0;
 	}
 
 	.concept-detail__actions-feedback {
@@ -703,6 +709,7 @@
 		font-size: 0.9rem;
 		cursor: pointer;
 		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+		white-space: nowrap;
 	}
 
 	.concept-detail__admin-button:hover,
@@ -739,10 +746,14 @@
 
 		.concept-detail__actions-panel {
 			gap: 0.55rem;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			align-items: center;
 		}
 
 		.concept-detail__action-option {
 			font-size: 0.88rem;
+			min-width: 0;
 		}
 	}
 </style>

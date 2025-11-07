@@ -360,6 +360,10 @@
 		font-weight: 600;
 	}
 
+	.concept-detail__pager-link--next {
+		margin-left: auto;
+	}
+
 	.concept-detail__sidebar {
 		display: grid;
 		gap: 1.2rem;
