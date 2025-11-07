@@ -15,6 +15,7 @@ const config = {
 		adapter: adapter({
 			fallback: 'index.html'
 		}),
+		alias: {},
 		paths: {
 			base: dev ? '' : basePath
 		},

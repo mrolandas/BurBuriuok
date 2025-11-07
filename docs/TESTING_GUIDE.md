@@ -50,6 +50,14 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - **CI gate** – `.github/workflows/content-seed-guard.yml`
   - GitHub Action `Content Regression Guard` runs the same trio of commands on pushes and pull requests targeting `main`.
 
+### Frontend Inline Editing Regression Tests
+
+- `npm run test:frontend` – runs the Node test harness in `frontend/tests/inlineAdvancedSummary.test.ts` via `tsx`.
+  - Verifies the advanced structural summary reflects live field edits.
+  - Ensures validation failures on structural fields trigger the advanced drawer warning state.
+  - Guards the advanced-field whitelist so structural inputs stay grouped correctly.
+- Run before merging any changes to `frontend/src/lib/components/ConceptDetail.svelte`, `$lib/admin/inlineAdvancedSummary.ts`, or other inline admin editing helpers, and whenever bug reports mention “Struktūros nustatymai” or advanced section regressions.
+
 ## Planned Automated Coverage
 
 - **Frontend** – component/unit tests with Vitest or Jest; end-to-end flows with Playwright.

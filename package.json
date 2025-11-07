@@ -9,6 +9,8 @@
   },
   "scripts": {
     "test": "node tests/checkSupabaseConnection.mjs",
+    "test:frontend": "npm run test --prefix frontend",
+    "test:frontend:watch": "npm run test:watch --prefix frontend",
     "content:seed:curriculum": "node content/scripts/build_curriculum_seed_sql.mjs",
     "content:seed:generate": "node content/scripts/build_seed_sql.mjs",
     "content:seed:dependencies": "node content/scripts/build_dependency_seed_sql.mjs",

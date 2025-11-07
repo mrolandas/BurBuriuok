@@ -27,6 +27,11 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins: [sveltekit()],
 		base,
+		resolve: {
+			alias: {
+				$lib: resolve('./src/lib')
+			}
+		},
 		server: {
 			fs: {
 				allow: [process.cwd(), repoRoot]
@@ -38,6 +43,11 @@ export default defineConfig(({ mode }) => {
 					secure: false
 				}
 			}
+		},
+		test: {
+			globals: true,
+			environment: 'jsdom',
+			setupFiles: ['tests/vitest.setup.ts']
 		}
 	};
 });

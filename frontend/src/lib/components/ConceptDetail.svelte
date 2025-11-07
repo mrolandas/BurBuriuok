@@ -18,6 +18,11 @@
 		type InlineConceptForm,
 		type MetadataBadge
 	} from '$lib/admin/conceptInlineEdit';
+	import {
+		buildAdvancedSummary,
+		hasAdvancedErrors,
+		type InlineFieldErrors
+	} from '$lib/admin/inlineAdvancedSummary';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
@@ -55,8 +60,6 @@
 	const adminImpersonating = $derived(Boolean(adminContext?.session.impersonating));
 
 	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset';
-	type InlineFieldErrors = Record<string, string[]>;
-
 	const dispatch = createEventDispatcher<{
 		setLearning: { conceptId: string; learning: boolean };
 		setKnown: { conceptId: string; known: boolean };
@@ -94,6 +97,17 @@
 	let lastConceptId: string | null = concept?.id ?? null;
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
+
+	const advancedSummary = $derived(buildAdvancedSummary(inlineForm));
+
+	let advancedOpen = $state(false);
+	const advancedHasErrors = $derived(hasAdvancedErrors(inlineErrors));
+
+	$effect(() => {
+		if (advancedHasErrors) {
+			advancedOpen = true;
+		}
+	});
 
 	let currentUrl = $state($page.url);
 	const unsubscribePage = page.subscribe(({ url }) => {
@@ -241,6 +255,16 @@
 	function submitInlineDraft(event: SubmitEvent): void {
 		event.preventDefault();
 		void handleInlineSave('draft');
+	}
+
+	function openAdvancedSection(): void {
+		advancedOpen = true;
+
+		requestAnimationFrame(() => {
+			const panel = document.getElementById('concept-advanced-fields');
+			panel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			panel?.focus?.();
+		});
 	}
 
 	async function setAdminMode(enabled: boolean): Promise<void> {
@@ -397,6 +421,61 @@
 			</div>
 
 			{#if adminEditEnabled}
+				<div class="concept-detail__admin-toolbar concept-detail__admin-toolbar--editing">
+					<div class="concept-detail__admin-control-group">
+						<label class="concept-detail__admin-field">
+							<span>Būsena</span>
+							<select bind:value={inlineForm.status} onchange={() => handleInlineInput('status')}>
+								{#each statusOptions as option}
+									<option value={option}>{statusLabels[option]}</option>
+								{/each}
+							</select>
+							{#if getInlineError('status')}
+								<p class="concept-detail__field-error concept-detail__field-error--inline">
+									{getInlineError('status')}
+								</p>
+							{/if}
+						</label>
+
+						<label class="concept-detail__checkbox concept-detail__checkbox--inline">
+							<input
+								type="checkbox"
+								bind:checked={inlineForm.isRequired}
+								onchange={() => handleInlineInput('isRequired')}
+							/>
+							<span>Privaloma tema</span>
+						</label>
+					</div>
+
+					{#if adminBadges.length}
+						<ul class="concept-detail__badge-list concept-detail__badge-list--meta">
+							{#each adminBadges as badge (badge.key)}
+								<li class="concept-detail__badge-item">
+									<span class="concept-detail__badge-key">{badge.key}</span>
+									<span class="concept-detail__badge-value">{badge.value}</span>
+								</li>
+							{/each}
+						</ul>
+					{/if}
+
+					<div class="concept-detail__admin-toolbar-actions">
+						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
+							{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
+						</button>
+						<button type="button" onclick={openAdvancedSection}>
+							Struktūros nustatymai
+						</button>
+						<a
+							href="/admin/concepts"
+							target="_blank"
+							rel="noreferrer"
+							class="concept-detail__admin-link"
+						>
+							Admin sąsaja
+						</a>
+					</div>
+				</div>
+			{:else if adminHasAccess}
 				<div class="concept-detail__admin-toolbar">
 					<span
 						class="concept-detail__status"
@@ -407,9 +486,9 @@
 
 					<span
 						class="concept-detail__badge"
-						class:concept-detail__badge--optional={!concept?.isRequired}
+						class:concept-detail__badge--optional={!inlineForm.isRequired}
 					>
-						{concept?.isRequired ? 'Privaloma tema' : 'Papildoma tema'}
+						{inlineForm.isRequired ? 'Privaloma tema' : 'Papildoma tema'}
 					</span>
 
 					{#if adminBadges.length}
@@ -425,7 +504,7 @@
 
 					<div class="concept-detail__admin-toolbar-actions">
 						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
-							{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
+							Redaguoti turinį
 						</button>
 						<a
 							href="/admin/concepts"
@@ -456,7 +535,7 @@
 				</div>
 			{/if}
 
-			<div class="concept-detail__form-grid concept-detail__form-grid--meta">
+			<div class="concept-detail__form-grid concept-detail__form-grid--basic">
 				<label>
 					<span>Terminas (LT) *</span>
 					<input
@@ -478,126 +557,6 @@
 					/>
 					{#if getInlineError('termEn')}
 						<p class="concept-detail__field-error">{getInlineError('termEn')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Būsena</span>
-					<select bind:value={inlineForm.status} onchange={() => handleInlineInput('status')}>
-						{#each statusOptions as option}
-							<option value={option}>{statusLabels[option]}</option>
-						{/each}
-					</select>
-					{#if getInlineError('status')}
-						<p class="concept-detail__field-error">{getInlineError('status')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Šaltinis</span>
-					<input
-						type="text"
-						bind:value={inlineForm.sourceRef}
-						oninput={() => handleInlineInput('sourceRef')}
-					/>
-					{#if getInlineError('sourceRef')}
-						<p class="concept-detail__field-error">{getInlineError('sourceRef')}</p>
-					{/if}
-				</label>
-
-				<label class="concept-detail__checkbox">
-					<input
-						type="checkbox"
-						bind:checked={inlineForm.isRequired}
-						onchange={() => handleInlineInput('isRequired')}
-					/>
-					<span>Privaloma tema</span>
-				</label>
-			</div>
-
-			<div class="concept-detail__form-grid concept-detail__form-grid--structure">
-				<label>
-					<span>Skyrius kodas *</span>
-					<input
-						type="text"
-						bind:value={inlineForm.sectionCode}
-						oninput={() => handleInlineInput('sectionCode')}
-					/>
-					{#if getInlineError('sectionCode')}
-						<p class="concept-detail__field-error">{getInlineError('sectionCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Skyrius pavadinimas *</span>
-					<input
-						type="text"
-						bind:value={inlineForm.sectionTitle}
-						oninput={() => handleInlineInput('sectionTitle')}
-					/>
-					{#if getInlineError('sectionTitle')}
-						<p class="concept-detail__field-error">{getInlineError('sectionTitle')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Poskyrio kodas</span>
-					<input
-						type="text"
-						bind:value={inlineForm.subsectionCode}
-						oninput={() => handleInlineInput('subsectionCode')}
-					/>
-					{#if getInlineError('subsectionCode')}
-						<p class="concept-detail__field-error">{getInlineError('subsectionCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Poskyrio pavadinimas</span>
-					<input
-						type="text"
-						bind:value={inlineForm.subsectionTitle}
-						oninput={() => handleInlineInput('subsectionTitle')}
-					/>
-					{#if getInlineError('subsectionTitle')}
-						<p class="concept-detail__field-error">{getInlineError('subsectionTitle')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Curriculum mazgo kodas</span>
-					<input
-						type="text"
-						bind:value={inlineForm.curriculumNodeCode}
-						oninput={() => handleInlineInput('curriculumNodeCode')}
-					/>
-					{#if getInlineError('curriculumNodeCode')}
-						<p class="concept-detail__field-error">{getInlineError('curriculumNodeCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Curriculum elemento eilės nr.</span>
-					<input
-						type="text"
-						inputmode="numeric"
-						bind:value={inlineForm.curriculumItemOrdinal}
-						oninput={() => handleInlineInput('curriculumItemOrdinal')}
-					/>
-					{#if getInlineError('curriculumItemOrdinal')}
-						<p class="concept-detail__field-error">{getInlineError('curriculumItemOrdinal')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Curriculum elemento pavadinimas</span>
-					<input
-						type="text"
-						bind:value={inlineForm.curriculumItemLabel}
-						oninput={() => handleInlineInput('curriculumItemLabel')}
-					/>
-					{#if getInlineError('curriculumItemLabel')}
-						<p class="concept-detail__field-error">{getInlineError('curriculumItemLabel')}</p>
 					{/if}
 				</label>
 			</div>
@@ -627,6 +586,124 @@
 					{/if}
 				</label>
 			</div>
+
+			<details
+				id="concept-advanced-fields"
+				class="concept-detail__advanced"
+				bind:open={advancedOpen}
+				tabindex="-1"
+			>
+				<summary>
+					<span>{advancedSummary}</span>
+					{#if advancedHasErrors}
+						<span class="concept-detail__advanced-indicator">Patikrinkite laukus</span>
+					{/if}
+				</summary>
+				<div class="concept-detail__advanced-body">
+					<p class="concept-detail__advanced-hint">
+						Šie laukai valdo medžio struktūrą, numeraciją ir šaltinio nuorodas. Keiskite juos, kai
+							reikia perkelti temą ar suderinti numeraciją.
+					</p>
+					<div class="concept-detail__form-grid concept-detail__form-grid--structure">
+						<label>
+							<span>Skyrius kodas *</span>
+							<input
+								type="text"
+								bind:value={inlineForm.sectionCode}
+								oninput={() => handleInlineInput('sectionCode')}
+							/>
+							{#if getInlineError('sectionCode')}
+								<p class="concept-detail__field-error">{getInlineError('sectionCode')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Skyrius pavadinimas *</span>
+							<input
+								type="text"
+								bind:value={inlineForm.sectionTitle}
+								oninput={() => handleInlineInput('sectionTitle')}
+							/>
+							{#if getInlineError('sectionTitle')}
+								<p class="concept-detail__field-error">{getInlineError('sectionTitle')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Poskyrio kodas</span>
+							<input
+								type="text"
+								bind:value={inlineForm.subsectionCode}
+								oninput={() => handleInlineInput('subsectionCode')}
+							/>
+							{#if getInlineError('subsectionCode')}
+								<p class="concept-detail__field-error">{getInlineError('subsectionCode')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Poskyrio pavadinimas</span>
+							<input
+								type="text"
+								bind:value={inlineForm.subsectionTitle}
+								oninput={() => handleInlineInput('subsectionTitle')}
+							/>
+							{#if getInlineError('subsectionTitle')}
+								<p class="concept-detail__field-error">{getInlineError('subsectionTitle')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Curriculum mazgo kodas</span>
+							<input
+								type="text"
+								bind:value={inlineForm.curriculumNodeCode}
+								oninput={() => handleInlineInput('curriculumNodeCode')}
+							/>
+							{#if getInlineError('curriculumNodeCode')}
+								<p class="concept-detail__field-error">{getInlineError('curriculumNodeCode')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Curriculum elemento eilės nr.</span>
+							<input
+								type="text"
+								inputmode="numeric"
+								bind:value={inlineForm.curriculumItemOrdinal}
+								oninput={() => handleInlineInput('curriculumItemOrdinal')}
+							/>
+							{#if getInlineError('curriculumItemOrdinal')}
+								<p class="concept-detail__field-error">{getInlineError('curriculumItemOrdinal')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Curriculum elemento pavadinimas</span>
+							<input
+								type="text"
+								bind:value={inlineForm.curriculumItemLabel}
+								oninput={() => handleInlineInput('curriculumItemLabel')}
+							/>
+							{#if getInlineError('curriculumItemLabel')}
+								<p class="concept-detail__field-error">{getInlineError('curriculumItemLabel')}</p>
+							{/if}
+						</label>
+
+						<label>
+							<span>Šaltinis</span>
+							<input
+								type="text"
+								bind:value={inlineForm.sourceRef}
+								oninput={() => handleInlineInput('sourceRef')}
+							/>
+							{#if getInlineError('sourceRef')}
+								<p class="concept-detail__field-error">{getInlineError('sourceRef')}</p>
+							{/if}
+						</label>
+					</div>
+				</div>
+			</details>
 
 			<div class="concept-detail__admin-actions">
 				<button
@@ -840,7 +917,7 @@
 		gap: 0.9rem;
 	}
 
-	.concept-detail__form-grid--meta,
+	.concept-detail__form-grid--basic,
 	.concept-detail__form-grid--structure {
 		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	}
@@ -856,7 +933,6 @@
 	}
 
 	.concept-detail__form-grid input,
-	.concept-detail__form-grid select,
 	.concept-detail__form-grid textarea {
 		width: 100%;
 		border: 1px solid var(--color-border-light);
@@ -869,7 +945,6 @@
 	}
 
 	.concept-detail__form-grid input:focus-visible,
-	.concept-detail__form-grid select:focus-visible,
 	.concept-detail__form-grid textarea:focus-visible {
 		outline: none;
 		border-color: var(--color-border);
@@ -882,17 +957,59 @@
 		color: #b3474d;
 	}
 
-	.concept-detail__checkbox {
-		display: inline-flex;
+	.concept-detail__field-error--inline {
+		margin: 0;
+		font-size: 0.78rem;
+		color: #b3474d;
+	}
+
+	.concept-detail__advanced {
+		border: 1px solid var(--color-border-light);
+		border-radius: 0.8rem;
+		background: var(--color-panel-secondary);
+	}
+
+	.concept-detail__advanced[open] {
+		border-color: var(--color-border);
+		background: var(--color-panel);
+	}
+
+	.concept-detail__advanced summary {
+		display: flex;
 		align-items: center;
-		gap: 0.45rem;
-		margin-top: 1.6rem;
+		justify-content: space-between;
+		gap: 1rem;
+		cursor: pointer;
+		padding: 0.7rem 1rem;
+		font-weight: 600;
+		list-style: none;
+	}
+
+	.concept-detail__advanced summary:focus-visible {
+		outline: 2px solid var(--color-border);
+		outline-offset: 2px;
+	}
+
+	.concept-detail__advanced summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.concept-detail__advanced-indicator {
+		font-size: 0.78rem;
+		color: #b3474d;
 		font-weight: 600;
 	}
 
-	.concept-detail__checkbox input[type='checkbox'] {
-		width: 1.1rem;
-		height: 1.1rem;
+	.concept-detail__advanced-body {
+		display: grid;
+		gap: 1rem;
+		padding: 0 1rem 1rem;
+	}
+
+	.concept-detail__advanced-hint {
+		margin: 0;
+		font-size: 0.82rem;
+		color: var(--color-text-subtle);
 	}
 
 	.concept-detail__admin-actions {
@@ -940,6 +1057,52 @@
 		flex-wrap: wrap;
 		gap: 0.6rem;
 		align-items: center;
+	}
+
+	.concept-detail__admin-control-group {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		align-items: flex-end;
+	}
+
+	.concept-detail__admin-field {
+		display: grid;
+		gap: 0.35rem;
+		font-size: 0.82rem;
+	}
+
+	.concept-detail__admin-field select {
+		border: 1px solid var(--color-border-light);
+		border-radius: 0.55rem;
+		padding: 0.5rem 0.75rem;
+		font: inherit;
+		background: var(--color-panel-secondary);
+		color: inherit;
+		transition: border-color 0.2s ease, background 0.2s ease;
+	}
+
+	.concept-detail__admin-field select:focus-visible {
+		outline: none;
+		border-color: var(--color-border);
+		background: var(--color-panel);
+	}
+
+	.concept-detail__checkbox {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-weight: 600;
+	}
+
+	.concept-detail__checkbox--inline {
+		margin-bottom: 0.1rem;
+		font-size: 0.85rem;
+	}
+
+	.concept-detail__checkbox input[type='checkbox'] {
+		width: 1.1rem;
+		height: 1.1rem;
 	}
 
 	.concept-detail__status {
