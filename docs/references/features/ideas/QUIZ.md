@@ -30,16 +30,16 @@ This document captures the initial scope for the learner knowledge-check experie
 ### Supported Types (Phase 1)
 
 - **Definition → Term (Type A)**
-   - Prompt: concept definition.
-   - Response: learner picks the correct term from multiple choice options.
-   - Distractors: concepts from the same section with similar taxonomy.
+  - Prompt: concept definition.
+  - Response: learner picks the correct term from multiple choice options.
+  - Distractors: concepts from the same section with similar taxonomy.
 - **Term → Definition (Type B)**
-   - Prompt: concept term.
-   - Response: learner selects the matching definition from multiple options.
+  - Prompt: concept term.
+  - Response: learner selects the matching definition from multiple options.
 - **Image Hotspot Identification (Type C)**
-   - Prompt: labelled or illustrative image (e.g., sail diagram).
-   - Response: learner taps/clicks the correct location; answer is valid if the pointer falls inside a predefined polygon/rectangle.
-   - Feedback: highlight the expected hotspot, optionally reveal the correct boundaries and show textual reinforcement.
+  - Prompt: labelled or illustrative image (e.g., sail diagram).
+  - Response: learner taps/clicks the correct location; answer is valid if the pointer falls inside a predefined polygon/rectangle.
+  - Feedback: highlight the expected hotspot, optionally reveal the correct boundaries and show textual reinforcement.
 
 Backlog types remain in scope for later phases:
 
@@ -76,8 +76,8 @@ Usage:
   - Provide "Review unknown" quick action that launches a targeted session on concepts with low pass streaks.
 - **Admin review tools**:
   - Allow admins to browse question performance, identify problematic items, and flag content for revision.
-   - Support "mark question as broken" feedback from learners during a quiz session (records the question ID, user note, timestamp).
-   - Surface hotspot accuracy metrics so admins can tune polygon tolerances or update imagery.
+  - Support "mark question as broken" feedback from learners during a quiz session (records the question ID, user note, timestamp).
+  - Surface hotspot accuracy metrics so admins can tune polygon tolerances or update imagery.
 
 ## 6. Admin-authored Questions (Backlog)
 

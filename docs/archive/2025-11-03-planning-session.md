@@ -56,7 +56,7 @@ Maintain this document during the active development session. Update checklists,
 ### F. Documentation & Delivery
 
 - [x] Refresh `docs/MASTER_PLAN.md` with the holistic strategy and phased roadmap.
-- [x] Update `docs/references/SUPABASE.md` once schema extensions are drafted.
+- [x] Update `docs/references/infrastructure/SUPABASE.md` once schema extensions are drafted.
 - [ ] Extend `DEVELOPMENT_SETUP.md` with new tooling and moderation workflows.
 - [x] Produce issue/backlog outline aligned with Phase 0/Phase 1 roadmap (see `docs/references/PHASE_BACKLOG.md`, `docs/references/ISSUE_TRACKER.md`).
 - [x] Capture canonical concept content source and seed automation in docs (`SUPABASE.md`, `INFRASTRUCTURE.md`, `TESTING_GUIDE.md`).
@@ -67,12 +67,12 @@ Maintain this document during the active development session. Update checklists,
 - 2025-11-03: Created and pushed migration `0006_curriculum_dependencies_media.sql` to add prerequisite mapping, content versioning, and media moderation scaffolding to Supabase (via `npx supabase db push --include-seed`).
 - 2025-11-03: Added Supabase migration `0006_curriculum_dependencies_media.sql` covering prerequisite mapping, content versioning, and media moderation scaffolding; updated Supabase reference documentation.
 - 2025-11-03: Documented API contracts, validation rules, audit logging, and rate limits in `docs/references/API_CONTRACTS.md` to unblock backend and admin tooling workstreams.
-- 2025-11-03: Captured admin dashboard blueprint in `docs/references/ADMIN_SETUP.md`, outlining screens, workflows, and open UX questions.
-- 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/STUDY_PATHS.md`, and `docs/references/GAMIFICATION_MODEL.md` respectively.
+- 2025-11-03: Captured admin dashboard blueprint in `docs/references/features/implemented/ADMIN_SETUP.md`, outlining screens, workflows, and open UX questions.
+- 2025-11-03: Recorded mobile-first UX wireframe notes, study path framework, and gamification model in `docs/references/UX_MOBILE_WIREFRAMES.md`, `docs/references/features/ideas/STUDY_PATHS.md`, and `docs/references/features/ideas/GAMIFICATION_MODEL.md` respectively.
 - 2025-11-03: Documented Personas & Permissions matrix in `docs/references/PERSONAS_PERMISSIONS.md` to align Supabase roles with planned capabilities.
 - 2025-11-03: Authored `docs/static_info/LBS_concepts_master.md` as the single source of truth for curriculum concepts and linked it to seed automation.
 - 2025-11-03: Updated `content/scripts/build_seed_sql.mjs` to parse the master markdown and regenerate `supabase/seeds/seed_concepts.sql` (300 concepts synced with curriculum structure).
-- 2025-11-03: Refreshed `docs/references/DEVELOPMENT_SETUP.md` with the markdown-driven seed workflow and canonical content guidance.
+- 2025-11-03: Refreshed `docs/DEVELOPMENT_SETUP.md` with the markdown-driven seed workflow and canonical content guidance.
 - 2025-11-03: Published `docs/references/PHASE_BACKLOG.md` to outline Phase 0/Phase 1 engineering backlog and learner experience components.
 - 2025-11-03: Logged schema decisions for prerequisites, draft content, and media moderation in `docs/references/SCHEMA_DECISIONS.md`.
 - 2025-11-03: Documented moderation SLA and notification plan in `docs/references/MODERATION_SLA.md`.

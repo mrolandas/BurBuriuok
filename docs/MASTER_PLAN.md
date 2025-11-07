@@ -85,8 +85,28 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Media Handling
 
-## Planning Status (2025-11-03)
+## Trimmed Launch Scope (2025-11-07)
 
+### Included for Launch
+
+- Admin authoring with inline concept editing plus a hierarchy management UI that lets editors drag concepts between sections/subsections and promote/demote nodes across levels.
+- Learner core experience: curriculum boards, collapsible tree navigation, concept workspace, and global search backed by live Supabase data.
+- Backend foundations covering curriculum/progress read endpoints, progress mutations with rate-limiting shim, audit logging, and deployable migrations/seeds.
+- Automation baseline: lint/unit/content checks, CI integration, and a first-release deployment checklist.
+- Architectural seams for future work: moderation-ready enums, backend event dispatcher stub, learner progression data shape (with optional history table), analytics event wrapper, rich content version metadata, and a defined media storage pipeline.
+
+### Deferred (Post-Launch Reference)
+
+- Moderation queue UI, approval workflows, and notification transports (Slack/email) wired to the dispatcher seam.
+- Learner practice loop (queue store, Supabase persistence, study runner HUD, spaced repetition scheduler) and knowledge-check module.
+- Gamification layer: streaks, XP, badges, adaptive recommendations, and analytics dashboards beyond the existing instrumentation seam.
+- Media submission intake, automated scanning, and contributor management beyond the defined storage seam.
+- Advanced moderation, instructor-role granularity, and social/community features (forums, discussions, reactions).
+- Comprehensive analytics taxonomy implementation, engagement nudges, and outbound messaging.
+
+## Planning Status (2025-11-07)
+
+- Trimmed launch scope captured in `docs/session/current_session.md`; full historical session notes archived under `docs/archive/` (see `2025-11-07-current-session.md`).
 - Planning deliverables are consolidated in `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`, `docs/references/ANALYTICS_EVENTS.md`, and `docs/references/ISSUE_TRACKER.md`.
 - Regression guardrail automation (seeds, curriculum snapshot, markdown validation) runs locally via Husky and in CI via `content-seed-guard.yml`.
 - No standalone wireframing assets exist beyond the written UX notes in `docs/references/UX_MOBILE_WIREFRAMES.md`; there are currently no screenshots to maintain.
@@ -138,7 +158,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - [ ] Configure nudges/notifications for streak breaks and path completions.
 - [ ] Instrument analytics events for curriculum traversal and practice outcomes.
 - [ ] Build lightweight insights dashboard for admins (e.g., most-missed concepts).
-- [ ] Operationalise gamification rules defined in `docs/references/GAMIFICATION_MODEL.md`.
+- [ ] Operationalise gamification rules defined in `docs/references/features/ideas/GAMIFICATION_MODEL.md`.
 
 ### Phase 4 – Social Layer (Post-MVP)
 

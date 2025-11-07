@@ -56,7 +56,7 @@ Run all commands from the repository root:
 
 - Import `getSupabaseClient` from `src/lib/supabase/client.ts` to create a browser client.
 - Treat Supabase calls as asynchronous; colocate data fetching in page `load` functions or use SvelteKit server endpoints when server-side logic is required.
-- Record schema and API changes in `docs/references/SUPABASE.md` and update seeds via the scripts documented in `docs/references/DEVELOPMENT_SETUP.md`.
+- Record schema and API changes in `docs/references/infrastructure/SUPABASE.md` and update seeds via the scripts documented in `docs/DEVELOPMENT_SETUP.md`.
 - Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent. `fetchNodeItems` now enriches list entries with concept slugs/flags so the tree can link into the LX-003 view. Prerequisite badges currently fall back to zero counts until a public dependency view is introduced; the helper logs a warning when the fallback triggers.
 - Admin-specific requests live in `src/lib/api/admin/`. `adminFetch` pulls the Supabase access token before calling the Express API (defaults to `/api/admin`), and the concept helpers (`listAdminConcepts`, `saveAdminConcept`) reuse the shared Zod schema from `shared/validation/adminConceptSchema`.
 - Use `src/lib/api/concepts.ts::fetchConceptBySlug` when loading concept detail routes to avoid duplicating Supabase queries.

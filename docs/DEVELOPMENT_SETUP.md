@@ -1,6 +1,6 @@
 # Development Setup
 
-This document keeps the development environment expectations in one place. Update it whenever tooling changes so human contributors and AI assistants stay in sync. For Supabase-specific details, see `docs/references/SUPABASE.md`.
+This document keeps the development environment expectations in one place. Update it whenever tooling changes so human contributors and AI assistants stay in sync. For Supabase-specific details, see `docs/references/infrastructure/SUPABASE.md`.
 
 ## Repository Layout
 
@@ -42,7 +42,7 @@ This document keeps the development environment expectations in one place. Updat
    - `npm run backend:dev` – run the Express API locally with hot reload via `tsx`.
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
    - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server). Supabase URL/anon key are loaded from the repo root `.env`, keeping local preview identical to production credentials.
-   - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env.local` (or shell) and `ADMIN_DEV_IMPERSONATION=true` in the repo root `.env`, then append `?impersonate=admin` to `/admin` routes. Remove or disable both flags before committing or deploying so the bypass never ships upstream. With the flags enabled, the AppShell menu shows the persistent “Aktyvuoti Admin” toggle that flips the global `adminMode` store and syncs the impersonation query parameter on navigation.
+   - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env.local` (or shell) and `ADMIN_DEV_IMPERSONATION=true` in the repo root `.env`, then append `?impersonate=admin` to `/admin` routes. Remove or disable both flags before committing or deploying so the bypass never ships upstream. With the flags enabled, the AppShell menu shows the persistent "Aktyvuoti Admin" toggle that flips the global `adminMode` store and syncs the impersonation query parameter on navigation.
    - Override the admin API base when the Express server is hosted externally by exporting `VITE_ADMIN_API_BASE` (defaults to `/api/admin`).
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
@@ -58,12 +58,12 @@ This document keeps the development environment expectations in one place. Updat
 ## Reference Guides
 
 - `docs/references/API_CONTRACTS.md` – REST surface, validation rules, rate limits, and persona-level access expectations.
-- `docs/references/BACKEND.md` – Express service layout, admin endpoints, shared validation helpers, and audit logging guidance.
-- `docs/references/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and frontend-specific workflows.
-- `docs/references/ADMIN_SETUP.md` – admin flows, impersonation toggle behaviour, moderation tasks, and analytics widgets that engineering must support.
+- `docs/references/infrastructure/BACKEND.md` – Express service layout, admin endpoints, shared validation helpers, and audit logging guidance.
+- `docs/references/infrastructure/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and frontend-specific workflows.
+- `docs/references/features/implemented/ADMIN_SETUP.md` – admin flows, impersonation toggle behaviour, moderation tasks, and analytics widgets that engineering must support.
 - `docs/references/UX_MOBILE_WIREFRAMES.md` – prioritized mobile-first layouts and interaction patterns.
-- `docs/references/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
-- `docs/references/STUDY_PATHS.md` – curated learner journeys, unlock criteria, and backlog items.
+- `docs/references/features/ideas/GAMIFICATION_MODEL.md` – XP/streak/badge data contracts and event triggers.
+- `docs/references/features/ideas/STUDY_PATHS.md` – curated learner journeys, unlock criteria, and backlog items.
 - `docs/references/PERSONAS_PERMISSIONS.md` – persona matrix with role bindings and Supabase RLS considerations.
 - `docs/references/ISSUE_TRACKER.md` – pre-scoped engineering tickets ready to be converted into GitHub issues (status tracked per workstream).
 
@@ -101,7 +101,7 @@ Notes:
 
 - `--local` is useful when the developer machine is not authenticated against a hosted Supabase project and you are applying migrations to a local stack.
 - If your local Supabase CLI setup uses different flags or a `remote` target, adapt the command accordingly (for example, `npx supabase db push --project-ref <ref>` for remote pushes).
-- Always review migrations and backups before applying them to any shared instance. See `docs/references/SUPABASE.md` for details about the hosted project and the canonical migration files under `supabase/migrations/`.
+- Always review migrations and backups before applying them to any shared instance. See `docs/references/infrastructure/SUPABASE.md` for details about the hosted project and the canonical migration files under `supabase/migrations/`.
 
 ### Supabase hosted push
 

@@ -57,7 +57,7 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
 | POST   | `/media-submissions`      | Upload metadata payload; signed upload URL returned for storage.                       |
 | PATCH  | `/media-submissions/:id`  | Allow contributor to withdraw pending submission.                                      |
 
-Progress endpoints require a device binding: send `x-device-key` or `deviceKey` query when auth flow is absent. Rate limit (stubbed in-memory) caps progress writes at 120/hour per device. Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/GAMIFICATION_MODEL.md`.
+Progress endpoints require a device binding: send `x-device-key` or `deviceKey` query when auth flow is absent. Rate limit (stubbed in-memory) caps progress writes at 120/hour per device. Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/features/ideas/GAMIFICATION_MODEL.md`.
 
 ## Admin Endpoints
 

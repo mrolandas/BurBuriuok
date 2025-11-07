@@ -47,4 +47,4 @@ Use the `$lib` alias for imports (e.g., `import { CurriculumTree } from '$lib';`
 ## Next Steps
 
 - LX-003 (concept detail view) will extend the current Supabase helpers with concept-level queries.
-- Coordinate with the backend team before introducing new Supabase RPCs or stored procedures—document changes in `docs/references/FRONTEND.md`.
+- Coordinate with the backend team before introducing new Supabase RPCs or stored procedures—document changes in `docs/references/infrastructure/FRONTEND.md`.

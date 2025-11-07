@@ -72,7 +72,7 @@ Maintain this document during the active development session. Update checklists,
 
 - 2025-11-03: Regenerated curriculum/concept seeds (`npm run content:seed:curriculum`, `npm run content:seed:generate`) and pushed migrations + seeds to the hosted Supabase project via `npx supabase db push --include-seed` after linking the project.
 
-- [ ] Document why Supabase is used from V1 and any constraints of the shared local instance (updated with hosted project details in `docs/references/SUPABASE.md`).
+- [ ] Document why Supabase is used from V1 and any constraints of the shared local instance (updated with hosted project details in `docs/references/infrastructure/SUPABASE.md`).
 - [ ] Record moderation requirements once image upload planning advances.
 - [ ] Note any deviations from the plan and link to follow-up tasks.
 - [x] Capture Supabase migration/seed execution steps once tested against the shared instance.

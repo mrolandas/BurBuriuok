@@ -2,6 +2,13 @@
 
 Use this list to open GitHub issues (or Jira tickets) quickly. Each entry has a suggested ID, owner placeholder, and acceptance criteria. Update the **Status** column as work progresses and link to the created issue once it exists.
 
+## Maintenance Checklist
+
+- Add a row only when the work is groomed enough to become a GitHub issue.
+- When creating an issue, paste the GitHub link in the **Status** column and note the open/closed state.
+- After closing or reprioritising work, reflect the status change here and adjust acceptance criteria if the scope evolves.
+- Cross-check this file at the start/end of each session (see `session/current_session.md`) so the backlog stays aligned.
+
 ## Learner Experience
 
 | ID     | Title                                 | Description                                                                                                          | Acceptance Criteria                                                                                                                                                                                                                          | Status                                                                                                                                                                                                                 |

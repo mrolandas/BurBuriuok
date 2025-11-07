@@ -1,15 +1,36 @@
 # BurBuriuok Documentation Index
 
-Use this directory to keep the working knowledge for BurBuriuok organised and easy to discover. Each document listed below has a single owner by default (the whole team) and should be kept current as features evolve.
+Use this guide to find the right document quickly and understand when it needs an update. When you touch a slice of work, scan the relevant section below and keep the linked docs in sync.
 
-- `MASTER_PLAN.md` – product vision, personas, and release roadmap for BurBuriuok.
-- `INFRASTRUCTURE.md` – current and planned hosting, integration, and operational concerns.
-- `TESTING_GUIDE.md` – testing strategy, coverage expectations, and status of automated tooling.
-- `static_info/LBS_programa.md` – authoritative concept list extracted from the Lithuanian Sailing Association curriculum.
-- `references/DEVELOPMENT_SETUP.md` – development environment expectations, local tooling, and helper commands for human and AI contributors.
-- `references/FRONTEND.md` – SvelteKit architecture overview, navigation rules, and the new theming workflow.
-- `references/SUPABASE.md` – connection details and usage plan for the shared Supabase stack.
-- `references/ISSUE_TRACKER.md` – backlog-ready issue seeds grouped by workstream with status to accelerate GitHub issue creation.
-- `references/ADMIN_SETUP.md` – admin personas, access toggles, inline editing entry points, and dashboard roadmap.
+## Core Planning
 
-> Tip: When adding a new document inside `docs/`, link it here with a short description so contributors can discover it quickly.
+- `MASTER_PLAN.md` – vision, personas, trimmed launch scope, and deferred roadmap items. Update when scope changes or major bets shift.
+- `INFRASTRUCTURE.md` – near-term vs future-state platform plans plus operational checklist. Refresh after infrastructure decisions or tooling upgrades.
+- `session/current_session.md` – active working session plan and checklist. Revise at the start/end of each session and archive completed plans under `archive/` with a datestamped filename.
+- `archive/` – historical session notes and superseded plans. Drop finished session docs here whenever a new plan replaces them.
+
+## Setup & Delivery
+
+- `DEVELOPMENT_SETUP.md` – canonical local tooling expectations, environment variables, and helper commands. Update when setup steps or scripts change.
+- `TESTING_GUIDE.md` – automated test coverage, required checks, and manual QA flows. Refresh after adding new suites or changing the release gate.
+- `static_info/` – authoritative curriculum sources (for example `static_info/LBS_programa.md`). Update only when the source material changes and regenerate seeds afterward.
+- `user_guides/` – learner/admin-facing product guides. Sync with significant UX updates so support and onboarding stay accurate.
+
+## Reference Hubs
+
+- `references/` – canonical specifications and design notes shared across teams. Update these alongside feature or schema changes and remember to append new entries to `references/README.md`.
+  - `references/infrastructure/` – stack-specific guides (`BACKEND.md`, `FRONTEND.md`, `SUPABASE.md`). Use its `README.md` for navigation and refresh whenever backend/frontend architecture or Supabase workflows evolve.
+  - `references/features/implemented/` – living docs for shipped experiences (`ADMIN_SETUP.md`, etc.). Update as production behaviour changes.
+  - `references/features/ideas/` – discovery notes and future concepts (`QUIZ.md`, `STUDY_PATHS.md`, `GAMIFICATION_MODEL.md`). Extend when ideation outcomes shift or new backlog items emerge.
+  - Other root references (`API_CONTRACTS.md`, `ISSUE_TRACKER.md`, `SCHEMA_DECISIONS.md`, `PERSONAS_PERMISSIONS.md`, `UX_MOBILE_WIREFRAMES.md`) should be updated in lockstep with schema updates, backlog grooming, role changes, or UX approvals respectively.
+
+## Keeping Docs Fresh
+
+- When implementing a feature, update the matching entry under `references/features/` and tag any schema notes in `SCHEMA_DECISIONS.md`.
+- After altering infrastructure or CI, edit `INFRASTRUCTURE.md`, `DEVELOPMENT_SETUP.md`, and the relevant `references/infrastructure/` page.
+- At sprint close, archive the old `session/current_session.md`, refresh `MASTER_PLAN.md` if scope moved, and record outcomes in the session log.
+- Before releases, run through `TESTING_GUIDE.md` to confirm guard rails are current and capture any new manual smoke steps.
+- Keep `references/README.md` in sync when adding or moving reference documents so navigation stays accurate.
+- Update `references/ISSUE_TRACKER.md` whenever issues are opened/closed or acceptance criteria change—treat it as the single source of truth for sprint-ready work.
+
+> Add a bullet here whenever new documentation appears under `docs/` so contributors understand where it lives and when to maintain it.
