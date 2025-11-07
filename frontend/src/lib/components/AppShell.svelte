@@ -34,6 +34,7 @@
 	let impersonatingAdmin = $state($page.url.searchParams.get('impersonate') === 'admin');
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let allowAdminSync = false;
+	let userMenuOpen = $state(false);
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
@@ -131,16 +132,37 @@
 	});
 
 	const toggleMenu = () => {
-		menuOpen = !menuOpen;
+		const next = !menuOpen;
+		menuOpen = next;
+		if (next) {
+			themeMenuOpen = false;
+			userMenuOpen = false;
+		} else {
+			themeMenuOpen = false;
+		}
 	};
 
-	const closeMenu = () => {
+	const toggleUserMenu = () => {
+		const next = !userMenuOpen;
+		userMenuOpen = next;
+		if (next) {
+			menuOpen = false;
+			themeMenuOpen = false;
+		}
+	};
+
+	const closeMenus = () => {
 		menuOpen = false;
 		themeMenuOpen = false;
+		userMenuOpen = false;
 	};
 
 	const toggleThemeMenu = () => {
-		themeMenuOpen = !themeMenuOpen;
+		const next = !themeMenuOpen;
+		themeMenuOpen = next;
+		if (next) {
+			userMenuOpen = false;
+		}
 	};
 
 	const chooseTheme = (theme: ThemeId) => {
@@ -149,7 +171,7 @@
 	};
 
 	const handleLinkClick = () => {
-		closeMenu();
+		closeMenus();
 	};
 
 	const isActive = (href: NavHref) => {
@@ -162,7 +184,7 @@
 
 	const handleKeydown = (event: KeyboardEvent) => {
 		if (event.key === 'Escape') {
-			closeMenu();
+			closeMenus();
 		}
 	};
 
@@ -187,7 +209,7 @@
 		const nextPath = url.pathname;
 		if (nextPath !== activePath) {
 			activePath = nextPath;
-			closeMenu();
+			closeMenus();
 		}
 		searchTerm = url.searchParams.get('q') ?? '';
 		impersonatingAdmin = url.searchParams.get('impersonate') === 'admin';
@@ -215,13 +237,13 @@
 	};
 
 	const openQuizModal = () => {
-		closeMenu();
+		closeMenus();
 		quizModal.open();
 	};
 
 	const handleAdminModeToggle = () => {
 		adminMode.toggle();
-		closeMenu();
+		closeMenus();
 	};
 
 	onDestroy(() => {
@@ -241,37 +263,89 @@
 				<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
 			</a>
 		</div>
-		{#if adminModeEnabled}
-			<span
-				class="app-shell__admin-indicator"
-				role="status"
-				aria-live="polite"
-				title={impersonatingAdmin
-					? 'Administratoriaus režimas įjungtas (imitacija)'
-					: 'Administratoriaus režimas įjungtas'}
-				aria-label={impersonatingAdmin
-					? 'Administratoriaus režimas įjungtas (imitacija)'
-					: 'Administratoriaus režimas įjungtas'}
+		<div class="app-shell__controls">
+			<div class="app-shell__user" data-admin-active={adminModeEnabled ? 'true' : 'false'}>
+				<button
+					type="button"
+					class="app-shell__user-toggle"
+					class:app-shell__user-toggle--active={adminModeEnabled}
+					aria-haspopup="true"
+					aria-expanded={userMenuOpen}
+					aria-controls="app-shell-user-menu"
+					onclick={toggleUserMenu}
+					title={adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys'}
+				>
+					<span class="app-shell__user-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" role="presentation" focusable="false">
+							{#if adminModeEnabled}
+								<path
+									d="M8 9.5a4 4 0 1 1 8 0v.5H8z"
+									class="app-shell__user-icon-hat"
+								></path>
+							{/if}
+							<circle cx="12" cy="10" r="3" class="app-shell__user-icon-head"></circle>
+							<path
+								d="M6.5 19.25c.54-3.18 2.95-4.75 5.5-4.75s4.96 1.57 5.5 4.75"
+								class="app-shell__user-icon-body"
+							></path>
+						</svg>
+					</span>
+					<span class="app-shell__sr-only">
+						{adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys'}
+					</span>
+				</button>
+
+				{#if userMenuOpen}
+					<div
+						id="app-shell-user-menu"
+						class="app-shell__user-menu"
+						role="menu"
+						aria-label="Naudotojo parinktys"
+					>
+						<a
+							href="/login"
+							class="app-shell__user-item"
+							role="menuitem"
+							onclick={closeMenus}
+						>
+							Prisijungti
+						</a>
+						<a
+							href="/register"
+							class="app-shell__user-item"
+							role="menuitem"
+							onclick={closeMenus}
+						>
+							Registruotis
+						</a>
+						<button
+							type="button"
+							class="app-shell__user-item app-shell__user-item--admin"
+							role="menuitem"
+							onclick={handleAdminModeToggle}
+						>
+							{adminModeEnabled ? 'Deaktyvuoti Admin' : 'Aktyvuoti Admin'}
+						</button>
+					</div>
+				{/if}
+			</div>
+
+			<button
+				type="button"
+				class="app-shell__menu-toggle"
+				aria-haspopup="true"
+				aria-expanded={menuOpen}
+				aria-controls="app-shell-menu"
+				onclick={toggleMenu}
 			>
-				<span class="app-shell__admin-indicator-dot" aria-hidden="true"></span>
-				<span>{impersonatingAdmin ? 'Admin imitacija' : 'Admin'}</span>
-			</span>
-		{/if}
-		<button
-			type="button"
-			class="app-shell__menu-toggle"
-			aria-haspopup="true"
-			aria-expanded={menuOpen}
-			aria-controls="app-shell-menu"
-			onclick={toggleMenu}
-		>
-			<span class="app-shell__menu-icon" aria-hidden="true">
-				<span></span>
-				<span></span>
-				<span></span>
-			</span>
-			<span class="app-shell__menu-label">Meniu</span>
-		</button>
+				<span class="app-shell__menu-icon" aria-hidden="true">
+					<span></span>
+					<span></span>
+					<span></span>
+				</span>
+				<span class="app-shell__menu-label">Meniu</span>
+			</button>
+		</div>
 		<nav
 			id="app-shell-menu"
 			class="app-shell__menu"
@@ -296,18 +370,6 @@
 				{#if visibleNavLinks.length}
 					<li class="app-shell__menu-divider" aria-hidden="true"></li>
 				{/if}
-
-				<li class="app-shell__menu-admin">
-					<button
-						type="button"
-						class="app-shell__menu-action app-shell__menu-action--admin"
-						onclick={handleAdminModeToggle}
-					>
-						{adminModeEnabled ? 'Deaktyvuoti Admin' : 'Aktyvuoti Admin'}
-					</button>
-				</li>
-
-				<li class="app-shell__menu-divider" aria-hidden="true"></li>
 
 				<li>
 					<button class="app-shell__menu-action" type="button" onclick={openQuizModal}>
@@ -366,14 +428,14 @@
 				</li>
 			</ul>
 		</nav>
-	</header>
+		</header>
 
-	{#if menuOpen}
-		<div class="app-shell__menu-overlay" onclick={closeMenu} aria-hidden="true"></div>
-	{/if}
+		{#if menuOpen || userMenuOpen}
+			<div class="app-shell__menu-overlay" onclick={closeMenus} aria-hidden="true"></div>
+		{/if}
 
-	<div class="app-shell__search" role="search">
-		<form class="app-shell__search-form" action={resolve('/search')} method="get">
+		<div class="app-shell__search" role="search">
+			<form class="app-shell__search-form" action={resolve('/search')} method="get">
 			<label class="app-shell__search-label" for="global-search">Paieška</label>
 			<div class="app-shell__search-field">
 				<input
@@ -566,26 +628,137 @@
 		color: var(--color-text-muted);
 	}
 
-	.app-shell__admin-indicator {
-		display: inline-flex;
+	.app-shell__controls {
+		display: flex;
 		align-items: center;
-		gap: 0.35rem;
-		padding: 0.2rem 0.4rem;
-		border-radius: 999px;
-		border: 1px solid transparent;
-		color: var(--color-accent-strong);
-		font-size: 0.78rem;
-		font-weight: 600;
-		letter-spacing: 0.04em;
-		white-space: nowrap;
+		gap: 0.6rem;
+		margin-left: auto;
 	}
 
-	.app-shell__admin-indicator-dot {
-		width: 0.45rem;
-		height: 0.45rem;
-		border-radius: 50%;
-		background: currentColor;
+	.app-shell__user {
+		position: relative;
+	}
+
+	.app-shell__user-toggle {
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-alt);
+		color: var(--color-text);
+		border-radius: 999px;
+		width: 2.4rem;
+		height: 2.4rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.app-shell__user-toggle:hover,
+	.app-shell__user-toggle:focus-visible {
+		border-color: rgba(56, 189, 248, 0.35);
+		background: rgba(56, 189, 248, 0.12);
+		color: var(--color-text);
+		box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+	}
+
+	.app-shell__user-toggle:focus-visible {
+		outline: none;
+	}
+
+	.app-shell__user-toggle--active {
+		border-color: var(--color-accent-border-strong);
+		color: var(--color-accent-strong);
 		box-shadow: 0 0 0 3px var(--color-accent-faint-strong);
+	}
+
+	.app-shell__user-icon svg {
+		width: 1.2rem;
+		height: 1.2rem;
+		stroke: currentColor;
+		stroke-width: 1.6;
+		fill: none;
+	}
+
+	.app-shell__user-icon-head {
+		fill: none;
+	}
+
+	.app-shell__user-icon-body {
+		fill: none;
+		stroke-linecap: round;
+	}
+
+	.app-shell__user-icon-hat {
+		fill: currentColor;
+		stroke: currentColor;
+		opacity: 0.2;
+	}
+
+	.app-shell__sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.app-shell__user-menu {
+		position: absolute;
+		top: calc(100% + 0.55rem);
+		right: 0;
+		display: grid;
+		gap: 0.35rem;
+		min-width: 200px;
+		padding: 0.65rem;
+		border-radius: 0.9rem;
+		background: var(--color-popover, var(--color-surface));
+		border: 1px solid var(--color-border);
+		box-shadow: 0 22px 45px -26px var(--color-overlay, rgba(15, 23, 42, 0.5));
+		backdrop-filter: blur(18px);
+		z-index: 95;
+	}
+
+	.app-shell__user-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.55rem 0.75rem;
+		border-radius: 0.75rem;
+		text-decoration: none;
+		font: inherit;
+		color: inherit;
+		border: 1px solid transparent;
+		background: transparent;
+		cursor: pointer;
+		transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+		text-align: left;
+	}
+
+	.app-shell__user-item:hover,
+	.app-shell__user-item:focus-visible {
+		border-color: var(--color-border);
+		background: var(--color-panel-hover);
+		outline: none;
+	}
+
+	.app-shell__user-item--admin {
+		color: var(--color-accent-strong);
+	}
+
+	.app-shell__user-item--admin:hover,
+	.app-shell__user-item--admin:focus-visible {
+		border-color: transparent;
+		background: var(--color-accent-faint);
 	}
 
 	.app-shell__menu-toggle {
@@ -603,7 +776,6 @@
 			background-color 0.2s ease,
 			border-color 0.2s ease,
 			transform 0.2s ease;
-		margin-left: auto;
 	}
 
 	.app-shell__menu-toggle:hover,
@@ -762,16 +934,6 @@
 	.app-shell__menu-action:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
-	}
-
-	.app-shell__menu-admin {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.app-shell__menu-action--admin {
-		justify-content: space-between;
 	}
 
 	.app-shell__menu-theme {
