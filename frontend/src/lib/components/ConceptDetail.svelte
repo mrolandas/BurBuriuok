@@ -54,7 +54,6 @@
 	const adminEditEnabled = $derived(Boolean(adminContext?.enabled));
 	const adminSessionError = $derived(adminContext?.session.errorMessage ?? null);
 	const adminHasAccess = $derived(Boolean(adminContext?.session.allowed));
-	const adminImpersonating = $derived(Boolean(adminContext?.session.impersonating));
 
 	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset';
 	const dispatch = createEventDispatcher<{
@@ -395,22 +394,6 @@
 					? 'denied'
 					: 'available'}
 			>
-				{#if adminEditEnabled}
-					<span class="concept-detail__admin-pill concept-detail__admin-pill--active">
-						Administratoriaus režimas įjungtas
-						{#if adminImpersonating}
-							<span class="concept-detail__admin-pill-note">(imitacija)</span>
-						{/if}
-					</span>
-				{:else if adminContext?.requested}
-					<span class="concept-detail__admin-pill concept-detail__admin-pill--denied">
-						{adminSessionError ?? 'Administratoriaus režimo įjungti nepavyko.'}
-					</span>
-				{:else if adminHasAccess}
-					<span class="concept-detail__admin-pill concept-detail__admin-pill--ready">
-						Administratoriaus teisės aptiktos – galite įjungti redagavimą.
-					</span>
-				{/if}
 
 				{#if adminHasAccess}
 					<button
@@ -422,11 +405,17 @@
 						{adminEditEnabled ? 'Baigti redagavimą' : 'Redaguoti'}
 					</button>
 				{/if}
+
+				{#if adminContext?.requested && !adminEditEnabled}
+					<p class="concept-detail__admin-message">
+						{adminSessionError ?? 'Administratoriaus režimo įjungti nepavyko.'}
+					</p>
+				{/if}
 			</div>
 
 			{#if adminEditEnabled}
-				<div class="concept-detail__admin-toolbar concept-detail__admin-toolbar--editing">
-					<div class="concept-detail__admin-control-group">
+				<div class="concept-detail__admin-toolbar">
+					<div class="concept-detail__admin-toolbar-main">
 						<label class="concept-detail__admin-field">
 							<span>Būsena</span>
 							<select bind:value={inlineForm.status} onchange={() => handleInlineInput('status')}>
@@ -441,7 +430,7 @@
 							{/if}
 						</label>
 
-						<label class="concept-detail__checkbox concept-detail__checkbox--inline">
+						<label class="concept-detail__admin-checkbox">
 							<input
 								type="checkbox"
 								bind:checked={inlineForm.isRequired}
@@ -449,24 +438,27 @@
 							/>
 							<span>Privaloma tema</span>
 						</label>
+
+						<div class="concept-detail__admin-toolbar-actions">
+							<button type="button" onclick={() => (adminEditing = !adminEditing)}>
+								{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
+							</button>
+						</div>
 					</div>
 
 					{#if adminBadges.length}
-						<ul class="concept-detail__badge-list concept-detail__badge-list--meta">
-							{#each adminBadges as badge (badge.key)}
-								<li class="concept-detail__badge-item">
-									<span class="concept-detail__badge-key">{badge.key}</span>
-									<span class="concept-detail__badge-value">{badge.value}</span>
-								</li>
-							{/each}
-						</ul>
+						<div class="concept-detail__admin-toolbar-meta">
+							<span class="concept-detail__admin-toolbar-label">Papildoma informacija</span>
+							<ul class="concept-detail__badge-list concept-detail__badge-list--meta">
+								{#each adminBadges as badge (badge.key)}
+									<li class="concept-detail__badge-item">
+										<span class="concept-detail__badge-key">{badge.key}</span>
+										<span class="concept-detail__badge-value">{badge.value}</span>
+									</li>
+								{/each}
+							</ul>
+						</div>
 					{/if}
-
-					<div class="concept-detail__admin-toolbar-actions">
-						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
-							{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
-						</button>
-					</div>
 				</div>
 			{/if}
 		</div>
@@ -662,8 +654,16 @@
 	.concept-detail__admin-meta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		align-items: center;
+	}
+
+	.concept-detail__admin-message {
+		flex-basis: 100%;
+		margin: 0;
+		font-size: 0.82rem;
+		color: #b3474d;
+		font-weight: 600;
 	}
 
 	.concept-detail__admin-section {
@@ -685,39 +685,6 @@
 	.concept-detail__admin-toggle:focus-visible {
 		border-color: var(--color-border-strong);
 		background: var(--color-panel-hover);
-	}
-
-	.concept-detail__admin-pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.35rem 0.75rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-border-light);
-		background: var(--color-panel-secondary);
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: var(--color-text-subtle);
-	}
-
-	.concept-detail__admin-pill--active {
-		border-color: var(--color-border);
-		color: var(--color-text);
-	}
-
-	.concept-detail__admin-pill--denied {
-		border-color: var(--color-border-strong);
-		color: #b3474d;
-	}
-
-	.concept-detail__admin-pill--ready {
-		color: var(--color-text);
-	}
-
-	.concept-detail__admin-pill-note {
-		font-weight: 500;
-		font-size: 0.78rem;
-		color: var(--color-text-subtle);
 	}
 
 	.concept-detail__admin-form {
@@ -867,10 +834,9 @@
 	}
 
 	.concept-detail__admin-toolbar {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-		align-items: center;
+		display: grid;
+		gap: 1.1rem;
+		align-items: start;
 		padding: 0.9rem 1rem;
 		border: 1px solid var(--color-border-light);
 		border-radius: 0.9rem;
@@ -878,15 +844,11 @@
 		box-shadow: 0 16px 32px -20px var(--color-overlay);
 	}
 
-	.concept-detail__admin-toolbar--editing {
-		align-items: flex-start;
-	}
-
-	.concept-detail__admin-control-group {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		align-items: flex-end;
+	.concept-detail__admin-toolbar-main {
+		display: grid;
+		gap: 0.9rem;
+		align-items: end;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	}
 
 	.concept-detail__admin-field {
@@ -919,21 +881,17 @@
 		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
 	}
 
-	.concept-detail__checkbox {
+	.concept-detail__admin-checkbox {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.45rem;
+		gap: 0.5rem;
 		font-weight: 600;
-	}
-
-	.concept-detail__checkbox--inline {
-		margin-bottom: 0.1rem;
 		font-size: 0.85rem;
 	}
 
-	.concept-detail__checkbox input[type='checkbox'] {
-		width: 1.15rem;
-		height: 1.15rem;
+	.concept-detail__admin-checkbox input[type='checkbox'] {
+		width: 1.1rem;
+		height: 1.1rem;
 		accent-color: var(--color-accent);
 		border-radius: 0.25rem;
 	}
@@ -966,8 +924,27 @@
 	.concept-detail__admin-toolbar-actions {
 		display: flex;
 		flex-wrap: wrap;
+		gap: 0.6rem;
+		justify-content: flex-end;
+		grid-column: 1 / -1;
+	}
+	.concept-detail__admin-toolbar-meta {
+		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
-		margin-left: auto;
+		align-items: baseline;
+	}
+
+	.concept-detail__admin-toolbar-label {
+		font-size: 0.78rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-text-subtle);
+	}
+
+	.concept-detail__badge-list--meta {
+		gap: 0.5rem;
 	}
 
 	.concept-detail__admin-toolbar-actions button {

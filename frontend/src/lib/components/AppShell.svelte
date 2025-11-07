@@ -31,6 +31,7 @@
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
 	let searchInput: HTMLInputElement | null = null;
 	let adminModeEnabled = $state(adminMode.value);
+	let impersonatingAdmin = $state($page.url.searchParams.get('impersonate') === 'admin');
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let allowAdminSync = false;
 	const visibleNavLinks = $derived(
@@ -110,10 +111,11 @@
 		}
 
 		const currentUrl = new URL(window.location.href);
-		const impersonatingAdmin = currentUrl.searchParams.get('impersonate') === 'admin';
-		if (adminMode.value && !impersonatingAdmin) {
+		const impersonating = currentUrl.searchParams.get('impersonate') === 'admin';
+		impersonatingAdmin = impersonating;
+		if (adminMode.value && !impersonating) {
 			void syncAdminModeToUrl(true);
-		} else if (!adminMode.value && impersonatingAdmin) {
+		} else if (!adminMode.value && impersonating) {
 			adminMode.enable();
 		}
 		const stored = window.localStorage.getItem('burburiuok-theme');
@@ -188,6 +190,7 @@
 			closeMenu();
 		}
 		searchTerm = url.searchParams.get('q') ?? '';
+		impersonatingAdmin = url.searchParams.get('impersonate') === 'admin';
 		if (allowAdminSync) {
 			void syncAdminModeToUrl(adminModeEnabled);
 		}
@@ -238,6 +241,19 @@
 				<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
 			</a>
 		</div>
+		{#if adminModeEnabled}
+			<span
+				class="app-shell__admin-indicator"
+				role="status"
+				aria-live="polite"
+				title={impersonatingAdmin
+					? 'Administratoriaus režimas įjungtas (imitacija)'
+					: 'Administratoriaus režimas įjungtas'}
+			>
+				<span class="app-shell__admin-indicator-dot" aria-hidden="true"></span>
+				<span>{impersonatingAdmin ? 'Admin · imitacija' : 'Admin aktyvus'}</span>
+			</span>
+		{/if}
 		<button
 			type="button"
 			class="app-shell__menu-toggle"
@@ -541,6 +557,30 @@
 	.app-shell__brand-subtitle {
 		font-size: 0.85rem;
 		color: var(--color-text-muted);
+	}
+
+	.app-shell__admin-indicator {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.35rem 0.75rem;
+		border-radius: 999px;
+		background: var(--color-accent-faint);
+		border: 1px solid var(--color-accent-border-strong);
+		color: var(--color-accent-strong);
+		font-size: 0.78rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		box-shadow: 0 6px 18px -12px var(--color-overlay);
+	}
+
+	.app-shell__admin-indicator-dot {
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 50%;
+		background: currentColor;
+		box-shadow: 0 0 0 4px var(--color-accent-faint-strong);
 	}
 
 	.app-shell__menu-toggle {
