@@ -18,11 +18,7 @@
 		type InlineConceptForm,
 		type MetadataBadge
 	} from '$lib/admin/conceptInlineEdit';
-	import {
-		buildAdvancedSummary,
-		hasAdvancedErrors,
-		type InlineFieldErrors
-	} from '$lib/admin/inlineAdvancedSummary';
+	import { type InlineFieldErrors } from '$lib/admin/inlineAdvancedSummary';
 	import { isMeaningfulSourceRef } from '$lib/admin/sourceReference';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
@@ -107,24 +103,13 @@
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
 
-	const advancedSummary = $derived(buildAdvancedSummary(inlineForm));
-
-	let advancedOpen = $state(false);
-	const advancedHasErrors = $derived(hasAdvancedErrors(inlineErrors));
 	let previousAdminEnabled = false;
-
-	$effect(() => {
-		if (advancedHasErrors) {
-			advancedOpen = true;
-		}
-	});
 
 	$effect(() => {
 		const current = adminEditEnabled;
 
 		if (!current) {
 			adminEditing = false;
-			advancedOpen = false;
 		} else if (!previousAdminEnabled && current) {
 			adminEditing = true;
 		}
@@ -280,20 +265,6 @@
 		void handleInlineSave('draft');
 	}
 
-	function openAdvancedSection(): void {
-		if (!adminEditing) {
-			adminEditing = true;
-		}
-
-		advancedOpen = true;
-
-		requestAnimationFrame(() => {
-			const panel = document.getElementById('concept-advanced-fields');
-			panel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			panel?.focus?.();
-		});
-	}
-
 	async function setAdminMode(enabled: boolean): Promise<void> {
 		if (enabled === adminEditEnabled) {
 			return;
@@ -310,7 +281,6 @@
 			adminEditing = true;
 		} else {
 			adminEditing = false;
-			advancedOpen = false;
 		}
 
 		await goto(`${url.pathname}${url.search}${url.hash}`, {
@@ -496,37 +466,7 @@
 						<button type="button" onclick={() => (adminEditing = !adminEditing)}>
 							{adminEditing ? 'Rodyti peržiūrą' : 'Redaguoti turinį'}
 						</button>
-						<button type="button" onclick={openAdvancedSection} disabled={!adminEditing}>
-							Struktūros nustatymai
-						</button>
 					</div>
-				</div>
-			{:else if adminHasAccess}
-				<div class="concept-detail__admin-toolbar">
-					<span
-						class="concept-detail__status"
-						class:concept-detail__status--published={conceptStatus === 'published'}
-					>
-						{statusLabels[conceptStatus]}
-					</span>
-
-					<span
-						class="concept-detail__badge"
-						class:concept-detail__badge--optional={!inlineForm.isRequired}
-					>
-						{inlineForm.isRequired ? 'Privaloma tema' : 'Papildoma tema'}
-					</span>
-
-					{#if adminBadges.length}
-						<ul class="concept-detail__badge-list">
-							{#each adminBadges as badge (badge.key)}
-								<li class="concept-detail__badge-item">
-									<span class="concept-detail__badge-key">{badge.key}</span>
-									<span class="concept-detail__badge-value">{badge.value}</span>
-								</li>
-							{/each}
-						</ul>
-					{/if}
 				</div>
 			{/if}
 		</div>
@@ -598,124 +538,6 @@
 					{/if}
 				</label>
 			</div>
-
-			<details
-				id="concept-advanced-fields"
-				class="concept-detail__advanced"
-				bind:open={advancedOpen}
-				tabindex="-1"
-			>
-				<summary>
-					<span>{advancedSummary}</span>
-					{#if advancedHasErrors}
-						<span class="concept-detail__advanced-indicator">Patikrinkite laukus</span>
-					{/if}
-				</summary>
-				<div class="concept-detail__advanced-body">
-					<p class="concept-detail__advanced-hint">
-						Šie laukai valdo medžio struktūrą, numeraciją ir šaltinio nuorodas. Keiskite juos, kai
-							reikia perkelti temą ar suderinti numeraciją.
-					</p>
-					<div class="concept-detail__form-grid concept-detail__form-grid--structure">
-						<label>
-							<span>Skyrius kodas *</span>
-							<input
-								type="text"
-								bind:value={inlineForm.sectionCode}
-								oninput={() => handleInlineInput('sectionCode')}
-							/>
-							{#if getInlineError('sectionCode')}
-								<p class="concept-detail__field-error">{getInlineError('sectionCode')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Skyrius pavadinimas *</span>
-							<input
-								type="text"
-								bind:value={inlineForm.sectionTitle}
-								oninput={() => handleInlineInput('sectionTitle')}
-							/>
-							{#if getInlineError('sectionTitle')}
-								<p class="concept-detail__field-error">{getInlineError('sectionTitle')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Poskyrio kodas</span>
-							<input
-								type="text"
-								bind:value={inlineForm.subsectionCode}
-								oninput={() => handleInlineInput('subsectionCode')}
-							/>
-							{#if getInlineError('subsectionCode')}
-								<p class="concept-detail__field-error">{getInlineError('subsectionCode')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Poskyrio pavadinimas</span>
-							<input
-								type="text"
-								bind:value={inlineForm.subsectionTitle}
-								oninput={() => handleInlineInput('subsectionTitle')}
-							/>
-							{#if getInlineError('subsectionTitle')}
-								<p class="concept-detail__field-error">{getInlineError('subsectionTitle')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Curriculum mazgo kodas</span>
-							<input
-								type="text"
-								bind:value={inlineForm.curriculumNodeCode}
-								oninput={() => handleInlineInput('curriculumNodeCode')}
-							/>
-							{#if getInlineError('curriculumNodeCode')}
-								<p class="concept-detail__field-error">{getInlineError('curriculumNodeCode')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Curriculum elemento eilės nr.</span>
-							<input
-								type="text"
-								inputmode="numeric"
-								bind:value={inlineForm.curriculumItemOrdinal}
-								oninput={() => handleInlineInput('curriculumItemOrdinal')}
-							/>
-							{#if getInlineError('curriculumItemOrdinal')}
-								<p class="concept-detail__field-error">{getInlineError('curriculumItemOrdinal')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Curriculum elemento pavadinimas</span>
-							<input
-								type="text"
-								bind:value={inlineForm.curriculumItemLabel}
-								oninput={() => handleInlineInput('curriculumItemLabel')}
-							/>
-							{#if getInlineError('curriculumItemLabel')}
-								<p class="concept-detail__field-error">{getInlineError('curriculumItemLabel')}</p>
-							{/if}
-						</label>
-
-						<label>
-							<span>Šaltinis</span>
-							<input
-								type="text"
-								bind:value={inlineForm.sourceRef}
-								oninput={() => handleInlineInput('sourceRef')}
-							/>
-							{#if getInlineError('sourceRef')}
-								<p class="concept-detail__field-error">{getInlineError('sourceRef')}</p>
-							{/if}
-						</label>
-					</div>
-				</div>
-			</details>
 
 			<div class="concept-detail__admin-actions">
 				<button
@@ -909,8 +731,7 @@
 		box-shadow: 0 18px 36px -18px var(--color-overlay);
 	}
 
-	.concept-detail__admin-form > .concept-detail__form-grid,
-	.concept-detail__advanced-body .concept-detail__form-grid {
+	.concept-detail__admin-form > .concept-detail__form-grid {
 		padding: 1rem;
 		border-radius: 1rem;
 		border: 1px solid var(--color-border-light);
@@ -941,8 +762,7 @@
 		gap: 1rem;
 	}
 
-	.concept-detail__form-grid--basic,
-	.concept-detail__form-grid--structure {
+	.concept-detail__form-grid--basic {
 		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	}
 
@@ -1003,63 +823,6 @@
 		margin: 0;
 		font-size: 0.78rem;
 		color: #b3474d;
-	}
-
-	.concept-detail__advanced {
-		border: 1px solid var(--color-border-light);
-		border-radius: 1rem;
-		background: var(--color-panel-secondary);
-		box-shadow: 0 16px 32px -20px var(--color-overlay);
-	}
-
-	.concept-detail__advanced[open] {
-		border-color: var(--color-border);
-		background: var(--color-panel);
-	}
-
-	.concept-detail__advanced summary {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		cursor: pointer;
-		padding: 0.85rem 1.25rem;
-		font-weight: 600;
-		list-style: none;
-		border-radius: 1rem;
-		background: transparent;
-	}
-
-	.concept-detail__advanced[open] summary {
-		border-bottom: 1px solid var(--color-border-light);
-		border-radius: 1rem 1rem 0 0;
-	}
-
-	.concept-detail__advanced summary:focus-visible {
-		outline: 2px solid var(--color-border);
-		outline-offset: 2px;
-	}
-
-	.concept-detail__advanced summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.concept-detail__advanced-indicator {
-		font-size: 0.78rem;
-		color: #b3474d;
-		font-weight: 600;
-	}
-
-	.concept-detail__advanced-body {
-		display: grid;
-		gap: 1.2rem;
-		padding: 1.1rem 1.25rem 1.25rem;
-	}
-
-	.concept-detail__advanced-hint {
-		margin: 0;
-		font-size: 0.82rem;
-		color: var(--color-text-subtle);
 	}
 
 	.concept-detail__admin-actions {
@@ -1175,46 +938,6 @@
 		border-radius: 0.25rem;
 	}
 
-	.concept-detail__status {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.35rem 0.8rem;
-		border-radius: 999px;
-		background: var(--color-panel-secondary);
-		border: 1px solid var(--color-border-light);
-		font-size: 0.82rem;
-		font-weight: 600;
-		color: var(--color-text-subtle);
-		cursor: default;
-	}
-
-	.concept-detail__status--published {
-		background: rgba(46, 160, 67, 0.15);
-		border-color: rgba(46, 160, 67, 0.35);
-		color: #256c3f;
-	}
-
-	.concept-detail__badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.3rem 0.7rem;
-		border-radius: 999px;
-		background: var(--color-panel-secondary);
-		border: 1px solid var(--color-border-light);
-		font-size: 0.8rem;
-		font-weight: 500;
-		color: var(--color-text-subtle);
-		cursor: default;
-	}
-
-	.concept-detail__badge--optional {
-		background: rgba(59, 130, 246, 0.12);
-		border-color: rgba(59, 130, 246, 0.25);
-		color: #1d4ed8;
-	}
-
 	.concept-detail__badge-list {
 		display: flex;
 		flex-wrap: wrap;
@@ -1269,8 +992,7 @@
 			padding: 1rem;
 		}
 
-		.concept-detail__admin-form > .concept-detail__form-grid,
-		.concept-detail__advanced-body .concept-detail__form-grid {
+		.concept-detail__admin-form > .concept-detail__form-grid {
 			padding: 0.75rem;
 		}
 
