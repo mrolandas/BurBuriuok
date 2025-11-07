@@ -107,6 +107,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 ## Planning Status (2025-11-07)
 
 - Trimmed launch scope captured in `docs/session/current_session.md`; full historical session notes archived under `docs/archive/` (see `2025-11-07-current-session.md`).
+- 2025-11-09: Admin AppShell refresh merged to `main`, inline concept editing reorganised for mobile, backend admin saves hardened against Supabase auth failures, and Supabase keys rotated with schema grants restored; documentation refresh queued.
 - Planning deliverables are consolidated in `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`, `docs/references/ANALYTICS_EVENTS.md`, and `docs/references/ISSUE_TRACKER.md`.
 - Regression guardrail automation (seeds, curriculum snapshot, markdown validation) runs locally via Husky and in CI via `content-seed-guard.yml`.
 - No standalone wireframing assets exist beyond the written UX notes in `docs/references/UX_MOBILE_WIREFRAMES.md`; there are currently no screenshots to maintain.

@@ -23,6 +23,13 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - [ ] **Media intake pipeline** – expose upload/metadata flow, define storage strategy, and queue submissions for review.
 - [ ] **Moderation queue & notification stubs** – build approve/reject UI with SLA signalling, dispatcher-backed Slack/email hooks, and tightened RLS/persona guards.
 
+## Recent Progress
+
+- Hardened inline concept editing: AppShell admin toggle persists across navigation, buttons reorganised for mobile, and inline save flow now surfaces backend validation feedback without 500s.
+- Backend admin save endpoint now guards Supabase auth errors, emits defensive audit logging, and returns clear payload failures for publish attempts.
+- Rotated Supabase anon + service keys, re-granted schema privileges, and verified admin draft saves, expected publish validation errors, and concept cleanup via Supabase script.
+- Cleaned temporary admin test concept, merged admin UI refresh branch to `main`, and prepped documentation backlog for the next pass.
+
 ## Seam Preservation Checklist (must complete inside trimmed scope)
 
 1. Keep moderation-ready status enums (`draft/published`, `pending/approved/rejected`) and document handling for future queues.
@@ -34,12 +41,11 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 
 ## Immediate Focus
 
-- Re-test admin shell & inline editing flows, document gaps, then layer tree management UX + backend reparenting.
-- Finalise the content versioning actions (draft/review/publish) and ensure audit history captures actor + summary.
-- Prototype media intake (UI + API), choose interim storage approach, and note schema updates in references.
-- Build moderation queue skeleton with SLA badges and wire dispatcher stubs to Slack/email logging.
-- Lock down RLS, validation, and persona gating updates; reflect changes in `PERSONAS_PERMISSIONS.md` and related references.
-- Keep CI guardrails (`npm test`, `npm run backend:typecheck`, `npm run frontend:check`, `npm run content:seed:check`) green after each slice.
+- Refresh documentation (this file, `docs/INFRASTRUCTURE.md`, `docs/references/infrastructure/SUPABASE.md`, `docs/MASTER_PLAN.md`) so the latest admin UI tweaks, backend guardrails, and key rotation steps are captured before starting new feature work.
+- Re-test the admin shell + inline editing path end-to-end after the merge to confirm the toggle persists, draft saves succeed, and publish attempts surface validation messaging without 500s.
+- Sketch the next set of hierarchy UX tasks (tree management, reparenting rules) while identifying backend seams needed for CRUD coverage.
+- Inventory remaining audit logging/doc gaps for draft → publish flow and queue them alongside dispatcher hook work.
+- Plan the media intake spike (UI, Supabase storage plan) and note schema touchpoints in `references/SCHEMA_DECISIONS.md` for upcoming implementation.
 
 ## Documentation & Maintenance Rules
 
@@ -73,6 +79,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 ## Session Log
 
 - 2025-11-07: Trimmed launch scope confirmed; archived prior session plan to `docs/archive/2025-11-07-current-session.md`; new plan captures hierarchy management requirement, architectural seams, and updated delivery slices.
+- 2025-11-09: Refined admin shell + inline editing UX, shored up backend guardrails, rotated Supabase keys with schema grants restored, validated draft saves/publish errors, removed test concept, and merged admin refresh to `main`; documentation refresh queued next.
 
 ## Wrap-up Checklist
 

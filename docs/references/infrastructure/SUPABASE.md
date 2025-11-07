@@ -15,6 +15,14 @@ This document captures how BurBuriuok uses Supabase during early development (st
 
 > Make sure `.env` is never committed. The repo `.gitignore` already excludes it.
 
+### Key Rotation Checklist (2025-11-09 refresh)
+
+1. In the Supabase Dashboard → Project Settings → API, rotate the anon and service role keys. Copy the new values immediately; the old keys are revoked once you navigate away.
+2. Update local `.env`, GitHub Secrets (`SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`), and any deployment environments. Committers should restart local dev servers so the refreshed keys load.
+3. Re-run schema grants for the service role: `grant usage on schema burburiuok to service_role;` followed by `grant select, insert, update, delete on all tables in schema burburiuok to service_role;` (repeat for future tables or define default privileges).
+4. Validate connectivity with `node tests/checkSupabaseConnection.mjs`, then perform an admin draft save + publish attempt in the UI to confirm 201/400 responses and audit logging.
+5. Clean up any test content inserted during validation, and log the rotation date in `docs/INFRASTRUCTURE.md` + this file. Target quarterly rotations unless incidents dictate otherwise.
+
 ## Database Layout (Current + Planned)
 
 - **Database name/schema** – create a dedicated schema `burburiuok` in the shared instance to avoid collisions with other projects.
