@@ -890,8 +890,22 @@
 
 	.concept-detail__admin-form {
 		display: grid;
-		gap: 1.2rem;
-		margin-top: 0.5rem;
+		gap: 1.5rem;
+		margin-top: 0.75rem;
+		padding: 1.25rem;
+		border-radius: 1.1rem;
+		border: 1px solid var(--color-border-light);
+		background: var(--color-panel);
+		box-shadow: 0 18px 36px -18px var(--color-overlay);
+	}
+
+	.concept-detail__admin-form > .concept-detail__form-grid,
+	.concept-detail__advanced-body .concept-detail__form-grid {
+		padding: 1rem;
+		border-radius: 1rem;
+		border: 1px solid var(--color-border-light);
+		background: var(--color-panel-secondary);
+		box-shadow: 0 12px 28px -22px var(--color-overlay);
 	}
 
 	.concept-detail__admin-alert {
@@ -914,7 +928,7 @@
 
 	.concept-detail__form-grid {
 		display: grid;
-		gap: 0.9rem;
+		gap: 1rem;
 	}
 
 	.concept-detail__form-grid--basic,
@@ -928,27 +942,45 @@
 
 	.concept-detail__form-grid label {
 		display: grid;
-		gap: 0.35rem;
+		gap: 0.45rem;
 		font-size: 0.85rem;
+	}
+
+	.concept-detail__form-grid label > span:first-child {
+		font-weight: 600;
+		color: var(--color-text-subtle);
 	}
 
 	.concept-detail__form-grid input,
 	.concept-detail__form-grid textarea {
 		width: 100%;
 		border: 1px solid var(--color-border-light);
-		border-radius: 0.55rem;
-		padding: 0.6rem 0.75rem;
+		border-radius: 0.65rem;
+		padding: 0.65rem 0.85rem;
 		font: inherit;
-		background: var(--color-panel-secondary);
+		background: var(--color-panel);
 		color: inherit;
-		transition: border-color 0.2s ease, background 0.2s ease;
+		transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+		box-shadow: 0 0 0 0 transparent;
+	}
+
+	.concept-detail__form-grid input:hover,
+	.concept-detail__form-grid textarea:hover {
+		border-color: var(--color-border);
+		background: var(--color-panel-hover);
 	}
 
 	.concept-detail__form-grid input:focus-visible,
 	.concept-detail__form-grid textarea:focus-visible {
 		outline: none;
-		border-color: var(--color-border);
-		background: var(--color-panel);
+		border-color: var(--color-accent-strong);
+		background: var(--color-popover);
+		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
+	}
+
+	.concept-detail__form-grid textarea {
+		min-height: 9rem;
+		resize: vertical;
 	}
 
 	.concept-detail__field-error {
@@ -965,8 +997,9 @@
 
 	.concept-detail__advanced {
 		border: 1px solid var(--color-border-light);
-		border-radius: 0.8rem;
+		border-radius: 1rem;
 		background: var(--color-panel-secondary);
+		box-shadow: 0 16px 32px -20px var(--color-overlay);
 	}
 
 	.concept-detail__advanced[open] {
@@ -980,9 +1013,16 @@
 		justify-content: space-between;
 		gap: 1rem;
 		cursor: pointer;
-		padding: 0.7rem 1rem;
+		padding: 0.85rem 1.25rem;
 		font-weight: 600;
 		list-style: none;
+		border-radius: 1rem;
+		background: transparent;
+	}
+
+	.concept-detail__advanced[open] summary {
+		border-bottom: 1px solid var(--color-border-light);
+		border-radius: 1rem 1rem 0 0;
 	}
 
 	.concept-detail__advanced summary:focus-visible {
@@ -1002,8 +1042,8 @@
 
 	.concept-detail__advanced-body {
 		display: grid;
-		gap: 1rem;
-		padding: 0 1rem 1rem;
+		gap: 1.2rem;
+		padding: 1.1rem 1.25rem 1.25rem;
 	}
 
 	.concept-detail__advanced-hint {
@@ -1022,18 +1062,19 @@
 	.concept-detail__admin-button {
 		border: 1px solid var(--color-border-light);
 		background: var(--color-panel-secondary);
-		border-radius: 0.6rem;
+		border-radius: 0.65rem;
 		padding: 0.6rem 1rem;
 		font-weight: 600;
 		font-size: 0.9rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 	}
 
 	.concept-detail__admin-button:hover,
 	.concept-detail__admin-button:focus-visible {
 		border-color: var(--color-border);
-		background: var(--color-panel);
+		background: var(--color-panel-hover);
+		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
 	}
 
 	.concept-detail__admin-button--primary {
@@ -1042,9 +1083,9 @@
 	}
 
 	.concept-detail__admin-button--publish {
-		background: rgba(59, 130, 246, 0.12);
-		border-color: rgba(59, 130, 246, 0.3);
-		color: #1d4ed8;
+		background: var(--color-accent-faint);
+		border-color: var(--color-accent-border-strong);
+		color: var(--color-accent-strong);
 	}
 
 	.concept-detail__admin-button:disabled {
@@ -1055,8 +1096,17 @@
 	.concept-detail__admin-toolbar {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
+		gap: 0.75rem;
 		align-items: center;
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--color-border-light);
+		border-radius: 0.9rem;
+		background: var(--color-panel);
+		box-shadow: 0 16px 32px -20px var(--color-overlay);
+	}
+
+	.concept-detail__admin-toolbar--editing {
+		align-items: flex-start;
 	}
 
 	.concept-detail__admin-control-group {
@@ -1068,24 +1118,32 @@
 
 	.concept-detail__admin-field {
 		display: grid;
-		gap: 0.35rem;
+		gap: 0.45rem;
 		font-size: 0.82rem;
 	}
 
 	.concept-detail__admin-field select {
 		border: 1px solid var(--color-border-light);
-		border-radius: 0.55rem;
-		padding: 0.5rem 0.75rem;
+		border-radius: 0.65rem;
+		padding: 0.55rem 0.85rem;
 		font: inherit;
-		background: var(--color-panel-secondary);
+		min-width: 11rem;
+		background: var(--color-panel);
 		color: inherit;
-		transition: border-color 0.2s ease, background 0.2s ease;
+		transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+		box-shadow: 0 0 0 0 transparent;
+	}
+
+	.concept-detail__admin-field select:hover {
+		border-color: var(--color-border);
+		background: var(--color-panel-hover);
 	}
 
 	.concept-detail__admin-field select:focus-visible {
 		outline: none;
-		border-color: var(--color-border);
-		background: var(--color-panel);
+		border-color: var(--color-accent-strong);
+		background: var(--color-popover);
+		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
 	}
 
 	.concept-detail__checkbox {
@@ -1101,8 +1159,10 @@
 	}
 
 	.concept-detail__checkbox input[type='checkbox'] {
-		width: 1.1rem;
-		height: 1.1rem;
+		width: 1.15rem;
+		height: 1.15rem;
+		accent-color: var(--color-accent);
+		border-radius: 0.25rem;
 	}
 
 	.concept-detail__status {
@@ -1197,6 +1257,19 @@
 	}
 
 	@media (max-width: 640px) {
+		.concept-detail__admin-form {
+			padding: 1rem;
+		}
+
+		.concept-detail__admin-form > .concept-detail__form-grid,
+		.concept-detail__advanced-body .concept-detail__form-grid {
+			padding: 0.75rem;
+		}
+
+		.concept-detail__admin-toolbar {
+			padding: 0.8rem;
+		}
+
 		.concept-detail__actions-panel {
 			gap: 0.55rem;
 		}
