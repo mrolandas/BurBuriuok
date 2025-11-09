@@ -10,6 +10,7 @@ import {
   adminConceptStatusSchema,
   type AdminConceptMutationInput,
 } from "../../../../shared/validation/adminConceptSchema.ts";
+import { isSupabaseAuthError } from "../../utils/supabaseErrors.ts";
 
 const router = Router();
 
@@ -287,25 +288,4 @@ function mapVersionForResponse(row: {
     createdBy: row.created_by ?? null,
     version: row.version ?? null,
   } satisfies ConceptVersionResponse;
-}
-
-function isSupabaseAuthError(error: unknown): boolean {
-  if (!error) {
-    return false;
-  }
-
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "string"
-      ? error
-      : typeof (error as { message?: unknown }).message === "string"
-      ? String((error as { message: string }).message)
-      : null;
-
-  if (!message) {
-    return false;
-  }
-
-  return message.toLowerCase().includes("invalid api key");
 }

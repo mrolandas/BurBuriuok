@@ -2,7 +2,10 @@
 	import CurriculumTreeBranch from './CurriculumTreeBranch.svelte';
 	import type { CurriculumNode } from '$lib/api/curriculum';
 	import { fetchChildNodes, fetchNodeItems } from '$lib/api/curriculum';
-	import type { TreeNodeState } from './curriculumTreeTypes';
+	import { createCurriculumNode } from '$lib/api/admin/curriculum';
+	import { adminMode } from '$lib/stores/adminMode';
+	import { onDestroy, onMount } from 'svelte';
+	import type { TreeNodeState, TreeNodeAdminState } from './curriculumTreeTypes';
 
 	type SectionSummary = {
 		code: string;
@@ -13,6 +16,20 @@
 	export let section: SectionSummary;
 	export let initialNodes: CurriculumNode[] = [];
 
+	let adminEnabled = false;
+	let adminModeUnsubscribe: (() => void) | null = null;
+
+	const createAdminState = (): TreeNodeAdminState => ({
+		createChild: {
+			open: false,
+			code: '',
+			title: '',
+			summary: '',
+			error: null,
+			busy: false
+		}
+	});
+
 	const createState = (node: CurriculumNode): TreeNodeState => ({
 		node,
 		expanded: false,
@@ -20,19 +37,74 @@
 		loaded: false,
 		children: [],
 		items: [],
-		error: null
+		error: null,
+		admin: createAdminState()
 	});
 
 	let roots: TreeNodeState[] = initialNodes.map(createState);
-	let renderKey = 0;
+
+	const refreshTree = () => {
+		roots = [...roots];
+	};
+
+	onMount(() => {
+		adminMode.initialize();
+		adminModeUnsubscribe = adminMode.subscribe((value) => {
+			adminEnabled = value;
+			refreshTree();
+		});
+	});
+
+	onDestroy(() => {
+		if (adminModeUnsubscribe) {
+			adminModeUnsubscribe();
+			adminModeUnsubscribe = null;
+		}
+	});
 
 	$: if (initialNodes) {
 		roots = initialNodes.map(createState);
-		bump();
 	}
 
-	const bump = () => {
-		renderKey += 1;
+	const resetCreateChildForm = (state: TreeNodeState) => {
+		const form = state.admin.createChild;
+		form.code = '';
+		form.title = '';
+		form.summary = '';
+		form.error = null;
+		form.busy = false;
+		refreshTree();
+	};
+
+	const openCreateChildForm = (state: TreeNodeState) => {
+		state.expanded = true;
+		if (!state.loaded) {
+			void ensureChildren(state);
+		}
+
+		resetCreateChildForm(state);
+		const form = state.admin.createChild;
+		form.open = true;
+		form.error = null;
+		form.busy = false;
+		refreshTree();
+	};
+
+	const cancelCreateChildForm = (state: TreeNodeState) => {
+		resetCreateChildForm(state);
+		state.admin.createChild.open = false;
+		refreshTree();
+	};
+
+	type CreateChildField = 'code' | 'title' | 'summary';
+
+	const updateCreateChildField = (state: TreeNodeState, field: CreateChildField, value: string) => {
+		const form = state.admin.createChild;
+		form[field] = value;
+		if (form.error) {
+			form.error = null;
+		}
+		refreshTree();
 	};
 
 	const ensureChildren = async (state: TreeNodeState, { force = false } = {}) => {
@@ -46,7 +118,7 @@
 
 		state.loading = true;
 		state.error = null;
-		bump();
+		refreshTree();
 
 		try {
 			const [children, items] = await Promise.all([
@@ -61,28 +133,63 @@
 			state.error = err instanceof Error ? err.message : 'Nepavyko įkelti duomenų.';
 		} finally {
 			state.loading = false;
-			bump();
+			refreshTree();
 		}
 	};
 
 	export const toggleNode = async (state: TreeNodeState) => {
 		if (state.expanded) {
 			state.expanded = false;
-			bump();
+			refreshTree();
 			return;
 		}
 
 		state.expanded = true;
-		bump();
+		refreshTree();
 		await ensureChildren(state);
 	};
 
 	export const retryNode = async (state: TreeNodeState) => {
 		if (!state.expanded) {
-			state.expanded = true;
+				state.expanded = true;
 		}
-		bump();
+			refreshTree();
 		await ensureChildren(state, { force: true });
+	};
+
+	const submitCreateChild = async (state: TreeNodeState) => {
+		const form = state.admin.createChild;
+		const code = form.code.trim();
+		const title = form.title.trim();
+		const summaryValue = form.summary.trim();
+
+		if (!code || !title) {
+			form.error = 'Įrašykite kodą ir pavadinimą.';
+			refreshTree();
+			return;
+		}
+
+		form.busy = true;
+		form.error = null;
+		refreshTree();
+
+		try {
+			await createCurriculumNode({
+				code,
+				title,
+				summary: summaryValue ? summaryValue : null,
+				parentCode: state.node.code
+			});
+
+			await ensureChildren(state, { force: true });
+			resetCreateChildForm(state);
+			form.open = false;
+		} catch (err) {
+			form.error = err instanceof Error ? err.message : 'Nepavyko sukurti poskyrio.';
+		} finally {
+			form.busy = false;
+			refreshTree();
+		}
 	};
 </script>
 
@@ -97,9 +204,16 @@
 	{#if !roots.length}
 		<p class="curriculum-tree__empty">Šioje skiltyje dar nėra įkelto turinio.</p>
 	{:else}
-		{#key renderKey}
-			<CurriculumTreeBranch nodes={roots} onToggle={toggleNode} onRetry={retryNode} />
-		{/key}
+		<CurriculumTreeBranch
+			nodes={roots}
+			onToggle={toggleNode}
+			onRetry={retryNode}
+			adminEnabled={adminEnabled}
+			onOpenCreateChild={openCreateChildForm}
+			onCancelCreateChild={cancelCreateChildForm}
+			onCreateChildFieldChange={updateCreateChildField}
+			onSubmitCreateChild={submitCreateChild}
+		/>
 	{/if}
 </section>
 

@@ -29,6 +29,8 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - Backend admin save endpoint now guards Supabase auth errors, emits defensive audit logging, and returns clear payload failures for publish attempts.
 - Rotated Supabase anon + service keys, re-granted schema privileges, and verified admin draft saves, expected publish validation errors, and concept cleanup via Supabase script.
 - Cleaned temporary admin test concept, merged admin UI refresh branch to `main`, and prepped documentation backlog for the next pass.
+- Cleaned temporary admin test concept, merged admin UI refresh branch to `main`, and prepped documentation backlog for the next pass.
+- Restored admin impersonation toggle on GitHub Pages, removed obsolete footer link, and hardened deployment workflow with root dependency install + Supabase smoke check.
 
 ## Seam Preservation Checklist (must complete inside trimmed scope)
 
@@ -41,9 +43,9 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 
 ## Immediate Focus
 
-- Refresh documentation (this file, `docs/INFRASTRUCTURE.md`, `docs/references/infrastructure/SUPABASE.md`, `docs/MASTER_PLAN.md`) so the latest admin UI tweaks, backend guardrails, and key rotation steps are captured before starting new feature work.
+- Confirm the refreshed docs stay accurate (session, infrastructure, Supabase, master plan) and capture any new deployment notes after the Pages fixes.
 - Re-test the admin shell + inline editing path end-to-end after the merge to confirm the toggle persists, draft saves succeed, and publish attempts surface validation messaging without 500s.
-- Sketch the next set of hierarchy UX tasks (tree management, reparenting rules) while identifying backend seams needed for CRUD coverage.
+- Break down the hierarchy tooling slice: document UX plan (drag/drop vs button controls), define minimum backend operations (create, reorder, reparent, delete safeguards), and map required API endpoints.
 - Inventory remaining audit logging/doc gaps for draft → publish flow and queue them alongside dispatcher hook work.
 - Plan the media intake spike (UI, Supabase storage plan) and note schema touchpoints in `references/SCHEMA_DECISIONS.md` for upcoming implementation.
 
@@ -80,6 +82,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 
 - 2025-11-07: Trimmed launch scope confirmed; archived prior session plan to `docs/archive/2025-11-07-current-session.md`; new plan captures hierarchy management requirement, architectural seams, and updated delivery slices.
 - 2025-11-09: Refined admin shell + inline editing UX, shored up backend guardrails, rotated Supabase keys with schema grants restored, validated draft saves/publish errors, removed test concept, and merged admin refresh to `main`; documentation refresh queued next.
+- 2025-11-09: Cleaned merged branches, deleted obsolete remotes, enabled admin impersonation on GitHub Pages, and opened `phase/1-hierarchy-crud` to focus on curriculum CRUD tooling.
 
 ## Wrap-up Checklist
 
