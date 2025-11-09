@@ -1,8 +1,12 @@
 import { Router } from "express";
 import {
   createCurriculumNodeAdmin,
+  deleteCurriculumNodeAdmin,
+  getCurriculumNodeByCode,
   listCurriculumNodesByParent,
+  updateCurriculumNodeAdmin,
   type CreateCurriculumNodeInput,
+  type UpdateCurriculumNodeInput,
 } from "../../../../data/repositories/curriculumRepository.ts";
 import type { CurriculumNode } from "../../../../data/types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
@@ -10,9 +14,13 @@ import { logContentMutation } from "../../services/auditLogger.ts";
 import { unauthorized } from "../../utils/httpError.ts";
 import {
   adminCurriculumNodeCreateSchema,
+  adminCurriculumNodeUpdateSchema,
   type AdminCurriculumNodeCreateInput,
 } from "../../../../shared/validation/adminCurriculumSchema.ts";
-import { isSupabaseAuthError, isUniqueConstraintError } from "../../utils/supabaseErrors.ts";
+import {
+  isSupabaseAuthError,
+  isUniqueConstraintError,
+} from "../../utils/supabaseErrors.ts";
 
 const router = Router();
 
@@ -116,6 +124,176 @@ router.post(
       },
       meta: {
         createdAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.patch(
+  "/nodes/:code",
+  asyncHandler(async (req, res) => {
+    const { code } = req.params;
+    const validation = adminCurriculumNodeUpdateSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      res.status(400).json({
+        error: {
+          message: "Neteisingai užpildyta poskyrio forma.",
+          details: validation.error.flatten(),
+        },
+      });
+      return;
+    }
+
+    const existing = await getCurriculumNodeByCode(code);
+
+    if (!existing) {
+      res.status(404).json({
+        error: {
+          message: `Curriculum node '${code}' was not found.`,
+        },
+      });
+      return;
+    }
+
+    if (
+      typeof validation.data.parentCode !== "undefined" &&
+      validation.data.parentCode !== existing.parentCode
+    ) {
+      res.status(400).json({
+        error: {
+          message: "Perkėlimas į kitą tėvinį poskyrį dar nepalaikomas.",
+        },
+      });
+      return;
+    }
+
+    const payload: UpdateCurriculumNodeInput = {
+      title: typeof validation.data.title === "string" ? validation.data.title : undefined,
+      summary:
+        typeof validation.data.summary !== "undefined"
+          ? validation.data.summary ?? null
+          : undefined,
+      ordinal:
+        typeof validation.data.ordinal === "number"
+          ? Number(validation.data.ordinal)
+          : undefined,
+    };
+
+    let updated: CurriculumNode | null = null;
+
+    try {
+      updated = await updateCurriculumNodeAdmin(code, payload);
+    } catch (error) {
+      if (isSupabaseAuthError(error)) {
+        throw unauthorized(
+          "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
+        );
+      }
+
+      if (isUniqueConstraintError(error)) {
+        res.status(409).json({
+          error: {
+            message:
+              "Nepavyko išsaugoti poskyrio, nes kitas to paties lygio elementas jau turi pasirinktą eilės numerį.",
+          },
+        });
+        return;
+      }
+
+      throw error;
+    }
+
+    if (!updated) {
+      throw new Error(`Curriculum node '${code}' was not returned after update.`);
+    }
+
+    try {
+      await logContentMutation({
+        entityType: "curriculum_node",
+        entityId: updated.code,
+        before: mapNodeForResponse(existing),
+        after: mapNodeForResponse(updated),
+        actor: req.authUser?.email ?? req.authUser?.id ?? null,
+        changeSummary: `Curriculum node '${updated.code}' updated via admin console.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log curriculum node update", {
+        code,
+        error,
+      });
+    }
+
+    res.json({
+      data: {
+        node: mapNodeForResponse(updated),
+      },
+      meta: {
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.delete(
+  "/nodes/:code",
+  asyncHandler(async (req, res) => {
+    const { code } = req.params;
+
+    const existing = await getCurriculumNodeByCode(code);
+
+    if (!existing) {
+      res.status(404).json({
+        error: {
+          message: `Curriculum node '${code}' was not found.`,
+        },
+      });
+      return;
+    }
+
+    let removed: CurriculumNode | null = null;
+
+    try {
+      removed = await deleteCurriculumNodeAdmin(code);
+    } catch (error) {
+      if (isSupabaseAuthError(error)) {
+        throw unauthorized(
+          "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
+        );
+      }
+
+      throw error;
+    }
+
+    if (!removed) {
+      throw new Error(`Curriculum node '${code}' was not returned after deletion.`);
+    }
+
+    try {
+      const beforeForLog = mapNodeForResponse(existing);
+      await logContentMutation<Record<string, unknown>>({
+        entityType: "curriculum_node",
+        entityId: removed.code,
+        before: beforeForLog,
+        after: {},
+        actor: req.authUser?.email ?? req.authUser?.id ?? null,
+        changeSummary: `Curriculum node '${removed.code}' deleted via admin console.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log curriculum node deletion", {
+        code,
+        error,
+      });
+    }
+
+    res.json({
+      data: {
+        node: mapNodeForResponse(removed),
+      },
+      meta: {
+        deletedAt: new Date().toISOString(),
       },
     });
   })

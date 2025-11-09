@@ -319,6 +319,13 @@ export type CreateCurriculumNodeInput = {
   ordinal?: number | null;
 };
 
+export type UpdateCurriculumNodeInput = {
+  title?: string;
+  summary?: string | null;
+  parentCode?: string | null;
+  ordinal?: number | null;
+};
+
 export async function createCurriculumNodeAdmin(
   input: CreateCurriculumNodeInput
 ): Promise<CurriculumNode> {
@@ -378,4 +385,150 @@ export async function createCurriculumNodeAdmin(
   }
 
   return created;
+}
+
+export async function updateCurriculumNodeAdmin(
+  code: string,
+  input: UpdateCurriculumNodeInput
+): Promise<CurriculumNode> {
+  const serviceClient = getServiceClient();
+  const existing = await getCurriculumNodeByCode(code);
+
+  if (!existing) {
+    throw new Error(`Curriculum node '${code}' was not found.`);
+  }
+
+  const updates: Record<string, unknown> = {};
+
+  if (typeof input.title === "string") {
+    updates.title = input.title.trim();
+  }
+
+  if (typeof input.summary !== "undefined") {
+    const summaryValue =
+      typeof input.summary === "string" ? input.summary.trim() : input.summary ?? null;
+    updates.summary = summaryValue && summaryValue.length ? summaryValue : null;
+  }
+
+  if (Object.keys(updates).length > 0) {
+    updates.updated_at = new Date().toISOString();
+    const { error } = await (serviceClient as any)
+      .from(NODE_TABLE)
+      .update(updates)
+      .eq("code", code);
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  const hasOrdinalUpdate =
+    typeof input.ordinal === "number" && Number.isFinite(input.ordinal);
+
+  if (hasOrdinalUpdate) {
+    const siblings = await fetchSiblingOrdinals(serviceClient, existing.parentCode);
+    const siblingsWithoutCurrent = siblings.filter((sibling) => sibling.code !== code);
+    const targetOrdinal = clampOrdinal(
+      Number(input.ordinal),
+      siblingsWithoutCurrent.length + 1
+    );
+
+    if (targetOrdinal !== existing.ordinal) {
+      const orderedCodes = siblingsWithoutCurrent.map((sibling) => sibling.code);
+      orderedCodes.splice(targetOrdinal - 1, 0, code);
+      await resequenceParentChildren(serviceClient, existing.parentCode, orderedCodes);
+    }
+  }
+
+  const updated = await getCurriculumNodeByCode(code);
+
+  if (!updated) {
+    throw new Error(`Curriculum node '${code}' could not be reloaded after update.`);
+  }
+
+  return updated;
+}
+
+export async function deleteCurriculumNodeAdmin(code: string): Promise<CurriculumNode> {
+  const serviceClient = getServiceClient();
+  const existing = await getCurriculumNodeByCode(code);
+
+  if (!existing) {
+    throw new Error(`Curriculum node '${code}' was not found.`);
+  }
+
+  const { error } = await (serviceClient as any)
+    .from(NODE_TABLE)
+    .delete()
+    .eq("code", code);
+
+  if (error) {
+    throw error;
+  }
+
+  const siblings = await fetchSiblingOrdinals(serviceClient, existing.parentCode);
+  const orderedCodes = siblings.map((sibling) => sibling.code);
+
+  if (orderedCodes.length) {
+    await resequenceParentChildren(serviceClient, existing.parentCode, orderedCodes);
+  }
+
+  return existing;
+}
+
+async function resequenceParentChildren(
+  client: SupabaseClient,
+  parentCode: string | null,
+  orderedCodes: string[]
+): Promise<void> {
+  if (!orderedCodes.length) {
+    return;
+  }
+
+  const offset = orderedCodes.length;
+  const now = new Date().toISOString();
+
+  for (let index = 0; index < orderedCodes.length; index += 1) {
+    const code = orderedCodes[index];
+    const updateQuery = applyParentFilter(
+      (client as any)
+        .from(NODE_TABLE)
+        .update({
+          ordinal: offset + index + 1,
+          updated_at: now,
+        })
+        .eq("code", code),
+      parentCode
+    );
+
+    const { error: tempError } = await updateQuery;
+
+    if (tempError) {
+      throw new Error(
+        `Failed to assign temporary ordinal for '${code}': ${tempError.message}`
+      );
+    }
+  }
+
+  for (let index = 0; index < orderedCodes.length; index += 1) {
+    const code = orderedCodes[index];
+    const updateQuery = applyParentFilter(
+      (client as any)
+        .from(NODE_TABLE)
+        .update({
+          ordinal: index + 1,
+          updated_at: now,
+        })
+        .eq("code", code),
+      parentCode
+    );
+
+    const { error: resequenceError } = await updateQuery;
+
+    if (resequenceError) {
+      throw new Error(
+        `Failed to resequence ordinal for '${code}': ${resequenceError.message}`
+      );
+    }
+  }
 }
