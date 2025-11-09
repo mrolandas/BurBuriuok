@@ -73,6 +73,7 @@
 	const handleDndFinalize = (event: CustomEvent<DndEvent<unknown>>) => {
 		const detail = event.detail as DndEvent<TreeNodeState>;
 		const orderedNodes = extractOrderedNodes(event);
+		isDragOver = false;
 		onNodeDragFinalize({
 			parentCode: resolveParentCode(),
 			orderedIds: orderedNodes.map((item) => String(item.id)),
@@ -160,6 +161,9 @@
 		cancelHoverExpand();
 		if (hoverTargetCode !== null) {
 			hoverTargetCode = null;
+		}
+		if (isDragOver) {
+			isDragOver = false;
 		}
 	}
 
