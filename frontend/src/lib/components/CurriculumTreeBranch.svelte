@@ -40,28 +40,27 @@
 	let isDragOver = false;
 
 	const resolveParentCode = () => (parentState ? parentState.node.code : null);
-	const extractOrderedIds = (event: CustomEvent<DndEvent<unknown>>): string[] => {
+	const extractOrderedNodes = (event: CustomEvent<DndEvent<unknown>>): TreeNodeState[] => {
 		const detail = event.detail as DndEvent<TreeNodeState>;
-		return detail.items
-			.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID)
-			.map((item) => String(item.id));
+		return detail.items.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID);
 	};
 
-	const resolveDragInfo = (event: CustomEvent<DndEvent<unknown>>) =>
-		event.detail as DndEvent<TreeNodeState>;
-
 	const handleDndConsider = (event: CustomEvent<DndEvent<unknown>>) => {
+		const orderedNodes = extractOrderedNodes(event);
 		onNodeDragConsider({
 			parentCode: resolveParentCode(),
-			orderedIds: extractOrderedIds(event)
+			orderedIds: orderedNodes.map((item) => String(item.id)),
+			orderedNodes
 		});
 	};
 
 	const handleDndFinalize = (event: CustomEvent<DndEvent<unknown>>) => {
-		const detail = resolveDragInfo(event);
+		const detail = event.detail as DndEvent<TreeNodeState>;
+		const orderedNodes = extractOrderedNodes(event);
 		onNodeDragFinalize({
 			parentCode: resolveParentCode(),
-			orderedIds: extractOrderedIds(event),
+			orderedIds: orderedNodes.map((item) => String(item.id)),
+			orderedNodes,
 			draggedId: String(detail.info.id),
 			trigger: detail.info.trigger
 		});
@@ -464,8 +463,10 @@
 	}
 
 	.tree-branch.tree-branch--drag-over {
-		background: rgba(37, 99, 235, 0.05);
-		border-radius: 0.9rem;
+		background: rgba(37, 99, 235, 0.1);
+		border: 2px solid var(--curriculum-drop-outline, #2563eb);
+		border-radius: 1rem;
+		box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
 	}
 
 	.tree-branch[data-drag-enabled='true'] .tree-node__header {
@@ -744,17 +745,38 @@
 	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']) {
 		position: relative;
 		visibility: visible !important;
-		opacity: 0;
 		pointer-events: none;
+		height: 0;
+		margin: 0.65rem 0;
+	}
+
+	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']::before) {
+		content: '';
+		position: absolute;
+		left: -1.25rem;
+		right: -1.25rem;
+		top: 50%;
+		height: 6px;
+		transform: translateY(-50%);
+		border-radius: 999px;
+		background: var(--curriculum-drop-outline, #2563eb);
+		box-shadow:
+			0 0 0 3px rgba(37, 99, 235, 0.25),
+			0 6px 18px rgba(15, 23, 42, 0.18);
+		z-index: 2;
 	}
 
 	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']::after) {
 		content: '';
 		position: absolute;
-		inset: 0;
-		border: 2px dashed var(--curriculum-drop-outline, #2563eb);
-		border-radius: 0.75rem;
+		left: -1.25rem;
+		right: -1.25rem;
+		top: 50%;
+		height: 28px;
+		transform: translateY(-50%);
+		border-radius: 14px;
 		background: rgba(37, 99, 235, 0.12);
+		z-index: 1;
 	}
 
 	:global(.tree-branch [data-is-dnd-shadow-item-internal='true'] *) {

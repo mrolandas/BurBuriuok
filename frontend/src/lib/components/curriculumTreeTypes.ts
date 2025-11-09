@@ -50,6 +50,7 @@ export type TreeNodeState = {
 export type TreeNodeOrderChange = {
 	parentCode: string | null;
 	orderedIds: string[];
+	orderedNodes: TreeNodeState[];
 };
 
 export type TreeNodeOrderFinalize = TreeNodeOrderChange & {

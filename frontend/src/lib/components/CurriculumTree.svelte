@@ -130,11 +130,10 @@
 		roots = initialNodes.map(createState);
 	}
 
-	const resetCreateChildForm = (state: TreeNodeState) => {
-		state.admin.createChild = {
-			...createCreateChildState(),
-			open: state.admin.createChild.open
-		};
+	const resetCreateChildForm = (state: TreeNodeState, options: { open?: boolean } = {}) => {
+		const next = createCreateChildState();
+		next.open = options.open ?? state.admin.createChild.open;
+		state.admin.createChild = next;
 		refreshTree();
 	};
 
@@ -148,17 +147,12 @@
 			void ensureChildren(state);
 		}
 
-		resetCreateChildForm(state);
-		const form = state.admin.createChild;
-		form.open = true;
-		form.error = null;
-		form.busy = false;
+		resetCreateChildForm(state, { open: true });
 		refreshTree();
 	};
 
 	const cancelCreateChildForm = (state: TreeNodeState) => {
-		resetCreateChildForm(state);
-		state.admin.createChild.open = false;
+		resetCreateChildForm(state, { open: false });
 		if (activeCreateNodeCode === state.node.code) {
 			activeCreateNodeCode = null;
 		}
@@ -279,9 +273,10 @@
 
 	const applyNodeOrderChange = (change: TreeNodeOrderChange) => {
 		const parentState = change.parentCode ? findNodeState(change.parentCode) : null;
-		const hasOrder = change.orderedIds.length > 0;
+		const nodesToAssign = [...change.orderedNodes];
+		const parentsToNormalize = new Set<TreeNodeState | null>();
 
-		if (!hasOrder) {
+		if (!nodesToAssign.length) {
 			if (parentState) {
 				parentState.children = [];
 			} else {
@@ -291,15 +286,6 @@
 			return;
 		}
 
-		const nodesToAssign: TreeNodeState[] = [];
-		for (const id of change.orderedIds) {
-			const nodeState = findNodeState(id);
-			if (!nodeState) {
-				return;
-			}
-			nodesToAssign.push(nodeState);
-		}
-
 		const targetParentCode = parentState ? parentState.node.code : null;
 
 		for (const node of nodesToAssign) {
@@ -307,16 +293,28 @@
 			const currentParentCode = currentParent ? currentParent.node.code : null;
 			if (currentParentCode !== targetParentCode) {
 				detachNode(node.node.code);
+				parentsToNormalize.add(currentParent ?? null);
 			}
 		}
 
 		if (parentState) {
 			parentState.children = nodesToAssign;
+			refreshSiblingOrdinals(parentState.children);
 		} else {
 			roots = nodesToAssign;
+			refreshSiblingOrdinals(roots);
 		}
 
-		refreshSiblingOrdinals(nodesToAssign);
+		parentsToNormalize.forEach((normalParent) => {
+			if (normalParent) {
+				normalParent.children = [...normalParent.children];
+				refreshSiblingOrdinals(normalParent.children);
+			} else {
+				roots = [...roots];
+				refreshSiblingOrdinals(roots);
+			}
+		});
+
 		refreshTree();
 	};
 
@@ -570,8 +568,7 @@
 			});
 
 			await ensureChildren(state, { force: true });
-			resetCreateChildForm(state);
-			form.open = false;
+			resetCreateChildForm(state, { open: false });
 			if (activeCreateNodeCode === state.node.code) {
 				activeCreateNodeCode = null;
 			}
