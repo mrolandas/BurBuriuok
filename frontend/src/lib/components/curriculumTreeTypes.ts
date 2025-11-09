@@ -51,9 +51,11 @@ export type TreeNodeOrderChange = {
 	parentCode: string | null;
 	orderedIds: string[];
 	orderedNodes: TreeNodeState[];
+	trigger: string;
+	source: string;
+	draggedId?: string;
 };
 
 export type TreeNodeOrderFinalize = TreeNodeOrderChange & {
 	draggedId: string;
-	trigger: string;
 };

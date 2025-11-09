@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { onDestroy } from 'svelte';
 	import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
 	import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
 
@@ -38,8 +39,11 @@
 	export let onNodeDragFinalize: (change: TreeNodeOrderFinalize) => void = () => {};
 	export let pendingParentCodes: Set<string | null> = new Set();
 	export let pendingNodeCodes: Set<string> = new Set();
+	export let dragSessionActive = false;
 
 	let isDragOver = false;
+	let hoverExpandTimeout: number | null = null;
+	let hoverTargetCode: string | null = null;
 
 	const resolveBranchParentCode = () => (parentState ? parentState.node.code : null);
 	const isBranchPending = () => pendingParentCodes?.has(resolveBranchParentCode()) ?? false;
@@ -52,11 +56,15 @@
 	};
 
 	const handleDndConsider = (event: CustomEvent<DndEvent<unknown>>) => {
+		const detail = event.detail as DndEvent<TreeNodeState>;
 		const orderedNodes = extractOrderedNodes(event);
 		onNodeDragConsider({
 			parentCode: resolveParentCode(),
 			orderedIds: orderedNodes.map((item) => String(item.id)),
-			orderedNodes
+			orderedNodes,
+			trigger: detail.info.trigger,
+			source: detail.info.source,
+			draggedId: String(detail.info.id)
 		});
 	};
 
@@ -68,7 +76,8 @@
 			orderedIds: orderedNodes.map((item) => String(item.id)),
 			orderedNodes,
 			draggedId: String(detail.info.id),
-			trigger: detail.info.trigger
+			trigger: detail.info.trigger,
+			source: detail.info.source
 		});
 	};
 
@@ -106,7 +115,55 @@
 				node.removeEventListener('touchstart', stop, listenerOptions);
 			}
 		};
+		};
+
+	const cancelHoverExpand = () => {
+		if (hoverExpandTimeout !== null) {
+			window.clearTimeout(hoverExpandTimeout);
+			hoverExpandTimeout = null;
+		}
 	};
+
+	const scheduleHoverExpand = (state: TreeNodeState) => {
+		if (!dragAndDropEnabled || !dragSessionActive || state.expanded) {
+			return;
+		}
+		cancelHoverExpand();
+		hoverExpandTimeout = window.setTimeout(() => {
+			hoverExpandTimeout = null;
+			if (!state.expanded) {
+				void onToggle(state);
+			}
+		}, 600);
+	};
+
+	const handleHeaderPointerEnter = (state: TreeNodeState) => {
+		if (!dragAndDropEnabled || !dragSessionActive) {
+			return;
+		}
+		if (hoverTargetCode !== state.node.code) {
+			hoverTargetCode = state.node.code;
+		}
+		scheduleHoverExpand(state);
+	};
+
+	const handleHeaderPointerLeave = (state: TreeNodeState) => {
+		if (hoverTargetCode === state.node.code) {
+			hoverTargetCode = null;
+		}
+		cancelHoverExpand();
+	};
+
+	$: if (!dragSessionActive) {
+		cancelHoverExpand();
+		if (hoverTargetCode !== null) {
+			hoverTargetCode = null;
+		}
+	}
+
+	onDestroy(() => {
+		cancelHoverExpand();
+	});
 </script>
 
 
@@ -127,7 +184,8 @@
 					backgroundColor: 'rgba(37, 99, 235, 0.06)'
 			  }
 			: {},
-		dropTargetClasses: dragAndDropEnabled ? ['tree-branch--active-drop'] : []
+		dropTargetClasses: dragAndDropEnabled ? ['tree-branch--active-drop'] : [],
+		dropAnimationDisabled: true
 	}}
 	on:consider={handleDndConsider}
 	on:finalize={handleDndFinalize}
@@ -138,7 +196,13 @@
 >
 	{#each nodes as state, index (state.id)}
 				<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
-					<div class="tree-node__header" class:tree-node__header--pending={isNodePending(state)}>
+					<div
+						class="tree-node__header"
+						class:tree-node__header--pending={isNodePending(state)}
+						class:tree-node__header--hover-target={dragSessionActive && hoverTargetCode === state.node.code}
+						on:pointerenter={() => handleHeaderPointerEnter(state)}
+						on:pointerleave={() => handleHeaderPointerLeave(state)}
+					>
 						<button
 							type="button"
 							class="tree-node__toggle"
@@ -276,6 +340,7 @@
 										{onNodeDragFinalize}
 										{pendingParentCodes}
 										{pendingNodeCodes}
+										{dragSessionActive}
 									/>
 								{:else if !state.items.length}
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
@@ -534,6 +599,12 @@
 		outline: 2px solid var(--curriculum-drop-outline, #2563eb);
 		outline-offset: 2px;
 		border-radius: 0.65rem;
+	}
+
+	.tree-node__header--hover-target {
+		background: rgba(37, 99, 235, 0.12);
+		border-radius: 0.65rem;
+		box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.25);
 	}
 
 	.tree-node__toggle {

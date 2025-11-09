@@ -34,6 +34,15 @@
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let activeCreateNodeCode: string | null = null;
 	let dragAndDropEnabled = false;
+	let dragSessionActive = false;
+
+	type DragSnapshot = {
+		nodeId: string;
+		originParentCode: string | null;
+		originOrdinal: number;
+	};
+
+	let activeDragSnapshot: DragSnapshot | null = null;
 
 	type PendingReorder = {
 		parentCode: string | null;
@@ -47,6 +56,7 @@
 	let baselinePositions = new Map<string, { parentCode: string | null; ordinal: number }>();
 	let reorderSaving = false;
 	let reorderError: string | null = null;
+	let pendingChangeCount = 0;
 
 	const createCreateChildState = (): TreeNodeCreateChildState => ({
 		open: false,
@@ -124,10 +134,8 @@
 	const refreshPendingSets = () => {
 		pendingParentCodes = new Set(pendingReorders.keys());
 		const nextNodes = new Set<string>();
-		for (const entry of pendingReorders.values()) {
-			for (const id of entry.orderedIds) {
-				nextNodes.add(id);
-			}
+		for (const code of baselinePositions.keys()) {
+			nextNodes.add(code);
 		}
 		pendingNodeCodes = nextNodes;
 	};
@@ -200,6 +208,11 @@
 		pruneResolvedPending();
 		refreshPendingSets();
 	};
+
+	$: pendingChangeCount = pendingNodeCodes.size;
+	$: if (!dragAndDropEnabled && dragSessionActive) {
+		dragSessionActive = false;
+	}
 
 	const registerPendingReorderForParent = (parentCode: string | null) => {
 		const parentState = parentCode ? findNodeState(parentCode) : null;
@@ -428,6 +441,37 @@
 		if (!dragAndDropEnabled) {
 			return;
 		}
+
+		const draggedId = change.draggedId;
+		if (!draggedId) {
+			return;
+		}
+
+		const wasActive = dragSessionActive;
+		const shouldActivate = change.trigger !== 'dragStopped';
+		dragSessionActive = shouldActivate;
+
+		if (!shouldActivate) {
+			activeDragSnapshot = null;
+			return;
+		}
+
+		if (!activeDragSnapshot || activeDragSnapshot.nodeId !== draggedId) {
+			const draggedState = findNodeState(draggedId);
+			const originParent = findParentState(draggedId);
+			activeDragSnapshot = {
+				nodeId: draggedId,
+				originParentCode: originParent ? originParent.node.code : null,
+				originOrdinal: draggedState ? draggedState.node.ordinal : -1
+			};
+		}
+
+		if (!wasActive && activeDragSnapshot) {
+			captureBaselineForParent(activeDragSnapshot.originParentCode);
+		}
+
+		const targetParentCode = change.parentCode ?? null;
+		captureBaselineForParent(targetParentCode);
 		applyNodeOrderChange(change);
 	};
 
@@ -436,14 +480,25 @@
 			return;
 		}
 
+		dragSessionActive = false;
+		const snapshot = activeDragSnapshot;
+		activeDragSnapshot = null;
+
 		const draggedNode = findNodeState(change.draggedId);
 		if (!draggedNode) {
+			refreshPendingState();
 			return;
 		}
 
-		const previousParent = findParentState(change.draggedId);
-		const previousParentCode = previousParent ? previousParent.node.code : null;
-		const previousOrdinal = draggedNode.node.ordinal;
+		const previousParentCode = snapshot && snapshot.nodeId === change.draggedId
+			? snapshot.originParentCode
+			: (() => {
+				const fallbackParent = findParentState(change.draggedId);
+				return fallbackParent ? fallbackParent.node.code : null;
+			})();
+		const previousOrdinal = snapshot && snapshot.nodeId === change.draggedId && snapshot.originOrdinal > -1
+			? snapshot.originOrdinal
+			: draggedNode.node.ordinal;
 		const targetParentCode = change.parentCode ?? null;
 
 		captureBaselineForParent(previousParentCode);
@@ -503,10 +558,11 @@
 		}
 
 		pendingReorders = new Map();
-		pendingParentCodes = new Set();
-		pendingNodeCodes = new Set();
 		baselinePositions = new Map();
 		reorderError = null;
+		dragSessionActive = false;
+		activeDragSnapshot = null;
+		refreshPendingSets();
 		refreshTree();
 	};
 
@@ -540,7 +596,7 @@
 			pendingParentCodes = new Set();
 			pendingNodeCodes = new Set();
 			baselinePositions = new Map();
-		reorderError = null;
+			reorderError = null;
 			refreshTree();
 			return;
 		}
@@ -573,10 +629,9 @@
 			}
 
 			pendingReorders = new Map();
-			pendingParentCodes = new Set();
-			pendingNodeCodes = new Set();
 			baselinePositions = new Map();
 			reorderError = null;
+			refreshPendingSets();
 		} catch (error) {
 			const message = translateApiError(error, 'Nepavyko išsaugoti pakeitimų.');
 			reorderError = message;
@@ -587,6 +642,8 @@
 			return;
 		} finally {
 			reorderSaving = false;
+			dragSessionActive = false;
+			activeDragSnapshot = null;
 			refreshTree();
 		}
 	};
@@ -626,6 +683,9 @@
 	};
 
 	const openDeleteConfirmation = (state: TreeNodeState) => {
+		if (!state.expanded) {
+			state.expanded = true;
+		}
 		state.admin.remove.confirming = true;
 		state.admin.remove.error = null;
 		refreshTree();
@@ -817,7 +877,7 @@
 		{/if}
 	</header>
 
-	{#if pendingReorders.size}
+	{#if pendingChangeCount}
 		<div
 			class="curriculum-tree__pending-banner"
 			role="status"
@@ -825,7 +885,7 @@
 			data-saving={reorderSaving}
 		>
 			<span class="curriculum-tree__pending-text">
-				Yra neišsaugotų perkėlimų.
+				Yra neišsaugotų perkėlimų ({pendingChangeCount}).
 			</span>
 			<div class="curriculum-tree__pending-actions">
 				<button
@@ -877,6 +937,7 @@
 			onNodeDragFinalize={handleNodeDragFinalize}
 			pendingParentCodes={pendingParentCodes}
 			pendingNodeCodes={pendingNodeCodes}
+			dragSessionActive={dragSessionActive}
 		/>
 	{/if}
 </section>
