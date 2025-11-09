@@ -31,6 +31,8 @@ _Update 2025-11-06 (p.m.)_: ADM-002 admin slice deployed concept CRUD MVP – `/
 
 _Update 2025-11-06 (late)_: Inline concept editing and the persistent “Aktyvuoti Admin” toggle in `AppShell` now mirror the `impersonate=admin` query flag, keeping admin affordances active while navigating between learner pages.
 
+_Update 2025-11-09_: Curriculum tree admin UX now supports drag-and-drop reordering with cancel/apply confirmation banner, auto-expands nodes when presenting delete/edit prompts, reinstates “Pridėti poskyrį”, and keeps pending highlights accurate after confirmation; “Pridėti terminą” remains a placeholder until backend CRUD lands.
+
 ## Screen Details
 
 ### 1. Overview
