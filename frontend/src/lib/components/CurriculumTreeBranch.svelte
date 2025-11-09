@@ -41,14 +41,15 @@
 	export let pendingNodeCodes: Set<string> = new Set();
 	export let dragSessionActive = false;
 	export let allowCreateChild = false;
+	export let pendingActive = false;
 
 	let isDragOver = false;
 	let hoverExpandTimeout: number | null = null;
 	let hoverTargetCode: string | null = null;
 
 	const resolveBranchParentCode = () => (parentState ? parentState.node.code : null);
-	const isBranchPending = () => pendingParentCodes?.has(resolveBranchParentCode()) ?? false;
-	const isNodePending = (state: TreeNodeState) => pendingNodeCodes?.has(state.node.code) ?? false;
+	const isBranchPending = () => pendingActive && (pendingParentCodes?.has(resolveBranchParentCode()) ?? false);
+	const isNodePending = (state: TreeNodeState) => pendingActive && (pendingNodeCodes?.has(state.node.code) ?? false);
 
 	const resolveParentCode = () => (parentState ? parentState.node.code : null);
 	const extractOrderedNodes = (event: CustomEvent<DndEvent<unknown>>): TreeNodeState[] => {
@@ -353,6 +354,7 @@
 										{pendingNodeCodes}
 										{dragSessionActive}
 										{allowCreateChild}
+										{pendingActive}
 									/>
 								{:else if !state.items.length}
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>

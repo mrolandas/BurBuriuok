@@ -953,6 +953,7 @@
 			pendingNodeCodes={pendingNodeCodes}
 			dragSessionActive={dragSessionActive}
 			allowCreateChild={allowCreateChild}
+			pendingActive={Boolean(pendingChangeCount)}
 		/>
 	{/if}
 </section>
