@@ -40,6 +40,7 @@
 	export let pendingParentCodes: Set<string | null> = new Set();
 	export let pendingNodeCodes: Set<string> = new Set();
 	export let dragSessionActive = false;
+	export let allowCreateChild = false;
 
 	let isDragOver = false;
 	let hoverExpandTimeout: number | null = null;
@@ -115,7 +116,7 @@
 				node.removeEventListener('touchstart', stop, listenerOptions);
 			}
 		};
-		};
+	};
 
 	const cancelHoverExpand = () => {
 		if (hoverExpandTimeout !== null) {
@@ -258,14 +259,16 @@
 							>
 								↓
 							</button>
-							<button
-								type="button"
-								class="tree-node__admin-chip"
-								on:click={() => onOpenCreateChild(state)}
-								disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
-							>
-								Pridėti poskyrį
-							</button>
+							{#if allowCreateChild}
+								<button
+									type="button"
+									class="tree-node__admin-chip"
+									on:click={() => onOpenCreateChild(state)}
+									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
+								>
+									Pridėti poskyrį
+								</button>
+							{/if}
 							<button
 								type="button"
 								class="tree-node__admin-chip tree-node__admin-chip--danger"
@@ -341,14 +344,15 @@
 										{pendingParentCodes}
 										{pendingNodeCodes}
 										{dragSessionActive}
+										{allowCreateChild}
 									/>
 								{:else if !state.items.length}
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
 								{/if}
 
-								{#if adminEnabled && (state.admin.createChild.open || state.admin.edit.open || state.admin.remove.confirming)}
+								{#if adminEnabled && ((allowCreateChild && state.admin.createChild.open) || state.admin.edit.open || state.admin.remove.confirming)}
 									<div class="tree-node__admin" use:preventDragPointerPropagation>
-										{#if state.admin.createChild.open}
+										{#if allowCreateChild && state.admin.createChild.open}
 											<form
 												class="tree-node__admin-form"
 												on:submit|preventDefault={() => onSubmitCreateChild(state)}

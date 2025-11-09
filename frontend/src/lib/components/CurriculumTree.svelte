@@ -35,6 +35,7 @@
 	let activeCreateNodeCode: string | null = null;
 	let dragAndDropEnabled = false;
 	let dragSessionActive = false;
+	const allowCreateChild = false;
 
 	type DragSnapshot = {
 		nodeId: string;
@@ -310,6 +311,9 @@
 	};
 
 	const openEditForm = (state: TreeNodeState) => {
+		if (!state.expanded) {
+			state.expanded = true;
+		}
 		const form = state.admin.edit;
 		form.title = state.node.title;
 		form.summary = state.node.summary ?? '';
@@ -317,6 +321,9 @@
 		form.busy = false;
 		form.open = true;
 		refreshTree();
+		if (!state.loaded) {
+			void ensureChildren(state);
+		}
 	};
 
 	const cancelEditForm = (state: TreeNodeState) => {
@@ -593,10 +600,11 @@
 
 		if (!updates.size) {
 			pendingReorders = new Map();
+			baselinePositions = new Map();
 			pendingParentCodes = new Set();
 			pendingNodeCodes = new Set();
-			baselinePositions = new Map();
 			reorderError = null;
+			refreshPendingSets();
 			refreshTree();
 			return;
 		}
@@ -630,6 +638,8 @@
 
 			pendingReorders = new Map();
 			baselinePositions = new Map();
+			pendingParentCodes = new Set();
+			pendingNodeCodes = new Set();
 			reorderError = null;
 			refreshPendingSets();
 		} catch (error) {
@@ -878,37 +888,39 @@
 	</header>
 
 	{#if pendingChangeCount}
-		<div
-			class="curriculum-tree__pending-banner"
-			role="status"
-			aria-live="polite"
-			data-saving={reorderSaving}
-		>
-			<span class="curriculum-tree__pending-text">
-				Yra neišsaugotų perkėlimų ({pendingChangeCount}).
-			</span>
-			<div class="curriculum-tree__pending-actions">
-				<button
-					type="button"
-					class="curriculum-tree__pending-button curriculum-tree__pending-button--ghost"
-					on:click={cancelPendingReorders}
-					disabled={reorderSaving}
-				>
-					Atšaukti
-				</button>
-				<button
-					type="button"
-					class="curriculum-tree__pending-button curriculum-tree__pending-button--primary"
-					on:click={applyPendingReorders}
-					disabled={reorderSaving}
-				>
-					Patvirtinti
-				</button>
+		<div class="curriculum-tree__pending-container">
+			<div
+				class="curriculum-tree__pending-banner"
+				role="status"
+				aria-live="polite"
+				data-saving={reorderSaving}
+			>
+				<span class="curriculum-tree__pending-text">
+					Yra neišsaugotų perkėlimų ({pendingChangeCount}).
+				</span>
+				<div class="curriculum-tree__pending-actions">
+					<button
+						type="button"
+						class="curriculum-tree__pending-button curriculum-tree__pending-button--ghost"
+						on:click={cancelPendingReorders}
+						disabled={reorderSaving}
+					>
+						Atšaukti
+					</button>
+					<button
+						type="button"
+						class="curriculum-tree__pending-button curriculum-tree__pending-button--primary"
+						on:click={applyPendingReorders}
+						disabled={reorderSaving}
+					>
+						Patvirtinti
+					</button>
+				</div>
 			</div>
+			{#if reorderError}
+				<p class="curriculum-tree__pending-error" role="alert">{reorderError}</p>
+			{/if}
 		</div>
-		{#if reorderError}
-			<p class="curriculum-tree__pending-error">{reorderError}</p>
-		{/if}
 	{/if}
 
 	{#if !roots.length}
@@ -938,6 +950,7 @@
 			pendingParentCodes={pendingParentCodes}
 			pendingNodeCodes={pendingNodeCodes}
 			dragSessionActive={dragSessionActive}
+			allowCreateChild={allowCreateChild}
 		/>
 	{/if}
 </section>
@@ -983,24 +996,38 @@
 		accent-color: var(--color-accent);
 	}
 
-	.curriculum-tree__pending-banner {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
-		border-radius: 1rem;
-		border: 1px solid rgba(37, 99, 235, 0.35);
-		background: rgba(37, 99, 235, 0.08);
-	}
+		.curriculum-tree__pending-container {
+			position: fixed;
+			left: 50%;
+			bottom: clamp(0.75rem, 4vw, 1.75rem);
+			transform: translateX(-50%);
+			width: min(calc(100% - 2rem), 40rem);
+			z-index: 20;
+			pointer-events: none;
+			display: grid;
+			gap: 0.45rem;
+		}
 
-	.curriculum-tree__pending-banner[data-saving='true'] {
-		opacity: 0.75;
-	}
+		.curriculum-tree__pending-banner {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.75rem;
+			padding: 0.85rem 1.1rem;
+			border-radius: 999px;
+			border: 1px solid rgba(37, 99, 235, 0.35);
+			background: rgba(37, 99, 235, 0.95);
+			box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+			pointer-events: auto;
+		}
+
+		.curriculum-tree__pending-banner[data-saving='true'] {
+			opacity: 0.8;
+		}
 
 	.curriculum-tree__pending-text {
 		font-weight: 600;
-		color: var(--curriculum-drop-outline, #2563eb);
+			color: var(--color-button-text-on-accent, #fff);
 	}
 
 	.curriculum-tree__pending-actions {
@@ -1020,26 +1047,27 @@
 	}
 
 	.curriculum-tree__pending-button--primary {
-		background: var(--color-accent);
-		border-color: var(--color-accent-border-strong);
-		color: var(--color-button-text-on-accent);
+		background: #fff;
+		border-color: transparent;
+		color: var(--curriculum-drop-outline, #1d4ed8);
 	}
 
 	.curriculum-tree__pending-button--primary:hover,
 	.curriculum-tree__pending-button--primary:focus-visible {
-		background: var(--color-accent-strong);
-		border-color: var(--color-accent-border-stronger);
+		background: rgba(255, 255, 255, 0.92);
+		border-color: transparent;
 	}
 
 	.curriculum-tree__pending-button--ghost {
 		background: transparent;
-		border-color: var(--curriculum-drop-outline, #2563eb);
-		color: var(--curriculum-drop-outline, #2563eb);
+		border-color: rgba(255, 255, 255, 0.6);
+		color: var(--color-button-text-on-accent, #fff);
 	}
 
 	.curriculum-tree__pending-button--ghost:hover,
 	.curriculum-tree__pending-button--ghost:focus-visible {
-		background: rgba(37, 99, 235, 0.12);
+		border-color: rgba(255, 255, 255, 0.85);
+		background: rgba(255, 255, 255, 0.15);
 	}
 
 	.curriculum-tree__pending-button[disabled] {
@@ -1048,9 +1076,15 @@
 	}
 
 	.curriculum-tree__pending-error {
-		margin: 0.5rem 0 0;
-		color: var(--color-status-error-text);
-		font-size: 0.85rem;
+		margin: 0;
+		text-align: center;
+		color: #fff;
+		font-size: 0.8rem;
+		background: rgba(220, 38, 38, 0.92);
+		padding: 0.45rem 1.1rem;
+		border-radius: 999px;
+		box-shadow: 0 12px 30px rgba(220, 38, 38, 0.18);
+		pointer-events: auto;
 	}
 
 	.curriculum-tree__empty {
