@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { TreeNodeState } from './curriculumTreeTypes';
+	import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
+	import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -32,11 +33,104 @@
 		parent: TreeNodeState | null,
 		direction: 'up' | 'down'
 	) => Promise<void> | void;
+	export let dragAndDropEnabled = false;
+	export let onNodeDragConsider: (change: TreeNodeOrderChange) => void = () => {};
+	export let onNodeDragFinalize: (change: TreeNodeOrderFinalize) => void = () => {};
+
+	let isDragOver = false;
+
+	const resolveParentCode = () => (parentState ? parentState.node.code : null);
+	const extractOrderedIds = (event: CustomEvent<DndEvent<unknown>>): string[] => {
+		const detail = event.detail as DndEvent<TreeNodeState>;
+		return detail.items
+			.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID)
+			.map((item) => String(item.id));
+	};
+
+	const resolveDragInfo = (event: CustomEvent<DndEvent<unknown>>) =>
+		event.detail as DndEvent<TreeNodeState>;
+
+	const handleDndConsider = (event: CustomEvent<DndEvent<unknown>>) => {
+		onNodeDragConsider({
+			parentCode: resolveParentCode(),
+			orderedIds: extractOrderedIds(event)
+		});
+	};
+
+	const handleDndFinalize = (event: CustomEvent<DndEvent<unknown>>) => {
+		const detail = resolveDragInfo(event);
+		onNodeDragFinalize({
+			parentCode: resolveParentCode(),
+			orderedIds: extractOrderedIds(event),
+			draggedId: String(detail.info.id),
+			trigger: detail.info.trigger
+		});
+	};
+
+	const handleDragEntered = () => {
+		if (!dragAndDropEnabled) {
+			return;
+		}
+		isDragOver = true;
+	};
+
+	const handleDragOverIndex = () => {
+		if (!dragAndDropEnabled) {
+			return;
+		}
+		isDragOver = true;
+	};
+
+	const handleDragLeft = () => {
+		isDragOver = false;
+	};
+
+	const preventDragPointerPropagation = (node: HTMLElement) => {
+		const listenerOptions: AddEventListenerOptions = { capture: true };
+		const stop = (event: MouseEvent | TouchEvent) => {
+			if (!dragAndDropEnabled) {
+				return;
+			}
+			event.stopPropagation();
+		};
+		node.addEventListener('mousedown', stop, listenerOptions);
+		node.addEventListener('touchstart', stop, listenerOptions);
+		return {
+			destroy() {
+				node.removeEventListener('mousedown', stop, listenerOptions);
+				node.removeEventListener('touchstart', stop, listenerOptions);
+			}
+		};
+	};
 </script>
 
 
-<ul class="tree-branch" data-level={level}>
-	{#each nodes as state, index (state.node.code)}
+<ul
+	class="tree-branch"
+	class:tree-branch--drag-over={isDragOver}
+	data-level={level}
+	data-parent-code={parentState ? parentState.node.code : ''}
+	use:dndzone={{
+		items: nodes,
+		dragDisabled: !dragAndDropEnabled,
+		dropFromOthersDisabled: false,
+		type: 'curriculum-node',
+		dropTargetStyle: dragAndDropEnabled
+			? {
+					outline: '2px solid var(--curriculum-drop-outline, #2563eb)',
+					backgroundColor: 'rgba(37, 99, 235, 0.06)'
+			  }
+			: {},
+		dropTargetClasses: dragAndDropEnabled ? ['tree-branch--active-drop'] : []
+	}}
+	on:consider={handleDndConsider}
+	on:finalize={handleDndFinalize}
+	on:draggedEntered={handleDragEntered}
+	on:draggedOverIndex={handleDragOverIndex}
+	on:draggedLeft={handleDragLeft}
+	data-drag-enabled={dragAndDropEnabled}
+>
+	{#each nodes as state, index (state.id)}
 				<li class="tree-node">
 					<div class="tree-node__header">
 						<button
@@ -67,7 +161,7 @@
 					</div>
 
 					{#if adminEnabled}
-						<div class="tree-node__admin-toolbar">
+						<div class="tree-node__admin-toolbar" use:preventDragPointerPropagation>
 							<button
 								type="button"
 								class="tree-node__admin-chip"
@@ -129,7 +223,7 @@
 								</button>
 							{:else}
 								{#if state.items.length}
-									<ul class="tree-node__items">
+									<ul class="tree-node__items" use:preventDragPointerPropagation>
 										{#each state.items as item (item.ordinal)}
 											<li>
 												{#if item.conceptSlug}
@@ -171,17 +265,21 @@
 										{onCancelDelete}
 										{onConfirmDelete}
 										{onMoveNode}
+										{dragAndDropEnabled}
+										{onNodeDragConsider}
+										{onNodeDragFinalize}
 									/>
 								{:else if !state.items.length}
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
 								{/if}
 
 								{#if adminEnabled && (state.admin.createChild.open || state.admin.edit.open || state.admin.remove.confirming)}
-									<div class="tree-node__admin">
+									<div class="tree-node__admin" use:preventDragPointerPropagation>
 										{#if state.admin.createChild.open}
 											<form
 												class="tree-node__admin-form"
 												on:submit|preventDefault={() => onSubmitCreateChild(state)}
+												use:preventDragPointerPropagation
 											>
 												<div class="tree-node__admin-grid">
 													<label class="tree-node__admin-field">
@@ -262,6 +360,7 @@
 											<form
 												class="tree-node__admin-form"
 												on:submit|preventDefault={() => onSubmitEdit(state)}
+												use:preventDragPointerPropagation
 											>
 												<div class="tree-node__admin-grid">
 													<label class="tree-node__admin-field tree-node__admin-field--full">
@@ -315,7 +414,7 @@
 										{/if}
 
 										{#if state.admin.remove.confirming}
-											<div class="tree-node__admin-delete">
+											<div class="tree-node__admin-delete" use:preventDragPointerPropagation>
 												<p class="tree-node__admin-status">Ar tikrai norite pašalinti šį poskyrį? Visi vidiniai poskyriai bus ištrinti.</p>
 												{#if state.admin.remove.error}
 													<p class="tree-node__admin-status tree-node__admin-status--error">
@@ -358,6 +457,23 @@
 		list-style: none;
 		display: grid;
 		gap: 0.75rem;
+	}
+
+	:global(.tree-branch--active-drop) {
+		box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2);
+	}
+
+	.tree-branch.tree-branch--drag-over {
+		background: rgba(37, 99, 235, 0.05);
+		border-radius: 0.9rem;
+	}
+
+	.tree-branch[data-drag-enabled='true'] .tree-node__header {
+		cursor: grab;
+	}
+
+	.tree-branch[data-drag-enabled='true'] .tree-node__header:active {
+		cursor: grabbing;
 	}
 
 	.tree-branch[data-level='0'] {
@@ -623,6 +739,31 @@
 
 	.tree-node__items li {
 		list-style: none;
+	}
+
+	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']) {
+		position: relative;
+		visibility: visible !important;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']::after) {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border: 2px dashed var(--curriculum-drop-outline, #2563eb);
+		border-radius: 0.75rem;
+		background: rgba(37, 99, 235, 0.12);
+	}
+
+	:global(.tree-branch [data-is-dnd-shadow-item-internal='true'] *) {
+		opacity: 0;
+	}
+
+	:global(#dnd-action-dragged-el) {
+		box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+		border-radius: 0.9rem;
 	}
 
 	.tree-node__item-link,

@@ -36,6 +36,7 @@ export type TreeNodeAdminState = {
 };
 
 export type TreeNodeState = {
+	id: string;
 	node: CurriculumNode;
 	expanded: boolean;
 	loading: boolean;
@@ -44,4 +45,14 @@ export type TreeNodeState = {
 	items: CurriculumItem[];
 	error: string | null;
 	admin: TreeNodeAdminState;
+};
+
+export type TreeNodeOrderChange = {
+	parentCode: string | null;
+	orderedIds: string[];
+};
+
+export type TreeNodeOrderFinalize = TreeNodeOrderChange & {
+	draggedId: string;
+	trigger: string;
 };

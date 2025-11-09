@@ -22,6 +22,14 @@ const config = {
 		prerender: {
 			handleMissingId: 'ignore',
 			entries: []
+		},
+		typescript: {
+			config(config) {
+				config.include ??= [];
+				if (!config.include.includes('../src/global.d.ts')) {
+					config.include.push('../src/global.d.ts');
+				}
+			}
 		}
 	},
 	extensions: ['.svelte', '.svx']

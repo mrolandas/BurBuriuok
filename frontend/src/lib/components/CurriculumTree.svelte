@@ -16,7 +16,9 @@
 		TreeNodeCreateChildState,
 		TreeNodeEditState,
 		TreeNodeDeleteState,
-		TreeNodeReorderState
+		TreeNodeReorderState,
+		TreeNodeOrderChange,
+		TreeNodeOrderFinalize
 	} from './curriculumTreeTypes';
 
 	type SectionSummary = {
@@ -30,6 +32,8 @@
 
 	let adminEnabled = false;
 	let adminModeUnsubscribe: (() => void) | null = null;
+	let activeCreateNodeCode: string | null = null;
+	let dragAndDropEnabled = false;
 
 	const createCreateChildState = (): TreeNodeCreateChildState => ({
 		open: false,
@@ -67,6 +71,7 @@
 	});
 
 	const createState = (node: CurriculumNode): TreeNodeState => ({
+		id: node.code,
 		node,
 		expanded: false,
 		loading: false,
@@ -79,6 +84,26 @@
 
 	let roots: TreeNodeState[] = initialNodes.map(createState);
 
+	const visitTree = (nodes: TreeNodeState[], visitor: (state: TreeNodeState) => void) => {
+		nodes.forEach((node) => {
+			visitor(node);
+			if (node.children.length) {
+				visitTree(node.children, visitor);
+			}
+		});
+	};
+
+	const closeCreateChildFormsExcept = (target: TreeNodeState | null) => {
+		visitTree(roots, (state) => {
+			if (target && state.node.code === target.node.code) {
+				return;
+			}
+			if (state.admin.createChild.open || state.admin.createChild.error || state.admin.createChild.busy) {
+				state.admin.createChild = createCreateChildState();
+			}
+		});
+	};
+
 	const refreshTree = () => {
 		roots = [...roots];
 	};
@@ -87,6 +112,9 @@
 		adminMode.initialize();
 		adminModeUnsubscribe = adminMode.subscribe((value) => {
 			adminEnabled = value;
+			if (!value) {
+				dragAndDropEnabled = false;
+			}
 			refreshTree();
 		});
 	});
@@ -111,6 +139,10 @@
 	};
 
 	const openCreateChildForm = (state: TreeNodeState) => {
+		if (activeCreateNodeCode && activeCreateNodeCode !== state.node.code) {
+			closeCreateChildFormsExcept(state);
+		}
+		activeCreateNodeCode = state.node.code;
 		state.expanded = true;
 		if (!state.loaded) {
 			void ensureChildren(state);
@@ -127,6 +159,9 @@
 	const cancelCreateChildForm = (state: TreeNodeState) => {
 		resetCreateChildForm(state);
 		state.admin.createChild.open = false;
+		if (activeCreateNodeCode === state.node.code) {
+			activeCreateNodeCode = null;
+		}
 		refreshTree();
 	};
 
@@ -195,6 +230,147 @@
 		siblings.forEach((sibling, index) => {
 			sibling.node.ordinal = index + 1;
 		});
+	};
+
+	const findNodeState = (code: string, nodes: TreeNodeState[] = roots): TreeNodeState | null => {
+		for (const node of nodes) {
+			if (node.node.code === code) {
+				return node;
+			}
+			if (node.children.length) {
+				const match = findNodeState(code, node.children);
+				if (match) {
+					return match;
+				}
+			}
+		}
+		return null;
+	};
+
+	const findParentState = (
+		code: string,
+		nodes: TreeNodeState[] = roots,
+		parent: TreeNodeState | null = null
+	): TreeNodeState | null => {
+		for (const node of nodes) {
+			if (node.node.code === code) {
+				return parent;
+			}
+			if (node.children.length) {
+				const match = findParentState(code, node.children, node);
+				if (match) {
+					return match;
+				}
+			}
+		}
+		return null;
+	};
+
+	const detachNode = (code: string): TreeNodeState | null => {
+		const parent = findParentState(code);
+		const collection = parent ? parent.children : roots;
+		const index = collection.findIndex((entry) => entry.node.code === code);
+		if (index === -1) {
+			return null;
+		}
+		const [removed] = collection.splice(index, 1);
+		return removed;
+	};
+
+	const applyNodeOrderChange = (change: TreeNodeOrderChange) => {
+		const parentState = change.parentCode ? findNodeState(change.parentCode) : null;
+		const hasOrder = change.orderedIds.length > 0;
+
+		if (!hasOrder) {
+			if (parentState) {
+				parentState.children = [];
+			} else {
+				roots = [];
+			}
+			refreshTree();
+			return;
+		}
+
+		const nodesToAssign: TreeNodeState[] = [];
+		for (const id of change.orderedIds) {
+			const nodeState = findNodeState(id);
+			if (!nodeState) {
+				return;
+			}
+			nodesToAssign.push(nodeState);
+		}
+
+		const targetParentCode = parentState ? parentState.node.code : null;
+
+		for (const node of nodesToAssign) {
+			const currentParent = findParentState(node.node.code);
+			const currentParentCode = currentParent ? currentParent.node.code : null;
+			if (currentParentCode !== targetParentCode) {
+				detachNode(node.node.code);
+			}
+		}
+
+		if (parentState) {
+			parentState.children = nodesToAssign;
+		} else {
+			roots = nodesToAssign;
+		}
+
+		refreshSiblingOrdinals(nodesToAssign);
+		refreshTree();
+	};
+
+	const handleNodeDragConsider = (change: TreeNodeOrderChange) => {
+		if (!dragAndDropEnabled) {
+			return;
+		}
+		applyNodeOrderChange(change);
+	};
+
+	const handleNodeDragFinalize = async (change: TreeNodeOrderFinalize) => {
+		if (!dragAndDropEnabled) {
+			return;
+		}
+
+		const draggedNode = findNodeState(change.draggedId);
+		if (!draggedNode) {
+			return;
+		}
+
+		const previousParent = findParentState(change.draggedId);
+		const previousParentCode = previousParent ? previousParent.node.code : null;
+		const previousOrdinal = draggedNode.node.ordinal;
+
+		applyNodeOrderChange(change);
+
+		const newIndex = change.orderedIds.findIndex((id) => id === change.draggedId);
+		if (newIndex === -1) {
+			return;
+		}
+
+		const newOrdinal = newIndex + 1;
+		const newParentCode = change.parentCode;
+
+		if (previousParentCode === newParentCode && previousOrdinal === newOrdinal) {
+			return;
+		}
+
+		draggedNode.admin.reorder.busy = true;
+		draggedNode.admin.reorder.error = null;
+		refreshTree();
+
+		try {
+			await updateCurriculumNode(change.draggedId, {
+				parentCode: newParentCode ?? null,
+				ordinal: newOrdinal
+			});
+			draggedNode.admin.reorder = createReorderState();
+		} catch (error) {
+			draggedNode.admin.reorder.error = translateApiError(error, 'Nepavyko perkelti poskyrio.');
+		} finally {
+			draggedNode.admin.reorder.busy = false;
+			refreshTree();
+		}
 	};
 
 	const submitEditForm = async (state: TreeNodeState) => {
@@ -396,6 +572,9 @@
 			await ensureChildren(state, { force: true });
 			resetCreateChildForm(state);
 			form.open = false;
+			if (activeCreateNodeCode === state.node.code) {
+				activeCreateNodeCode = null;
+			}
 		} catch (err) {
 			form.error = translateApiError(err, 'Nepavyko sukurti poskyrio.');
 		} finally {
@@ -410,6 +589,14 @@
 		<h1 class="curriculum-tree__title">{section.title}</h1>
 		{#if section.summary}
 			<p class="curriculum-tree__summary">{section.summary}</p>
+		{/if}
+		{#if adminEnabled}
+			<div class="curriculum-tree__toolbar">
+				<label class="curriculum-tree__toggle">
+					<input type="checkbox" bind:checked={dragAndDropEnabled} />
+					<span>Perkelti vilkdami</span>
+				</label>
+			</div>
 		{/if}
 	</header>
 
@@ -434,6 +621,9 @@
 			onCancelDelete={cancelDeleteConfirmation}
 			onConfirmDelete={confirmDeleteNode}
 			onMoveNode={moveNode}
+			dragAndDropEnabled={dragAndDropEnabled}
+			onNodeDragConsider={handleNodeDragConsider}
+			onNodeDragFinalize={handleNodeDragFinalize}
 		/>
 	{/if}
 </section>
@@ -458,6 +648,25 @@
 		margin: 0;
 		color: var(--color-text-muted);
 		line-height: 1.6;
+	}
+
+	.curriculum-tree__toolbar {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.curriculum-tree__toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+		user-select: none;
+	}
+
+	.curriculum-tree__toggle input {
+		accent-color: var(--color-accent);
 	}
 
 	.curriculum-tree__empty {
