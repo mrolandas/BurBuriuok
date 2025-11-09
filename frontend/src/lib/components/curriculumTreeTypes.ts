@@ -9,6 +9,17 @@ export type TreeNodeCreateChildState = {
 	busy: boolean;
 };
 
+export type TreeNodeCreateItemState = {
+	open: boolean;
+	term: string;
+	description: string;
+	termEn: string;
+	sourceRef: string;
+	isRequired: boolean;
+	error: string | null;
+	busy: boolean;
+};
+
 export type TreeNodeEditState = {
 	open: boolean;
 	title: string;
@@ -30,6 +41,7 @@ export type TreeNodeReorderState = {
 
 export type TreeNodeAdminState = {
 	createChild: TreeNodeCreateChildState;
+	createItem: TreeNodeCreateItemState;
 	edit: TreeNodeEditState;
 	remove: TreeNodeDeleteState;
 	reorder: TreeNodeReorderState;

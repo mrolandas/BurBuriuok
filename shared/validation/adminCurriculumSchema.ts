@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const codePattern = /^[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?$/;
+const slugPattern = /^[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?$/;
 
 function requiredCode() {
   return z
@@ -69,6 +70,65 @@ function optionalCode() {
     });
 }
 
+function requiredItemLabel() {
+  return z
+    .string()
+    .trim()
+    .min(1, { message: "Terminas negali būti tuščias." })
+    .max(160, { message: "Terminas negali viršyti 160 simbolių." });
+}
+
+function optionalSlug() {
+  return z
+    .union([
+      z
+        .string()
+        .trim()
+        .toLowerCase()
+        .min(2, { message: "Slug turi būti bent 2 simbolių." })
+        .max(90, { message: "Slug negali viršyti 90 simbolių." })
+        .regex(slugPattern, {
+          message: "Slug gali sudaryti tik mažosios raidės, skaičiai ir brūkšneliai.",
+        })
+        .transform((value) => {
+          const trimmed = value.trim();
+          return trimmed.length ? trimmed : null;
+        }),
+      z.literal(null),
+    ])
+    .optional()
+    .transform((value) => {
+      if (typeof value === "undefined") {
+        return undefined;
+      }
+      return value;
+    });
+}
+
+function optionalItemText(max: number) {
+  return z
+    .union([
+      z
+        .string()
+        .trim()
+        .max(max, {
+          message: "Tekstas negali būti ilgesnis nei " + String(max) + " simbolių.",
+        })
+        .transform((value) => {
+          const trimmed = value.trim();
+          return trimmed.length ? trimmed : null;
+        }),
+      z.literal(null),
+    ])
+    .optional()
+    .transform((value) => {
+      if (typeof value === "undefined") {
+        return undefined;
+      }
+      return value;
+    });
+}
+
 const ordinalSchema = z
   .number()
   .int({ message: "Eilės numeris turi būti sveikas skaičius." })
@@ -107,3 +167,19 @@ export const adminCurriculumNodeUpdateSchema = z
 
 export type AdminCurriculumNodeCreateInput = z.infer<typeof adminCurriculumNodeCreateSchema>;
 export type AdminCurriculumNodeUpdateInput = z.infer<typeof adminCurriculumNodeUpdateSchema>;
+
+export const adminCurriculumItemCreateSchema = z
+  .object({
+    nodeCode: requiredCode(),
+    label: requiredItemLabel(),
+    conceptSlug: optionalSlug(),
+    termLt: optionalItemText(160),
+    termEn: optionalItemText(160),
+    descriptionLt: optionalItemText(4000),
+    descriptionEn: optionalItemText(4000),
+    sourceRef: optionalItemText(160),
+    isRequired: z.boolean().optional(),
+  })
+  .strict();
+
+export type AdminCurriculumItemCreateInput = z.infer<typeof adminCurriculumItemCreateSchema>;

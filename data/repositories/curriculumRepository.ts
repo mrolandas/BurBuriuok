@@ -3,17 +3,22 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient";
 import type {
+  Concept,
   CurriculumItem,
   CurriculumItemRow,
   CurriculumNode,
   CurriculumNodeRow,
 } from "../types";
+import { getConceptBySlug, upsertConcepts } from "./conceptsRepository";
 
 const NODE_VIEW = "burburiuok_curriculum_nodes";
 const ITEM_VIEW = "burburiuok_curriculum_items";
 const NODE_TABLE = "curriculum_nodes";
+const ITEM_TABLE = "curriculum_items";
+const CONCEPTS_TABLE = "concepts";
 const SERVICE_SCHEMA = "burburiuok";
 const MAX_CODE_LENGTH = 64;
+const MAX_CONCEPT_SLUG_LENGTH = 90;
 const diacriticRegex = /[\u0300-\u036f]/g;
 
 function mapNodeRow(row: Partial<CurriculumNodeRow>): CurriculumNode {
@@ -37,6 +42,138 @@ function mapItemRow(row: Partial<CurriculumItemRow>): CurriculumItem {
     createdAt: String(row.created_at ?? ""),
     updatedAt: String(row.updated_at ?? ""),
   };
+}
+
+function slugifyConceptTerm(value: string): string {
+  return String(value ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(diacriticRegex, "")
+    .replace(/\(.*?\)/g, "")
+    .replace(/[&/]/g, " ")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, MAX_CONCEPT_SLUG_LENGTH);
+}
+
+function sanitizeNullable(value: string | null | undefined): string | null {
+  if (typeof value !== "string") {
+    return value ?? null;
+  }
+  const trimmed = value.trim();
+  return trimmed.length ? trimmed : null;
+}
+
+async function conceptSlugExists(client: SupabaseClient, slug: string): Promise<boolean> {
+  const { data, error } = await (client as any)
+    .from(CONCEPTS_TABLE)
+    .select("slug")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Failed to verify concept slug uniqueness: ${error.message}`);
+  }
+
+  return Boolean(data?.slug);
+}
+
+async function ensureUniqueConceptSlug(client: SupabaseClient, base: string): Promise<string> {
+  const normalized = slugifyConceptTerm(base);
+  let candidate = normalized || "terminas";
+  let suffix = 0;
+
+  while (await conceptSlugExists(client, candidate)) {
+    suffix += 1;
+    const suffixPart = `-${suffix}`;
+    const availableLength = MAX_CONCEPT_SLUG_LENGTH - suffixPart.length;
+    const prefix = normalized.slice(0, Math.max(1, availableLength));
+    candidate = `${prefix}${suffixPart}`.replace(/-+/g, "-").replace(/^-|-$/g, "");
+    if (!candidate.length) {
+      candidate = `terminas${suffixPart}`.slice(0, MAX_CONCEPT_SLUG_LENGTH);
+    }
+    if (suffix > 10_000) {
+      throw new Error("Unable to generate unique concept slug.");
+    }
+  }
+
+  return candidate;
+}
+
+type SectionContext = {
+  sectionCode: string;
+  sectionTitle: string | null;
+  subsectionCode: string | null;
+  subsectionTitle: string | null;
+};
+
+async function resolveSectionContext(
+  client: SupabaseClient,
+  node: CurriculumNode
+): Promise<SectionContext> {
+  const lineage: CurriculumNode[] = [node];
+  let current: CurriculumNode | null = node;
+
+  while (current?.parentCode) {
+    const parent = await getCurriculumNodeByCode(current.parentCode, client);
+    if (!parent) {
+      break;
+    }
+    lineage.push(parent);
+    current = parent;
+  }
+
+  const sectionNode = lineage[lineage.length - 1];
+  const subsectionNode = node.code === sectionNode.code ? null : node;
+
+  return {
+    sectionCode: sectionNode.code,
+    sectionTitle: sectionNode.title ?? null,
+    subsectionCode: subsectionNode ? subsectionNode.code : null,
+    subsectionTitle: subsectionNode ? subsectionNode.title ?? null : null,
+  } satisfies SectionContext;
+}
+
+async function fetchNextItemOrdinal(client: SupabaseClient, nodeCode: string): Promise<number> {
+  const { data, error } = await (client as any)
+    .from(ITEM_TABLE)
+    .select("ordinal")
+    .eq("node_code", nodeCode)
+    .order("ordinal", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    throw new Error(`Failed to fetch curriculum item ordinal: ${error.message}`);
+  }
+
+  const latest = Array.isArray(data) && data.length ? data[0] : null;
+  const rawOrdinal = latest?.ordinal;
+  const ordinalNumber =
+    typeof rawOrdinal === "number"
+      ? rawOrdinal
+      : typeof rawOrdinal === "string"
+      ? Number.parseInt(rawOrdinal, 10)
+      : 0;
+
+  return Number.isFinite(ordinalNumber) ? ordinalNumber + 1 : 1;
+}
+
+async function deleteCurriculumItemRecord(
+  client: SupabaseClient,
+  nodeCode: string,
+  ordinal: number
+): Promise<void> {
+  const { error } = await (client as any)
+    .from(ITEM_TABLE)
+    .delete()
+    .eq("node_code", nodeCode)
+    .eq("ordinal", ordinal);
+
+  if (error) {
+    throw new Error(`Failed to revert curriculum item insert: ${error.message}`);
+  }
 }
 
 function getServiceClient(client: SupabaseClient | null = null): SupabaseClient {
@@ -326,6 +463,23 @@ export type UpdateCurriculumNodeInput = {
   ordinal?: number | null;
 };
 
+export type CreateCurriculumItemInput = {
+  nodeCode: string;
+  label: string;
+  conceptSlug?: string | null;
+  termLt?: string | null;
+  termEn?: string | null;
+  descriptionLt?: string | null;
+  descriptionEn?: string | null;
+  sourceRef?: string | null;
+  isRequired?: boolean | null;
+};
+
+export type CreateCurriculumItemResult = {
+  item: CurriculumItem;
+  concept: Concept;
+};
+
 export async function createCurriculumNodeAdmin(
   input: CreateCurriculumNodeInput
 ): Promise<CurriculumNode> {
@@ -474,6 +628,129 @@ export async function deleteCurriculumNodeAdmin(code: string): Promise<Curriculu
   }
 
   return existing;
+}
+
+export async function createCurriculumItemAdmin(
+  input: CreateCurriculumItemInput
+): Promise<CreateCurriculumItemResult> {
+  const serviceClient = getServiceClient();
+  const nodeCode = typeof input.nodeCode === "string" ? input.nodeCode.trim() : "";
+
+  if (!nodeCode.length) {
+    throw new Error("Curriculum node code is required to create an item.");
+  }
+
+  const node = await getCurriculumNodeByCode(nodeCode, serviceClient);
+
+  if (!node) {
+    const error = new Error(`Curriculum node '${nodeCode}' was not found.`);
+    (error as { code?: string }).code = "NODE_NOT_FOUND";
+    throw error;
+  }
+
+  const label = input.label?.trim() ?? "";
+
+  if (!label.length) {
+    throw new Error("Curriculum item label cannot be empty.");
+  }
+
+  const providedSlug =
+    typeof input.conceptSlug === "string" && input.conceptSlug.trim().length
+      ? input.conceptSlug.trim().toLowerCase()
+      : null;
+  const termLt = sanitizeNullable(input.termLt) ?? label;
+  const termEn = sanitizeNullable(input.termEn);
+  const descriptionLt = sanitizeNullable(input.descriptionLt) ?? "Aprašymas bus papildytas vėliau.";
+  const descriptionEn = sanitizeNullable(input.descriptionEn);
+  const sourceRef = sanitizeNullable(input.sourceRef);
+  const isRequired = typeof input.isRequired === "boolean" ? input.isRequired : true;
+
+  const ordinal = await fetchNextItemOrdinal(serviceClient, node.code);
+  const slugBase = providedSlug ?? termLt ?? label;
+  const slug = await ensureUniqueConceptSlug(serviceClient, slugBase);
+  const sectionContext = await resolveSectionContext(serviceClient, node);
+
+  let insertedRow: CurriculumItemRow | null = null;
+
+  try {
+    const insertPayload = {
+      node_code: node.code,
+      ordinal,
+      label,
+    } satisfies Partial<CurriculumItemRow>;
+
+    const { data: inserted, error: insertError } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .insert(insertPayload)
+      .select("*")
+      .single();
+
+    if (insertError) {
+      throw insertError;
+    }
+
+    insertedRow = inserted as CurriculumItemRow;
+
+    const metadata = {
+      status: "draft",
+      createdVia: "curriculum-tree",
+    } satisfies Record<string, unknown>;
+
+    await upsertConcepts(
+      [
+        {
+          section_code: sectionContext.sectionCode,
+          section_title: sectionContext.sectionTitle,
+          subsection_code: sectionContext.subsectionCode,
+          subsection_title: sectionContext.subsectionTitle,
+          slug,
+          term_lt: termLt,
+          term_en: termEn,
+          description_lt: descriptionLt,
+          description_en: descriptionEn,
+          source_ref: sourceRef,
+          metadata,
+          is_required: isRequired,
+          curriculum_node_code: node.code,
+          curriculum_item_ordinal: ordinal,
+          curriculum_item_label: label,
+        },
+      ],
+      serviceClient
+    );
+
+    const concept = await getConceptBySlug(slug, serviceClient);
+
+    if (!concept) {
+      throw new Error(`Concept '${slug}' could not be reloaded after creation.`);
+    }
+
+    const item = mapItemRow(insertedRow);
+
+    return {
+      item,
+      concept,
+    } satisfies CreateCurriculumItemResult;
+  } catch (error) {
+    if (insertedRow) {
+      const parsedOrdinal =
+        typeof insertedRow.ordinal === "number"
+          ? insertedRow.ordinal
+          : Number.parseInt(String(insertedRow.ordinal ?? ordinal), 10);
+      const rollbackOrdinal = Number.isFinite(parsedOrdinal) ? Number(parsedOrdinal) : ordinal;
+      try {
+        await deleteCurriculumItemRecord(serviceClient, node.code, rollbackOrdinal);
+      } catch (rollbackError) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to rollback curriculum item insert", {
+          nodeCode: node.code,
+          ordinal: rollbackOrdinal,
+          rollbackError,
+        });
+      }
+    }
+    throw error;
+  }
 }
 
 async function resequenceParentChildren(

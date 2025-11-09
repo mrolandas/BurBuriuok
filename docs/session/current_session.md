@@ -29,6 +29,8 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - Supabase admin save guardrails in place (auth error handling, defensive audit logging, predictable error payloads) with rotated anon/service keys and restored schema grants.
 - Admin GitHub Pages build now runs with impersonation enabled, obsolete links removed, and deployment workflow verified via Supabase smoke checks.
 - Curriculum tree admin experience upgraded with drag-and-drop reorder, floating confirmation banner, cancel/apply workflow, automatic expansion for delete/edit forms, and consistent pending highlight reset after confirmation.
+- Curriculum tree admin experience upgraded with drag-and-drop reorder, floating confirmation banner, cancel/apply workflow, automatic expansion for delete/edit forms, and consistent pending highlight reset after confirmation.
+- “Pridėti terminą” workflow now publishes curriculum items plus draft concepts (LT/EN copy, source reference, required flag) through the admin API and refreshes branches after save.
 
 ## Seam Preservation Checklist (must complete inside trimmed scope)
 
@@ -42,7 +44,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 ## Immediate Focus
 
 - Document the hierarchy tooling slice updates (this pass) and outline backend parity work for create/reparent safeguards.
-- Schedule implementation for “Pridėti terminą” interactions and backend item CRUD to close the curriculum tooling gap.
+- Validate the new “Pridėti terminą” flow (seed updates, edge cases) and earmark follow-up tasks for editing/reordering curriculum items.
 - Continue audit logging review for draft → publish flow and align dispatcher hook backlog with moderation queue milestones.
 - Prep media intake spike notes (`references/SCHEMA_DECISIONS.md`, `references/infrastructure/SUPABASE.md`) ahead of asset pipeline work.
 
@@ -81,6 +83,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - 2025-11-09: Refined admin shell + inline editing UX, shored up backend guardrails, rotated Supabase keys with schema grants restored, validated draft saves/publish errors, removed test concept, and merged admin refresh to `main`; documentation refresh queued next.
 - 2025-11-09: Cleaned merged branches, deleted obsolete remotes, enabled admin impersonation on GitHub Pages, and opened `phase/1-hierarchy-crud` to focus on curriculum CRUD tooling.
 - 2025-11-09 (evening): Delivered curriculum tree drag-and-drop confirmation flow with cancel/apply banner, restored create/delete affordances, ensured pending highlights vanish post-confirmation, and documented follow-up tasks for backend parity and term management.
+- 2025-11-09 (late): Enabled “Pridėti terminą” end-to-end — admin UI form, backend item/concept CRUD, audit logging, and documentation refresh queued for related guides.
 
 ## Wrap-up Checklist
 

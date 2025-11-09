@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createCurriculumItemAdmin,
   createCurriculumNodeAdmin,
   deleteCurriculumNodeAdmin,
   getCurriculumNodeByCode,
@@ -8,11 +9,17 @@ import {
   type CreateCurriculumNodeInput,
   type UpdateCurriculumNodeInput,
 } from "../../../../data/repositories/curriculumRepository.ts";
-import type { CurriculumNode } from "../../../../data/types.ts";
+import type {
+  Concept,
+  ContentVersionStatus,
+  CurriculumItem,
+  CurriculumNode,
+} from "../../../../data/types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { logContentMutation } from "../../services/auditLogger.ts";
 import { unauthorized } from "../../utils/httpError.ts";
 import {
+  adminCurriculumItemCreateSchema,
   adminCurriculumNodeCreateSchema,
   adminCurriculumNodeUpdateSchema,
   type AdminCurriculumNodeCreateInput,
@@ -299,6 +306,120 @@ router.delete(
   })
 );
 
+router.post(
+  "/items",
+  asyncHandler(async (req, res) => {
+    const validation = adminCurriculumItemCreateSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      res.status(400).json({
+        error: {
+          message: "Neteisingai užpildyta termino forma.",
+          details: validation.error.flatten(),
+        },
+      });
+      return;
+    }
+
+    let created: Awaited<ReturnType<typeof createCurriculumItemAdmin>> | null = null;
+
+    try {
+      created = await createCurriculumItemAdmin(validation.data);
+    } catch (error) {
+      if (isSupabaseAuthError(error)) {
+        throw unauthorized(
+          "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
+        );
+      }
+
+      if (isUniqueConstraintError(error)) {
+        res.status(409).json({
+          error: {
+            message: "Termino įrašas jau egzistuoja kituose duomenyse.",
+          },
+        });
+        return;
+      }
+
+      if (error instanceof Error && error.message === "Curriculum item label cannot be empty.") {
+        res.status(400).json({
+          error: {
+            message: "Terminas negali būti tuščias.",
+          },
+        });
+        return;
+      }
+
+      if (typeof (error as { code?: string }).code === "string") {
+        const codeValue = String((error as { code: string }).code);
+        if (codeValue === "NODE_NOT_FOUND") {
+          res.status(404).json({
+            error: {
+              message: `Curriculum node '${validation.data.nodeCode}' was not found.`,
+            },
+          });
+          return;
+        }
+      }
+
+      throw error;
+    }
+
+    if (!created) {
+      throw new Error("Curriculum item creation did not return a result.");
+    }
+
+    const actor = req.authUser?.email ?? req.authUser?.id ?? null;
+
+    const conceptStatus = resolveConceptStatus(created.concept);
+
+    try {
+      await logContentMutation({
+        entityType: "curriculum_item",
+        entityId: `${created.item.nodeCode}:${created.item.ordinal}`,
+        before: null,
+        after: mapItemForLog(created.item, created.concept),
+        actor,
+        changeSummary: `Curriculum item '${created.item.label}' created via admin console.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log curriculum item creation", {
+        nodeCode: created.item.nodeCode,
+        ordinal: created.item.ordinal,
+        error,
+      });
+    }
+
+    try {
+      await logContentMutation({
+        entityType: "concept",
+        entityId: created.concept.slug,
+        before: null,
+        after: mapConceptForLog(created.concept),
+        actor,
+        status: conceptStatus,
+        changeSummary: `Concept '${created.concept.slug}' created for curriculum item '${created.item.nodeCode}'.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log concept creation for curriculum item", {
+        slug: created.concept.slug,
+        error,
+      });
+    }
+
+    res.status(201).json({
+      data: {
+        item: mapItemForResponse(created.item, created.concept),
+      },
+      meta: {
+        createdAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
 export default router;
 
 function normalizeCreatePayload(
@@ -340,6 +461,70 @@ type CurriculumNodeResponse = {
   updatedAt: string;
   prerequisiteCount: number;
 };
+
+type CurriculumItemResponse = {
+  nodeCode: string;
+  ordinal: number;
+  label: string;
+  conceptSlug: string;
+  conceptTerm: string;
+  isRequired: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+function resolveConceptStatus(concept: Concept): ContentVersionStatus {
+  const raw = typeof concept.metadata?.status === "string" ? concept.metadata.status : null;
+  const allowed: ContentVersionStatus[] = ["draft", "in_review", "published", "archived"];
+  if (raw && allowed.includes(raw as ContentVersionStatus)) {
+    return raw as ContentVersionStatus;
+  }
+  return "draft";
+}
+
+function mapItemForResponse(item: CurriculumItem, concept: Concept): CurriculumItemResponse {
+  return {
+    nodeCode: item.nodeCode,
+    ordinal: item.ordinal,
+    label: item.label,
+    conceptSlug: concept.slug,
+    conceptTerm: concept.termLt,
+    isRequired: concept.isRequired,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  } satisfies CurriculumItemResponse;
+}
+
+function mapItemForLog(item: CurriculumItem, concept: Concept) {
+  return {
+    nodeCode: item.nodeCode,
+    ordinal: item.ordinal,
+    label: item.label,
+    conceptSlug: concept.slug,
+    conceptTerm: concept.termLt,
+    isRequired: concept.isRequired,
+  } satisfies Record<string, unknown>;
+}
+
+function mapConceptForLog(concept: Concept) {
+  return {
+    slug: concept.slug,
+    termLt: concept.termLt,
+    termEn: concept.termEn,
+    descriptionLt: concept.descriptionLt,
+    descriptionEn: concept.descriptionEn,
+    sectionCode: concept.sectionCode,
+    sectionTitle: concept.sectionTitle,
+    subsectionCode: concept.subsectionCode,
+    subsectionTitle: concept.subsectionTitle,
+    curriculumNodeCode: concept.curriculumNodeCode,
+    curriculumItemOrdinal: concept.curriculumItemOrdinal,
+    curriculumItemLabel: concept.curriculumItemLabel,
+    sourceRef: concept.sourceRef,
+    isRequired: concept.isRequired,
+    metadata: concept.metadata ?? {},
+  } satisfies Record<string, unknown>;
+}
 
 function mapNodeForResponse(node: CurriculumNode): CurriculumNodeResponse {
   return {

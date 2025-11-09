@@ -18,6 +18,14 @@
 		value: string
 	) => void;
 	export let onSubmitCreateChild: (state: TreeNodeState) => Promise<void> | void;
+	export let onOpenCreateItem: (state: TreeNodeState) => Promise<void> | void;
+	export let onCancelCreateItem: (state: TreeNodeState) => Promise<void> | void;
+	export let onCreateItemFieldChange: (
+		state: TreeNodeState,
+		field: 'term' | 'description' | 'termEn' | 'sourceRef' | 'isRequired',
+		value: string | boolean
+	) => void;
+	export let onSubmitCreateItem: (state: TreeNodeState) => Promise<void> | void;
 	export let onOpenEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onCancelEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onEditFieldChange: (
@@ -267,8 +275,8 @@
 							<button
 								type="button"
 								class="tree-node__admin-chip"
-								title="Funkcija dar ruošiama"
-								disabled
+								on:click={() => onOpenCreateItem(state)}
+								disabled={state.admin.createItem.busy || state.admin.createItem.open || state.admin.remove.busy}
 							>
 								Pridėti terminą
 							</button>
@@ -343,6 +351,10 @@
 										{onCancelCreateChild}
 										{onCreateChildFieldChange}
 										{onSubmitCreateChild}
+										{onOpenCreateItem}
+										{onCancelCreateItem}
+										{onCreateItemFieldChange}
+										{onSubmitCreateItem}
 										{onOpenEdit}
 										{onCancelEdit}
 										{onEditFieldChange}
@@ -364,7 +376,7 @@
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
 								{/if}
 
-								{#if adminEnabled && ((allowCreateChild && state.admin.createChild.open) || state.admin.edit.open || state.admin.remove.confirming)}
+								{#if adminEnabled && ((allowCreateChild && state.admin.createChild.open) || state.admin.createItem.open || state.admin.edit.open || state.admin.remove.confirming)}
 									<div class="tree-node__admin" use:preventDragPointerPropagation>
 										{#if allowCreateChild && state.admin.createChild.open}
 											<form
@@ -442,6 +454,115 @@
 														disabled={state.admin.createChild.busy}
 													>
 														{state.admin.createChild.busy ? 'Saugoma…' : 'Išsaugoti'}
+													</button>
+												</div>
+											</form>
+										{/if}
+
+										{#if state.admin.createItem.open}
+											<form
+												class="tree-node__admin-form"
+												on:submit|preventDefault={() => onSubmitCreateItem(state)}
+												use:preventDragPointerPropagation
+											>
+												<div class="tree-node__admin-grid">
+													<label class="tree-node__admin-field tree-node__admin-field--full">
+														<span>Terminas</span>
+														<input
+															type="text"
+															value={state.admin.createItem.term}
+															on:input={(event) =>
+																onCreateItemFieldChange(
+																	state,
+																	'term',
+																	event.currentTarget.value
+																)}
+															placeholder="Įveskite termino pavadinimą"
+															disabled={state.admin.createItem.busy}
+														/>
+													</label>
+													<label class="tree-node__admin-field tree-node__admin-field--full">
+														<span>Aprašymas (nebūtina)</span>
+														<textarea
+															rows={3}
+															value={state.admin.createItem.description}
+															on:input={(event) =>
+																onCreateItemFieldChange(
+																	state,
+																	'description',
+																	event.currentTarget.value
+																)}
+															placeholder="Trumpas termino paaiškinimas"
+															disabled={state.admin.createItem.busy}
+														></textarea>
+													</label>
+													<label class="tree-node__admin-field">
+														<span>Angliškas atitikmuo (nebūtina)</span>
+														<input
+															type="text"
+															value={state.admin.createItem.termEn}
+															on:input={(event) =>
+																onCreateItemFieldChange(
+																	state,
+																	'termEn',
+																	event.currentTarget.value
+																)}
+															placeholder="Pvz., „Centreboard boat“"
+															disabled={state.admin.createItem.busy}
+														/>
+													</label>
+													<label class="tree-node__admin-field">
+														<span>Šaltinis (nebūtina)</span>
+														<input
+															type="text"
+															value={state.admin.createItem.sourceRef}
+															on:input={(event) =>
+																onCreateItemFieldChange(
+																	state,
+																	'sourceRef',
+																	event.currentTarget.value
+																)}
+															placeholder="Pvz., LBS_programa.md"
+															disabled={state.admin.createItem.busy}
+														/>
+													</label>
+													<label class="tree-node__admin-checkbox">
+														<input
+															type="checkbox"
+															checked={state.admin.createItem.isRequired}
+															on:change={(event) =>
+																onCreateItemFieldChange(
+																	state,
+																	'isRequired',
+																	event.currentTarget.checked
+																)}
+															disabled={state.admin.createItem.busy}
+														/>
+														<span>Privalomas terminas</span>
+													</label>
+												</div>
+
+												{#if state.admin.createItem.error}
+													<p class="tree-node__admin-status tree-node__admin-status--error">
+														{state.admin.createItem.error}
+													</p>
+												{/if}
+
+												<div class="tree-node__admin-actions">
+													<button
+														type="button"
+														class="tree-node__admin-button tree-node__admin-button--ghost"
+														on:click={() => onCancelCreateItem(state)}
+														disabled={state.admin.createItem.busy}
+													>
+														Atšaukti
+													</button>
+													<button
+														type="submit"
+														class="tree-node__admin-button tree-node__admin-button--primary"
+														disabled={state.admin.createItem.busy}
+													>
+														{state.admin.createItem.busy ? 'Saugoma…' : 'Išsaugoti'}
 													</button>
 												</div>
 											</form>
@@ -748,6 +869,20 @@
 		gap: 0.35rem;
 		font-size: 0.8rem;
 		color: var(--color-text);
+	}
+
+	.tree-node__admin-checkbox {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.8rem;
+		color: var(--color-text);
+		grid-column: 1 / -1;
+	}
+
+	.tree-node__admin-checkbox input {
+		width: auto;
+		margin: 0;
 	}
 
 	.tree-node__admin-field--full {

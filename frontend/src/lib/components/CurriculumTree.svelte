@@ -3,6 +3,7 @@
 	import type { CurriculumNode } from '$lib/api/curriculum';
 	import { fetchChildNodes, fetchNodeItems } from '$lib/api/curriculum';
 	import {
+		createCurriculumItem,
 		createCurriculumNode,
 		updateCurriculumNode,
 		deleteCurriculumNode
@@ -14,6 +15,7 @@
 		TreeNodeState,
 		TreeNodeAdminState,
 		TreeNodeCreateChildState,
+		TreeNodeCreateItemState,
 		TreeNodeEditState,
 		TreeNodeDeleteState,
 		TreeNodeReorderState,
@@ -33,6 +35,7 @@
 	let adminEnabled = false;
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let activeCreateNodeCode: string | null = null;
+	let activeCreateItemNodeCode: string | null = null;
 	let dragAndDropEnabled = false;
 	let dragSessionActive = false;
 	const allowCreateChild = true;
@@ -68,6 +71,17 @@
 		busy: false
 	});
 
+	const createCreateItemState = (): TreeNodeCreateItemState => ({
+		open: false,
+		term: '',
+		description: '',
+		termEn: '',
+		sourceRef: '',
+		isRequired: true,
+		error: null,
+		busy: false
+	});
+
 	const createEditState = (): TreeNodeEditState => ({
 		open: false,
 		title: '',
@@ -89,6 +103,7 @@
 
 	const createAdminState = (): TreeNodeAdminState => ({
 		createChild: createCreateChildState(),
+		createItem: createCreateItemState(),
 		edit: createEditState(),
 		remove: createDeleteState(),
 		reorder: createReorderState()
@@ -124,6 +139,17 @@
 			}
 			if (state.admin.createChild.open || state.admin.createChild.error || state.admin.createChild.busy) {
 				state.admin.createChild = createCreateChildState();
+			}
+		});
+	};
+
+	const closeCreateItemFormsExcept = (target: TreeNodeState | null) => {
+		visitTree(roots, (state) => {
+			if (target && state.node.code === target.node.code) {
+				return;
+			}
+			if (state.admin.createItem.open || state.admin.createItem.error || state.admin.createItem.busy) {
+				state.admin.createItem = createCreateItemState();
 			}
 		});
 	};
@@ -257,6 +283,13 @@
 		refreshTree();
 	};
 
+	const resetCreateItemForm = (state: TreeNodeState, options: { open?: boolean } = {}) => {
+		const next = createCreateItemState();
+		next.open = options.open ?? state.admin.createItem.open;
+		state.admin.createItem = next;
+		refreshTree();
+	};
+
 	const openCreateChildForm = (state: TreeNodeState) => {
 		if (activeCreateNodeCode && activeCreateNodeCode !== state.node.code) {
 			closeCreateChildFormsExcept(state);
@@ -279,12 +312,53 @@
 		refreshTree();
 	};
 
+	const openCreateItemForm = (state: TreeNodeState) => {
+		if (activeCreateItemNodeCode && activeCreateItemNodeCode !== state.node.code) {
+			closeCreateItemFormsExcept(state);
+		}
+		activeCreateItemNodeCode = state.node.code;
+		if (!state.expanded) {
+			state.expanded = true;
+		}
+		if (!state.loaded) {
+			void ensureChildren(state);
+		}
+		resetCreateItemForm(state, { open: true });
+		refreshTree();
+	};
+
+	const cancelCreateItemForm = (state: TreeNodeState) => {
+		state.admin.createItem = createCreateItemState();
+		if (activeCreateItemNodeCode === state.node.code) {
+			activeCreateItemNodeCode = null;
+		}
+		refreshTree();
+	};
+
 	type CreateChildField = 'code' | 'title' | 'summary';
+	type CreateItemField = 'term' | 'description' | 'termEn' | 'sourceRef' | 'isRequired';
 	type EditField = 'title' | 'summary';
 
 	const updateCreateChildField = (state: TreeNodeState, field: CreateChildField, value: string) => {
 		const form = state.admin.createChild;
 		form[field] = value;
+		if (form.error) {
+			form.error = null;
+		}
+		refreshTree();
+	};
+
+	const updateCreateItemField = (
+		state: TreeNodeState,
+		field: CreateItemField,
+		value: string | boolean
+	) => {
+		const form = state.admin.createItem;
+		if (field === 'isRequired') {
+			form.isRequired = Boolean(value);
+		} else {
+			form[field] = typeof value === 'string' ? value : form[field];
+		}
 		if (form.error) {
 			form.error = null;
 		}
@@ -871,6 +945,47 @@
 			refreshTree();
 		}
 	};
+
+	const submitCreateItem = async (state: TreeNodeState) => {
+		const form = state.admin.createItem;
+		const term = form.term.trim();
+		const description = form.description.trim();
+		const termEn = form.termEn.trim();
+		const sourceRef = form.sourceRef.trim();
+
+		if (!term) {
+			form.error = 'Įrašykite terminą.';
+			refreshTree();
+			return;
+		}
+
+		form.busy = true;
+		form.error = null;
+		refreshTree();
+
+		try {
+			await createCurriculumItem({
+				nodeCode: state.node.code,
+				label: term,
+				termLt: term,
+				termEn: termEn ? termEn : undefined,
+				descriptionLt: description ? description : undefined,
+				sourceRef: sourceRef ? sourceRef : undefined,
+				isRequired: form.isRequired
+			});
+
+			await ensureChildren(state, { force: true });
+			resetCreateItemForm(state, { open: false });
+			if (activeCreateItemNodeCode === state.node.code) {
+				activeCreateItemNodeCode = null;
+			}
+		} catch (err) {
+			form.error = translateApiError(err, 'Nepavyko sukurti termino.');
+		} finally {
+			form.busy = false;
+			refreshTree();
+		}
+	};
 </script>
 
 <section class="curriculum-tree">
@@ -938,6 +1053,10 @@
 			onCancelCreateChild={cancelCreateChildForm}
 			onCreateChildFieldChange={updateCreateChildField}
 			onSubmitCreateChild={submitCreateChild}
+			onOpenCreateItem={openCreateItemForm}
+			onCancelCreateItem={cancelCreateItemForm}
+			onCreateItemFieldChange={updateCreateItemField}
+			onSubmitCreateItem={submitCreateItem}
 			onOpenEdit={openEditForm}
 			onCancelEdit={cancelEditForm}
 			onEditFieldChange={updateEditField}

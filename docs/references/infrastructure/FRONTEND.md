@@ -66,7 +66,7 @@ Run all commands from the repository root:
 
 - Drag-and-drop reorder uses `svelte-dnd-action`; preview moves take effect immediately but require confirmation through the floating `Patvirtinti/Atšaukti` banner pinned to the viewport bottom.
 - `CurriculumTree.svelte` collects baseline ordinals before a drag starts, renders pending highlights while moves are unsaved, and clears the visual state as soon as confirmation succeeds or changes are cancelled.
-- Delete and edit affordances auto-expand branches so confirmation prompts are visible without manual toggles; “Pridėti poskyrį” is enabled again while “Pridėti terminą” remains a placeholder until backend item CRUD lands.
+- Delete and edit affordances auto-expand branches so confirmation prompts are visible without manual toggles; “Pridėti poskyrį” and “Pridėti terminą” now open inline forms that post through the admin API, capturing summaries, optional vertimai, šaltiniai, and the required flag before refreshing the branch.
 - The toolbar order is now `Redaguoti`, `Šalinti`, `Pridėti poskyrį`, `Pridėti terminą`, `↑`, `↓`; keep new actions aligned with this layout.
 
 ## Testing & Quality
