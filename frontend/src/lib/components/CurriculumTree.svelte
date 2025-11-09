@@ -35,6 +35,19 @@
 	let activeCreateNodeCode: string | null = null;
 	let dragAndDropEnabled = false;
 
+	type PendingReorder = {
+		parentCode: string | null;
+		orderedIds: string[];
+		orderedNodes: TreeNodeState[];
+	};
+
+	let pendingReorders = new Map<string | null, PendingReorder>();
+	let pendingParentCodes = new Set<string | null>();
+	let pendingNodeCodes = new Set<string>();
+	let baselinePositions = new Map<string, { parentCode: string | null; ordinal: number }>();
+	let reorderSaving = false;
+	let reorderError: string | null = null;
+
 	const createCreateChildState = (): TreeNodeCreateChildState => ({
 		open: false,
 		code: '',
@@ -106,6 +119,99 @@
 
 	const refreshTree = () => {
 		roots = [...roots];
+	};
+
+	const refreshPendingSets = () => {
+		pendingParentCodes = new Set(pendingReorders.keys());
+		const nextNodes = new Set<string>();
+		for (const entry of pendingReorders.values()) {
+			for (const id of entry.orderedIds) {
+				nextNodes.add(id);
+			}
+		}
+		pendingNodeCodes = nextNodes;
+	};
+
+	const captureBaselineForParent = (parentCode: string | null) => {
+		const parentState = parentCode ? findNodeState(parentCode) : null;
+		const collection = parentState ? parentState.children : roots;
+		if (!collection.length) {
+			return;
+		}
+		const next = new Map(baselinePositions);
+		for (const node of collection) {
+			if (!next.has(node.node.code)) {
+				next.set(node.node.code, {
+					parentCode,
+					ordinal: node.node.ordinal
+				});
+			}
+		}
+		if (next.size !== baselinePositions.size) {
+			baselinePositions = next;
+		}
+	};
+
+	const cleanupResolvedBaselines = () => {
+		if (!baselinePositions.size) {
+			return;
+		}
+		const next = new Map(baselinePositions);
+		for (const [code, initial] of baselinePositions.entries()) {
+			const nodeState = findNodeState(code);
+			if (!nodeState) {
+				next.delete(code);
+				continue;
+			}
+			const currentParent = findParentState(code);
+			const currentParentCode = currentParent ? currentParent.node.code : null;
+			const currentOrdinal = nodeState.node.ordinal;
+			if (currentParentCode === initial.parentCode && currentOrdinal === initial.ordinal) {
+				next.delete(code);
+			}
+		}
+		if (next.size !== baselinePositions.size) {
+			baselinePositions = next;
+		}
+	};
+
+	const pruneResolvedPending = () => {
+		if (!pendingReorders.size) {
+			if (pendingParentCodes.size || pendingNodeCodes.size) {
+				pendingParentCodes = new Set();
+				pendingNodeCodes = new Set();
+			}
+			return;
+		}
+		const next = new Map<string | null, PendingReorder>();
+		for (const [parentCode, entry] of pendingReorders.entries()) {
+			const hasBaselineNode = entry.orderedIds.some((id) => baselinePositions.has(id));
+			if (hasBaselineNode) {
+				next.set(parentCode, entry);
+			}
+		}
+		if (next.size !== pendingReorders.size) {
+			pendingReorders = next;
+		}
+	};
+
+	const refreshPendingState = () => {
+		cleanupResolvedBaselines();
+		pruneResolvedPending();
+		refreshPendingSets();
+	};
+
+	const registerPendingReorderForParent = (parentCode: string | null) => {
+		const parentState = parentCode ? findNodeState(parentCode) : null;
+		const collection = parentState ? parentState.children : roots;
+		const pending: PendingReorder = {
+			parentCode,
+			orderedIds: collection.map((state) => state.node.code),
+			orderedNodes: [...collection]
+		};
+		const next = new Map(pendingReorders);
+		next.set(parentCode, pending);
+		pendingReorders = next;
 	};
 
 	onMount(() => {
@@ -325,7 +431,7 @@
 		applyNodeOrderChange(change);
 	};
 
-	const handleNodeDragFinalize = async (change: TreeNodeOrderFinalize) => {
+	const handleNodeDragFinalize = (change: TreeNodeOrderFinalize) => {
 		if (!dragAndDropEnabled) {
 			return;
 		}
@@ -338,35 +444,149 @@
 		const previousParent = findParentState(change.draggedId);
 		const previousParentCode = previousParent ? previousParent.node.code : null;
 		const previousOrdinal = draggedNode.node.ordinal;
+		const targetParentCode = change.parentCode ?? null;
+
+		captureBaselineForParent(previousParentCode);
+		captureBaselineForParent(targetParentCode);
 
 		applyNodeOrderChange(change);
 
 		const newIndex = change.orderedIds.findIndex((id) => id === change.draggedId);
-		if (newIndex === -1) {
+		const newOrdinal = newIndex === -1 ? null : newIndex + 1;
+
+		if (previousParentCode === targetParentCode && (newOrdinal === null || previousOrdinal === newOrdinal)) {
+			refreshPendingState();
 			return;
 		}
 
-		const newOrdinal = newIndex + 1;
-		const newParentCode = change.parentCode;
+		registerPendingReorderForParent(targetParentCode);
+		if (previousParentCode !== targetParentCode) {
+			registerPendingReorderForParent(previousParentCode);
+		}
 
-		if (previousParentCode === newParentCode && previousOrdinal === newOrdinal) {
+		refreshPendingState();
+	};
+
+	const cancelPendingReorders = () => {
+		if (!baselinePositions.size) {
 			return;
 		}
 
-		draggedNode.admin.reorder.busy = true;
-		draggedNode.admin.reorder.error = null;
+		const parentEntries = new Map<string | null, { code: string; ordinal: number }[]>();
+		for (const [code, position] of baselinePositions.entries()) {
+			const list = parentEntries.get(position.parentCode) ?? [];
+			list.push({ code, ordinal: position.ordinal });
+			parentEntries.set(position.parentCode, list);
+		}
+
+		for (const [parentCode, entries] of parentEntries.entries()) {
+			entries.sort((a, b) => a.ordinal - b.ordinal);
+			const nodeStates = entries
+				.map(({ code }) => findNodeState(code))
+				.filter((state): state is TreeNodeState => Boolean(state));
+
+			for (const nodeState of nodeStates) {
+				detachNode(nodeState.node.code);
+			}
+
+			if (parentCode) {
+				const parentState = findNodeState(parentCode);
+				if (!parentState) {
+					continue;
+				}
+				parentState.children = nodeStates;
+				refreshSiblingOrdinals(parentState.children);
+			} else {
+				roots = nodeStates;
+				refreshSiblingOrdinals(roots);
+			}
+		}
+
+		pendingReorders = new Map();
+		pendingParentCodes = new Set();
+		pendingNodeCodes = new Set();
+		baselinePositions = new Map();
+		reorderError = null;
+		refreshTree();
+	};
+
+	const applyPendingReorders = async () => {
+		if (reorderSaving || !baselinePositions.size) {
+			return;
+		}
+
+		const updates = new Map<string, { parentCode: string | null; ordinal: number }>();
+		for (const [code, baseline] of baselinePositions.entries()) {
+			const nodeState = findNodeState(code);
+			if (!nodeState) {
+				continue;
+			}
+			const currentParent = findParentState(code);
+			const currentParentCode = currentParent ? currentParent.node.code : null;
+			const currentOrdinal = nodeState.node.ordinal;
+
+			if (currentParentCode === baseline.parentCode && currentOrdinal === baseline.ordinal) {
+				continue;
+			}
+
+			updates.set(code, {
+				parentCode: currentParentCode,
+				ordinal: currentOrdinal
+			});
+		}
+
+		if (!updates.size) {
+			pendingReorders = new Map();
+			pendingParentCodes = new Set();
+			pendingNodeCodes = new Set();
+			baselinePositions = new Map();
+		reorderError = null;
+			refreshTree();
+			return;
+		}
+
+		reorderSaving = true;
+		reorderError = null;
+
+		const affectedNodes: TreeNodeState[] = [];
+		for (const code of updates.keys()) {
+			const nodeState = findNodeState(code);
+			if (!nodeState) {
+				continue;
+			}
+			nodeState.admin.reorder.busy = true;
+			nodeState.admin.reorder.error = null;
+			affectedNodes.push(nodeState);
+		}
 		refreshTree();
 
 		try {
-			await updateCurriculumNode(change.draggedId, {
-				parentCode: newParentCode ?? null,
-				ordinal: newOrdinal
-			});
-			draggedNode.admin.reorder = createReorderState();
+			for (const [code, payload] of updates.entries()) {
+				await updateCurriculumNode(code, {
+					parentCode: payload.parentCode ?? null,
+					ordinal: payload.ordinal
+				});
+			}
+
+			for (const nodeState of affectedNodes) {
+				nodeState.admin.reorder = createReorderState();
+			}
+
+			pendingReorders = new Map();
+			pendingParentCodes = new Set();
+			pendingNodeCodes = new Set();
+			baselinePositions = new Map();
+			reorderError = null;
 		} catch (error) {
-			draggedNode.admin.reorder.error = translateApiError(error, 'Nepavyko perkelti poskyrio.');
+			const message = translateApiError(error, 'Nepavyko išsaugoti pakeitimų.');
+			reorderError = message;
+			for (const nodeState of affectedNodes) {
+				nodeState.admin.reorder.busy = false;
+				nodeState.admin.reorder.error = message;
+			}
+			return;
 		} finally {
-			draggedNode.admin.reorder.busy = false;
+			reorderSaving = false;
 			refreshTree();
 		}
 	};
@@ -597,6 +817,40 @@
 		{/if}
 	</header>
 
+	{#if pendingReorders.size}
+		<div
+			class="curriculum-tree__pending-banner"
+			role="status"
+			aria-live="polite"
+			data-saving={reorderSaving}
+		>
+			<span class="curriculum-tree__pending-text">
+				Yra neišsaugotų perkėlimų.
+			</span>
+			<div class="curriculum-tree__pending-actions">
+				<button
+					type="button"
+					class="curriculum-tree__pending-button curriculum-tree__pending-button--ghost"
+					on:click={cancelPendingReorders}
+					disabled={reorderSaving}
+				>
+					Atšaukti
+				</button>
+				<button
+					type="button"
+					class="curriculum-tree__pending-button curriculum-tree__pending-button--primary"
+					on:click={applyPendingReorders}
+					disabled={reorderSaving}
+				>
+					Patvirtinti
+				</button>
+			</div>
+		</div>
+		{#if reorderError}
+			<p class="curriculum-tree__pending-error">{reorderError}</p>
+		{/if}
+	{/if}
+
 	{#if !roots.length}
 		<p class="curriculum-tree__empty">Šioje skiltyje dar nėra įkelto turinio.</p>
 	{:else}
@@ -621,6 +875,8 @@
 			dragAndDropEnabled={dragAndDropEnabled}
 			onNodeDragConsider={handleNodeDragConsider}
 			onNodeDragFinalize={handleNodeDragFinalize}
+			pendingParentCodes={pendingParentCodes}
+			pendingNodeCodes={pendingNodeCodes}
 		/>
 	{/if}
 </section>
@@ -664,6 +920,76 @@
 
 	.curriculum-tree__toggle input {
 		accent-color: var(--color-accent);
+	}
+
+	.curriculum-tree__pending-banner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(37, 99, 235, 0.35);
+		background: rgba(37, 99, 235, 0.08);
+	}
+
+	.curriculum-tree__pending-banner[data-saving='true'] {
+		opacity: 0.75;
+	}
+
+	.curriculum-tree__pending-text {
+		font-weight: 600;
+		color: var(--curriculum-drop-outline, #2563eb);
+	}
+
+	.curriculum-tree__pending-actions {
+		display: flex;
+		gap: 0.5rem;
+		margin-left: auto;
+	}
+
+	.curriculum-tree__pending-button {
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 600;
+		padding: 0.35rem 0.9rem;
+		border: 1px solid transparent;
+		cursor: pointer;
+		transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.curriculum-tree__pending-button--primary {
+		background: var(--color-accent);
+		border-color: var(--color-accent-border-strong);
+		color: var(--color-button-text-on-accent);
+	}
+
+	.curriculum-tree__pending-button--primary:hover,
+	.curriculum-tree__pending-button--primary:focus-visible {
+		background: var(--color-accent-strong);
+		border-color: var(--color-accent-border-stronger);
+	}
+
+	.curriculum-tree__pending-button--ghost {
+		background: transparent;
+		border-color: var(--curriculum-drop-outline, #2563eb);
+		color: var(--curriculum-drop-outline, #2563eb);
+	}
+
+	.curriculum-tree__pending-button--ghost:hover,
+	.curriculum-tree__pending-button--ghost:focus-visible {
+		background: rgba(37, 99, 235, 0.12);
+	}
+
+	.curriculum-tree__pending-button[disabled] {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.curriculum-tree__pending-error {
+		margin: 0.5rem 0 0;
+		color: var(--color-status-error-text);
+		font-size: 0.85rem;
 	}
 
 	.curriculum-tree__empty {

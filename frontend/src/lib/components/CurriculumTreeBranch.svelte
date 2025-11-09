@@ -36,8 +36,14 @@
 	export let dragAndDropEnabled = false;
 	export let onNodeDragConsider: (change: TreeNodeOrderChange) => void = () => {};
 	export let onNodeDragFinalize: (change: TreeNodeOrderFinalize) => void = () => {};
+	export let pendingParentCodes: Set<string | null> = new Set();
+	export let pendingNodeCodes: Set<string> = new Set();
 
 	let isDragOver = false;
+
+	const resolveBranchParentCode = () => (parentState ? parentState.node.code : null);
+	const isBranchPending = () => pendingParentCodes?.has(resolveBranchParentCode()) ?? false;
+	const isNodePending = (state: TreeNodeState) => pendingNodeCodes?.has(state.node.code) ?? false;
 
 	const resolveParentCode = () => (parentState ? parentState.node.code : null);
 	const extractOrderedNodes = (event: CustomEvent<DndEvent<unknown>>): TreeNodeState[] => {
@@ -107,6 +113,7 @@
 <ul
 	class="tree-branch"
 	class:tree-branch--drag-over={isDragOver}
+	class:tree-branch--pending={isBranchPending()}
 	data-level={level}
 	data-parent-code={parentState ? parentState.node.code : ''}
 	use:dndzone={{
@@ -130,8 +137,8 @@
 	data-drag-enabled={dragAndDropEnabled}
 >
 	{#each nodes as state, index (state.id)}
-				<li class="tree-node">
-					<div class="tree-node__header">
+				<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
+					<div class="tree-node__header" class:tree-node__header--pending={isNodePending(state)}>
 						<button
 							type="button"
 							class="tree-node__toggle"
@@ -267,6 +274,8 @@
 										{dragAndDropEnabled}
 										{onNodeDragConsider}
 										{onNodeDragFinalize}
+										{pendingParentCodes}
+										{pendingNodeCodes}
 									/>
 								{:else if !state.items.length}
 									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
@@ -458,6 +467,11 @@
 		gap: 0.75rem;
 	}
 
+	.tree-branch[data-drag-enabled='true'] {
+		padding-top: 0.75rem;
+		padding-bottom: 1rem;
+	}
+
 	:global(.tree-branch--active-drop) {
 		box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2);
 	}
@@ -467,6 +481,12 @@
 		border: 2px solid var(--curriculum-drop-outline, #2563eb);
 		border-radius: 1rem;
 		box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+	}
+
+	.tree-branch.tree-branch--pending {
+		background: rgba(37, 99, 235, 0.08);
+		border-radius: 1rem;
+		box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.18);
 	}
 
 	.tree-branch[data-drag-enabled='true'] .tree-node__header {
@@ -499,10 +519,21 @@
 		gap: 0.8rem;
 	}
 
+	.tree-node--pending {
+		border-color: var(--curriculum-drop-outline, #2563eb);
+		box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+	}
+
 	.tree-node__header {
 		display: flex;
 		align-items: flex-start;
 		gap: 0.6rem;
+	}
+
+	.tree-node__header--pending {
+		outline: 2px solid var(--curriculum-drop-outline, #2563eb);
+		outline-offset: 2px;
+		border-radius: 0.65rem;
 	}
 
 	.tree-node__toggle {
@@ -747,7 +778,7 @@
 		visibility: visible !important;
 		pointer-events: none;
 		height: 0;
-		margin: 0.65rem 0;
+		margin: 1.1rem 0;
 	}
 
 	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']::before) {
