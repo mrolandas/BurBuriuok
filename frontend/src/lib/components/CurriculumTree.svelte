@@ -2,10 +2,22 @@
 	import CurriculumTreeBranch from './CurriculumTreeBranch.svelte';
 	import type { CurriculumNode } from '$lib/api/curriculum';
 	import { fetchChildNodes, fetchNodeItems } from '$lib/api/curriculum';
-	import { createCurriculumNode } from '$lib/api/admin/curriculum';
+	import {
+		createCurriculumNode,
+		updateCurriculumNode,
+		deleteCurriculumNode
+	} from '$lib/api/admin/curriculum';
 	import { adminMode } from '$lib/stores/adminMode';
 	import { onDestroy, onMount } from 'svelte';
-	import type { TreeNodeState, TreeNodeAdminState } from './curriculumTreeTypes';
+	import { AdminApiError } from '$lib/api/admin/client';
+	import type {
+		TreeNodeState,
+		TreeNodeAdminState,
+		TreeNodeCreateChildState,
+		TreeNodeEditState,
+		TreeNodeDeleteState,
+		TreeNodeReorderState
+	} from './curriculumTreeTypes';
 
 	type SectionSummary = {
 		code: string;
@@ -19,15 +31,39 @@
 	let adminEnabled = false;
 	let adminModeUnsubscribe: (() => void) | null = null;
 
+	const createCreateChildState = (): TreeNodeCreateChildState => ({
+		open: false,
+		code: '',
+		title: '',
+		summary: '',
+		error: null,
+		busy: false
+	});
+
+	const createEditState = (): TreeNodeEditState => ({
+		open: false,
+		title: '',
+		summary: '',
+		error: null,
+		busy: false
+	});
+
+	const createDeleteState = (): TreeNodeDeleteState => ({
+		confirming: false,
+		busy: false,
+		error: null
+	});
+
+	const createReorderState = (): TreeNodeReorderState => ({
+		busy: false,
+		error: null
+	});
+
 	const createAdminState = (): TreeNodeAdminState => ({
-		createChild: {
-			open: false,
-			code: '',
-			title: '',
-			summary: '',
-			error: null,
-			busy: false
-		}
+		createChild: createCreateChildState(),
+		edit: createEditState(),
+		remove: createDeleteState(),
+		reorder: createReorderState()
 	});
 
 	const createState = (node: CurriculumNode): TreeNodeState => ({
@@ -67,12 +103,10 @@
 	}
 
 	const resetCreateChildForm = (state: TreeNodeState) => {
-		const form = state.admin.createChild;
-		form.code = '';
-		form.title = '';
-		form.summary = '';
-		form.error = null;
-		form.busy = false;
+		state.admin.createChild = {
+			...createCreateChildState(),
+			open: state.admin.createChild.open
+		};
 		refreshTree();
 	};
 
@@ -97,6 +131,7 @@
 	};
 
 	type CreateChildField = 'code' | 'title' | 'summary';
+	type EditField = 'title' | 'summary';
 
 	const updateCreateChildField = (state: TreeNodeState, field: CreateChildField, value: string) => {
 		const form = state.admin.createChild;
@@ -105,6 +140,183 @@
 			form.error = null;
 		}
 		refreshTree();
+	};
+
+	const translateApiError = (error: unknown, fallback: string): string => {
+		if (error instanceof AdminApiError) {
+			const apiError: AdminApiError = error;
+			if (apiError.status === 409) {
+				return 'Toks kodas jau naudojamas. Pasirinkite kitą kodą arba palikite lauką tuščią.';
+			}
+			if (apiError.status === 400 || apiError.status === 404) {
+				return apiError.message;
+			}
+			return apiError.message || fallback;
+		}
+
+		if (error instanceof Error) {
+			return error.message || fallback;
+		}
+
+		return fallback;
+	};
+
+	const openEditForm = (state: TreeNodeState) => {
+		const form = state.admin.edit;
+		form.title = state.node.title;
+		form.summary = state.node.summary ?? '';
+		form.error = null;
+		form.busy = false;
+		form.open = true;
+		refreshTree();
+	};
+
+	const cancelEditForm = (state: TreeNodeState) => {
+		state.admin.edit = {
+			...createEditState()
+		};
+		refreshTree();
+	};
+
+	const updateEditField = (state: TreeNodeState, field: EditField, value: string) => {
+		const form = state.admin.edit;
+		form[field] = value;
+		if (form.error) {
+			form.error = null;
+		}
+		refreshTree();
+	};
+
+	const findSiblingCollection = (parent: TreeNodeState | null): TreeNodeState[] => {
+		return parent ? parent.children : roots;
+	};
+
+	const refreshSiblingOrdinals = (siblings: TreeNodeState[]) => {
+		siblings.forEach((sibling, index) => {
+			sibling.node.ordinal = index + 1;
+		});
+	};
+
+	const submitEditForm = async (state: TreeNodeState) => {
+		const form = state.admin.edit;
+		const title = form.title.trim();
+		const summaryValue = form.summary.trim();
+
+		if (!title) {
+			form.error = 'Įrašykite pavadinimą.';
+			refreshTree();
+			return;
+		}
+
+		form.busy = true;
+		form.error = null;
+		refreshTree();
+
+		try {
+			const updated = await updateCurriculumNode(state.node.code, {
+				title,
+				summary: summaryValue ? summaryValue : null
+			});
+
+			state.node.title = updated.title;
+			state.node.summary = updated.summary;
+			state.admin.edit = {
+				...createEditState()
+			};
+		} catch (error) {
+			form.error = translateApiError(error, 'Nepavyko atnaujinti poskyrio.');
+		} finally {
+			form.busy = false;
+			refreshTree();
+		}
+	};
+
+	const openDeleteConfirmation = (state: TreeNodeState) => {
+		state.admin.remove.confirming = true;
+		state.admin.remove.error = null;
+		refreshTree();
+	};
+
+	const cancelDeleteConfirmation = (state: TreeNodeState) => {
+		state.admin.remove = {
+			...createDeleteState()
+		};
+		refreshTree();
+	};
+
+	const confirmDeleteNode = async (state: TreeNodeState, parent: TreeNodeState | null) => {
+		const removal = state.admin.remove;
+		removal.busy = true;
+		removal.error = null;
+		refreshTree();
+
+		try {
+			await deleteCurriculumNode(state.node.code);
+
+			const siblings = findSiblingCollection(parent);
+			const updatedSiblings = siblings.filter((sibling) => sibling.node.code !== state.node.code);
+			refreshSiblingOrdinals(updatedSiblings);
+			if (parent) {
+				parent.children = updatedSiblings;
+			} else {
+				roots = updatedSiblings;
+			}
+			state.admin.remove = {
+				...createDeleteState()
+			};
+		} catch (error) {
+			removal.error = translateApiError(error, 'Nepavyko pašalinti poskyrio.');
+		} finally {
+			removal.busy = false;
+			refreshTree();
+		}
+	};
+
+	const moveNode = async (
+		state: TreeNodeState,
+		parent: TreeNodeState | null,
+		direction: 'up' | 'down'
+	) => {
+		if (state.admin.reorder.busy) {
+			return;
+		}
+
+		const siblings = findSiblingCollection(parent);
+		const currentIndex = siblings.findIndex((sibling) => sibling.node.code === state.node.code);
+		if (currentIndex === -1) {
+			return;
+		}
+
+		const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+		if (targetIndex < 0 || targetIndex >= siblings.length) {
+			return;
+		}
+
+		state.admin.reorder.busy = true;
+		state.admin.reorder.error = null;
+		refreshTree();
+
+		try {
+			await updateCurriculumNode(state.node.code, {
+				ordinal: targetIndex + 1
+			});
+
+			const updatedSiblings = [...siblings];
+			const [moved] = updatedSiblings.splice(currentIndex, 1);
+			updatedSiblings.splice(targetIndex, 0, moved);
+			refreshSiblingOrdinals(updatedSiblings);
+
+			if (parent) {
+				parent.children = updatedSiblings;
+			} else {
+				roots = updatedSiblings;
+			}
+		} catch (error) {
+			state.admin.reorder.error = translateApiError(error, 'Nepavyko perkelti poskyrio.');
+		} finally {
+			state.admin.reorder.busy = false;
+			refreshTree();
+		}
 	};
 
 	const ensureChildren = async (state: TreeNodeState, { force = false } = {}) => {
@@ -175,7 +387,7 @@
 
 		try {
 			await createCurriculumNode({
-				code: rawCode ? rawCode : null,
+				code: rawCode ? rawCode : undefined,
 				title,
 				summary: summaryValue ? summaryValue : null,
 				parentCode: state.node.code
@@ -185,7 +397,7 @@
 			resetCreateChildForm(state);
 			form.open = false;
 		} catch (err) {
-			form.error = err instanceof Error ? err.message : 'Nepavyko sukurti poskyrio.';
+			form.error = translateApiError(err, 'Nepavyko sukurti poskyrio.');
 		} finally {
 			form.busy = false;
 			refreshTree();
@@ -206,6 +418,7 @@
 	{:else}
 		<CurriculumTreeBranch
 			nodes={roots}
+			parentState={null}
 			onToggle={toggleNode}
 			onRetry={retryNode}
 			adminEnabled={adminEnabled}
@@ -213,6 +426,14 @@
 			onCancelCreateChild={cancelCreateChildForm}
 			onCreateChildFieldChange={updateCreateChildField}
 			onSubmitCreateChild={submitCreateChild}
+			onOpenEdit={openEditForm}
+			onCancelEdit={cancelEditForm}
+			onEditFieldChange={updateEditField}
+			onSubmitEdit={submitEditForm}
+			onRequestDelete={openDeleteConfirmation}
+			onCancelDelete={cancelDeleteConfirmation}
+			onConfirmDelete={confirmDeleteNode}
+			onMoveNode={moveNode}
 		/>
 	{/if}
 </section>

@@ -9,6 +9,18 @@ const impersonationEnabled =
 const rawBase = import.meta.env.VITE_ADMIN_API_BASE ?? '/api/v1/admin';
 const ADMIN_API_BASE = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
 
+export class AdminApiError extends Error {
+	status: number;
+	body?: unknown;
+
+	constructor(message: string, status: number, body?: unknown) {
+		super(message);
+		this.name = 'AdminApiError';
+		this.status = status;
+		this.body = body;
+	}
+}
+
 async function resolveAccessToken(): Promise<string> {
 	const supabase = getSupabaseClient();
 	const { data, error } = await supabase.auth.getSession();
@@ -74,17 +86,19 @@ export async function adminFetch<TResponse>(
 
 	if (!response.ok) {
 		let errorMessage = response.statusText || 'Serverio klaida.';
+		let responseBody: unknown;
 
 		try {
-			const body = (await response.json()) as { error?: { message?: string } };
-			if (body?.error?.message) {
-				errorMessage = body.error.message;
+			responseBody = await response.json();
+			const bodyWithMessage = responseBody as { error?: { message?: string } };
+			if (bodyWithMessage?.error?.message) {
+				errorMessage = bodyWithMessage.error.message;
 			}
 		} catch (parseError) {
 			console.warn('Nepavyko perskaityti klaidos žinutės iš administratoriaus API.', parseError);
 		}
 
-		throw new Error(errorMessage);
+		throw new AdminApiError(errorMessage, response.status, responseBody);
 	}
 
 	return (await response.json()) as TResponse;
