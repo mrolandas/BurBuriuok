@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { onDestroy } from 'svelte';
-	import { dragHandle, dragHandleZone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
+	import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
 	import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
@@ -179,7 +179,7 @@
 	class:tree-branch--pending={isBranchPending()}
 	data-level={level}
 	data-parent-code={parentState ? parentState.node.code : ''}
-	use:dragHandleZone={{
+	use:dndzone={{
 		items: nodes,
 		dragDisabled: !dragAndDropEnabled,
 		dropFromOthersDisabled: false,
@@ -201,14 +201,13 @@
 	data-drag-enabled={dragAndDropEnabled}
 >
 	{#each nodes as state, index (state.id)}
-			<li class="tree-node" class:tree-node--pending={isNodePending(state)} use:dragHandle>
+				<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
 					<div
 						class="tree-node__header"
 						class:tree-node__header--pending={isNodePending(state)}
 						class:tree-node__header--hover-target={dragSessionActive && hoverTargetCode === state.node.code}
 						on:pointerenter={() => handleHeaderPointerEnter(state)}
 						on:pointerleave={() => handleHeaderPointerLeave(state)}
-						use:dragHandle
 					>
 						<button
 							type="button"
