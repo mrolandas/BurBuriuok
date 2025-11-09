@@ -243,6 +243,32 @@
 							</button>
 							<button
 								type="button"
+								class="tree-node__admin-chip tree-node__admin-chip--danger"
+								on:click={() => onRequestDelete(state)}
+								disabled={state.admin.remove.busy || state.admin.remove.confirming}
+							>
+								Šalinti
+							</button>
+							{#if allowCreateChild}
+								<button
+									type="button"
+									class="tree-node__admin-chip"
+									on:click={() => onOpenCreateChild(state)}
+									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
+								>
+									Pridėti poskyrį
+								</button>
+							{/if}
+							<button
+								type="button"
+								class="tree-node__admin-chip"
+								title="Funkcija dar ruošiama"
+								disabled
+							>
+								Pridėti terminą
+							</button>
+							<button
+								type="button"
 								class="tree-node__admin-chip"
 								on:click={() => onMoveNode(state, parentState, 'up')}
 								disabled={index === 0 || state.admin.reorder.busy || state.admin.remove.busy}
@@ -258,24 +284,6 @@
 								aria-label="Perkelti žemyn"
 							>
 								↓
-							</button>
-							{#if allowCreateChild}
-								<button
-									type="button"
-									class="tree-node__admin-chip"
-									on:click={() => onOpenCreateChild(state)}
-									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
-								>
-									Pridėti poskyrį
-								</button>
-							{/if}
-							<button
-								type="button"
-								class="tree-node__admin-chip tree-node__admin-chip--danger"
-								on:click={() => onRequestDelete(state)}
-								disabled={state.admin.remove.busy || state.admin.remove.confirming}
-							>
-								Šalinti
 							</button>
 						</div>
 						{#if state.admin.reorder.error}

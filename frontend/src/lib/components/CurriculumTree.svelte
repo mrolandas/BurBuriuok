@@ -35,7 +35,7 @@
 	let activeCreateNodeCode: string | null = null;
 	let dragAndDropEnabled = false;
 	let dragSessionActive = false;
-	const allowCreateChild = false;
+	const allowCreateChild = true;
 
 	type DragSnapshot = {
 		nodeId: string;
@@ -642,6 +642,8 @@
 			pendingNodeCodes = new Set();
 			reorderError = null;
 			refreshPendingSets();
+			refreshTree();
+			return;
 		} catch (error) {
 			const message = translateApiError(error, 'Nepavyko išsaugoti pakeitimų.');
 			reorderError = message;
