@@ -201,7 +201,7 @@
 	data-drag-enabled={dragAndDropEnabled}
 >
 	{#each nodes as state, index (state.id)}
-				<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
+			<li class="tree-node" class:tree-node--pending={isNodePending(state)} use:dragHandle>
 					<div
 						class="tree-node__header"
 						class:tree-node__header--pending={isNodePending(state)}
