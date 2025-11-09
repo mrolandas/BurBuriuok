@@ -52,7 +52,7 @@ router.post(
       return;
     }
 
-    const payload = normalizeCreatePayload(validation.data);
+  const payload = normalizeCreatePayload(validation.data);
 
     let created: CurriculumNode | null = null;
 
@@ -68,7 +68,7 @@ router.post(
       if (isUniqueConstraintError(error)) {
         res.status(409).json({
           error: {
-            message: `Curriculum node '${payload.code}' already exists.`,
+            message: `Curriculum node '${payload.code ?? "(automatinis kodas)"}' jau egzistuoja.`,
           },
         });
         return;
@@ -126,7 +126,10 @@ export default router;
 function normalizeCreatePayload(
   payload: AdminCurriculumNodeCreateInput
 ): CreateCurriculumNodeInput {
-  const code = payload.code.trim();
+  const code =
+    typeof payload.code === "string" && payload.code.trim().length
+      ? payload.code.trim()
+      : null;
   const title = payload.title.trim();
   const parentCode = payload.parentCode ? payload.parentCode.trim() : null;
 

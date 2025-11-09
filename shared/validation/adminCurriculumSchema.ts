@@ -27,10 +27,20 @@ function optionalSummary() {
       z
         .string()
         .trim()
-        .max(1000, { message: "Santrauka negali viršyti 1000 simbolių." }),
+        .max(1000, { message: "Santrauka negali viršyti 1000 simbolių." })
+        .transform((value) => {
+          const trimmed = value.trim();
+          return trimmed.length ? trimmed : null;
+        }),
       z.literal(null),
     ])
-    .optional();
+    .optional()
+    .transform((value) => {
+      if (typeof value === "undefined") {
+        return undefined;
+      }
+      return value;
+    });
 }
 
 function optionalCode() {
@@ -43,10 +53,20 @@ function optionalCode() {
         .max(64, { message: "Kodas negali viršyti 64 simbolių." })
         .regex(codePattern, {
           message: "Kodas gali turėti raides, skaičius, taškus ir brūkšnelius (be tarpų).",
+        })
+        .transform((value) => {
+          const trimmed = value.trim();
+          return trimmed.length ? trimmed : null;
         }),
       z.literal(null),
     ])
-    .optional();
+    .optional()
+    .transform((value) => {
+      if (typeof value === "undefined") {
+        return undefined;
+      }
+      return value;
+    });
 }
 
 const ordinalSchema = z
@@ -58,7 +78,7 @@ const ordinalSchema = z
 
 export const adminCurriculumNodeCreateSchema = z
   .object({
-    code: requiredCode(),
+    code: optionalCode(),
     title: requiredTitle(),
     summary: optionalSummary(),
     parentCode: optionalCode(),

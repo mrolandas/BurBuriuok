@@ -12,7 +12,7 @@ export type AdminCurriculumNode = {
 };
 
 export type CreateCurriculumNodeInput = {
-	code: string;
+	code?: string | null;
 	title: string;
 	summary?: string | null;
 	parentCode?: string | null;

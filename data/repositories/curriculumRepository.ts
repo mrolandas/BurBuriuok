@@ -13,6 +13,8 @@ const NODE_VIEW = "burburiuok_curriculum_nodes";
 const ITEM_VIEW = "burburiuok_curriculum_items";
 const NODE_TABLE = "curriculum_nodes";
 const SERVICE_SCHEMA = "burburiuok";
+const MAX_CODE_LENGTH = 64;
+const diacriticRegex = /[\u0300-\u036f]/g;
 
 function mapNodeRow(row: Partial<CurriculumNodeRow>): CurriculumNode {
   return {
@@ -49,6 +51,89 @@ function applyParentFilter(query: any, parentCode: string | null) {
     return query.eq("parent_code", parentCode);
   }
   return query.is("parent_code", null);
+}
+
+type ResolveCodeOptions = {
+  client: SupabaseClient;
+  providedCode: string | null;
+  parentCode: string | null;
+  title: string;
+};
+
+async function resolveCurriculumNodeCode({
+  client,
+  providedCode,
+  parentCode,
+  title,
+}: ResolveCodeOptions): Promise<string> {
+  if (providedCode && providedCode.length) {
+    return providedCode;
+  }
+
+  const base = buildCodeBase(parentCode, title);
+  return ensureUniqueCode(client, base);
+}
+
+function buildCodeBase(parentCode: string | null, title: string): string {
+  const normalized = title
+    .normalize("NFD")
+    .replace(diacriticRegex, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, Math.max(1, MAX_CODE_LENGTH - 8));
+
+  const fallback = parentCode ? `${parentCode}-poskyris` : "poskyris";
+  const candidate = normalized || fallback;
+
+  if (!parentCode) {
+    return candidate;
+  }
+
+  const combined = `${parentCode}-${candidate}`;
+  if (combined.length <= MAX_CODE_LENGTH) {
+    return combined;
+  }
+
+  const trimmedParent = parentCode.slice(0, Math.max(1, Math.floor(MAX_CODE_LENGTH / 2)));
+  const available = MAX_CODE_LENGTH - trimmedParent.length - 1;
+  const trimmedCandidate = candidate.slice(0, Math.max(1, available));
+  return `${trimmedParent}-${trimmedCandidate}`;
+}
+
+async function ensureUniqueCode(client: SupabaseClient, base: string): Promise<string> {
+  let suffix = 0;
+  let candidate = base.slice(0, MAX_CODE_LENGTH) || "poskyris";
+
+  while (await nodeCodeExists(client, candidate)) {
+    suffix += 1;
+    const suffixPart = `-${suffix}`;
+    const availableLength = MAX_CODE_LENGTH - suffixPart.length;
+    const prefix = base.slice(0, availableLength);
+    candidate = `${prefix}${suffixPart}`;
+    if (!candidate.length) {
+      candidate = `poskyris${suffixPart}`.slice(0, MAX_CODE_LENGTH);
+    }
+    if (suffix > 10_000) {
+      throw new Error("Unable to generate unique curriculum node code.");
+    }
+  }
+
+  return candidate;
+}
+
+async function nodeCodeExists(client: SupabaseClient, code: string): Promise<boolean> {
+  const { data, error } = await (client as any)
+    .from(NODE_TABLE)
+    .select("code")
+    .eq("code", code)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Failed to verify curriculum code uniqueness: ${error.message}`);
+  }
+
+  return Boolean(data?.code);
 }
 
 export async function listCurriculumNodes(
@@ -227,7 +312,7 @@ async function shiftSiblingOrdinals(
 }
 
 export type CreateCurriculumNodeInput = {
-  code: string;
+  code?: string | null;
   title: string;
   summary: string | null;
   parentCode: string | null;
@@ -264,10 +349,17 @@ export async function createCurriculumNodeAdmin(
     await shiftSiblingOrdinals(serviceClient, parentCode, ordinal);
   }
 
+  const code = await resolveCurriculumNodeCode({
+    client: serviceClient,
+    providedCode: typeof input.code === "string" ? input.code.trim() : null,
+    parentCode,
+    title: input.title,
+  });
+
   const { error } = await (serviceClient as any)
     .from(NODE_TABLE)
     .insert({
-      code: input.code,
+      code,
       title: input.title,
       summary: input.summary,
       level,
@@ -279,12 +371,10 @@ export async function createCurriculumNodeAdmin(
     throw error;
   }
 
-  const created = await getCurriculumNodeByCode(input.code);
+  const created = await getCurriculumNodeByCode(code);
 
   if (!created) {
-    throw new Error(
-      `Curriculum node '${input.code}' could not be reloaded after creation.`
-    );
+    throw new Error(`Curriculum node '${code}' could not be reloaded after creation.`);
   }
 
   return created;

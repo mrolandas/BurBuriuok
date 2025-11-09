@@ -159,12 +159,12 @@
 
 	const submitCreateChild = async (state: TreeNodeState) => {
 		const form = state.admin.createChild;
-		const code = form.code.trim();
+		const rawCode = form.code.trim();
 		const title = form.title.trim();
 		const summaryValue = form.summary.trim();
 
-		if (!code || !title) {
-			form.error = 'Įrašykite kodą ir pavadinimą.';
+		if (!title) {
+			form.error = 'Įrašykite pavadinimą.';
 			refreshTree();
 			return;
 		}
@@ -175,7 +175,7 @@
 
 		try {
 			await createCurriculumNode({
-				code,
+				code: rawCode ? rawCode : null,
 				title,
 				summary: summaryValue ? summaryValue : null,
 				parentCode: state.node.code

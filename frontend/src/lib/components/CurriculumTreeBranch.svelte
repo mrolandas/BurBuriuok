@@ -106,23 +106,6 @@
 									>
 										<div class="tree-node__admin-grid">
 											<label class="tree-node__admin-field">
-												<span>Kodas</span>
-												<input
-													type="text"
-													value={state.admin.createChild.code}
-													on:input={(event) =>
-														onCreateChildFieldChange(
-															state,
-															'code',
-															event.currentTarget.value
-														)}
-													placeholder="Pvz., 3.4.1"
-													required
-													autocomplete="off"
-													disabled={state.admin.createChild.busy}
-												/>
-											</label>
-											<label class="tree-node__admin-field">
 												<span>Pavadinimas</span>
 												<input
 													type="text"
@@ -134,7 +117,6 @@
 															event.currentTarget.value
 														)}
 													placeholder="Naujo poskyrio pavadinimas"
-													required
 													disabled={state.admin.createChild.busy}
 												/>
 											</label>
@@ -152,6 +134,22 @@
 													placeholder="Trumpas aprašas apie poskyrio turinį"
 													disabled={state.admin.createChild.busy}
 												></textarea>
+											</label>
+											<label class="tree-node__admin-field">
+												<span>Kodas (nebūtinas)</span>
+												<input
+													type="text"
+													value={state.admin.createChild.code}
+													on:input={(event) =>
+														onCreateChildFieldChange(
+															state,
+															'code',
+															event.currentTarget.value
+														)}
+													placeholder="Palikite tuščią, jei nurodysime automatiškai"
+													autocomplete="off"
+													disabled={state.admin.createChild.busy}
+												/>
 											</label>
 										</div>
 
