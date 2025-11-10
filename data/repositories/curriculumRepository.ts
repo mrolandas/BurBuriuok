@@ -306,6 +306,26 @@ export async function getCurriculumNodeByCode(
     if (error.code === "PGRST116") {
       return null;
     }
+    if (typeof error.message === "string" && error.message.includes("schema cache")) {
+      const tableClient = client ?? getServiceClient(null);
+      const { data: fallbackData, error: fallbackError } = await (tableClient as any)
+        .from(NODE_TABLE)
+        .select("*")
+        .eq("code", code)
+        .maybeSingle();
+
+      if (fallbackError) {
+        throw new Error(
+          `Failed to fetch curriculum node '${code}' via fallback: ${fallbackError.message}`
+        );
+      }
+
+      if (!fallbackData) {
+        return null;
+      }
+
+      return mapNodeRow(fallbackData);
+    }
     throw new Error(`Failed to fetch curriculum node '${code}': ${error.message}`);
   }
 

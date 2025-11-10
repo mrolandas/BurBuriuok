@@ -59,6 +59,22 @@ export async function getConceptBySlug(
     if (error.code === "PGRST116") {
       return null;
     }
+    if (typeof error.message === "string" && error.message.includes("schema cache")) {
+      const fallbackClient = client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
+      const { data: fallbackData, error: fallbackError } = await (fallbackClient as any)
+        .from(PRIVATE_TABLE)
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+      if (fallbackError) {
+        throw new Error(
+          `Failed to fetch concept by slug '${slug}' via fallback: ${fallbackError.message}`
+        );
+      }
+
+      return fallbackData ? mapConceptRow(fallbackData) : null;
+    }
     throw new Error(
       `Failed to fetch concept by slug '${slug}': ${error.message}`
     );
