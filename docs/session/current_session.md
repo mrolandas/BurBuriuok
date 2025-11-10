@@ -84,6 +84,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - 2025-11-09: Cleaned merged branches, deleted obsolete remotes, enabled admin impersonation on GitHub Pages, and opened `phase/1-hierarchy-crud` to focus on curriculum CRUD tooling.
 - 2025-11-09 (evening): Delivered curriculum tree drag-and-drop confirmation flow with cancel/apply banner, restored create/delete affordances, ensured pending highlights vanish post-confirmation, and documented follow-up tasks for backend parity and term management.
 - 2025-11-09 (late): Enabled “Pridėti terminą” end-to-end — admin UI form, backend item/concept CRUD, audit logging, and documentation refresh queued for related guides.
+- 2025-11-10: Delivered the dedicated concept edit modal (shared inline helpers, status badge parity, post-save tree refresh) plus admin toolbar refinements (concept-level Playwright smoke script, curriculum action buttons restyled/aligned, delete positioned rightmost) and queued docs/notes.
 
 ## Wrap-up Checklist
 

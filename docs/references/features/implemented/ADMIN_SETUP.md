@@ -33,6 +33,8 @@ _Update 2025-11-06 (late)_: Inline concept editing and the persistent “Aktyvuo
 
 _Update 2025-11-09_: Curriculum tree admin UX now supports drag-and-drop reordering with cancel/apply confirmation banner, auto-expands nodes when presenting delete/edit prompts, reinstates “Pridėti poskyrį”, and wires “Pridėti terminą” into new item/concept CRUD (LT/EN copy, source, required flag) while keeping pending highlights accurate after confirmation.
 
+_Update 2025-11-10_: Concept editing now includes a dedicated modal that mirrors the inline editor (shared helpers, draft/publish buttons, status chip), tree branches refresh immediately after saves, and curriculum admin toolbar buttons adopt the same styling/order as concept actions (arrows first, delete anchored last).
+
 ## Screen Details
 
 ### 1. Overview

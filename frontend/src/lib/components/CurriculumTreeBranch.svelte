@@ -256,41 +256,7 @@
 						<div class="tree-node__admin-toolbar" use:preventDragPointerPropagation>
 							<button
 								type="button"
-								class="tree-node__admin-chip"
-								on:click={() => onOpenEdit(state)}
-								disabled={state.admin.edit.busy || state.admin.edit.open || state.admin.remove.busy}
-							>
-								Redaguoti
-							</button>
-							<button
-								type="button"
-								class="tree-node__admin-chip tree-node__admin-chip--danger"
-								on:click={() => onRequestDelete(state)}
-								disabled={state.admin.remove.busy || state.admin.remove.confirming}
-							>
-								Šalinti
-							</button>
-							{#if allowCreateChild}
-								<button
-									type="button"
-									class="tree-node__admin-chip"
-									on:click={() => onOpenCreateChild(state)}
-									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
-								>
-									Pridėti poskyrį
-								</button>
-							{/if}
-							<button
-								type="button"
-								class="tree-node__admin-chip"
-								on:click={() => onOpenCreateItem(state)}
-								disabled={state.admin.createItem.busy || state.admin.createItem.open || state.admin.remove.busy}
-							>
-								Pridėti terminą
-							</button>
-							<button
-								type="button"
-								class="tree-node__admin-chip"
+								class="tree-node__item-action"
 								on:click={() => onMoveNode(state, parentState, 'up')}
 								disabled={index === 0 || state.admin.reorder.busy || state.admin.remove.busy}
 								aria-label="Perkelti aukštyn"
@@ -299,12 +265,46 @@
 							</button>
 							<button
 								type="button"
-								class="tree-node__admin-chip"
+								class="tree-node__item-action"
 								on:click={() => onMoveNode(state, parentState, 'down')}
 								disabled={index === nodes.length - 1 || state.admin.reorder.busy || state.admin.remove.busy}
 								aria-label="Perkelti žemyn"
 							>
 								↓
+							</button>
+							{#if allowCreateChild}
+								<button
+									type="button"
+									class="tree-node__item-action"
+									on:click={() => onOpenCreateChild(state)}
+									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
+								>
+									Pridėti poskyrį
+								</button>
+							{/if}
+							<button
+								type="button"
+								class="tree-node__item-action"
+								on:click={() => onOpenCreateItem(state)}
+								disabled={state.admin.createItem.busy || state.admin.createItem.open || state.admin.remove.busy}
+							>
+								Pridėti terminą
+							</button>
+							<button
+								type="button"
+								class="tree-node__item-action"
+								on:click={() => onOpenEdit(state)}
+								disabled={state.admin.edit.busy || state.admin.edit.open || state.admin.remove.busy}
+							>
+								Redaguoti
+							</button>
+							<button
+								type="button"
+								class="tree-node__item-action tree-node__item-action--danger"
+								on:click={() => onRequestDelete(state)}
+								disabled={state.admin.remove.busy || state.admin.remove.confirming}
+							>
+								Šalinti
 							</button>
 						</div>
 						{#if state.admin.reorder.error}
@@ -881,45 +881,8 @@
 	.tree-node__admin-toolbar {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.4rem;
+		gap: 0.35rem;
 		margin-top: -0.25rem;
-	}
-
-	.tree-node__admin-chip {
-		border: 1px solid var(--color-border);
-		background: var(--color-panel-soft);
-		color: var(--color-text);
-		font-size: 0.75rem;
-		font-weight: 600;
-		padding: 0.25rem 0.75rem;
-		border-radius: 999px;
-		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-	}
-
-	.tree-node__admin-chip:hover,
-	.tree-node__admin-chip:focus-visible {
-		background: var(--color-panel);
-		border-color: var(--color-border-strong, var(--color-border));
-		transform: translateY(-1px);
-	}
-
-	.tree-node__admin-chip[disabled] {
-		opacity: 0.6;
-		cursor: not-allowed;
-		transform: none;
-	}
-
-	.tree-node__admin-chip--danger {
-		border-color: var(--color-status-error-border);
-		background: var(--color-status-error-bg);
-		color: var(--color-status-error-text);
-	}
-
-	.tree-node__admin-chip--danger:hover,
-	.tree-node__admin-chip--danger:focus-visible {
-		border-color: var(--color-status-error-border-strong, var(--color-status-error-border));
-		background: var(--color-status-error-bg-strong, var(--color-status-error-bg));
 	}
 
 	.tree-node__admin-delete {
