@@ -47,6 +47,12 @@ export type TreeNodeAdminState = {
 	reorder: TreeNodeReorderState;
 };
 
+export type TreeItemAdminState = {
+	busy: boolean;
+	error: string | null;
+	confirmingDelete: boolean;
+};
+
 export type TreeNodeState = {
 	id: string;
 	node: CurriculumNode;
@@ -55,6 +61,7 @@ export type TreeNodeState = {
 	loaded: boolean;
 	children: TreeNodeState[];
 	items: CurriculumItem[];
+	itemAdmin: Record<string, TreeItemAdminState>;
 	error: string | null;
 	admin: TreeNodeAdminState;
 };

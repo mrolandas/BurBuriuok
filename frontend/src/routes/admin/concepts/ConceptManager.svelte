@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { page } from '$app/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import {
 		listAdminConcepts,
@@ -62,10 +63,25 @@
 	let editorDirty = false;
 	let initialSnapshot = '';
 	let beforeUnloadAttached = false;
+	let lastPrefilledSlug: string | null = null;
+	let requestedSlug: string | null = null;
 
 	onMount(() => {
 		void refreshConcepts();
 	});
+
+	$: requestedSlug = $page.url.searchParams.get('slug');
+	$: if (!loading && !loadError && concepts.length && requestedSlug) {
+		const target = concepts.find((concept) => concept.slug === requestedSlug);
+		if (target && requestedSlug !== lastPrefilledSlug) {
+			openEdit(target);
+			lastPrefilledSlug = requestedSlug;
+		}
+	}
+
+	$: if (!requestedSlug) {
+		lastPrefilledSlug = null;
+	}
 
 	function getFilterParams(): {
 		sectionCode?: string;

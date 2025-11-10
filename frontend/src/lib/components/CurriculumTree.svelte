@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CurriculumTreeBranch from './CurriculumTreeBranch.svelte';
-	import type { CurriculumNode } from '$lib/api/curriculum';
+	import ConceptEditModal from './ConceptEditModal.svelte';
+	import type { CurriculumNode, CurriculumItem } from '$lib/api/curriculum';
 	import { fetchChildNodes, fetchNodeItems } from '$lib/api/curriculum';
 	import {
 		createCurriculumItem,
@@ -8,6 +9,7 @@
 		updateCurriculumNode,
 		deleteCurriculumNode
 	} from '$lib/api/admin/curriculum';
+	import { deleteAdminConcept } from '$lib/api/admin/concepts';
 	import { adminMode } from '$lib/stores/adminMode';
 	import { onDestroy, onMount } from 'svelte';
 	import { AdminApiError } from '$lib/api/admin/client';
@@ -20,8 +22,10 @@
 		TreeNodeDeleteState,
 		TreeNodeReorderState,
 		TreeNodeOrderChange,
-		TreeNodeOrderFinalize
+		TreeNodeOrderFinalize,
+		TreeItemAdminState
 	} from './curriculumTreeTypes';
+	import { resolve } from '$app/paths';
 
 	type SectionSummary = {
 		code: string;
@@ -36,9 +40,33 @@
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let activeCreateNodeCode: string | null = null;
 	let activeCreateItemNodeCode: string | null = null;
+	const createItemAdminState = (): TreeItemAdminState => ({
+		busy: false,
+		error: null,
+		confirmingDelete: false
+	});
+
 	let dragAndDropEnabled = false;
 	let dragSessionActive = false;
 	const allowCreateChild = true;
+
+	type ConceptEditorState = {
+		open: boolean;
+		slug: string | null;
+		nodeState: TreeNodeState | null;
+		itemKey: string | null;
+		conceptLabel: string | null;
+	};
+
+	const createConceptEditorState = (): ConceptEditorState => ({
+		open: false,
+		slug: null,
+		nodeState: null,
+		itemKey: null,
+		conceptLabel: null
+	});
+
+	let conceptEditor: ConceptEditorState = createConceptEditorState();
 
 	type DragSnapshot = {
 		nodeId: string;
@@ -117,6 +145,7 @@
 		loaded: false,
 		children: [],
 		items: [],
+		itemAdmin: {},
 		error: null,
 		admin: createAdminState()
 	});
@@ -156,6 +185,37 @@
 
 	const refreshTree = () => {
 		roots = [...roots];
+	};
+
+	const buildItemKey = (nodeCode: string, ordinal: number): string =>
+		`${nodeCode}:${ordinal}`;
+
+	const syncItemAdminState = (
+		current: Record<string, TreeItemAdminState>,
+		items: CurriculumItem[]
+	): Record<string, TreeItemAdminState> => {
+		const next: Record<string, TreeItemAdminState> = {};
+		for (const item of items) {
+			const key = buildItemKey(item.nodeCode, item.ordinal);
+			next[key] = current[key] ?? createItemAdminState();
+		}
+		return next;
+	};
+
+	const updateItemAdminState = (
+		state: TreeNodeState,
+		key: string,
+		patch: Partial<TreeItemAdminState>
+	) => {
+		const existing = state.itemAdmin[key] ?? createItemAdminState();
+		state.itemAdmin = {
+			...state.itemAdmin,
+			[key]: {
+				...existing,
+				...patch
+			}
+		};
+		refreshTree();
 	};
 
 	const refreshPendingSets = () => {
@@ -346,6 +406,134 @@
 			form.error = null;
 		}
 		refreshTree();
+	};
+
+	const openConceptEditor = (state: TreeNodeState, item: CurriculumItem) => {
+		const displayLabel = item.conceptTerm ?? item.label;
+		const key = buildItemKey(item.nodeCode, item.ordinal);
+		console.info('[CurriculumTree] openConceptEditor invoked', {
+			sectionCode: section.code,
+			nodeCode: state.node.code,
+			itemOrdinal: item.ordinal,
+			conceptSlug: item.conceptSlug,
+			conceptLabel: displayLabel
+		});
+
+		if (!item.conceptSlug) {
+			console.warn('[CurriculumTree] edit aborted: missing concept slug', {
+				sectionCode: section.code,
+				nodeCode: state.node.code,
+				itemOrdinal: item.ordinal
+			});
+			updateItemAdminState(state, key, {
+				error: 'Šis terminas dar neturi susieto koncepto.'
+			});
+			return;
+		}
+
+		updateItemAdminState(state, key, {
+			error: null
+		});
+
+		const nextEditor = createConceptEditorState();
+		nextEditor.open = true;
+		nextEditor.slug = item.conceptSlug;
+		nextEditor.nodeState = state;
+		nextEditor.itemKey = key;
+		nextEditor.conceptLabel = displayLabel;
+		conceptEditor = nextEditor;
+		console.info('[CurriculumTree] concept editor state updated', {
+			open: conceptEditor.open,
+			slug: conceptEditor.slug,
+			label: conceptEditor.conceptLabel
+		});
+	};
+
+	const resetConceptEditor = () => {
+		conceptEditor = createConceptEditorState();
+	};
+
+	const handleConceptEditorClose = () => {
+		resetConceptEditor();
+	};
+
+	const handleConceptEditorSaved = async (
+		event: CustomEvent<{ concept: import('$lib/api/admin/concepts').AdminConceptResource }>
+	) => {
+		const context = conceptEditor;
+		resetConceptEditor();
+		const savedConcept = event.detail?.concept;
+
+		if (context.nodeState) {
+			if (savedConcept && context.itemKey) {
+				const target = context.nodeState.items.find(
+					(item) => buildItemKey(item.nodeCode, item.ordinal) === context.itemKey
+				);
+				if (target) {
+					target.conceptSlug = savedConcept.slug;
+					target.conceptTerm = savedConcept.termLt ?? target.conceptTerm;
+					if (savedConcept.termLt) {
+						target.label = savedConcept.termLt;
+					}
+					refreshTree();
+				}
+			}
+			await ensureChildren(context.nodeState, { force: true });
+		}
+	};
+
+	const requestConceptDeletion = (state: TreeNodeState, item: CurriculumItem) => {
+		const key = buildItemKey(item.nodeCode, item.ordinal);
+
+		if (!item.conceptSlug) {
+			updateItemAdminState(state, key, {
+				error: 'Šis terminas dar neturi susieto koncepto.',
+				confirmingDelete: false
+			});
+			return;
+		}
+
+		updateItemAdminState(state, key, {
+			error: null,
+			confirmingDelete: true
+		});
+	};
+
+	const cancelConceptDeletion = (state: TreeNodeState, item: CurriculumItem) => {
+		const key = buildItemKey(item.nodeCode, item.ordinal);
+		updateItemAdminState(state, key, {
+			confirmingDelete: false,
+			error: null,
+			busy: false
+		});
+	};
+
+	const confirmConceptDeletion = async (state: TreeNodeState, item: CurriculumItem) => {
+		if (!item.conceptSlug) {
+			requestConceptDeletion(state, item);
+			return;
+		}
+
+		const key = buildItemKey(item.nodeCode, item.ordinal);
+		updateItemAdminState(state, key, {
+			busy: true,
+			error: null
+		});
+
+		try {
+			await deleteAdminConcept(item.conceptSlug);
+			updateItemAdminState(state, key, {
+				busy: false,
+				confirmingDelete: false,
+				error: null
+			});
+			await ensureChildren(state, { force: true });
+		} catch (error) {
+			updateItemAdminState(state, key, {
+				busy: false,
+				error: translateApiError(error, 'Nepavyko pašalinti termino.')
+			});
+		}
 	};
 
 	const updateCreateItemField = (
@@ -880,7 +1068,26 @@
 
 			state.children = children.map(createState);
 			state.items = items;
+			state.itemAdmin = syncItemAdminState(state.itemAdmin, items);
 			state.loaded = true;
+				if (adminEnabled) {
+					const missingSlugs = items
+						.filter((item) => !item.conceptSlug)
+						.map((item) => ({ ordinal: item.ordinal, label: item.label }));
+					if (missingSlugs.length) {
+						console.warn('[CurriculumTree] Loaded items without concept slug', {
+							sectionCode: section.code,
+							nodeCode: state.node.code,
+							missingSlugs
+						});
+					} else {
+						console.debug('[CurriculumTree] Loaded node items', {
+							sectionCode: section.code,
+							nodeCode: state.node.code,
+							itemCount: items.length
+						});
+					}
+				}
 		} catch (err) {
 			state.error = err instanceof Error ? err.message : 'Nepavyko įkelti duomenų.';
 		} finally {
@@ -1056,7 +1263,11 @@
 			onOpenCreateItem={openCreateItemForm}
 			onCancelCreateItem={cancelCreateItemForm}
 			onCreateItemFieldChange={updateCreateItemField}
-			onSubmitCreateItem={submitCreateItem}
+				onSubmitCreateItem={submitCreateItem}
+				onEditItem={openConceptEditor}
+				onRequestDeleteItem={requestConceptDeletion}
+				onCancelDeleteItem={cancelConceptDeletion}
+				onConfirmDeleteItem={confirmConceptDeletion}
 			onOpenEdit={openEditForm}
 			onCancelEdit={cancelEditForm}
 			onEditFieldChange={updateEditField}
@@ -1076,6 +1287,14 @@
 		/>
 	{/if}
 </section>
+
+<ConceptEditModal
+	open={conceptEditor.open}
+	slug={conceptEditor.slug}
+	label={conceptEditor.conceptLabel}
+	on:close={handleConceptEditorClose}
+	on:saved={handleConceptEditorSaved}
+/>
 
 <style>
 	.curriculum-tree {

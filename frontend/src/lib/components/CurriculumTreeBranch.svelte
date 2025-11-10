@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import { onDestroy } from 'svelte';
-	import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
-	import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
+	 import { resolve } from '$app/paths';
+	 import { onDestroy } from 'svelte';
+	 import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
+	 import type { CurriculumItem } from '$lib/api/curriculum';
+	 import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -26,6 +27,10 @@
 		value: string | boolean
 	) => void;
 	export let onSubmitCreateItem: (state: TreeNodeState) => Promise<void> | void;
+	export let onEditItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
+	export let onRequestDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
+	export let onCancelDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
+	export let onConfirmDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
 	export let onOpenEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onCancelEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onEditFieldChange: (
@@ -58,6 +63,9 @@
 	const resolveBranchParentCode = () => (parentState ? parentState.node.code : null);
 	const isBranchPending = () => pendingActive && (pendingParentCodes?.has(resolveBranchParentCode()) ?? false);
 	const isNodePending = (state: TreeNodeState) => pendingActive && (pendingNodeCodes?.has(state.node.code) ?? false);
+	const resolveItemKey = (item: CurriculumItem) => `${item.nodeCode}:${item.ordinal}`;
+	const getItemAdminState = (state: TreeNodeState, item: CurriculumItem) =>
+		state.itemAdmin?.[resolveItemKey(item)];
 
 	const resolveParentCode = () => (parentState ? parentState.node.code : null);
 	const extractOrderedNodes = (event: CustomEvent<DndEvent<unknown>>): TreeNodeState[] => {
@@ -319,20 +327,86 @@
 								{#if state.items.length}
 									<ul class="tree-node__items" use:preventDragPointerPropagation>
 										{#each state.items as item (item.ordinal)}
-											<li>
-												{#if item.conceptSlug}
-													<a
-														class="tree-node__item-link"
-														href={resolve(`/concepts/${encodeURIComponent(item.conceptSlug)}`)}
-													>
-														<span class="tree-node__item-ordinal">{item.ordinal}.</span>
-														<span class="tree-node__item-label">{item.label}</span>
-													</a>
-												{:else}
-													<span class="tree-node__item-text">
-														<span class="tree-node__item-ordinal">{item.ordinal}.</span>
-														<span>{item.label}</span>
-													</span>
+											{@const displayLabel = item.conceptTerm ?? item.label}
+											{@const itemAdmin = getItemAdminState(state, item)}
+											<li
+												class="tree-node__item"
+												class:tree-node__item--admin={adminEnabled}
+												class:tree-node__item--busy={adminEnabled && (itemAdmin?.busy ?? false)}
+											>
+												<div class="tree-node__item-content">
+													{#if item.conceptSlug}
+														<a
+															class="tree-node__item-link"
+															href={resolve(`/concepts/${encodeURIComponent(item.conceptSlug)}`)}
+														>
+															<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+															<span class="tree-node__item-label">{displayLabel}</span>
+														</a>
+													{:else}
+														<span class="tree-node__item-text">
+															<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+															<span>{displayLabel}</span>
+														</span>
+													{/if}
+
+													{#if adminEnabled}
+														<div class="tree-node__item-toolbar" use:preventDragPointerPropagation>
+															<button
+																type="button"
+																class="tree-node__item-action"
+																on:click={() => onEditItem(state, item)}
+																disabled={!item.conceptSlug || itemAdmin?.busy}
+															>
+																Redaguoti
+															</button>
+															<button
+																type="button"
+																class="tree-node__item-action tree-node__item-action--danger"
+																on:click={() => onRequestDeleteItem(state, item)}
+																disabled={itemAdmin?.busy}
+															>
+																Šalinti
+															</button>
+														</div>
+													{/if}
+												</div>
+
+												{#if adminEnabled}
+													{#if itemAdmin?.confirmingDelete}
+														<div class="tree-node__item-confirm" use:preventDragPointerPropagation>
+															<p class="tree-node__item-confirm-message">
+																Ar tikrai norite pašalinti terminą „{displayLabel}”?
+															</p>
+															{#if itemAdmin.error}
+																<p class="tree-node__admin-status tree-node__admin-status--error">
+																	{itemAdmin.error}
+																</p>
+															{/if}
+															<div class="tree-node__item-confirm-actions">
+																<button
+																	type="button"
+																	class="tree-node__item-action"
+																	on:click={() => onCancelDeleteItem(state, item)}
+																	disabled={itemAdmin?.busy}
+																>
+																	Atšaukti
+																</button>
+																<button
+																	type="button"
+																	class="tree-node__item-action tree-node__item-action--danger"
+																	on:click={() => onConfirmDeleteItem(state, item)}
+																	disabled={itemAdmin?.busy}
+																>
+																	{itemAdmin?.busy ? 'Šalinama…' : 'Patvirtinti'}
+																</button>
+															</div>
+														</div>
+													{:else if itemAdmin?.error}
+														<p class="tree-node__admin-status tree-node__admin-status--error">
+															{itemAdmin.error}
+														</p>
+													{/if}
 												{/if}
 											</li>
 										{/each}
@@ -355,6 +429,10 @@
 										{onCancelCreateItem}
 										{onCreateItemFieldChange}
 										{onSubmitCreateItem}
+										{onEditItem}
+										{onRequestDeleteItem}
+										{onCancelDeleteItem}
+										{onConfirmDeleteItem}
 										{onOpenEdit}
 										{onCancelEdit}
 										{onEditFieldChange}
@@ -997,6 +1075,77 @@
 		list-style: none;
 	}
 
+	.tree-node__item {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.tree-node__item-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.6rem;
+	}
+
+	.tree-node__item-toolbar {
+		display: flex;
+		gap: 0.35rem;
+	}
+
+	.tree-node__item-action {
+		border-radius: 999px;
+		border: 1px solid var(--color-border);
+		background: transparent;
+		color: var(--color-text);
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 0.25rem 0.75rem;
+		cursor: pointer;
+		transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.tree-node__item-action:hover,
+	.tree-node__item-action:focus-visible {
+		border-color: var(--color-text);
+	}
+
+	.tree-node__item-action[disabled] {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.tree-node__item-action--danger {
+		border-color: var(--color-status-error-border);
+		color: var(--color-status-error-text);
+	}
+
+	.tree-node__item-action--danger:hover,
+	.tree-node__item-action--danger:focus-visible {
+		background: var(--color-status-error-bg);
+	}
+
+	.tree-node__item-confirm {
+		display: grid;
+		gap: 0.5rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: 0.85rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-01);
+	}
+
+	.tree-node__item-confirm-message {
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.45;
+	}
+
+	.tree-node__item-confirm-actions {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+	}
+
 	:global(.tree-branch [data-is-dnd-shadow-item-internal='true']) {
 		position: relative;
 		visibility: visible !important;
@@ -1052,7 +1201,7 @@
 		font-size: 0.9rem;
 		color: var(--color-text);
 		text-align: left;
-		width: 100%;
+		flex: 1;
 	}
 
 	.tree-node__item-link {

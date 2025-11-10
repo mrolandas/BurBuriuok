@@ -1,7 +1,17 @@
 import { Router } from "express";
-import { listConcepts, getConceptBySlug, upsertConcepts } from "../../../../data/repositories/conceptsRepository.ts";
+import {
+  listConcepts,
+  getConceptBySlug,
+  upsertConcepts,
+} from "../../../../data/repositories/conceptsRepository.ts";
+import { deleteCurriculumItemAdminBySlug } from "../../../../data/repositories/curriculumRepository.ts";
 import { listContentVersionsForEntity } from "../../../../data/repositories/contentVersionsRepository.ts";
-import type { Concept, ContentVersionStatus, UpsertConceptInput } from "../../../../data/types.ts";
+import type {
+  Concept,
+  ContentVersionStatus,
+  CurriculumItem,
+  UpsertConceptInput,
+} from "../../../../data/types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { unauthorized } from "../../utils/httpError.ts";
 import { logContentMutation } from "../../services/auditLogger.ts";
@@ -195,6 +205,90 @@ router.post(
   })
 );
 
+router.delete(
+  "/:slug",
+  asyncHandler(async (req, res) => {
+    const slug = req.params.slug?.trim();
+
+    if (!slug) {
+      res.status(400).json({
+        error: {
+          message: "Slug parameter is required.",
+        },
+      });
+      return;
+    }
+
+    let deletion: Awaited<ReturnType<typeof deleteCurriculumItemAdminBySlug>>;
+
+    try {
+      deletion = await deleteCurriculumItemAdminBySlug(slug);
+    } catch (error) {
+      if ((error as { code?: string }).code === "CONCEPT_NOT_FOUND") {
+        res.status(404).json({
+          error: {
+            message: `Concept with slug '${slug}' was not found.`,
+          },
+        });
+        return;
+      }
+
+      throw error;
+    }
+
+    const { concept, item } = deletion;
+    const actor = req.authUser?.email ?? req.authUser?.id ?? null;
+
+    try {
+      await logContentMutation<Record<string, unknown>>({
+        entityType: "concept",
+        entityId: concept.slug,
+        before: mapConceptForResponse(concept),
+        after: {},
+        actor,
+        status: extractStatus(concept),
+        changeSummary: `Concept '${concept.slug}' deleted via admin console.`,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to log concept deletion", {
+        slug: concept.slug,
+        error,
+      });
+    }
+
+    if (item) {
+      try {
+        await logContentMutation<Record<string, unknown>>({
+          entityType: "curriculum_item",
+          entityId: `${item.nodeCode}:${item.ordinal}`,
+          before: mapCurriculumItemForLog(item, concept),
+          after: {},
+          actor,
+          changeSummary: `Curriculum item '${item.nodeCode}:${item.ordinal}' deleted via admin console.`,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to log curriculum item deletion", {
+          nodeCode: item.nodeCode,
+          ordinal: item.ordinal,
+          error,
+        });
+      }
+    }
+
+    res.json({
+      data: {
+        concept: mapConceptForResponse(concept),
+        item: item ? mapCurriculumItemForResponse(item) : null,
+      },
+      meta: {
+        deletedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
 export default router;
 
 type ConceptStatus = "draft" | "published";
@@ -228,6 +322,27 @@ function mapConceptForResponse(concept: Concept) {
     status: extractStatus(concept),
     createdAt: concept.createdAt,
     updatedAt: concept.updatedAt,
+  } satisfies Record<string, unknown>;
+}
+
+function mapCurriculumItemForResponse(item: CurriculumItem) {
+  return {
+    nodeCode: item.nodeCode,
+    ordinal: item.ordinal,
+    label: item.label,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  } satisfies Record<string, unknown>;
+}
+
+function mapCurriculumItemForLog(item: CurriculumItem, concept: Concept) {
+  return {
+    nodeCode: item.nodeCode,
+    ordinal: item.ordinal,
+    label: item.label,
+    conceptSlug: concept.slug,
+    conceptTerm: concept.termLt,
+    isRequired: concept.isRequired,
   } satisfies Record<string, unknown>;
 }
 

@@ -773,6 +773,79 @@ export async function createCurriculumItemAdmin(
   }
 }
 
+export type DeleteCurriculumItemAdminResult = {
+  concept: Concept;
+  item: CurriculumItem | null;
+};
+
+export async function deleteCurriculumItemAdminBySlug(
+  slug: string
+): Promise<DeleteCurriculumItemAdminResult> {
+  const serviceClient = getServiceClient();
+  const concept = await getConceptBySlug(slug, serviceClient);
+
+  if (!concept) {
+    const error = new Error(`Concept '${slug}' was not found.`);
+    (error as { code?: string }).code = "CONCEPT_NOT_FOUND";
+    throw error;
+  }
+
+  let itemRow: CurriculumItemRow | null = null;
+
+  if (
+    concept.curriculumNodeCode &&
+    typeof concept.curriculumItemOrdinal === "number" &&
+    Number.isFinite(concept.curriculumItemOrdinal)
+  ) {
+    const { data, error } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .select("*")
+      .eq("node_code", concept.curriculumNodeCode)
+      .eq("ordinal", concept.curriculumItemOrdinal)
+      .maybeSingle();
+
+    if (error && error.code !== "PGRST116") {
+      throw new Error(
+        `Failed to fetch curriculum item '${concept.curriculumNodeCode}:${concept.curriculumItemOrdinal}': ${error.message}`
+      );
+    }
+
+    itemRow = (data as CurriculumItemRow | null) ?? null;
+  }
+
+  if (itemRow) {
+    const { error: deleteItemError } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .delete()
+      .eq("node_code", itemRow.node_code)
+      .eq("ordinal", itemRow.ordinal);
+
+    if (deleteItemError) {
+      throw new Error(
+        `Failed to delete curriculum item '${itemRow.node_code}:${itemRow.ordinal}': ${deleteItemError.message}`
+      );
+    }
+
+    await resequenceNodeItems(serviceClient, itemRow.node_code);
+  }
+
+  const { error: deleteConceptError } = await (serviceClient as any)
+    .from(CONCEPTS_TABLE)
+    .delete()
+    .eq("slug", slug);
+
+  if (deleteConceptError) {
+    throw new Error(
+      `Failed to delete concept '${slug}': ${deleteConceptError.message}`
+    );
+  }
+
+  return {
+    concept,
+    item: itemRow ? mapItemRow(itemRow) : null,
+  } satisfies DeleteCurriculumItemAdminResult;
+}
+
 async function resequenceParentChildren(
   client: SupabaseClient,
   parentCode: string | null,
@@ -825,6 +898,121 @@ async function resequenceParentChildren(
     if (resequenceError) {
       throw new Error(
         `Failed to resequence ordinal for '${code}': ${resequenceError.message}`
+      );
+    }
+  }
+}
+
+async function resequenceNodeItems(
+  client: SupabaseClient,
+  nodeCode: string
+): Promise<void> {
+  const { data, error } = await (client as any)
+    .from(ITEM_TABLE)
+    .select("ordinal")
+    .eq("node_code", nodeCode)
+    .order("ordinal", { ascending: true });
+
+  if (error) {
+    throw new Error(
+      `Failed to load curriculum item ordinals for '${nodeCode}': ${error.message}`
+    );
+  }
+
+  const rows = (data as { ordinal: number }[] | null) ?? [];
+
+  if (!rows.length) {
+    return;
+  }
+
+  const ordinals = rows
+    .map((row) =>
+      typeof row.ordinal === "number" && Number.isFinite(row.ordinal)
+        ? row.ordinal
+        : Number(row.ordinal)
+    )
+    .filter((value) => Number.isFinite(value)) as number[];
+
+  let requiresResequence = false;
+
+  for (let index = 0; index < ordinals.length; index += 1) {
+    if (ordinals[index] !== index + 1) {
+      requiresResequence = true;
+      break;
+    }
+  }
+
+  if (!requiresResequence) {
+    return;
+  }
+
+  const offset = ordinals.length;
+  const now = new Date().toISOString();
+
+  for (let index = 0; index < ordinals.length; index += 1) {
+    const originalOrdinal = ordinals[index];
+    const tempOrdinal = offset + index + 1;
+
+    const { error: tempUpdateError } = await (client as any)
+      .from(ITEM_TABLE)
+      .update({
+        ordinal: tempOrdinal,
+        updated_at: now,
+      })
+      .eq("node_code", nodeCode)
+      .eq("ordinal", originalOrdinal);
+
+    if (tempUpdateError) {
+      throw new Error(
+        `Failed to assign temporary ordinal for '${nodeCode}:${originalOrdinal}': ${tempUpdateError.message}`
+      );
+    }
+
+    const { error: tempConceptUpdateError } = await (client as any)
+      .from(CONCEPTS_TABLE)
+      .update({
+        curriculum_item_ordinal: tempOrdinal,
+      })
+      .eq("curriculum_node_code", nodeCode)
+      .eq("curriculum_item_ordinal", originalOrdinal);
+
+    if (tempConceptUpdateError) {
+      throw new Error(
+        `Failed to assign temporary concept ordinal for '${nodeCode}:${originalOrdinal}': ${tempConceptUpdateError.message}`
+      );
+    }
+  }
+
+  for (let index = 0; index < ordinals.length; index += 1) {
+    const targetOrdinal = index + 1;
+    const tempOrdinal = offset + index + 1;
+
+    const { error: resequenceError } = await (client as any)
+      .from(ITEM_TABLE)
+      .update({
+        ordinal: targetOrdinal,
+        updated_at: now,
+      })
+      .eq("node_code", nodeCode)
+      .eq("ordinal", tempOrdinal);
+
+    if (resequenceError) {
+      throw new Error(
+        `Failed to resequence ordinal for '${nodeCode}:${tempOrdinal}': ${resequenceError.message}`
+      );
+    }
+
+    const { error: resequenceConceptError } = await (client as any)
+      .from(CONCEPTS_TABLE)
+      .update({
+        curriculum_item_ordinal: targetOrdinal,
+      })
+      .eq("curriculum_node_code", nodeCode)
+      .eq("curriculum_item_ordinal", tempOrdinal);
+
+    if (resequenceConceptError) {
+      throw new Error(
+        `Failed to resequence concept ordinal for '${nodeCode}:${tempOrdinal}': ${resequenceConceptError.message}`
       );
     }
   }

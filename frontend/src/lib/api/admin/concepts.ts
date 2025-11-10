@@ -88,6 +88,29 @@ const upsertResponseSchema = z.object({
 		.optional()
 });
 
+const deletedCurriculumItemSchema = z
+	.object({
+		nodeCode: z.string(),
+		ordinal: z.number(),
+		label: z.string(),
+		createdAt: z.string(),
+		updatedAt: z.string()
+	})
+	.passthrough();
+
+const deleteResponseSchema = z.object({
+	data: z.object({
+		concept: adminConceptResourceSchema,
+		item: deletedCurriculumItemSchema.nullable().optional()
+	}),
+	meta: z
+		.object({
+			deletedAt: z.string()
+		})
+		.passthrough()
+		.optional()
+});
+
 const conceptVersionSchema = z.object({
 	id: z.string(),
 	status: adminConceptStatusSchema.nullable().optional(),
@@ -114,6 +137,7 @@ const historyResponseSchema = z.object({
 export type AdminConceptResource = z.infer<typeof adminConceptResourceSchema>;
 export type AdminConceptStatus = z.infer<typeof adminConceptStatusSchema>;
 export type AdminConceptVersion = z.infer<typeof conceptVersionSchema>;
+export type AdminDeletedCurriculumItem = z.infer<typeof deletedCurriculumItemSchema>;
 
 export async function listAdminConcepts(params: {
 	sectionCode?: string;
@@ -153,6 +177,20 @@ export async function saveAdminConcept(
 
 	const parsed = upsertResponseSchema.parse(response);
 	return parsed.data.concept;
+}
+
+export async function deleteAdminConcept(
+	slug: string
+): Promise<{ concept: AdminConceptResource; item: AdminDeletedCurriculumItem | null }> {
+	const response = await adminFetch<unknown>(`/concepts/${slug}`, {
+		method: 'DELETE'
+	});
+
+	const parsed = deleteResponseSchema.parse(response);
+	return {
+		concept: parsed.data.concept,
+		item: parsed.data.item ?? null
+	};
 }
 
 export async function fetchAdminConceptHistory(
