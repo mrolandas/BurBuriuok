@@ -34,46 +34,116 @@ export async function recordContentVersion(
   const supabase =
     client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
 
-  const versionPayload = {
-    entity_type: input.entityType,
-    entity_primary_key: input.entityPrimaryKey,
-    status: input.status,
-    change_summary: input.changeSummary ?? null,
-    diff: input.diff ?? null,
-    created_by: input.actor ?? undefined,
-  };
+  const attemptLimit = 3;
+  let lastError: Error | null = null;
 
-  const { data, error } = await (supabase as any)
-    .from(VERSIONS_TABLE)
-    .insert(versionPayload)
-    .select("id")
-    .single();
-
-  if (error) {
-    throw new Error(`Failed to insert content version: ${error.message}`);
-  }
-
-  const versionId = (data as VersionRow | null)?.id;
-  if (!versionId) {
-    throw new Error("Supabase did not return an id for the inserted content version record.");
-  }
-
-  if (input.changes && input.changes.length) {
-    const changeRows = input.changes.map((change) =>
-      toChangeRow(change, versionId, input.actor ?? undefined)
-    );
-    const { error: changeError } = await (supabase as any)
-      .from(CHANGES_TABLE)
-      .insert(changeRows);
-
-    if (changeError) {
-      throw new Error(
-        `Failed to insert content version changes: ${changeError.message}`
+  for (let attempt = 0; attempt < attemptLimit; attempt += 1) {
+    try {
+      const version = await resolveNextVersion(
+        supabase,
+        input.entityType,
+        input.entityPrimaryKey
       );
+
+      const versionPayload = {
+        entity_type: input.entityType,
+        entity_primary_key: input.entityPrimaryKey,
+        version,
+        status: input.status,
+        change_summary: input.changeSummary ?? null,
+        diff: input.diff ?? null,
+        created_by: input.actor ?? null,
+      };
+
+      const { data, error } = await (supabase as any)
+        .from(VERSIONS_TABLE)
+        .insert(versionPayload)
+        .select("id")
+        .single();
+
+      if (error) {
+        if (isVersionConflict(error)) {
+          lastError = new Error(error.message);
+          continue;
+        }
+        throw new Error(`Failed to insert content version: ${error.message}`);
+      }
+
+      const versionId = (data as VersionRow | null)?.id;
+      if (!versionId) {
+        throw new Error(
+          "Supabase did not return an id for the inserted content version record."
+        );
+      }
+
+      if (input.changes && input.changes.length) {
+        const changeRows = input.changes.map((change) =>
+          toChangeRow(change, versionId, input.actor ?? undefined)
+        );
+        const { error: changeError } = await (supabase as any)
+          .from(CHANGES_TABLE)
+          .insert(changeRows);
+
+        if (changeError) {
+          throw new Error(
+            `Failed to insert content version changes: ${changeError.message}`
+          );
+        }
+      }
+
+      return versionId;
+    } catch (error) {
+      if (isVersionConflict(error)) {
+        lastError = error as Error;
+        await delayForContention(attempt);
+        continue;
+      }
+      throw error as Error;
     }
   }
 
-  return versionId;
+  throw (lastError ?? new Error("Unable to record content version due to repeated conflicts."));
+}
+
+async function resolveNextVersion(
+  client: SupabaseClient,
+  entityType: ContentEntityType,
+  entityPrimaryKey: string
+): Promise<number> {
+  const { data, error } = await (client as any)
+    .from(VERSIONS_TABLE)
+    .select("version")
+    .eq("entity_type", entityType)
+    .eq("entity_primary_key", entityPrimaryKey)
+    .order("version", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    throw new Error(
+      `Failed to resolve next version for ${entityType} ${entityPrimaryKey}: ${error.message}`
+    );
+  }
+
+  const latest = Array.isArray(data) && data.length ? data[0] : null;
+  const latestVersion = Number(latest?.version ?? 0);
+  return Number.isFinite(latestVersion) ? latestVersion + 1 : 1;
+}
+
+function isVersionConflict(error: unknown): boolean {
+  const message = (error as { message?: string })?.message ?? "";
+  const code = (error as { code?: string })?.code ?? "";
+  return (
+    code === "23505" ||
+    message.includes("content_versions_entity_version_idx") ||
+    message.toLowerCase().includes("duplicate key value")
+  );
+}
+
+async function delayForContention(attempt: number): Promise<void> {
+  const delayMs = 25 * (attempt + 1);
+  await new Promise((resolve) => {
+    setTimeout(resolve, delayMs);
+  });
 }
 
 export async function listContentVersionsForEntity(
