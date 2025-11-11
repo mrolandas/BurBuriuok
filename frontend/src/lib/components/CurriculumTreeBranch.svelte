@@ -288,7 +288,7 @@
 								on:click={() => onOpenCreateItem(state)}
 								disabled={state.admin.createItem.busy || state.admin.createItem.open || state.admin.remove.busy}
 							>
-								Pridėti terminą
+								Pridėti sąvoką
 							</button>
 							<button
 								type="button"
@@ -376,7 +376,7 @@
 													{#if itemAdmin?.confirmingDelete}
 														<div class="tree-node__item-confirm" use:preventDragPointerPropagation>
 															<p class="tree-node__item-confirm-message">
-																Ar tikrai norite pašalinti terminą „{displayLabel}”?
+																Ar tikrai norite pašalinti sąvoką „{displayLabel}”?
 															</p>
 															{#if itemAdmin.error}
 																<p class="tree-node__admin-status tree-node__admin-status--error">
@@ -545,7 +545,7 @@
 											>
 												<div class="tree-node__admin-grid">
 													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Terminas</span>
+														<span>Sąvoka</span>
 														<input
 															type="text"
 															value={state.admin.createItem.term}
@@ -555,7 +555,7 @@
 																	'term',
 																	event.currentTarget.value
 																)}
-															placeholder="Įveskite termino pavadinimą"
+															placeholder="Įveskite sąvokos pavadinimą"
 															disabled={state.admin.createItem.busy}
 														/>
 													</label>
@@ -570,7 +570,7 @@
 																	'description',
 																	event.currentTarget.value
 																)}
-															placeholder="Trumpas termino paaiškinimas"
+															placeholder="Trumpas sąvokos paaiškinimas"
 															disabled={state.admin.createItem.busy}
 														></textarea>
 													</label>
@@ -616,13 +616,21 @@
 																)}
 															disabled={state.admin.createItem.busy}
 														/>
-														<span>Privalomas terminas</span>
+														<span>Privaloma sąvoka</span>
 													</label>
 												</div>
 
 												{#if state.admin.createItem.error}
 													<p class="tree-node__admin-status tree-node__admin-status--error">
 														{state.admin.createItem.error}
+														{#if state.admin.createItem.conflict}
+															<a
+																class="tree-node__admin-link"
+																href={resolve(`/concepts/${encodeURIComponent(state.admin.createItem.conflict.slug)}`)}
+															>
+																Peržiūrėti sąvoką
+															</a>
+														{/if}
 													</p>
 												{/if}
 
@@ -998,6 +1006,15 @@
 
 	.tree-node__admin-status--error {
 		color: var(--color-status-error-text);
+	}
+
+	.tree-node__admin-status--error a {
+		color: inherit;
+		text-decoration: underline;
+	}
+
+	.tree-node__admin-link {
+		margin-left: 0.35rem;
 	}
 
 	.tree-node__status {

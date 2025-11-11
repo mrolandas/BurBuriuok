@@ -41,5 +41,5 @@ function ensureUrl(url: URL | undefined): URL {
 		return new URL(window.location.href);
 	}
 
-	throw new Error('URL reikalingas koncepcijos duomenims įkelti.');
+	throw new Error('URL reikalingas sąvokos duomenims įkelti.');
 }

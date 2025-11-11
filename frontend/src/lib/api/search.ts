@@ -82,7 +82,7 @@ export async function searchConcepts(query: string, limit = 20): Promise<SearchR
 		.limit(limit);
 
 	if (conceptError) {
-		console.error('Nepavyko gauti koncepcijų paieškos rezultatų', conceptError);
+		console.error('Nepavyko gauti sąvokų paieškos rezultatų', conceptError);
 		throw new Error('Nepavyko atlikti paieškos.');
 	}
 

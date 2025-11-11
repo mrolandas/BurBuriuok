@@ -138,8 +138,8 @@ Kick-off session for actual backend and frontend implementation following the pl
 
 - Kitą sesiją pradėti nuodugniu administratoriaus sąrankos testavimu, užfiksuoti radinius ir pakoreguoti stilių bei funkcionalumą pagal pastebėtus trūkumus.
 - Patikrinti „Rytmečio dangaus“ kontrastą po numatytojo nustatymo ir, jei reikia, sukalibruoti šviesių temų tipografiją.
-- Uždaryti LX-004 – sukurti vietinę eilės saugyklą ir susieti ją su naujais koncepto veiksmų įvykiais.
-- Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir koncepto puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
+- Uždaryti LX-004 – sukurti vietinę eilės saugyklą ir susieti ją su naujais sąvokos veiksmų įvykiais.
+- Apibrėžti duomenų perkrovimo/kešavimo strategiją, kad skilties medis ir sąvokos puslapis dalintųsi tais pačiais Supabase užklausų rezultatais.
 - Coordinate with backend on exposing a public dependency view so prerequisite badges can show real counts.
 - Draft LX-004/LX-005 implementation notes (queue state, session HUD, gamification signals) while ruošiamės jungti prie naujų veiksmų įvykių.
 - Start LX-004 discovery: outline the study queue store API and how the new action signals will move items between lists (po spalvų atnaujinimo).

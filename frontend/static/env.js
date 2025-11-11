@@ -1,5 +1,5 @@
 (() => {
-	const existingConfig = window.__BURBURIUOK_CONFIG__ ?? {};
+	const existingConfig = window.__BURKURSAS_CONFIG__ ?? {};
 
 	try {
 		const host = window.location.hostname.toLowerCase();
@@ -11,5 +11,5 @@
 		// Ignore hostname parsing issues so local development keeps working
 	}
 
-	window.__BURBURIUOK_CONFIG__ = existingConfig;
+	window.__BURKURSAS_CONFIG__ = existingConfig;
 })();

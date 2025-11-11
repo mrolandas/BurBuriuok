@@ -46,11 +46,23 @@ function validateConceptTable(buffer, context) {
     return { errors: [], tables: 0, rows: 0 };
   }
 
-  const headerLabels = headerCells.map(normaliseHeader);
-  const requiredHeaders = ["term lt", "term en", "apibrėžimas"];
-  const isConceptTable = requiredHeaders.some((header) =>
-    headerLabels.includes(header)
-  );
+    const headerLabels = headerCells.map(normaliseHeader);
+
+    const headerAliases = {
+      termLt: ["term lt", "sąvoka lt", "savoka lt"],
+      termEn: ["term en", "sąvoka en", "savoka en"],
+      definition: ["apibrėžimas", "aprasymas", "aprašymas"],
+    };
+
+    const findHeaderIndex = (aliases) =>
+      headerLabels.findIndex((label) => aliases.includes(label));
+
+    const termLtIndex = findHeaderIndex(headerAliases.termLt);
+    const termEnIndex = findHeaderIndex(headerAliases.termEn);
+    const definitionIndex = findHeaderIndex(headerAliases.definition);
+
+    const isConceptTable =
+      termLtIndex !== -1 && termEnIndex !== -1 && definitionIndex !== -1;
 
   if (!isConceptTable) {
     return { errors: [], tables: 0, rows: 0 };
@@ -58,19 +70,21 @@ function validateConceptTable(buffer, context) {
 
   const errors = [];
   const tableStartLine = buffer[0].lineNumber;
+    const requiredColumns = [
+      { index: termLtIndex, label: "Sąvoka LT" },
+      { index: termEnIndex, label: "Sąvoka EN" },
+      { index: definitionIndex, label: "Apibrėžimas" },
+    ];
 
-  requiredHeaders.forEach((required) => {
-    if (!headerLabels.includes(required)) {
-      errors.push(
-        `Line ${tableStartLine}: Missing required column '${required}' in table (${
-          context.section ?? context.topic ?? "unknown section"
-        }).`
-      );
-    }
-  });
-
-  const termLtIndex = headerLabels.indexOf("term lt");
-  const definitionIndex = headerLabels.indexOf("apibrėžimas");
+    requiredColumns.forEach(({ index, label }) => {
+      if (index === -1) {
+        errors.push(
+          `Line ${tableStartLine}: Missing required column '${label}' in table (${
+            context.section ?? context.topic ?? "unknown section"
+          }).`
+        );
+      }
+    });
 
   const seenTerms = new Set();
   let dataRows = 0;
@@ -98,7 +112,7 @@ function validateConceptTable(buffer, context) {
 
     if (!termLt) {
       errors.push(
-        `Line ${lineNumber}: 'Term LT' must not be empty (${
+        `Line ${lineNumber}: 'Sąvoka (LT)' must not be empty (${
           context.section ?? context.topic ?? "unknown section"
         }).`
       );
@@ -116,7 +130,7 @@ function validateConceptTable(buffer, context) {
     if (duplicateKey) {
       if (seenTerms.has(duplicateKey)) {
         errors.push(
-          `Line ${lineNumber}: Duplicate 'Term LT' entry '${termLtRaw}' within the same table (${
+          `Line ${lineNumber}: Duplicate 'Sąvoka (LT)' entry '${termLtRaw}' within the same table (${
             context.section ?? context.topic ?? "unknown section"
           }).`
         );

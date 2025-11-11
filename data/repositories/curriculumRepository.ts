@@ -10,6 +10,7 @@ import type {
   CurriculumNodeRow,
 } from "../types";
 import { getConceptBySlug, upsertConcepts } from "./conceptsRepository";
+import { mapConceptRow } from "./conceptsMapper";
 
 const NODE_VIEW = "burburiuok_curriculum_nodes";
 const ITEM_VIEW = "burburiuok_curriculum_items";
@@ -20,6 +21,11 @@ const SERVICE_SCHEMA = "burburiuok";
 const MAX_CODE_LENGTH = 64;
 const MAX_CONCEPT_SLUG_LENGTH = 90;
 const diacriticRegex = /[\u0300-\u036f]/g;
+
+type DuplicateConceptError = Error & {
+  code: "CONCEPT_ALREADY_EXISTS";
+  concept: Concept;
+};
 
 function mapNodeRow(row: Partial<CurriculumNodeRow>): CurriculumNode {
   return {
@@ -82,7 +88,7 @@ async function conceptSlugExists(client: SupabaseClient, slug: string): Promise<
 
 async function ensureUniqueConceptSlug(client: SupabaseClient, base: string): Promise<string> {
   const normalized = slugifyConceptTerm(base);
-  let candidate = normalized || "terminas";
+  let candidate = normalized || "savoka";
   let suffix = 0;
 
   while (await conceptSlugExists(client, candidate)) {
@@ -92,7 +98,7 @@ async function ensureUniqueConceptSlug(client: SupabaseClient, base: string): Pr
     const prefix = normalized.slice(0, Math.max(1, availableLength));
     candidate = `${prefix}${suffixPart}`.replace(/-+/g, "-").replace(/^-|-$/g, "");
     if (!candidate.length) {
-      candidate = `terminas${suffixPart}`.slice(0, MAX_CONCEPT_SLUG_LENGTH);
+  candidate = `savoka${suffixPart}`.slice(0, MAX_CONCEPT_SLUG_LENGTH);
     }
     if (suffix > 10_000) {
       throw new Error("Unable to generate unique concept slug.");
@@ -100,6 +106,34 @@ async function ensureUniqueConceptSlug(client: SupabaseClient, base: string): Pr
   }
 
   return candidate;
+}
+
+function createDuplicateConceptError(concept: Concept): DuplicateConceptError {
+  const error = new Error(
+    `Concept '${concept.slug}' already exists in section '${concept.sectionCode}'.`
+  ) as DuplicateConceptError;
+  error.code = "CONCEPT_ALREADY_EXISTS";
+  error.concept = concept;
+  return error;
+}
+
+async function findConceptBySectionAndTerm(
+  client: SupabaseClient,
+  sectionCode: string,
+  termLt: string
+): Promise<Concept | null> {
+  const { data, error } = await (client as any)
+    .from(CONCEPTS_TABLE)
+    .select("*")
+    .eq("section_code", sectionCode)
+    .eq("term_lt", termLt)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Failed to verify concept uniqueness: ${error.message}`);
+  }
+
+  return data ? mapConceptRow(data) : null;
 }
 
 type SectionContext = {
@@ -755,6 +789,16 @@ export async function createCurriculumItemAdmin(
   const slugBase = providedSlug ?? termLt ?? label;
   const slug = await ensureUniqueConceptSlug(serviceClient, slugBase);
   const sectionContext = await resolveSectionContext(serviceClient, node);
+
+  const existingConcept = await findConceptBySectionAndTerm(
+    serviceClient,
+    sectionContext.sectionCode,
+    termLt
+  );
+
+  if (existingConcept) {
+    throw createDuplicateConceptError(existingConcept);
+  }
 
   let insertedRow: CurriculumItemRow | null = null;
 

@@ -1,11 +1,11 @@
-# LBS Curriculum Concept Master
+# LBS Curriculum Sąvoka Master
 
-This reference enumerates every curriculum concept with a concise Lithuanian definition (and, where useful, an English term). Use it as the single source of truth when regenerating Supabase seeds or other learning materials.
+This reference enumerates every curriculum sąvoka with a concise Lithuanian definition (and, where useful, an English term). Use it as the single source of truth when regenerating Supabase seeds or other learning materials.
 
 | Stulpelis     | Aprašas                                                                                              |
 | ------------- | ---------------------------------------------------------------------------------------------------- |
-| `Term LT`     | Oficialus lietuviškas terminas arba formuluotė, kaip pateikta LBS programoje.                        |
-| `Term EN`     | Dažniausiai vartojamas angliškas atitikmuo, jei toks egzistuoja (palikta tuščia, jeigu nėra svarbu). |
+| `Sąvoka LT`   | Oficialus lietuviškas sąvokos pavadinimas arba formuluotė, kaip pateikta LBS programoje.             |
+| `Sąvoka EN`   | Dažniausiai vartojamas angliškas atitikmuo, jei toks egzistuoja (palikta tuščia, jeigu nėra svarbu). |
 | `Apibrėžimas` | Viena ar dvi aiškios lietuviškos sakinio dalys, skirtos mokymo turiniui.                             |
 
 ---
@@ -14,7 +14,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.1a Burinių jachtų korpusų tipai
 
-| Term LT       | Term EN          | Apibrėžimas                                                                                          |
+| Sąvoka LT     | Sąvoka EN        | Apibrėžimas                                                                                          |
 | ------------- | ---------------- | ---------------------------------------------------------------------------------------------------- |
 | Jolė          | Dinghy           | Maža, lengva burinė valtis su atviru deniu, skirta mokymui ar trumpoms išvykoms.                     |
 | Švertbotas    | Centreboard boat | Korpusas su keliama šverto plokšte, leidžiančia plaukti sekliuose vandenyse.                         |
@@ -26,7 +26,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.1.1 Burlaivių tipai
 
-| Term LT            | Term EN          | Apibrėžimas                                                                                         |
+| Sąvoka LT          | Sąvoka EN        | Apibrėžimas                                                                                         |
 | ------------------ | ---------------- | --------------------------------------------------------------------------------------------------- |
 | Ketas              | Cat rig          | Vieno stiebo laivas su viena groto bure be priekinės burės.                                         |
 | Šliupas            | Sloop            | Populiariausias vieno stiebo takelažas su grotu ir viena priekine bure (stakseliu ar genuja).       |
@@ -42,7 +42,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.2.1 Korpusas
 
-| Term LT                                    | Term EN                   | Apibrėžimas                                                                                        |
+| Sąvoka LT                                  | Sąvoka EN                 | Apibrėžimas                                                                                        |
 | ------------------------------------------ | ------------------------- | -------------------------------------------------------------------------------------------------- |
 | Falškilis                                  | False keel                | Papildomas išorinis kilio sluoksnis, saugantis pagrindinį kilį nuo nusidėvėjimo.                   |
 | Kilis                                      | Keel                      | Pagrindinė išilginė korpuso sija, suteikianti tvirtumą ir stabilumą.                               |
@@ -92,7 +92,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.2.2 Rangautas
 
-| Term LT                            | Term EN                 | Apibrėžimas                                                                                                                                      |
+| Sąvoka LT                          | Sąvoka EN               | Apibrėžimas                                                                                                                                      |
 | ---------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Stiebas                            | Mast                    | Vertikalus rangauto elementas su topu, klotiku, pėda, šporu ir zalingiais, laikantis bures.                                                      |
 | Gikas                              | Boom                    | Horizontalus karčis, prie kurio tvirtinama groto apačia ir kuriuo valdoma burė.                                                                  |
@@ -103,7 +103,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.2.3 Takelažas
 
-| Term LT                         | Term EN            | Apibrėžimas                                                                                                                     |
+| Sąvoka LT                       | Sąvoka EN          | Apibrėžimas                                                                                                                     |
 | ------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | Forštagai                       | Forestays          | Stovinčio takelažo trosai, laikantys stiebą nuo pasvyrimo atgal ir laikančios priekines bures.                                  |
 | Achterštagai                    | Backstays          | Trosai, laikantys stiebą nuo pasvyrimo į priekį ir reguliuojantys stiebo lenkimą.                                               |
@@ -131,7 +131,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.2.4 Burių tipai
 
-| Term LT                              | Term EN        | Apibrėžimas                                                                                       |
+| Sąvoka LT                            | Sąvoka EN      | Apibrėžimas                                                                                       |
 | ------------------------------------ | -------------- | ------------------------------------------------------------------------------------------------- |
 | Tiesioji burė                        | Square sail    | Keturkampė burė, statmena stiebui, naudojama tradiciniuose laivuose.                              |
 | Špritinė burė                        | Spritsail      | Burė su įstrižiniu špritu, ištempiama įstrižai nuo stiebo.                                        |
@@ -161,7 +161,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.3.1 Švartavimo ir inkaravimo priemonės
 
-| Term LT                      | Term EN        | Apibrėžimas                                                                                                                  |
+| Sąvoka LT                    | Sąvoka EN      | Apibrėžimas                                                                                                                  |
 | ---------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | Kliuzai                      | Fairleads      | Metalinės ar plastikinės angos, nukreipiančios lynus per bortą.                                                              |
 | Klampės                      | Cleats         | Tvirtinimo dvilaikės virvėms rišti prie denio ar borto.                                                                      |
@@ -189,7 +189,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.3.2 Avarinės ir gelbėjimo priemonės
 
-| Term LT                     | Term EN                | Apibrėžimas                                                                     |
+| Sąvoka LT                   | Sąvoka EN              | Apibrėžimas                                                                     |
 | --------------------------- | ---------------------- | ------------------------------------------------------------------------------- |
 | Gesintuvai                  | Fire extinguishers     | Privalomi gaisro gesinimo prietaisai su tinkamomis klasėmis.                    |
 | Kibirai                     | Buckets                | Paprasti įrankiai vandeniui semti ar gesinti gaisrą.                            |
@@ -205,7 +205,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 1.3.3 Jachtos pagalbinis mechaninis variklis
 
-| Term LT                      | Term EN                      | Apibrėžimas                                                                                      |
+| Sąvoka LT                    | Sąvoka EN                    | Apibrėžimas                                                                                      |
 | ---------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------ |
 | Variklių rūšys ir paruošimas | Engine types & commissioning | Dyzeliniai, benzininiai, elektriniai varikliai, jų galingumų parinkimas ir paleidimo procedūros. |
 | Priežiūra                    | Maintenance                  | Reguliarus alyvos keitimas, filtrų priežiūra, aušinimo ir kuro sistemos kontrolė.                |
@@ -216,7 +216,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 2.1 Jachtos charakteristikos
 
-| Term LT                  | Term EN             | Apibrėžimas                                                                     |
+| Sąvoka LT                | Sąvoka EN           | Apibrėžimas                                                                     |
 | ------------------------ | ------------------- | ------------------------------------------------------------------------------- |
 | Ilgis (LOA)              | Length overall      | Bendrasis jachtos ilgis nuo laivapriekio iki laivagalio, įskaitant išsikišimus. |
 | Plotis (BMAX)            | Beam                | Didžiausias korpuso plotis, lemiantis stabilumą ir vidaus erdves.               |
@@ -231,19 +231,19 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 2.5 Tikrasis vėjas
 
-| Term LT                          | Term EN                 | Apibrėžimas                                                                                        |
+| Sąvoka LT                        | Sąvoka EN               | Apibrėžimas                                                                                        |
 | -------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | Stiprumas (TWS) ir kryptis (TWA) | True wind speed & angle | Meteorologinis vėjas, kurio greitis ir kryptis matuojami ramioje aplinkoje, naudojami navigacijai. |
 
 ### 2.6 Kursinis vėjas
 
-| Term LT                         | Term EN              | Apibrėžimas                                                                                          |
+| Sąvoka LT                         | Sąvoka EN              | Apibrėžimas                                                                                          |
 | ------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------- |
 | Sąvoka ir susidarymo priežastis | Apparent wind basics | Vėjas, jaučiamas laive dėl laivo judėjimo, susidarantis tarp tikrojo vėjo ir laivo greičio vektorių. |
 
 ### 2.7 Vimpelinis vėjas
 
-| Term LT                          | Term EN       | Apibrėžimas                                                                                   |
+| Sąvoka LT                          | Sąvoka EN       | Apibrėžimas                                                                                   |
 | -------------------------------- | ------------- | --------------------------------------------------------------------------------------------- |
 | Kryptis (AWA) ir stiprumas (AWS) | Apparent wind | Laive matuojamas vėjas; nustatomas pagal vimpelį ar prietaisus ir būtinas burių reguliavimui. |
 
@@ -253,7 +253,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 3.4 Manevravimo sąvokos
 
-| Term LT                       | Term EN                          | Apibrėžimas                                                              |
+| Sąvoka LT                       | Sąvoka EN                          | Apibrėžimas                                                              |
 | ----------------------------- | -------------------------------- | ------------------------------------------------------------------------ |
 | Vendas                        | Tack                             | Posūkis prieš vėją, kai nosis kerta vėją ir burės persimetamos.          |
 | Halsas                        | Gybe                             | Posūkis pavėjui, kai laivagalys kerta vėjo kryptį ir gikas persimetamas. |
@@ -267,7 +267,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 3.12.1 Vietos parinkimas (inkaravimas)
 
-| Term LT                        | Term EN               | Apibrėžimas                                                            |
+| Sąvoka LT                        | Sąvoka EN               | Apibrėžimas                                                            |
 | ------------------------------ | --------------------- | ---------------------------------------------------------------------- |
 | Vandens telkinio dugno gruntas | Seabed type           | Vertiname dugno sudėtį (smėlis, molis, uoliena), kad inkaras įsikibtų. |
 | Povandeniniai kliuviniai       | Underwater hazards    | Patikriname ar nėra akmenų, nuolaužų ar kitų kliūčių inkaro vietoje.   |
@@ -280,7 +280,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 3.15.1 Nutrūkus (įrangai)
 
-| Term LT              | Term EN                 | Apibrėžimas                                                                   |
+| Sąvoka LT              | Sąvoka EN                 | Apibrėžimas                                                                   |
 | -------------------- | ----------------------- | ----------------------------------------------------------------------------- |
 | Priešvėjiniam vantui | Windward shroud failure | Situacija, kai nutrūksta vėjo pusėje esantis vantas – reikia skubiai atramos. |
 | Bakštagui            | Runner failure          | Nutrūkus bakštagui, stiebas gali prarasti atramą plaukaujant aštriai pavėjui. |
@@ -291,7 +291,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 3.15.2 Atsikabinus (įrangai)
 
-| Term LT           | Term EN             | Apibrėžimas                                                                  |
+| Sąvoka LT           | Sąvoka EN             | Apibrėžimas                                                                  |
 | ----------------- | ------------------- | ---------------------------------------------------------------------------- |
 | Pavėjiniam vantui | Leeward shroud slip | Atsikabinęs pavėjinės pusės vantas praranda įtempimą, stiebas gali vibruoti. |
 | Bakštagui         | Runner slip         | Bakštagas nuslysta nuo tvirtinimo, reikia iš naujo įtempti.                  |
@@ -306,7 +306,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 4.9 Pagalbos iškvietimas
 
-| Term LT                    | Term EN             | Apibrėžimas                                                               |
+| Sąvoka LT                    | Sąvoka EN             | Apibrėžimas                                                               |
 | -------------------------- | ------------------- | ------------------------------------------------------------------------- |
 | Mob. tel. Nr. 112          | Emergency phone 112 | Bendras Europos skubios pagalbos numeris.                                 |
 | VHF radijo ryšiu           | VHF distress        | Skubios pagalbos kanalai (CH16), naudojant MAYDAY/PAN-PAN signalus.       |
@@ -319,7 +319,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 6.6 Locijos terminai
 
-| Term LT                  | Term EN       | Apibrėžimas                                                               |
+| Sąvoka LT                  | Sąvoka EN       | Apibrėžimas                                                               |
 | ------------------------ | ------------- | ------------------------------------------------------------------------- |
 | Baseinas                 | Basin         | Uždaresnė vandens akvatorija uostuose ar prieplaukose.                    |
 | Akvatorija               | Water area    | Vandens telkinio dalis, skirta navigacijai ar kitoms veikloms.            |
@@ -349,21 +349,21 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 6.11 Kliūčių žymėjimo sistemos
 
-| Term LT                    | Term EN                 | Apibrėžimas                                                                   |
+| Sąvoka LT                    | Sąvoka EN                 | Apibrėžimas                                                                   |
 | -------------------------- | ----------------------- | ----------------------------------------------------------------------------- |
 | Kardinalinė sistema        | Cardinal marks          | Ženklai, rodantys saugiausią pusę aplenkti kliūtį pagal pasaulio šalis.       |
 | Lateralinė ir kiti ženklai | Lateral & special marks | Ženklai, nurodantys farvaterio kraštus, specialias zonas, izoliuotus pavojus. |
 
 ### 6.13 Darbo su jūrlapiais taisyklės
 
-| Term LT          | Term EN             | Apibrėžimas                                              |
+| Sąvoka LT          | Sąvoka EN             | Apibrėžimas                                              |
 | ---------------- | ------------------- | -------------------------------------------------------- |
 | Linijų ilgis     | Plotting lines      | Tikslus atstumų žymėjimas jūrlapyje pagal mastelį.       |
 | Kampų nustatymas | Bearing measurement | Krypties ir kursų žymėjimas naudojant braižymo įrankius. |
 
 ### 6.14 Navigatoriaus-šturmano įrankiai
 
-| Term LT                | Term EN        | Apibrėžimas                              |
+| Sąvoka LT                | Sąvoka EN        | Apibrėžimas                              |
 | ---------------------- | -------------- | ---------------------------------------- |
 | Matlankis              | Protractor     | Kampų matavimo įrankis kursams braižyti. |
 | Lygiagrečioji liniuotė | Parallel ruler | Įrankis kursams perkelti per jūrlapį.    |
@@ -371,7 +371,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 6.15 Grafiniai navigaciniai uždaviniai
 
-| Term LT                               | Term EN              | Apibrėžimas                                                     |
+| Sąvoka LT                               | Sąvoka EN              | Apibrėžimas                                                     |
 | ------------------------------------- | -------------------- | --------------------------------------------------------------- |
 | Koordinačių nustatymas                | Fixing position      | Taško ilgumos ir platumos nustatymas jūrlapyje.                 |
 | Taško radimas pagal koordinates       | Plotting position    | Koordinačių perkėlimas į jūrlapį, norint rasti vietą.           |
@@ -381,7 +381,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 6.16 Elektroniniai navigacijos prietaisai
 
-| Term LT                    | Term EN                         | Apibrėžimas                                                           |
+| Sąvoka LT                    | Sąvoka EN                         | Apibrėžimas                                                           |
 | -------------------------- | ------------------------------- | --------------------------------------------------------------------- |
 | Lagas                      | Log                             | Prietaisas laivo greičiui ir nuplauktam atstumui matuoti.             |
 | Echolotas                  | Echo sounder                    | Prietaisas gylio matavimui po laivu.                                  |
@@ -396,19 +396,19 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 7.2.1 Buriavimas pasienio ruože
 
-| Term LT                   | Term EN              | Apibrėžimas                                                                               |
+| Sąvoka LT                   | Sąvoka EN              | Apibrėžimas                                                                               |
 | ------------------------- | -------------------- | ----------------------------------------------------------------------------------------- |
 | Straipsniai Nr. 14/1; 7.8 | Border sailing rules | Pagrindinės Valstybės sienos įstatymo nuostatos dėl judėjimo pasienio ruože ir kontrolės. |
 
 ### 7.2.2 Draudimai
 
-| Term LT                       | Term EN            | Apibrėžimas                                                                       |
+| Sąvoka LT                       | Sąvoka EN            | Apibrėžimas                                                                       |
 | ----------------------------- | ------------------ | --------------------------------------------------------------------------------- |
 | Straipsniai Nr. 14/12; 13; 14 | Prohibited actions | Vidaus vandenų transporto taisyklių straipsniai, apibrėžiantys draudžiamą elgesį. |
 
 ### 7.9 Vėliavų etiketas
 
-| Term LT                          | Term EN             | Apibrėžimas                                                                       |
+| Sąvoka LT                          | Sąvoka EN             | Apibrėžimas                                                                       |
 | -------------------------------- | ------------------- | --------------------------------------------------------------------------------- |
 | Buriuojant                       | Under sail          | Valstybinės ir klubo vėliavos kėlimas bei išdėstymas, kai laivas plaukia burėmis. |
 | Stovint uoste ar nuleidus inkarą | In port / at anchor | Vėliavų tvarka ir iškėlimo laikai stovint.                                        |
@@ -421,7 +421,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 8.1 Pagrindinės sąvokos
 
-| Term LT                       | Term EN               | Apibrėžimas                                                                                      |
+| Sąvoka LT                       | Sąvoka EN               | Apibrėžimas                                                                                      |
 | ----------------------------- | --------------------- | ------------------------------------------------------------------------------------------------ |
 | Laivas                        | Vessel                | Bet koks plaukiojantis įrenginys, tinkamas judėti vandeniu.                                      |
 | Laivas su mechaniniu varikliu | Power-driven vessel   | Laivas, varomas mechanine jėga.                                                                  |
@@ -442,13 +442,13 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 8.8 Laivų garsinė signalizacija
 
-| Term LT            | Term EN       | Apibrėžimas                                                                          |
+| Sąvoka LT            | Sąvoka EN       | Apibrėžimas                                                                          |
 | ------------------ | ------------- | ------------------------------------------------------------------------------------ |
 | Garsiniai signalai | Sound signals | Signalų seka (dėmesio, posūkiai, ribotas matomumas, nelaimės) pagal CEVNI taisykles. |
 
 ### 8.9 Laivybą reguliuojantys signaliniai ženklai
 
-| Term LT       | Term EN           | Apibrėžimas                                                     |
+| Sąvoka LT       | Sąvoka EN           | Apibrėžimas                                                     |
 | ------------- | ----------------- | --------------------------------------------------------------- |
 | Draudžiamieji | Prohibitory signs | Ženklai, draudžiantys tam tikrą veiklą ar judėjimą.             |
 | Privalomieji  | Mandatory signs   | Ženklai, įpareigojantys laikytis nurodytos krypties ar veiksmo. |
@@ -459,7 +459,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 8.10.1 Sąvokos
 
-| Term LT                  | Term EN             | Apibrėžimas                                         |
+| Sąvoka LT                  | Sąvoka EN             | Apibrėžimas                                         |
 | ------------------------ | ------------------- | --------------------------------------------------- |
 | Plaukimas aukštyn/žemyn  | Upstream/downstream | Navigacija prieš ar pasroviui upėje.                |
 | Priešpriešinis plaukimas | Head-on situation   | Situacija, kai laivai artėja vienas prieš kitą.     |
@@ -472,7 +472,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 9.3 Laivų navigaciniai žiburiai ir ženklai
 
-| Term LT                       | Term EN               | Apibrėžimas                                                         |
+| Sąvoka LT                       | Sąvoka EN               | Apibrėžimas                                                         |
 | ----------------------------- | --------------------- | ------------------------------------------------------------------- |
 | Burinis laivas                | Sailing vessel lights | Navigaciniai žiburiai, kuriuos privalo rodyti burlaivis.            |
 | Laivas su mechaniniu varikliu | Power-driven lights   | Žiburiai, kai burinis laivas plaukia su varikliu.                   |
@@ -491,7 +491,7 @@ This reference enumerates every curriculum concept with a concise Lithuanian def
 
 ### 10.17 Jūriniai mazgai
 
-| Term LT                       | Term EN             | Apibrėžimas                                                                   |
+| Sąvoka LT                       | Sąvoka EN             | Apibrėžimas                                                                   |
 | ----------------------------- | ------------------- | ----------------------------------------------------------------------------- |
 | Vytulas (virvės suringavimas) | Coil                | Tvarkingas virvės susukimas laikymui.                                         |
 | Klampės mazgas                | Cleat hitch         | Mazgas virvei pritvirtinti prie klampės.                                      |

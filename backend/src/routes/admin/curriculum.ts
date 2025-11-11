@@ -314,7 +314,7 @@ router.post(
     if (!validation.success) {
       res.status(400).json({
         error: {
-          message: "Neteisingai užpildyta termino forma.",
+          message: "Neteisingai užpildyta sąvokos forma.",
           details: validation.error.flatten(),
         },
       });
@@ -332,10 +332,31 @@ router.post(
         );
       }
 
+      if ((error as { code?: string }).code === "CONCEPT_ALREADY_EXISTS") {
+        const concept = (error as { concept?: Concept }).concept ?? null;
+        res.status(409).json({
+          error: {
+            message: concept
+              ? `Šiame skyriuje jau yra sąvoka „${concept.termLt}“.`
+              : "Šiame skyriuje jau yra tokia sąvoka.",
+            code: "CONCEPT_ALREADY_EXISTS",
+            details: concept
+              ? {
+                  slug: concept.slug,
+                  termLt: concept.termLt,
+                  nodeCode: concept.curriculumNodeCode,
+                  itemLabel: concept.curriculumItemLabel,
+                }
+              : undefined,
+          },
+        });
+        return;
+      }
+
       if (isUniqueConstraintError(error)) {
         res.status(409).json({
           error: {
-            message: "Termino įrašas jau egzistuoja kituose duomenyse.",
+            message: "Šiame skyriuje jau yra tokia sąvoka.",
           },
         });
         return;
@@ -344,7 +365,7 @@ router.post(
       if (error instanceof Error && error.message === "Curriculum item label cannot be empty.") {
         res.status(400).json({
           error: {
-            message: "Terminas negali būti tuščias.",
+            message: "Sąvoka negali būti tuščia.",
           },
         });
         return;

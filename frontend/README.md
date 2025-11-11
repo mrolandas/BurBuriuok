@@ -1,4 +1,4 @@
-# Frontend – BurBuriuok
+# Frontend – BurKursas
 
 SvelteKit powers the learner experience under `frontend/`. This README captures the essentials for running the app, wiring new slices, and understanding the shared utilities.
 

@@ -18,7 +18,7 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 - Admin console requests default to `/api/admin`. Override this with `VITE_ADMIN_API_BASE` when the Express backend runs on another host or port.
 - Admin impersonation: export `VITE_ENABLE_ADMIN_IMPERSONATION=true` (and `ADMIN_DEV_IMPERSONATION=true` at the repo root) during local development to surface the AppShell admin toggle. The control updates the `impersonate=admin` query parameter automatically when it changes so inline editing stays active while navigating.
 - GitHub Pages: deployments now default to the Render backend (`https://burburiuok.onrender.com/api/v1/admin`). Override this by setting the `VITE_ADMIN_API_BASE` Actions secret if the backend host changes.
-- Production builds: GitHub Actions writes `frontend/static/env.js` with `supabaseUrl` and `supabaseAnonKey`. `src/lib/config/appConfig.ts` consumes `window.__BURBURIUOK_CONFIG__` at runtime, falling back to `import.meta.env.VITE_*` values when present.
+- Production builds: GitHub Actions writes `frontend/static/env.js` with `supabaseUrl` and `supabaseAnonKey`. `src/lib/config/appConfig.ts` consumes `window.__BURKURSAS_CONFIG__` at runtime, falling back to `import.meta.env.VITE_*` values when present.
 - Browser hydration uses a small inline script in `src/app.html` to apply the cached theme before SvelteKit boots, avoiding a flash of incorrect theming.
 
 Development builds still log a warning if credentials are missing so contributors can spot misconfiguration early.

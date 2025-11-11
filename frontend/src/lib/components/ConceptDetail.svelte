@@ -382,7 +382,7 @@
 
 			<div class="concept-detail__form-grid concept-detail__form-grid--basic">
 				<label>
-					<span>Terminas (LT) *</span>
+					<span>Sąvoka (LT) *</span>
 					<input
 						type="text"
 						bind:value={inlineForm.termLt}
@@ -394,7 +394,7 @@
 				</label>
 
 				<label>
-					<span>Terminas (EN)</span>
+					<span>Sąvoka (EN)</span>
 					<input
 						type="text"
 						bind:value={inlineForm.termEn}

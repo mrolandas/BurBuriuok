@@ -74,8 +74,8 @@ function requiredItemLabel() {
   return z
     .string()
     .trim()
-    .min(1, { message: "Terminas negali būti tuščias." })
-    .max(160, { message: "Terminas negali viršyti 160 simbolių." });
+  .min(1, { message: "Sąvoka negali būti tuščia." })
+  .max(160, { message: "Sąvoka negali viršyti 160 simbolių." });
 }
 
 function optionalSlug() {

@@ -4,7 +4,7 @@ _Last updated: 2025-11-06_
 
 ## About This Guide
 
-This document explains how authenticated administrators can work inside the BurBuriuok admin console. The guide covers navigation, key flows, and tips for the current sprint deliverables (ADM-001 and ADM-002) with pointers to future modules.
+This document explains how authenticated administrators can work inside the BurKursas admin console. The guide covers navigation, key flows, and tips for the current sprint deliverables (ADM-001 and ADM-002) with pointers to future modules.
 
 ## Prerequisites
 
@@ -62,7 +62,7 @@ The Concepts module is the most complete feature today. It provides a searchable
 ### Creating a Concept
 
 1. Click `+ Nauja tema` at the top of the table to open the drawer.
-2. Fill out the required fields (`Slug`, `Terminas (LT)`, `Aprašymas (LT)`, `Skyriaus kodas`, `Skyriaus pavadinimas`, `Būsena`). Optional fields accept blank values.
+2. Fill out the required fields (`Slug`, `Sąvoka (LT)`, `Aprašymas (LT)`, `Skyriaus kodas`, `Skyriaus pavadinimas`, `Būsena`). Optional fields accept blank values.
 3. Draft vs. Publish: Use the status toggle in the drawer footer. Publishing exposes the concept to learners.
 4. Click `Išsaugoti`. The form runs shared Zod validation, showing inline errors if fields are missing or invalid.
 5. On success, you see a toast confirmation. The table updates optimistically with the new concept.
@@ -84,7 +84,7 @@ The Concepts module is the most complete feature today. It provides a searchable
 ### Validation Rules
 
 - `Slug`: Required, lowercase kebab-case. Immutable after creation.
-- `Terminas (LT)`: Required.
+- `Sąvoka (LT)`: Required.
 - `Aprašymas (LT)`: Required; trim extra whitespace.
 - `isRequired`: Indicates whether the concept is mandatory in the curriculum.
 - Metadata `status` mirrors the top-level status to keep history consistent.

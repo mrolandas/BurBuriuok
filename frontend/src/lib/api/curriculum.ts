@@ -124,7 +124,7 @@ export async function fetchNodeItems(nodeCode: string): Promise<CurriculumItem[]
 		.eq('curriculum_node_code', nodeCode);
 
 	if (conceptError) {
-		console.warn('Nepavyko susieti temų su koncepcijomis', conceptError);
+		console.warn('Nepavyko susieti temų su sąvokomis', conceptError);
 	} else {
 		for (const concept of concepts ?? []) {
 			const ordinalValue = concept.curriculum_item_ordinal;

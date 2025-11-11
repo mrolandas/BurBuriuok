@@ -244,11 +244,16 @@ function loadConceptRecordsFromMaster(structure) {
     const normalizedHeaders = headerCells.map((cell) =>
       cell.toLowerCase().replace(/\s+/g, " ").trim()
     );
-    const termLtIndex = normalizedHeaders.findIndex(
-      (cell) => cell.startsWith("term lt") || cell === "term lt"
+    const matchesAnyHeader = (cell, candidates) =>
+      candidates.some(
+        (candidate) => cell === candidate || cell.startsWith(`${candidate} `)
+      );
+
+    const termLtIndex = normalizedHeaders.findIndex((cell) =>
+      matchesAnyHeader(cell, ["term lt", "sąvoka lt", "savoka lt"])
     );
-    const termEnIndex = normalizedHeaders.findIndex(
-      (cell) => cell.startsWith("term en") || cell === "term en"
+    const termEnIndex = normalizedHeaders.findIndex((cell) =>
+      matchesAnyHeader(cell, ["term en", "sąvoka en", "savoka en"])
     );
     const definitionIndex = normalizedHeaders.findIndex(
       (cell) => cell.includes("apibr") || cell.includes("apras")

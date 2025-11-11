@@ -1,17 +1,17 @@
-# BurBuriuok
+# BurKursas
 
-BurBuriuok is a Lithuanian-first learning companion that helps novice skippers prepare for the Lithuanian Sailing Association curriculum. The product UI and learner-facing copy stay in Lithuanian, while code, internal documentation, and developer conversations remain in English.
+BurKursas is a Lithuanian-first learning companion that helps novice skippers prepare for the Lithuanian Sailing Association curriculum. The product UI and learner-facing copy stay in Lithuanian, while code, internal documentation, and developer conversations remain in English.
 
 ## Overview
 
-BurBuriuok guides learners through the "Lietuvos Buriavimo Asociacijos vidaus vandenų burinės jachtos vado mokymo programa (20241015d_redakcija_241024_112644-1)". The canonical list of required concepts lives in `docs/static_info/LBS_programa.md`. The product concentrates on the theoretical exam and offers practical checklists to support on-water preparation.
+BurKursas guides learners through the "Lietuvos Buriavimo Asociacijos vidaus vandenų burinės jachtos vado mokymo programa (20241015d_redakcija_241024_112644-1)". The canonical list of required sąvokos lives in `docs/static_info/LBS_programa.md`. The product concentrates on the theoretical exam and offers practical checklists to support on-water preparation.
 
 ## Goals
 
-- Help learners build fluency with every concept required by the national curriculum.
+- Help learners build fluency with every sąvoka required by the national curriculum.
 - Provide quick knowledge checks to reinforce progress.
 - Stay mobile-first: ~70% phone, 20% tablet, 10% desktop usage assumptions drive design decisions.
-- Offer note-taking hooks (hashtags, mentions, or similar affordances) that let learners map class notes back to curriculum sections and individual concepts.
+- Offer note-taking hooks (hashtags, mentions, or similar affordances) that let learners map class notes back to curriculum sections and individual sąvokos.
 
 ## Release Roadmap
 

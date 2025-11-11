@@ -1,4 +1,4 @@
-# BurBuriuok Documentation Index
+# BurKursas Documentation Index
 
 Use this guide to find the right document quickly and understand when it needs an update. When you touch a slice of work, scan the relevant section below and keep the linked docs in sync.
 

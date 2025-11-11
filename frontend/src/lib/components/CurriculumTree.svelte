@@ -23,6 +23,7 @@
 		TreeNodeReorderState,
 		TreeNodeOrderChange,
 		TreeNodeOrderFinalize,
+		TreeNodeConceptConflict,
 		TreeItemAdminState
 	} from './curriculumTreeTypes';
 	import { resolve } from '$app/paths';
@@ -68,6 +69,45 @@
 
 	let conceptEditor: ConceptEditorState = createConceptEditorState();
 
+	type AdminErrorBody = {
+		error?: {
+			code?: string;
+			details?: {
+				slug?: string;
+				termLt?: string;
+				nodeCode?: string | null;
+				itemLabel?: string | null;
+			};
+		};
+	};
+
+	const extractConceptConflict = (error: unknown): TreeNodeConceptConflict | null => {
+		if (!(error instanceof AdminApiError)) {
+			return null;
+		}
+		const body = error.body as AdminErrorBody | null | undefined;
+		if (!body?.error || body.error.code !== 'CONCEPT_ALREADY_EXISTS') {
+			return null;
+		}
+		const details = body.error.details ?? {};
+		const slug = typeof details.slug === 'string' && details.slug.length ? details.slug : null;
+		if (!slug) {
+			return null;
+		}
+		const term =
+			typeof details.termLt === 'string' && details.termLt.length ? details.termLt : slug;
+		const nodeCode =
+			typeof details.nodeCode === 'string' && details.nodeCode.length ? details.nodeCode : null;
+		const itemLabel =
+			typeof details.itemLabel === 'string' && details.itemLabel.length ? details.itemLabel : null;
+		return {
+			slug,
+			term,
+			nodeCode,
+			itemLabel
+		};
+	};
+
 	type DragSnapshot = {
 		nodeId: string;
 		originParentCode: string | null;
@@ -107,6 +147,7 @@
 		sourceRef: '',
 		isRequired: true,
 		error: null,
+		conflict: null,
 		busy: false
 	});
 
@@ -426,7 +467,7 @@
 				itemOrdinal: item.ordinal
 			});
 			updateItemAdminState(state, key, {
-				error: 'Šis terminas dar neturi susieto koncepto.'
+				error: 'Šiam elementui dar nepriskirta sąvoka.'
 			});
 			return;
 		}
@@ -487,7 +528,7 @@
 
 		if (!item.conceptSlug) {
 			updateItemAdminState(state, key, {
-				error: 'Šis terminas dar neturi susieto koncepto.',
+				error: 'Šiam elementui dar nepriskirta sąvoka.',
 				confirmingDelete: false
 			});
 			return;
@@ -531,7 +572,8 @@
 		} catch (error) {
 			updateItemAdminState(state, key, {
 				busy: false,
-				error: translateApiError(error, 'Nepavyko pašalinti termino.')
+				error: translateApiError(error, 'Nepavyko pašalinti sąvokos.'),
+				confirmingDelete: false
 			});
 		}
 	};
@@ -549,6 +591,9 @@
 		}
 		if (form.error) {
 			form.error = null;
+		}
+		if (form.conflict) {
+			form.conflict = null;
 		}
 		refreshTree();
 	};
@@ -1161,13 +1206,15 @@
 		const sourceRef = form.sourceRef.trim();
 
 		if (!term) {
-			form.error = 'Įrašykite terminą.';
+			form.error = 'Įrašykite sąvoką.';
+			form.conflict = null;
 			refreshTree();
 			return;
 		}
 
 		form.busy = true;
 		form.error = null;
+		form.conflict = null;
 		refreshTree();
 
 		try {
@@ -1187,7 +1234,15 @@
 				activeCreateItemNodeCode = null;
 			}
 		} catch (err) {
-			form.error = translateApiError(err, 'Nepavyko sukurti termino.');
+			const conflict = extractConceptConflict(err);
+			if (conflict) {
+				const displayTerm = conflict.term.length ? conflict.term : conflict.slug;
+				form.error = `Šiame skyriuje jau yra sąvoka „${displayTerm}“.`;
+				form.conflict = conflict;
+			} else {
+				form.error = translateApiError(err, 'Nepavyko sukurti sąvokos.');
+				form.conflict = null;
+			}
 		} finally {
 			form.busy = false;
 			refreshTree();

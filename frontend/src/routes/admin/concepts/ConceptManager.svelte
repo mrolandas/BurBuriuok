@@ -109,7 +109,7 @@
 			concepts = sortConcepts(list);
 			updateSectionOptions(concepts);
 		} catch (error) {
-			loadError = error instanceof Error ? error.message : 'Nepavyko įkelti temų sąrašo.';
+			loadError = error instanceof Error ? error.message : 'Nepavyko įkelti sąvokų sąrašo.';
 		} finally {
 			loading = false;
 		}
@@ -484,12 +484,12 @@
 			activeConcept = saved;
 			editorDirty = false;
 			editorOpen = false;
-			showSuccess(editorMode === 'edit' ? 'Tema atnaujinta.' : 'Tema sukurta.');
+			showSuccess(editorMode === 'edit' ? 'Sąvoka atnaujinta.' : 'Sąvoka sukurta.');
 			if (editorMode === 'edit') {
 				void loadHistory(saved.slug);
 			}
 		} catch (error) {
-			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti temų.';
+			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti sąvokų.';
 		} finally {
 			saving = false;
 		}
@@ -523,13 +523,13 @@
 <section class="concepts-shell">
 	<header class="concepts-shell__header">
 		<div>
-			<h1>Temų tvarkyklė</h1>
+			<h1>Sąvokų tvarkyklė</h1>
 			<p>
-				Kurti ir atnaujinti mokomąsias temas. Administratoriaus pakeitimai saugomi ir žymimi kaip
+				Kurti ir atnaujinti mokomąsias sąvokas. Administratoriaus pakeitimai saugomi ir žymimi kaip
 				juodraščiai arba publikuoti įrašai.
 			</p>
 		</div>
-		<button class="primary" type="button" on:click={openCreate}>Nauja tema</button>
+		<button class="primary" type="button" on:click={openCreate}>Nauja sąvoka</button>
 	</header>
 
 	{#if loadError}
@@ -537,13 +537,13 @@
 	{:else if loading}
 		<p class="muted">Įkeliama...</p>
 	{:else if !concepts.length}
-		<p class="muted">Dar nėra sukurtų temų.</p>
+		<p class="muted">Dar nėra sukurtų sąvokų.</p>
 	{:else}
 		<div class="table-wrapper">
 			<table class="concept-table">
 				<thead>
 					<tr>
-						<th scope="col">Terminas</th>
+						<th scope="col">Sąvoka</th>
 						<th scope="col">Skyrius</th>
 						<th scope="col">Slug</th>
 						<th scope="col">Būsena</th>
@@ -585,7 +585,7 @@
 										target="_blank"
 										rel="noreferrer"
 									>
-										Atverti temą
+										Atverti sąvoką
 									</a>
 								</div>
 							</td>
@@ -602,7 +602,7 @@
 		class="drawer-backdrop"
 		role="button"
 		tabindex="0"
-		aria-label="Uždaryti temų redagavimo formą"
+		aria-label="Uždaryti sąvokų redagavimo formą"
 		on:click={closeEditor}
 		on:keydown={handleBackdropKeydown}
 	></div>
@@ -612,7 +612,7 @@
 	<form class="drawer__form" on:submit|preventDefault={handleSubmit}>
 		<header class="drawer__header">
 			<div>
-				<h2>{editorMode === 'edit' ? 'Redaguoti temą' : 'Nauja tema'}</h2>
+				<h2>{editorMode === 'edit' ? 'Redaguoti sąvoką' : 'Nauja sąvoka'}</h2>
 				{#if activeConcept}
 					<p class="muted">Redaguojama: <code>{activeConcept.slug}</code></p>
 				{/if}
@@ -634,7 +634,7 @@
 			</label>
 
 			<label>
-				<span>Terminas (LT) *</span>
+				<span>Sąvoka (LT) *</span>
 				<input bind:value={formState.termLt} name="termLt" required on:input={markDirty} />
 				{#if getFirstError('termLt')}
 					<p class="field-error">{getFirstError('termLt')}</p>
@@ -642,7 +642,7 @@
 			</label>
 
 			<label>
-				<span>Terminas (EN)</span>
+				<span>Sąvoka (EN)</span>
 				<input bind:value={formState.termEn} name="termEn" on:input={markDirty} />
 				{#if getFirstError('termEn')}
 					<p class="field-error">{getFirstError('termEn')}</p>
@@ -737,7 +737,7 @@
 
 			<label class="checkbox">
 				<input type="checkbox" bind:checked={formState.isRequired} on:change={markDirty} />
-				<span>Privaloma tema</span>
+				<span>Privaloma sąvoka</span>
 			</label>
 
 			<div class="status-toggle" role="radiogroup" aria-label="Temos būsena">

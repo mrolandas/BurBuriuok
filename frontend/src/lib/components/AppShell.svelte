@@ -86,7 +86,7 @@
 		if (typeof window === 'undefined') {
 			return;
 		}
-		window.localStorage.setItem('burburiuok-theme', theme);
+		window.localStorage.setItem('burkursas-theme', theme);
 	};
 
 	const setTheme = (theme: ThemeId) => {
@@ -119,7 +119,7 @@
 		} else if (!adminMode.value && impersonating) {
 			adminMode.enable();
 		}
-		const stored = window.localStorage.getItem('burburiuok-theme');
+		const stored = window.localStorage.getItem('burkursas-theme');
 		const initial: ThemeId = isKnownTheme(stored) ? stored : themeOptions[0].id;
 		activeTheme = initial;
 		syncThemeToDocument(initial);
@@ -258,8 +258,8 @@
 <div class="app-shell">
 	<header class="app-shell__header">
 		<div class="app-shell__brand">
-			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurBuriuok pradžia">
-				<span class="app-shell__brand-mark">BurBuriuok</span>
+			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurKursas pradžia">
+				<span class="app-shell__brand-mark">BurKursas</span>
 				<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
 			</a>
 		</div>

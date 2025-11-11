@@ -1,6 +1,6 @@
 # Supabase Reference
 
-This document captures how BurBuriuok uses Supabase during early development (starting with V1), how to access the live project, and what changes are planned as we expand admin tooling, moderation, and learner engagement.
+This document captures how BurKursas uses Supabase during early development (starting with V1), how to access the live project, and what changes are planned as we expand admin tooling, moderation, and learner engagement.
 
 ## Current Environment
 
@@ -9,7 +9,7 @@ This document captures how BurBuriuok uses Supabase during early development (st
 - **Anon Key** – `SUPABASE_ANON_KEY` (client-side requests once auth is enabled).
 - **Service Role Key** – `SUPABASE_SERVICE_ROLE_KEY` (server-side only; keep out of client bundles). Stored locally in `.env` for now.
 - **Local fallback** – prior local-stack variables remain commented in `.env` in case we need to bring back the on-device Supabase instance for offline work.
-- **Runtime config** – GitHub Actions writes `frontend/static/env.js` with the production URL + anon key during deploy; the browser reads these values from `window.__BURBURIUOK_CONFIG__` so the static bundle stays credentials-free.
+- **Runtime config** – GitHub Actions writes `frontend/static/env.js` with the production URL + anon key during deploy; the browser reads these values from `window.__BURKURSAS_CONFIG__` so the static bundle stays credentials-free.
 - **Dashboard access** – global admin logs into https://app.supabase.com → project `burburiuok` → Database/Storage/Auth tabs. Only the owner account currently has admin rights; invite additional maintainers directly from the Supabase UI.
 - **Impersonation toggle** – the learner shell uses the `impersonate=admin` query string to unlock inline editing. Local development requires `VITE_ENABLE_ADMIN_IMPERSONATION`/`ADMIN_DEV_IMPERSONATION` flags so Supabase RLS continues to guard real production sessions.
 

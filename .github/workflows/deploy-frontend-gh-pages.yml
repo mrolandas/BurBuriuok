@@ -112,7 +112,7 @@ jobs:
             config.adminApiBase = adminBaseFromEnv;
           }
 
-          const content = `window.__BURBURIUOK_CONFIG__ = Object.assign(window.__BURBURIUOK_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
+          const content = `window.__BURKURSAS_CONFIG__ = Object.assign(window.__BURKURSAS_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
           fs.writeFileSync('build/env.js', content);
           NODE
 

@@ -1,5 +1,12 @@
 import type { CurriculumItem, CurriculumNode } from '$lib/api/curriculum';
 
+export type TreeNodeConceptConflict = {
+	slug: string;
+	term: string;
+	nodeCode: string | null;
+	itemLabel: string | null;
+};
+
 export type TreeNodeCreateChildState = {
 	open: boolean;
 	code: string;
@@ -17,6 +24,7 @@ export type TreeNodeCreateItemState = {
 	sourceRef: string;
 	isRequired: boolean;
 	error: string | null;
+	conflict: TreeNodeConceptConflict | null;
 	busy: boolean;
 };
 

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-const STORAGE_KEY = 'burburiuok-admin-mode';
+const STORAGE_KEY = 'burkursas-admin-mode';
 
 function createAdminModeStore() {
 	let initialized = false;

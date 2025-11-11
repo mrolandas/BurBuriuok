@@ -5,13 +5,13 @@ type RuntimeConfig = {
 };
 
 const globalWithRuntimeConfig = globalThis as typeof globalThis & {
-	__BURBURIUOK_CONFIG__?: unknown;
+	__BURKURSAS_CONFIG__?: unknown;
 };
 
 const runtimeConfig: RuntimeConfig =
-	typeof globalWithRuntimeConfig.__BURBURIUOK_CONFIG__ === 'object' &&
-	globalWithRuntimeConfig.__BURBURIUOK_CONFIG__ !== null
-		? (globalWithRuntimeConfig.__BURBURIUOK_CONFIG__ as RuntimeConfig)
+	typeof globalWithRuntimeConfig.__BURKURSAS_CONFIG__ === 'object' &&
+	globalWithRuntimeConfig.__BURKURSAS_CONFIG__ !== null
+		? (globalWithRuntimeConfig.__BURKURSAS_CONFIG__ as RuntimeConfig)
 		: {};
 
 const supabaseUrl = runtimeConfig.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL ?? '';
@@ -19,7 +19,7 @@ const supabaseAnonKey = runtimeConfig.supabaseAnonKey ?? import.meta.env.VITE_SU
 const adminApiBase = runtimeConfig.adminApiBase ?? import.meta.env.VITE_ADMIN_API_BASE ?? '';
 
 export const appConfig = {
-	appName: 'BurBuriuok',
+	appName: 'BurKursas',
 	supabase: {
 		url: supabaseUrl,
 		anonKey: supabaseAnonKey
@@ -43,11 +43,11 @@ export function validateSupabaseConfig(): void {
 
 declare global {
 	interface Global {
-		__BURBURIUOK_CONFIG__?: RuntimeConfig;
+		__BURKURSAS_CONFIG__?: RuntimeConfig;
 	}
 
 	interface Window {
-		__BURBURIUOK_CONFIG__?: RuntimeConfig;
+		__BURKURSAS_CONFIG__?: RuntimeConfig;
 	}
 }
 

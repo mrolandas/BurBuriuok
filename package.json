@@ -1,7 +1,7 @@
 {
   "name": "buriavimas",
   "version": "1.0.0",
-  "description": "BurBuriuok is a Lithuanian-first learning companion that helps prepare for the Lithuanian Sailing Association skipper curriculum. User-facing copy will stay in Lithuanian, while source code, internal documentation, and developer discussions remain in English for clarity.",
+  "description": "BurKursas is a Lithuanian-first learning companion that helps prepare for the Lithuanian Sailing Association skipper curriculum. User-facing copy will stay in Lithuanian, while source code, internal documentation, and developer discussions remain in English for clarity.",
   "type": "module",
   "directories": {
     "doc": "docs",

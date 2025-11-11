@@ -9,8 +9,8 @@ import {
 import type { InlineConceptForm } from '$lib/admin/conceptInlineEdit';
 
 const baseForm: InlineConceptForm = {
-	termLt: 'Terminas LT',
-	termEn: 'Terminas EN',
+	termLt: 'Sąvoka LT',
+	termEn: 'Sąvoka EN',
 	descriptionLt: 'Aprašymas LT',
 	descriptionEn: 'Aprašymas EN',
 	sourceRef: 'Šaltinis-1',

@@ -33,7 +33,7 @@ export async function fetchConceptBySlug(slug: string): Promise<ConceptDetail | 
 		.maybeSingle();
 
 	if (error) {
-		console.error('Nepavyko įkelti koncepcijos duomenų', error);
+		console.error('Nepavyko įkelti sąvokos duomenų', error);
 		throw new Error('Nepavyko įkelti temos duomenų.');
 	}
 
