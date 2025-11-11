@@ -86,6 +86,7 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - 2025-11-09 (late): Enabled “Pridėti terminą” end-to-end — admin UI form, backend item/concept CRUD, audit logging, and documentation refresh queued for related guides.
 - 2025-11-10: Delivered the dedicated concept edit modal (shared inline helpers, status badge parity, post-save tree refresh) plus admin toolbar refinements (concept-level Playwright smoke script, curriculum action buttons restyled/aligned, delete positioned rightmost) and queued docs/notes.
 - 2025-11-10: Delivered the dedicated concept edit modal (shared inline helpers, status badge parity, post-save tree refresh) plus admin toolbar refinements (concept-level Playwright smoke script, curriculum action buttons restyled/aligned, delete positioned rightmost) and queued docs/notes. Identified a follow-up bug: subsection delete flow is failing; defer fix to next session.
+- 2025-11-11: Investigated GitHub Pages admin failures (405/404 HTML responses). Added runtime-configurable admin API base, deployment secrets wiring, and GitHub Pages warning so hosted builds target the Express backend.
 
 ## Wrap-up Checklist
 

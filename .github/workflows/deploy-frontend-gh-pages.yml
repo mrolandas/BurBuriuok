@@ -81,6 +81,7 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ENABLE_ADMIN_IMPERSONATION: enabled
+          VITE_ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
         run: npm run build
 
       - name: Prepare static assets
@@ -88,18 +89,28 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
             echo "Supabase environment variables are missing"
             exit 1
           fi
 
-          cat <<EOF > build/env.js
-          window.__BURBURIUOK_CONFIG__ = Object.assign(window.__BURBURIUOK_CONFIG__ ?? {}, {
-            supabaseUrl: "${SUPABASE_URL}",
-            supabaseAnonKey: "${SUPABASE_ANON_KEY}"
-          });
-          EOF
+          node <<'NODE'
+          const fs = require('fs');
+
+          const config = {
+            supabaseUrl: process.env.SUPABASE_URL,
+            supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+          };
+
+          if (process.env.ADMIN_API_BASE && process.env.ADMIN_API_BASE.trim().length) {
+            config.adminApiBase = process.env.ADMIN_API_BASE.trim();
+          }
+
+          const content = `window.__BURBURIUOK_CONFIG__ = Object.assign(window.__BURBURIUOK_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
+          fs.writeFileSync('build/env.js', content);
+          NODE
 
           cp build/index.html build/404.html
 

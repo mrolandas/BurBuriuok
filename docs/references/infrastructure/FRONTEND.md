@@ -17,6 +17,7 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 - Local development: keep Supabase credentials in the repo root `.env`. The Vite config (`frontend/vite.config.ts`) reads those values and exposes them to the SvelteKit dev server automatically, so no extra `frontend/.env` maintenance is required.
 - Admin console requests default to `/api/admin`. Override this with `VITE_ADMIN_API_BASE` when the Express backend runs on another host or port.
 - Admin impersonation: export `VITE_ENABLE_ADMIN_IMPERSONATION=true` (and `ADMIN_DEV_IMPERSONATION=true` at the repo root) during local development to surface the AppShell admin toggle. The control updates the `impersonate=admin` query parameter automatically when it changes so inline editing stays active while navigating.
+- GitHub Pages: set the `VITE_ADMIN_API_BASE` Actions secret (and matching runtime value) to the hosted Express API (`https://<backend-host>/api/v1/admin`). The deployment workflow writes the base into `env.js`, so admin requests on GitHub Pages reach the correct origin instead of the static site.
 - Production builds: GitHub Actions writes `frontend/static/env.js` with `supabaseUrl` and `supabaseAnonKey`. `src/lib/config/appConfig.ts` consumes `window.__BURBURIUOK_CONFIG__` at runtime, falling back to `import.meta.env.VITE_*` values when present.
 - Browser hydration uses a small inline script in `src/app.html` to apply the cached theme before SvelteKit boots, avoiding a flash of incorrect theming.
 

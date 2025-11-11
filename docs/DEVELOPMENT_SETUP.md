@@ -43,7 +43,7 @@ This document keeps the development environment expectations in one place. Updat
    - `npm run backend:start` – run the backend once without watch mode for smoke testing.
    - `npm run frontend:dev` – launch the SvelteKit learner experience shell (Vite dev server). Supabase URL/anon key are loaded from the repo root `.env`, keeping local preview identical to production credentials.
    - When testing admin layouts without Supabase auth, set `VITE_ENABLE_ADMIN_IMPERSONATION=true` in `frontend/.env.local` (or shell) and `ADMIN_DEV_IMPERSONATION=true` in the repo root `.env`, then append `?impersonate=admin` to `/admin` routes. Remove or disable both flags before committing or deploying so the bypass never ships upstream. With the flags enabled, the AppShell menu shows the persistent "Aktyvuoti Admin" toggle that flips the global `adminMode` store and syncs the impersonation query parameter on navigation.
-   - Override the admin API base when the Express server is hosted externally by exporting `VITE_ADMIN_API_BASE` (defaults to `/api/admin`).
+   - Override the admin API base when the Express server is hosted externally by exporting `VITE_ADMIN_API_BASE` (defaults to `/api/admin`). GitHub Pages deployments **must** set this so admin actions call the hosted backend instead of the static site origin.
 
 > Backend scripts require `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (or anon key for read-only) in `.env` so the shared `data/` repositories can connect.
 

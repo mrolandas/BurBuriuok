@@ -58,7 +58,7 @@ Mounted under `/api/v1/admin/concepts`:
 ## Environment Flags
 
 - Backend requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. These values already live in the repo root `.env` for local development.
-- The frontend admin console calls the backend through `/api/admin` by default. Override the base path with `VITE_ADMIN_API_BASE` when the Express API runs on a different host/port.
+- The frontend admin console calls the backend through `/api/admin` by default. Override the base path with `VITE_ADMIN_API_BASE` when the Express API runs on a different host/port (required for GitHub Pages, where the static site would otherwise POST to the pages origin and receive 404/405 HTML responses).
 - Set `VITE_ENABLE_ADMIN_IMPERSONATION=true` only during local development to unlock the `?impersonate=admin` preview mode.
 
 ## Local Development Workflow

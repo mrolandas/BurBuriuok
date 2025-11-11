@@ -1,3 +1,4 @@
+import { appConfig } from '$lib/config/appConfig';
 import { getSupabaseClient } from '$lib/supabase/client';
 
 const impersonationEnv = import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION;
@@ -6,8 +7,23 @@ const impersonationEnabled =
 	impersonationEnv === '1' ||
 	impersonationEnv === 'enabled';
 
-const rawBase = import.meta.env.VITE_ADMIN_API_BASE ?? '/api/v1/admin';
-const ADMIN_API_BASE = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+function resolveAdminApiBase(): string {
+	const configuredBase = (appConfig.admin?.apiBase ?? '').trim();
+	const envBase = (import.meta.env.VITE_ADMIN_API_BASE ?? '').trim();
+	const rawBase = configuredBase.length ? configuredBase : envBase.length ? envBase : '/api/v1/admin';
+	return rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+}
+
+const ADMIN_API_BASE = resolveAdminApiBase();
+
+if (typeof window !== 'undefined') {
+	const host = window.location.hostname.toLowerCase();
+	if (host.endsWith('github.io') && ADMIN_API_BASE.startsWith('/')) {
+		console.warn(
+			'[AdminAPI] Relative admin API base detected on GitHub Pages. Configure VITE_ADMIN_API_BASE or set adminApiBase in env.js so requests reach the hosted backend.'
+		);
+	}
+}
 
 export class AdminApiError extends Error {
 	status: number;
