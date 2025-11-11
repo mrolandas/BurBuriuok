@@ -103,15 +103,35 @@ export async function adminFetch<TResponse>(
 	if (!response.ok) {
 		let errorMessage = response.statusText || 'Serverio klaida.';
 		let responseBody: unknown;
+		const contentType = response.headers.get('content-type') ?? '';
 
-		try {
-			responseBody = await response.json();
-			const bodyWithMessage = responseBody as { error?: { message?: string } };
-			if (bodyWithMessage?.error?.message) {
-				errorMessage = bodyWithMessage.error.message;
+		if (contentType.includes('application/json')) {
+			try {
+				responseBody = await response.json();
+				const bodyWithMessage = responseBody as { error?: { message?: string } };
+				if (bodyWithMessage?.error?.message) {
+					errorMessage = bodyWithMessage.error.message;
+				}
+			} catch (parseError) {
+				console.warn('Nepavyko perskaityti klaidos žinutės iš administratoriaus API.', parseError);
 			}
-		} catch (parseError) {
-			console.warn('Nepavyko perskaityti klaidos žinutės iš administratoriaus API.', parseError);
+		} else {
+			try {
+				const textBody = (await response.text()).slice(0, 400);
+				if (textBody.length) {
+					responseBody = textBody;
+				}
+			} catch (parseError) {
+				console.warn('Nepavyko perskaityti klaidos žinutės iš administratoriaus API.', parseError);
+			}
+		}
+
+		if (typeof window !== 'undefined') {
+			const host = window.location.hostname.toLowerCase();
+			if (host.endsWith('github.io') && ADMIN_API_BASE.startsWith('/')) {
+				errorMessage =
+					'GitHub Pages administratoriaus API bazė neteisingai sukonfigūruota. Nustatykite VITE_ADMIN_API_BASE arba adminApiBase env.js faile, kad užklausos pasiektų Express serverį.';
+			}
 		}
 
 		throw new AdminApiError(errorMessage, response.status, responseBody);

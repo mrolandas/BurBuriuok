@@ -623,12 +623,78 @@ export async function updateCurriculumNodeAdmin(
   return updated;
 }
 
+async function collectSubtreeNodeCodes(rootCode: string): Promise<string[]> {
+  const visited = new Set<string>();
+  const queue: string[] = [rootCode];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || visited.has(current)) {
+      continue;
+    }
+
+    visited.add(current);
+
+    const children = await listCurriculumNodesByParent(current);
+    for (const child of children) {
+      queue.push(child.code);
+    }
+  }
+
+  return Array.from(visited);
+}
+
+type ConceptSlugRow = {
+  slug?: string | null;
+};
+
+async function listConceptSlugsForNodes(
+  client: SupabaseClient,
+  nodeCodes: string[]
+): Promise<string[]> {
+  if (!nodeCodes.length) {
+    return [];
+  }
+
+  const { data, error } = await (client as any)
+    .from(CONCEPTS_TABLE)
+    .select("slug")
+    .in("curriculum_node_code", nodeCodes);
+
+  if (error) {
+    throw new Error(
+      `Failed to fetch concepts for curriculum nodes '${nodeCodes.join(", ")}' to support deletion: ${error.message}`
+    );
+  }
+
+  const rows = (data as ConceptSlugRow[] | null) ?? [];
+  const slugs = rows
+    .map((row) => (typeof row.slug === "string" ? row.slug.trim() : ""))
+    .filter((slug) => slug.length);
+
+  return Array.from(new Set(slugs));
+}
+
 export async function deleteCurriculumNodeAdmin(code: string): Promise<CurriculumNode> {
   const serviceClient = getServiceClient();
   const existing = await getCurriculumNodeByCode(code);
 
   if (!existing) {
     throw new Error(`Curriculum node '${code}' was not found.`);
+  }
+
+  const subtreeNodeCodes = await collectSubtreeNodeCodes(code);
+  const conceptSlugs = await listConceptSlugsForNodes(serviceClient, subtreeNodeCodes);
+
+  for (const slug of conceptSlugs) {
+    try {
+      await deleteCurriculumItemAdminBySlug(slug);
+    } catch (error) {
+      if ((error as { code?: string }).code === "CONCEPT_NOT_FOUND") {
+        continue;
+      }
+      throw error;
+    }
   }
 
   const { error } = await (serviceClient as any)

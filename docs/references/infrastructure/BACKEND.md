@@ -69,3 +69,10 @@ Mounted under `/api/v1/admin/concepts`:
 4. Save a concept and verify the audit log: check Supabase `content_versions` or run a quick SQL query to confirm `status`, `diff`, and `changes` entries were generated.
 
 > When adding new admin resources, create a matching shared schema (if needed), mount the router under `backend/src/routes/admin/`, update `docs/references/API_CONTRACTS.md`, and document the workflow here.
+
+## Render Deployment
+
+- Service URL: `https://burburiuok.onrender.com` (admin API surface lives under `/api/v1/*`).
+- Render injects a `PORT` environment variable; do not override it. The service start command is `npm run backend:start` and relies on `tsx` to launch `backend/src/server.ts`.
+- Required environment variables: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, and `BACKEND_ALLOWED_ORIGINS` (include both `https://mrolandas.github.io` and `https://mrolandas.github.io/BurBuriuok`).
+- GitHub Pages consumers must set `VITE_ADMIN_API_BASE` (Actions secret) or provide the value via `env.js` so hosted admin requests target the Render endpoint instead of the Pages origin. The static `env.js` now assigns the Render URL automatically when the app runs on `github.io`.

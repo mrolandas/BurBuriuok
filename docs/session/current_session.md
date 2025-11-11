@@ -16,21 +16,36 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - Establish the content versioning workflow, media submission pipeline, and moderation queue skeleton backed by documented seams.
 - Keep automation, documentation, and validation aligned so deferred phases can plug in without rework.
 
+### Alignment Snapshot
+
+- **Curriculum CRUD + hierarchy:** Frontend drag/drop, concept modal parity, and hosted admin access are live; backend safeguards and item CRUD parity remain.
+- **Versioning workflow:** Audit logging tables and admin status badges exist; draft/review routing and rollback tooling still pending.
+- **Media intake & moderation:** Storage seams and enums defined; intake UI, queue scaffolding, and dispatcher hooks untouched.
+
 ## Deliverable Slices
 
 - [ ] **Curriculum CRUD + hierarchy controls** – extend inline concept editing with tree management, shared validation, and backend reparenting rules.
+  - ✅ Drag/drop tree admin UX, confirmation banner, concept edit modal parity, and hosted admin runtime config.
+  - ⏳ Backend safeguards for reparent/delete, item-level CRUD parity, and documentation pass.
 - [ ] **Content versioning workflow** – implement draft/review/publish flow with audit logging, rollback notes, and documentation updates.
+  - ✅ Audit logging tables, admin status badges, and consistent save guards.
+  - ⏳ Review queue UX, rollback notes, and Supabase policy hardening.
 - [ ] **Media intake pipeline** – expose upload/metadata flow, define storage strategy, and queue submissions for review.
+  - ✅ Storage seams, metadata schema, and documentation skeletons.
+  - ⏳ Intake UI, upload handling, and moderation transitions.
 - [ ] **Moderation queue & notification stubs** – build approve/reject UI with SLA signalling, dispatcher-backed Slack/email hooks, and tightened RLS/persona guards.
+  - ✅ Dispatcher seam documented; status enums preserved.
+  - ⏳ Queue surface, notification stubs, and RLS refinement.
 
 ## Recent Progress
 
 - Inline concept editor hardened: persistent AppShell admin toggle, mobile-friendly controls, and clear validation surfaces on failed saves.
 - Supabase admin save guardrails in place (auth error handling, defensive audit logging, predictable error payloads) with rotated anon/service keys and restored schema grants.
-- Admin GitHub Pages build now runs with impersonation enabled, obsolete links removed, and deployment workflow verified via Supabase smoke checks.
-- Curriculum tree admin experience upgraded with drag-and-drop reorder, floating confirmation banner, cancel/apply workflow, automatic expansion for delete/edit forms, and consistent pending highlight reset after confirmation.
+- Admin GitHub Pages build now runs with impersonation enabled, obsolete links removed, deployment workflow verified via Supabase smoke checks, and runtime-configurable admin API base wired for hosted builds.
 - Curriculum tree admin experience upgraded with drag-and-drop reorder, floating confirmation banner, cancel/apply workflow, automatic expansion for delete/edit forms, and consistent pending highlight reset after confirmation.
 - “Pridėti terminą” workflow now publishes curriculum items plus draft concepts (LT/EN copy, source reference, required flag) through the admin API and refreshes branches after save.
+- GitHub Pages deployment now ships the project favicon, removes Svelte defaults, and documents runtime config requirements for hosted admins.
+- Render-hosted Express backend live at `https://burburiuok.onrender.com`; GitHub Pages admin console now defaults to that base when running on `github.io`.
 
 ## Seam Preservation Checklist (must complete inside trimmed scope)
 
@@ -47,6 +62,8 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - Validate the new “Pridėti terminą” flow (seed updates, edge cases) and earmark follow-up tasks for editing/reordering curriculum items.
 - Continue audit logging review for draft → publish flow and align dispatcher hook backlog with moderation queue milestones.
 - Prep media intake spike notes (`references/SCHEMA_DECISIONS.md`, `references/infrastructure/SUPABASE.md`) ahead of asset pipeline work.
+- Create GitHub issues for backend hierarchy safeguards and hosted-runtime docs to keep Phase 1 backlog traceable.
+- Verify GitHub Pages deploy with Render admin base (post-secret update) and note any cached API responses in the Session Log.
 
 ## Documentation & Maintenance Rules
 
@@ -86,7 +103,8 @@ Shared orientation, scope, and guard rails for the trimmed Build Sprint 1 launch
 - 2025-11-09 (late): Enabled “Pridėti terminą” end-to-end — admin UI form, backend item/concept CRUD, audit logging, and documentation refresh queued for related guides.
 - 2025-11-10: Delivered the dedicated concept edit modal (shared inline helpers, status badge parity, post-save tree refresh) plus admin toolbar refinements (concept-level Playwright smoke script, curriculum action buttons restyled/aligned, delete positioned rightmost) and queued docs/notes.
 - 2025-11-10: Delivered the dedicated concept edit modal (shared inline helpers, status badge parity, post-save tree refresh) plus admin toolbar refinements (concept-level Playwright smoke script, curriculum action buttons restyled/aligned, delete positioned rightmost) and queued docs/notes. Identified a follow-up bug: subsection delete flow is failing; defer fix to next session.
-- 2025-11-11: Investigated GitHub Pages admin failures (405/404 HTML responses). Added runtime-configurable admin API base, deployment secrets wiring, and GitHub Pages warning so hosted builds target the Express backend.
+- 2025-11-11: Investigated GitHub Pages admin failures (405/404 HTML responses). Added runtime-configurable admin API base, deployment secrets wiring, GitHub Pages warning so hosted builds target the Express backend, and swapped Svelte favicon references for the project icon.
+- 2025-11-11: Deployed the Express backend to Render (`https://burburiuok.onrender.com`), updated static `env.js` to default GitHub Pages builds to the Render admin base, and documented the new hosting setup.
 
 ## Wrap-up Checklist
 

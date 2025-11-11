@@ -99,13 +99,17 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
 
+          const defaultAdminApiBase = 'https://burburiuok.onrender.com/api/v1/admin';
+
           const config = {
             supabaseUrl: process.env.SUPABASE_URL,
-            supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+            supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
+            adminApiBase: defaultAdminApiBase
           };
 
-          if (process.env.ADMIN_API_BASE && process.env.ADMIN_API_BASE.trim().length) {
-            config.adminApiBase = process.env.ADMIN_API_BASE.trim();
+          const adminBaseFromEnv = process.env.ADMIN_API_BASE?.trim();
+          if (adminBaseFromEnv) {
+            config.adminApiBase = adminBaseFromEnv;
           }
 
           const content = `window.__BURBURIUOK_CONFIG__ = Object.assign(window.__BURBURIUOK_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
