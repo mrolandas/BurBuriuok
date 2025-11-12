@@ -69,6 +69,15 @@ export const adminConceptMutationSchema = z
       .regex(slugPattern, {
         message: "Slug gali sudaryti tik mažosios raidės, skaičiai ir brūkšneliai.",
       }),
+    originalSlug: z
+      .string()
+      .trim()
+      .min(2, { message: "Pradinis slug turi būti bent 2 simbolių." })
+      .max(90, { message: "Pradinis slug negali viršyti 90 simbolių." })
+      .regex(slugPattern, {
+        message: "Pradinis slug gali sudaryti tik mažosios raidės, skaičiai ir brūkšneliai.",
+      })
+      .optional(),
     termLt: requiredText(1, 160),
     termEn: optionalText(160),
     descriptionLt: requiredText(1, 4000),

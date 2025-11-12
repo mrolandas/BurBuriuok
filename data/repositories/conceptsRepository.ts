@@ -83,6 +83,26 @@ export async function getConceptBySlug(
   return data ? mapConceptRow(data) : null;
 }
 
+export async function findConceptBySectionAndTerm(
+  sectionCode: string,
+  termLt: string,
+  client: SupabaseClient | null = null
+): Promise<Concept | null> {
+  const supabase = client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
+  const { data, error } = await (supabase as any)
+    .from(PRIVATE_TABLE)
+    .select("*")
+    .eq("section_code", sectionCode)
+    .eq("term_lt", termLt)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Failed to verify concept uniqueness: ${error.message}`);
+  }
+
+  return data ? mapConceptRow(data) : null;
+}
+
 export async function upsertConcepts(
   concepts: UpsertConceptInput[],
   client: SupabaseClient | null = null

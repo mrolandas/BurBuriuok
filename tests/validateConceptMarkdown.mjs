@@ -46,23 +46,23 @@ function validateConceptTable(buffer, context) {
     return { errors: [], tables: 0, rows: 0 };
   }
 
-    const headerLabels = headerCells.map(normaliseHeader);
+  const headerLabels = headerCells.map(normaliseHeader);
 
-    const headerAliases = {
-      termLt: ["term lt", "sąvoka lt", "savoka lt"],
-      termEn: ["term en", "sąvoka en", "savoka en"],
-      definition: ["apibrėžimas", "aprasymas", "aprašymas"],
-    };
+  const headerAliases = {
+    termLt: ["term lt", "sąvoka lt", "savoka lt"],
+    termEn: ["term en", "sąvoka en", "savoka en"],
+    definition: ["apibrėžimas", "aprasymas", "aprašymas"],
+  };
 
-    const findHeaderIndex = (aliases) =>
-      headerLabels.findIndex((label) => aliases.includes(label));
+  const findHeaderIndex = (aliases) =>
+    headerLabels.findIndex((label) => aliases.includes(label));
 
-    const termLtIndex = findHeaderIndex(headerAliases.termLt);
-    const termEnIndex = findHeaderIndex(headerAliases.termEn);
-    const definitionIndex = findHeaderIndex(headerAliases.definition);
+  const termLtIndex = findHeaderIndex(headerAliases.termLt);
+  const termEnIndex = findHeaderIndex(headerAliases.termEn);
+  const definitionIndex = findHeaderIndex(headerAliases.definition);
 
-    const isConceptTable =
-      termLtIndex !== -1 && termEnIndex !== -1 && definitionIndex !== -1;
+  const isConceptTable =
+    termLtIndex !== -1 && termEnIndex !== -1 && definitionIndex !== -1;
 
   if (!isConceptTable) {
     return { errors: [], tables: 0, rows: 0 };
@@ -70,21 +70,21 @@ function validateConceptTable(buffer, context) {
 
   const errors = [];
   const tableStartLine = buffer[0].lineNumber;
-    const requiredColumns = [
-      { index: termLtIndex, label: "Sąvoka LT" },
-      { index: termEnIndex, label: "Sąvoka EN" },
-      { index: definitionIndex, label: "Apibrėžimas" },
-    ];
+  const requiredColumns = [
+    { index: termLtIndex, label: "Sąvoka LT" },
+    { index: termEnIndex, label: "Sąvoka EN" },
+    { index: definitionIndex, label: "Apibrėžimas" },
+  ];
 
-    requiredColumns.forEach(({ index, label }) => {
-      if (index === -1) {
-        errors.push(
-          `Line ${tableStartLine}: Missing required column '${label}' in table (${
-            context.section ?? context.topic ?? "unknown section"
-          }).`
-        );
-      }
-    });
+  requiredColumns.forEach(({ index, label }) => {
+    if (index === -1) {
+      errors.push(
+        `Line ${tableStartLine}: Missing required column '${label}' in table (${
+          context.section ?? context.topic ?? "unknown section"
+        }).`
+      );
+    }
+  });
 
   const seenTerms = new Set();
   let dataRows = 0;

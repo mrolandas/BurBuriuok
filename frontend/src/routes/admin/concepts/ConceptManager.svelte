@@ -12,6 +12,7 @@
 		type AdminConceptVersion,
 		adminConceptFormSchema
 	} from '$lib/api/admin/concepts';
+	import SectionSelect from '$lib/admin/SectionSelect.svelte';
 	import type { AdminConceptMutationInput } from '../../../../../shared/validation/adminConceptSchema';
 
 	type ConceptFormState = {
@@ -72,6 +73,7 @@
 	let deleteConfirmSlug: string | null = null;
 	let deletingSlug: string | null = null;
 	let deleteError: string | null = null;
+	const sectionLabelId = 'concept-section-select';
 
 	onMount(() => {
 		void refreshConcepts();
@@ -272,6 +274,13 @@
 
 	function handleSlugInput(): void {
 		slugManuallyEdited = true;
+		markDirty();
+	}
+
+	function handleSectionChange(option: SectionOption): void {
+		const title = option.title && option.title.trim().length ? option.title : option.code;
+		formState = { ...formState, sectionCode: option.code, sectionTitle: title };
+		formErrors = { ...formErrors, sectionCode: [], sectionTitle: [] };
 		markDirty();
 	}
 
@@ -852,18 +861,19 @@
 					{/if}
 				</label>
 
-				<label>
-					<span>Skyriaus kodas *</span>
-					<input bind:value={formState.sectionCode} name="sectionCode" required on:input={markDirty} />
+				<label class="form-grid__full">
+					<span id={sectionLabelId}>Skyrius *</span>
+					<SectionSelect
+						labelledBy={sectionLabelId}
+						options={sectionOptions}
+						valueCode={formState.sectionCode}
+						valueTitle={formState.sectionTitle}
+						disabled={!sectionOptions.length}
+						on:change={(event) => handleSectionChange(event.detail)}
+					/>
 					{#if getFirstError('sectionCode')}
 						<p class="field-error">{getFirstError('sectionCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Skyriaus pavadinimas *</span>
-					<input bind:value={formState.sectionTitle} name="sectionTitle" required on:input={markDirty} />
-					{#if getFirstError('sectionTitle')}
+					{:else if getFirstError('sectionTitle')}
 						<p class="field-error">{getFirstError('sectionTitle')}</p>
 					{/if}
 				</label>

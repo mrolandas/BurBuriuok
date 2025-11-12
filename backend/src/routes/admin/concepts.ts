@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   listConcepts,
   getConceptBySlug,
+  findConceptBySectionAndTerm,
   upsertConcepts,
 } from "../../../../data/repositories/conceptsRepository.ts";
 import { deleteCurriculumItemAdminBySlug } from "../../../../data/repositories/curriculumRepository.ts";
@@ -20,7 +21,7 @@ import {
   adminConceptStatusSchema,
   type AdminConceptMutationInput,
 } from "../../../../shared/validation/adminConceptSchema.ts";
-import { isSupabaseAuthError } from "../../utils/supabaseErrors.ts";
+import { isSupabaseAuthError, isUniqueConstraintError } from "../../utils/supabaseErrors.ts";
 
 const router = Router();
 
@@ -153,6 +154,50 @@ router.post(
 
     const existing = await getConceptBySlug(payload.slug);
 
+    const isEditingExisting = Boolean(existing && payload.originalSlug === existing.slug);
+
+    if (!isEditingExisting && existing) {
+      const conflictConcept = mapConceptForResponse(existing);
+      res.status(409).json({
+        error: {
+          message: `Slug '${payload.slug}' jau naudojamas kitai sąvokai.`,
+          code: "CONCEPT_ALREADY_EXISTS",
+          details: {
+            slug: conflictConcept.slug,
+            termLt: conflictConcept.termLt,
+            nodeCode: conflictConcept.curriculumNodeCode,
+            itemLabel: conflictConcept.curriculumItemLabel,
+          },
+        },
+      });
+      return;
+    }
+
+    const conflictingByTerm = await findConceptBySectionAndTerm(
+      payload.sectionCode,
+      payload.termLt
+    );
+
+    if (
+      conflictingByTerm &&
+      conflictingByTerm.slug !== payload.slug &&
+      conflictingByTerm.slug !== payload.originalSlug
+    ) {
+      res.status(409).json({
+        error: {
+          message: `Šiame skyriuje jau yra sąvoka "${conflictingByTerm.termLt}".`,
+          code: "CONCEPT_ALREADY_EXISTS",
+          details: {
+            slug: conflictingByTerm.slug,
+            termLt: conflictingByTerm.termLt,
+            nodeCode: conflictingByTerm.curriculumNodeCode,
+            itemLabel: conflictingByTerm.curriculumItemLabel,
+          },
+        },
+      });
+      return;
+    }
+
     const upsertPayload = toUpsertConceptInput(payload, existing?.metadata ?? {});
 
     try {
@@ -162,6 +207,30 @@ router.post(
         throw unauthorized(
           "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
         );
+      }
+      if (isUniqueConstraintError(error)) {
+        const conflict = await findConceptBySectionAndTerm(
+          payload.sectionCode,
+          payload.termLt
+        );
+
+        res.status(409).json({
+          error: {
+            message: conflict
+              ? `Šiame skyriuje jau yra sąvoka „${conflict.termLt}“.`
+              : "Šiame skyriuje jau yra tokia sąvoka.",
+            code: "CONCEPT_ALREADY_EXISTS",
+            details: conflict
+              ? {
+                  slug: conflict.slug,
+                  termLt: conflict.termLt,
+                  nodeCode: conflict.curriculumNodeCode,
+                  itemLabel: conflict.curriculumItemLabel,
+                }
+              : undefined,
+          },
+        });
+        return;
       }
       throw error;
     }

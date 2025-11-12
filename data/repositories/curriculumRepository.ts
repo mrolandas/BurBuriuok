@@ -9,8 +9,11 @@ import type {
   CurriculumNode,
   CurriculumNodeRow,
 } from "../types";
-import { getConceptBySlug, upsertConcepts } from "./conceptsRepository";
-import { mapConceptRow } from "./conceptsMapper";
+import {
+  findConceptBySectionAndTerm,
+  getConceptBySlug,
+  upsertConcepts,
+} from "./conceptsRepository";
 
 const NODE_VIEW = "burburiuok_curriculum_nodes";
 const ITEM_VIEW = "burburiuok_curriculum_items";
@@ -115,25 +118,6 @@ function createDuplicateConceptError(concept: Concept): DuplicateConceptError {
   error.code = "CONCEPT_ALREADY_EXISTS";
   error.concept = concept;
   return error;
-}
-
-async function findConceptBySectionAndTerm(
-  client: SupabaseClient,
-  sectionCode: string,
-  termLt: string
-): Promise<Concept | null> {
-  const { data, error } = await (client as any)
-    .from(CONCEPTS_TABLE)
-    .select("*")
-    .eq("section_code", sectionCode)
-    .eq("term_lt", termLt)
-    .maybeSingle();
-
-  if (error && error.code !== "PGRST116") {
-    throw new Error(`Failed to verify concept uniqueness: ${error.message}`);
-  }
-
-  return data ? mapConceptRow(data) : null;
 }
 
 type SectionContext = {
@@ -791,9 +775,9 @@ export async function createCurriculumItemAdmin(
   const sectionContext = await resolveSectionContext(serviceClient, node);
 
   const existingConcept = await findConceptBySectionAndTerm(
-    serviceClient,
     sectionContext.sectionCode,
-    termLt
+    termLt,
+    serviceClient
   );
 
   if (existingConcept) {

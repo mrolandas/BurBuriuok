@@ -72,6 +72,7 @@ export function inlineFormToPayload(
 
 	return {
 		slug: concept.slug,
+		originalSlug: concept.slug,
 		termLt: form.termLt.trim(),
 		termEn: optionalString(form.termEn),
 		descriptionLt: form.descriptionLt.trim(),
