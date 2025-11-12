@@ -72,6 +72,12 @@ type CreateCurriculumItemResponse = {
 	};
 };
 
+type ListCurriculumNodesResponse = {
+	data: {
+		nodes: AdminCurriculumNode[];
+	};
+};
+
 export async function createCurriculumNode(
 	input: CreateCurriculumNodeInput
 ): Promise<AdminCurriculumNode> {
@@ -125,4 +131,18 @@ export async function createCurriculumItem(
 	});
 
 	return response.data.item;
+}
+
+export async function listCurriculumNodes(parentCode: string | null = null): Promise<AdminCurriculumNode[]> {
+	const search = new URLSearchParams();
+
+	if (parentCode) {
+		search.set('parentCode', parentCode);
+	}
+
+	const query = search.toString();
+	const target = query.length ? `/curriculum/nodes?${query}` : '/curriculum/nodes';
+	const response = await adminFetch<ListCurriculumNodesResponse>(target);
+
+	return response.data.nodes ?? [];
 }

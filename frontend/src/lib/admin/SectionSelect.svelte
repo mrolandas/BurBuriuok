@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher, onDestroy, tick } from 'svelte';
 
-	export type SectionOption = {
-		code: string;
-		title: string | null;
+	type SectionOption = {
+		key: string;
+		label: string;
+		sectionCode: string;
+		sectionTitle: string;
+		subsectionCode: string | null;
+		subsectionTitle: string | null;
+		nodeCode: string;
+		disabled?: boolean;
+		depth?: number;
 	};
 
 	type SectionSelectEvent = {
@@ -11,8 +18,8 @@
 	};
 
 	export let options: SectionOption[] = [];
-	export let valueCode = '';
-	export let valueTitle: string | null = '';
+	export let valueKey = '';
+	export let valueLabel: string | null = '';
 	export let labelledBy: string | undefined;
 	export let disabled = false;
 	export let placeholder = 'Pasirinkite skyrių';
@@ -31,13 +38,24 @@
 	const listboxId = `${componentId}-listbox`;
 
 	function optionDisplay(option: SectionOption): string {
-		const title = option.title?.trim();
-		return title && title.length ? `${title} (${option.code})` : option.code;
+		const preferred = option.subsectionTitle?.trim();
+		if (preferred && preferred.length) {
+			return preferred;
+		}
+		return option.sectionTitle;
 	}
 
-	function resolveTitle(option: SectionOption): string {
-		const title = option.title?.trim();
-		return title && title.length ? title : option.code;
+	function optionCode(option: SectionOption): string {
+		return option.subsectionCode ?? option.sectionCode;
+	}
+
+	function sanitizeOptionKey(key: string): string {
+		const cleaned = key.replace(/[^A-Za-z0-9_-]/g, '-');
+		return cleaned.length ? cleaned : 'option';
+	}
+
+	function optionDomId(option: SectionOption): string {
+		return `${componentId}-option-${sanitizeOptionKey(option.key)}`;
 	}
 
 	function matchesQuery(option: SectionOption, term: string): boolean {
@@ -45,19 +63,27 @@
 			return true;
 		}
 
-		const code = option.code.toLowerCase();
-		const title = option.title?.toLowerCase() ?? '';
-		return code.includes(term) || title.includes(term);
+		const haystack = [
+			option.label.toLowerCase(),
+			option.sectionTitle.toLowerCase(),
+			option.subsectionTitle?.toLowerCase() ?? '',
+			option.sectionCode.toLowerCase(),
+			option.subsectionCode?.toLowerCase() ?? ''
+		];
+		return haystack.some((value) => value.includes(term));
 	}
 
 	$: normalizedQuery = query.trim().toLowerCase();
 	$: filteredOptions = options.filter((option) => matchesQuery(option, normalizedQuery));
-	$: selectedOption = options.find((option) => option.code === valueCode) ?? null;
-	$: displayLabel = selectedOption ? resolveTitle(selectedOption) : placeholder;
-	$: displayCode = selectedOption ? selectedOption.code : '';
+	$: selectedOption = options.find((option) => option.key === valueKey) ?? null;
+	$: resolvedFallbackLabel = valueLabel && valueLabel.trim().length ? valueLabel : null;
+	$: displayLabel = selectedOption
+		? optionDisplay(selectedOption)
+		: resolvedFallbackLabel ?? placeholder;
+	$: displayCode = selectedOption ? optionCode(selectedOption) : '';
 	$: highlightedId =
 		highlightedIndex >= 0 && highlightedIndex < filteredOptions.length
-			? `${componentId}-option-${filteredOptions[highlightedIndex].code}`
+			? optionDomId(filteredOptions[highlightedIndex])
 			: undefined;
 
 	let detachPointerListener: (() => void) | null = null;
@@ -116,10 +142,15 @@
 				return -1;
 			}
 			if (!selectedOption) {
-				return 0;
+				return findFirstEnabled(filteredOptions);
 			}
-			const index = filteredOptions.findIndex((option) => option.code === selectedOption.code);
-			return index >= 0 ? index : 0;
+			const index = filteredOptions.findIndex(
+				(option) => !option.disabled && option.key === selectedOption.key
+			);
+			if (index >= 0) {
+				return index;
+			}
+			return findFirstEnabled(filteredOptions);
 		})();
 
 		await tick();
@@ -150,23 +181,65 @@
 		}
 	}
 
+	function findFirstEnabled(options: SectionOption[]): number {
+		return options.findIndex((option) => !option.disabled);
+	}
+
+	function findLastEnabled(options: SectionOption[]): number {
+		for (let index = options.length - 1; index >= 0; index -= 1) {
+			if (!options[index]?.disabled) {
+				return index;
+			}
+		}
+		return -1;
+	}
+
+	function findNextEnabled(current: number, direction: 1 | -1): number {
+		if (!filteredOptions.length) {
+			return -1;
+		}
+
+		let next = current;
+		let attempts = 0;
+		const total = filteredOptions.length;
+
+		while (attempts < total) {
+			next += direction;
+			if (next < 0) {
+				next = total - 1;
+			} else if (next >= total) {
+				next = 0;
+			}
+
+			if (!filteredOptions[next]?.disabled) {
+				return next;
+			}
+
+			attempts += 1;
+		}
+
+		return -1;
+	}
+
 	function moveHighlight(delta: number): void {
 		if (!filteredOptions.length) {
 			highlightedIndex = -1;
 			return;
 		}
 
-		const maxIndex = filteredOptions.length - 1;
-		let next = highlightedIndex + delta;
-
-		if (next < 0) {
-			next = maxIndex;
-		} else if (next > maxIndex) {
-			next = 0;
+		if (highlightedIndex === -1) {
+			highlightedIndex = delta >= 0 ? findFirstEnabled(filteredOptions) : findLastEnabled(filteredOptions);
+			scrollHighlightedIntoView();
+			return;
 		}
 
-		highlightedIndex = next;
-		scrollHighlightedIntoView();
+		const direction: 1 | -1 = delta >= 0 ? 1 : -1;
+		const next = findNextEnabled(highlightedIndex, direction);
+
+		if (next !== -1) {
+			highlightedIndex = next;
+			scrollHighlightedIntoView();
+		}
 	}
 
 	function scrollHighlightedIntoView(): void {
@@ -186,12 +259,23 @@
 			return;
 		}
 
-		const index = highlightedIndex >= 0 ? highlightedIndex : 0;
+		let index = highlightedIndex;
+		if (index === -1 || filteredOptions[index]?.disabled) {
+			index = findFirstEnabled(filteredOptions);
+		}
+
+		if (index === -1) {
+			return;
+		}
+
 		const option = filteredOptions[index];
 		selectOption(option);
 	}
 
 	function selectOption(option: SectionOption): void {
+		if (option.disabled) {
+			return;
+		}
 		dispatch('change', option);
 		closeDropdown();
 	}
@@ -253,9 +337,10 @@
 			highlightedIndex = -1;
 		} else {
 			const preferred = selectedOption
-				? filteredOptions.findIndex((option) => option.code === selectedOption.code)
+				? filteredOptions.findIndex((option) => !option.disabled && option.key === selectedOption.key)
 				: -1;
-			highlightedIndex = preferred >= 0 ? preferred : 0;
+			const fallback = preferred >= 0 ? preferred : findFirstEnabled(filteredOptions);
+			highlightedIndex = fallback;
 			scrollHighlightedIntoView();
 		}
 	}
@@ -265,7 +350,7 @@
 	<button
 		type="button"
 		class="section-select__button"
-		class:section-select__button--placeholder={!selectedOption}
+		class:section-select__button--placeholder={!selectedOption && !resolvedFallbackLabel}
 		disabled={disabled || !options.length}
 		on:click={toggleDropdown}
 		on:keydown={handleButtonKeydown}
@@ -308,21 +393,24 @@
 
 			<ul class="section-select__options" role="listbox" id={listboxId}>
 				{#if filteredOptions.length}
-					{#each filteredOptions as option, index (option.code)}
+					{#each filteredOptions as option, index (option.key)}
 						<li>
 							<button
 								type="button"
 								class="section-option"
-								class:section-option--selected={option.code === valueCode}
+								class:section-option--selected={option.key === valueKey}
 								class:section-option--highlighted={index === highlightedIndex}
+								class:section-option--disabled={option.disabled}
 								on:click={() => selectOption(option)}
 								role="option"
-								aria-selected={option.code === valueCode}
-								id={`${componentId}-option-${option.code}`}
+								aria-selected={option.key === valueKey}
+								aria-disabled={option.disabled}
+								id={optionDomId(option)}
 								data-option-index={index}
+								style={`--option-depth: ${option.depth ?? 0};`}
 							>
-								<span class="section-option__title">{resolveTitle(option)}</span>
-								<span class="section-option__code">{option.code}</span>
+								<span class="section-option__title">{optionDisplay(option)}</span>
+								<span class="section-option__code">{optionCode(option)}</span>
 							</button>
 						</li>
 					{/each}
@@ -449,6 +537,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		padding: 0.5rem 0.6rem;
+		padding-inline-start: calc(0.6rem + (var(--option-depth, 0) * 1.35rem));
 		border-radius: 0.55rem;
 		border: 1px solid transparent;
 		background: transparent;
@@ -471,16 +560,33 @@
 		background: rgba(59, 130, 246, 0.15);
 	}
 
+	.section-option--disabled {
+		cursor: default;
+		background: transparent;
+	}
+
+	.section-option--disabled:hover,
+	.section-option--disabled:focus-visible {
+		background: transparent;
+		border-color: transparent;
+	}
+
 	.section-option__title {
 		font-weight: 500;
+		flex: 1 1 auto;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
+	.section-option--disabled .section-option__title {
+		font-weight: 600;
+	}
+
 	.section-option__code {
 		font-size: 0.8rem;
 		color: var(--color-text-soft);
+		white-space: nowrap;
 	}
 
 	.section-select__empty {

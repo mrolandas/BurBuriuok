@@ -13,6 +13,8 @@
 		adminConceptFormSchema
 	} from '$lib/api/admin/concepts';
 	import SectionSelect from '$lib/admin/SectionSelect.svelte';
+	import { listCurriculumNodes } from '$lib/api/admin/curriculum';
+	import type { AdminCurriculumNode } from '$lib/api/admin/curriculum';
 	import type { AdminConceptMutationInput } from '../../../../../shared/validation/adminConceptSchema';
 
 	type ConceptFormState = {
@@ -34,18 +36,30 @@
 	};
 
 	type FieldErrors = Record<string, string[]>;
-	type SectionOption = {
-		code: string;
-		title: string | null;
+	type SectionSelectOption = {
+		key: string;
+		label: string;
+		sectionCode: string;
+		sectionTitle: string;
+		subsectionCode: string | null;
+		subsectionTitle: string | null;
+		nodeCode: string;
+		disabled?: boolean;
+		depth?: number;
 	};
 
 	let concepts: AdminConceptResource[] = [];
 	let filteredConcepts: AdminConceptResource[] = [];
-	let sectionOptions: SectionOption[] = [];
+	let sectionOptions: SectionSelectOption[] = [];
+	let sectionOptionsLoading = false;
+	let sectionOptionsError: string | null = null;
 	let filterSectionCode = 'all';
 	let filterStatus: 'all' | AdminConceptStatus = 'all';
 	let searchTerm = '';
 	let totalMatches = 0;
+
+	let selectedSectionOptionKey = '';
+	let selectedSectionFallbackLabel: string | null = null;
 
 	let loading = false;
 	let loadError: string | null = null;
@@ -75,8 +89,160 @@
 	let deleteError: string | null = null;
 	const sectionLabelId = 'concept-section-select';
 
+	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
+		const trimmed = (title ?? '').trim();
+		return trimmed.length ? trimmed : fallback;
+	}
+
+	function sectionOptionLabel(option: SectionSelectOption): string {
+		const subsection = option.subsectionTitle?.trim();
+		if (subsection && subsection.length) {
+			return subsection;
+		}
+		return normalizeNodeTitle(option.sectionTitle, option.sectionCode);
+	}
+
+	function resolveFormFallbackLabel(state: ConceptFormState): string | null {
+		const subsection = state.subsectionTitle.trim();
+		if (subsection.length) {
+			return subsection;
+		}
+
+		const subsectionCode = state.subsectionCode.trim();
+		if (subsectionCode.length) {
+			return subsectionCode;
+		}
+
+		const section = state.sectionTitle.trim();
+		if (section.length) {
+			return section;
+		}
+
+		const sectionCode = state.sectionCode.trim();
+		if (sectionCode.length) {
+			return sectionCode;
+		}
+
+		return null;
+	}
+
+	function findMatchingOptionForForm(): SectionSelectOption | null {
+		const nodeCode = formState.curriculumNodeCode.trim();
+		if (nodeCode.length) {
+			const byNode = sectionOptions.find((option) => !option.disabled && option.nodeCode === nodeCode);
+			if (byNode) {
+				return byNode;
+			}
+		}
+
+		const subsectionCode = formState.subsectionCode.trim();
+		if (subsectionCode.length) {
+			const bySubsection = sectionOptions.find(
+				(option) => !option.disabled && option.subsectionCode === subsectionCode
+			);
+			if (bySubsection) {
+				return bySubsection;
+			}
+		}
+
+		const sectionCode = formState.sectionCode.trim();
+		if (sectionCode.length) {
+			const bySection = sectionOptions.find(
+				(option) => option.sectionCode === sectionCode && option.disabled === true
+			);
+			if (bySection) {
+				return bySection;
+			}
+		}
+
+		return null;
+	}
+
+	function syncSelectedSectionFromForm(): void {
+		const match = findMatchingOptionForForm();
+		if (match) {
+			selectedSectionOptionKey = match.key;
+			selectedSectionFallbackLabel = sectionOptionLabel(match);
+			return;
+		}
+
+		selectedSectionOptionKey = '';
+		selectedSectionFallbackLabel = resolveFormFallbackLabel(formState);
+	}
+
+	syncSelectedSectionFromForm();
+
+	async function loadSectionOptions(): Promise<void> {
+		sectionOptionsLoading = true;
+		sectionOptionsError = null;
+
+		try {
+			const compiled: SectionSelectOption[] = [];
+			const rootNodes = await listCurriculumNodes(null);
+
+			for (const root of rootNodes) {
+				const sectionTitle = normalizeNodeTitle(root.title, root.code);
+				compiled.push({
+					key: `section:${root.code}`,
+					label: sectionTitle,
+					sectionCode: root.code,
+					sectionTitle,
+					subsectionCode: null,
+					subsectionTitle: null,
+					nodeCode: root.code,
+					disabled: true,
+					depth: 0
+				});
+
+				await appendChildren(root, 1, root, compiled);
+			}
+
+			sectionOptions = compiled;
+			syncSelectedSectionFromForm();
+		} catch (error) {
+			sectionOptionsError =
+				error instanceof Error ? error.message : 'Nepavyko įkelti skyrių iš mokymo plano.';
+			sectionOptions = [];
+			syncSelectedSectionFromForm();
+		} finally {
+			sectionOptionsLoading = false;
+		}
+	}
+
+	async function appendChildren(
+		parent: AdminCurriculumNode,
+		depth: number,
+		sectionRoot: AdminCurriculumNode,
+		collector: SectionSelectOption[]
+	): Promise<void> {
+		const children = await listCurriculumNodes(parent.code);
+		if (!children.length) {
+			return;
+		}
+
+		const sectionTitle = normalizeNodeTitle(sectionRoot.title, sectionRoot.code);
+
+		for (const child of children) {
+			const childTitle = normalizeNodeTitle(child.title, child.code);
+			collector.push({
+				key: `node:${sectionRoot.code}:${child.code}`,
+				label: childTitle,
+				sectionCode: sectionRoot.code,
+				sectionTitle,
+				subsectionCode: child.code,
+				subsectionTitle: childTitle,
+				nodeCode: child.code,
+				disabled: false,
+				depth
+			});
+
+			await appendChildren(child, depth + 1, sectionRoot, collector);
+		}
+	}
+
 	onMount(() => {
 		void refreshConcepts();
+		void loadSectionOptions();
 	});
 
 	$: requestedSlug = $page.url.searchParams.get('slug');
@@ -116,7 +282,6 @@
 		try {
 			const list = await listAdminConcepts(getFilterParams());
 			concepts = sortConcepts(list);
-			updateSectionOptions(concepts);
 		} catch (error) {
 			loadError = error instanceof Error ? error.message : 'Nepavyko įkelti sąvokų sąrašo.';
 		} finally {
@@ -124,17 +289,6 @@
 		}
 	}
 
-	function updateSectionOptions(list: AdminConceptResource[]): void {
-		const map = new Map<string, string | null>();
-		for (const item of list) {
-			if (!map.has(item.sectionCode)) {
-				map.set(item.sectionCode, item.sectionTitle ?? null);
-			}
-		}
-		sectionOptions = Array.from(map.entries())
-			.map(([code, title]) => ({ code, title }))
-			.sort((a, b) => a.code.localeCompare(b.code, 'lt-LT'));
-	}
 
 	function sortConcepts(list: AdminConceptResource[]): AdminConceptResource[] {
 		return [...list].sort((a, b) => a.termLt.localeCompare(b.termLt, 'lt-LT'));
@@ -149,7 +303,6 @@
 			next[index] = saved;
 		}
 		concepts = sortConcepts(next);
-		updateSectionOptions(concepts);
 	}
 
 	function matchesSearch(concept: AdminConceptResource, query: string): boolean {
@@ -277,11 +430,36 @@
 		markDirty();
 	}
 
-	function handleSectionChange(option: SectionOption): void {
-		const title = option.title && option.title.trim().length ? option.title : option.code;
-		formState = { ...formState, sectionCode: option.code, sectionTitle: title };
-		formErrors = { ...formErrors, sectionCode: [], sectionTitle: [] };
+	function handleSectionChange(option: SectionSelectOption): void {
+		const sectionTitle = option.sectionTitle?.trim().length ? option.sectionTitle.trim() : option.sectionCode;
+		const subsectionCode = option.subsectionCode ?? '';
+		const subsectionTitle = option.subsectionTitle?.trim().length
+			? option.subsectionTitle.trim()
+			: subsectionCode;
+
+		selectedSectionOptionKey = option.key;
+		selectedSectionFallbackLabel = sectionOptionLabel(option);
+
+		formState = {
+			...formState,
+			sectionCode: option.sectionCode,
+			sectionTitle,
+			subsectionCode,
+			subsectionTitle: subsectionCode.length ? subsectionTitle : '',
+			curriculumNodeCode: option.nodeCode ?? ''
+		};
+
+		formErrors = {
+			...formErrors,
+			sectionCode: [],
+			sectionTitle: [],
+			subsectionCode: [],
+			subsectionTitle: [],
+			curriculumNodeCode: []
+		};
+
 		markDirty();
+		syncSelectedSectionFromForm();
 	}
 
 	const ADVANCED_FIELDS = new Set([
@@ -316,6 +494,7 @@
 		showAdvancedFields = false;
 		slugManuallyEdited = false;
 		setInitialSnapshot(formState, metadataSnapshot);
+		syncSelectedSectionFromForm();
 	}
 
 	function openCreate(): void {
@@ -349,6 +528,7 @@
 		formErrors = {};
 		saveError = null;
 		setInitialSnapshot(formState, metadataSnapshot);
+		syncSelectedSectionFromForm();
 		historyEntries = [];
 		historyError = null;
 		historyLoading = false;
@@ -641,7 +821,6 @@
 			await deleteAdminConcept(targetSlug);
 			const remaining = concepts.filter((concept) => concept.slug !== targetSlug);
 			concepts = sortConcepts(remaining);
-			updateSectionOptions(concepts);
 			if (activeConcept && activeConcept.slug === targetSlug) {
 				finalizeCloseEditor();
 			}
@@ -866,11 +1045,16 @@
 					<SectionSelect
 						labelledBy={sectionLabelId}
 						options={sectionOptions}
-						valueCode={formState.sectionCode}
-						valueTitle={formState.sectionTitle}
-						disabled={!sectionOptions.length}
+						valueKey={selectedSectionOptionKey}
+						valueLabel={selectedSectionFallbackLabel}
+						disabled={!sectionOptions.length || sectionOptionsLoading}
 						on:change={(event) => handleSectionChange(event.detail)}
 					/>
+					{#if sectionOptionsLoading}
+						<p class="muted">Įkeliami skyriai...</p>
+					{:else if sectionOptionsError}
+						<p class="field-error">{sectionOptionsError}</p>
+					{/if}
 					{#if getFirstError('sectionCode')}
 						<p class="field-error">{getFirstError('sectionCode')}</p>
 					{:else if getFirstError('sectionTitle')}
