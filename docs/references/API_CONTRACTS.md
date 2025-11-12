@@ -63,15 +63,15 @@ Progress endpoints require a device binding: send `x-device-key` or `deviceKey` 
 
 ### Curriculum & Concepts
 
-| Method | Path                                           | Body                                                           | Status  | Notes                                                                                          |
-| ------ | ---------------------------------------------- | -------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| POST   | `/admin/curriculum/nodes`                      | `{ code, title, summary?, parentCode?, ordinal }`              | Planned | Creates node; enforces unique code and ordinal-within-parent.                                  |
-| PATCH  | `/admin/curriculum/nodes/:code`                | Partial fields                                                 | Planned | Updates node; writes entry to `content_versions`.                                              |
-| DELETE | `/admin/curriculum/nodes/:code`                |                                                                | Planned | Soft delete by setting status to `archived`; cascade handled via Supabase RLS.                 |
-| POST   | `/admin/curriculum/nodes/:code/items`          | `{ ordinal, label }`                                           | Planned | Validates ordinal uniqueness for the node.                                                     |
-| PATCH  | `/admin/curriculum/nodes/:code/items/:ordinal` | Partial                                                        | Planned | Allows label edits or ordinal swaps.                                                           |
-| POST   | `/admin/curriculum/dependencies`               | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Planned | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
-| DELETE | `/admin/curriculum/dependencies/:id`           |                                                                | Planned | Removes mapping, writes audit row.                                                             |
+| Method | Path                                 | Body                                                           | Status  | Notes                                                                                          |
+| ------ | ------------------------------------ | -------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| POST   | `/admin/curriculum/nodes`            | `{ code, title, summary?, parentCode?, ordinal?}`              | Shipped | Creates node; enforces unique code and ordinal-within-parent.                                  |
+| PATCH  | `/admin/curriculum/nodes/:code`      | Partial fields (`title`, `summary`, etc.)                      | Shipped | Updates node; writes entry to `content_versions`.                                              |
+| DELETE | `/admin/curriculum/nodes/:code`      |                                                                | Shipped | Archives node and returns latest snapshot.                                                     |
+| POST   | `/admin/curriculum/items`            | `{ nodeCode, label, termLt, termEn?, ... }`                    | Shipped | Creates curriculum item; validation mirrors shared schema used by admin tree forms.            |
+| PATCH  | `/admin/curriculum/items/:id`        | Partial                                                        | Planned | Will support label edits, required toggle, and ordinal swaps once stable.                      |
+| POST   | `/admin/curriculum/dependencies`     | `{ source: { type, id }, prerequisite: { type, id }, notes? }` | Planned | Validates both sides exist; rejects self-references and circular graphs via server-side check. |
+| DELETE | `/admin/curriculum/dependencies/:id` |                                                                | Planned | Removes mapping, writes audit row.                                                             |
 
 #### Concepts (shipped ADM-002 slice)
 
@@ -103,6 +103,7 @@ Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once ar
 The backend enforces input validation in addition to Supabase constraints.
 
 - **Curriculum nodes**: `code` matches `/^[0-9]+(\.[0-9a-z]+)*$/`, `ordinal` unique within parent, `parentCode` must exist unless root. Depth capped at 4 for now.
+- Inline section editing posts trimmed `title`/`summary` payloads to `PATCH /admin/curriculum/nodes/:code`; the service normalises empty summaries to `null` before persistence.
 - **Curriculum items**: `label` non-empty, max 400 chars, ordinals sequential (duplicates rejected; gaps allowed but flagged as warning in response metadata).
 - **Dependencies**: No self-dependency; server detects simple cycles by checking existing graph before insert. Mixed type links allowed (concept→node) but must reflect real prerequisite order.
 - **Concepts**: `termLt` required, `termEn` optional but trimmed. `slug` lowercase kebab-case; generated from Lithuanian term with transliteration. `metadata` defaults to `{}` and must be JSON-serialisable. `isRequired` defaults from seed alignment.

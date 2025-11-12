@@ -35,6 +35,8 @@ _Update 2025-11-09_: Curriculum tree admin UX now supports drag-and-drop reorder
 
 _Update 2025-11-10_: Concept editing now includes a dedicated modal that mirrors the inline editor (shared helpers, draft/publish buttons, status chip), tree branches refresh immediately after saves, and curriculum admin toolbar buttons adopt the same styling/order as concept actions (arrows first, delete anchored last).
 
+_Update 2025-11-11_: Section board inline editing landed on the learner homepage. When admin mode is active the root cards expose a “Redaguoti skiltį” action that opens the shared modal, posts updates through the curriculum node endpoint, and displays toast feedback after saves.
+
 ## Screen Details
 
 ### 1. Overview
@@ -85,7 +87,7 @@ _Update 2025-11-10_: Concept editing now includes a dedicated modal that mirrors
 
 - `AppShell` exposes a menu button labelled “Aktyvuoti Admin” that flips to “Deaktyvuoti Admin” when active. The control is gated behind the same impersonation feature flags used by local development.
 - The toggle writes to `src/lib/stores/adminMode.ts`, a persisted Svelte store that ensures admin affordances survive navigation and reloads.
-- Toggling the control updates the `impersonate=admin` query parameter via SvelteKit’s `goto`, allowing inline concept editing to reuse the existing admin APIs without a page refresh.
+- Toggling the control updates the `impersonate=admin` query parameter via SvelteKit’s `goto`, allowing inline concept and section editing to reuse the existing admin APIs without a page refresh.
 - Future authentication work will swap the toggle for a real login dialog while preserving the shared store so the UI remains reactive.
 
 ## Access Control & Routing

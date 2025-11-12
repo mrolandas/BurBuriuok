@@ -14,6 +14,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Regenerate `supabase/seeds/seed_concepts.sql` and `supabase/seeds/seed_curriculum_dependencies.sql` from `docs/static_info/LBS_concepts_master.md` (`npm run content:seed:generate`, `npm run content:seed:dependencies`) and confirm `npm run content:seed:check` reports no drift before pushing.
   - Navigate from the curriculum tree to a concept detail page (`/concepts/[slug]`) to confirm breadcrumbs, Lithuanian copy, placeholder actions, and peer-topic links render without console errors.
   - Toggle the AppShell admin control (“Aktyvuoti Admin” / “Deaktyvuoti Admin”) and follow a few concept links to confirm the impersonation query flag persists and inline edit affordances stay visible without requiring a page refresh.
+  - On the section board (`/`), open the inline section editor (admin mode must be active), update a title/summary, save, and verify the toast confirmation appears plus the card reflects the new copy without a reload.
   - Run an admin inline edit rehearsal: with the toggle active, update a draft concept, confirm the inline save returns 201, verify audit logging succeeds, and attempt a publish that currently fails with the expected validation 400 (no 500s). Repeat after any Supabase key rotation.
 
 ### Automated Connectivity Check

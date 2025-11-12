@@ -5,10 +5,10 @@ The SvelteKit app under `frontend/` delivers the learner experience and consumes
 ## Architecture Snapshot
 
 - **Framework** – SvelteKit with TypeScript and Vite (Node 20 target).
-- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree; `src/routes/concepts/[slug]/+page.svelte` delivers the LX-003 concept detail workspace; `src/routes/admin/+layout.svelte` guards admin pages, and `src/routes/admin/concepts/+page.svelte` mounts the ADM-002 concept manager drawer.
+- **Routing** – File-based routes under `src/routes`. The root `+page.svelte` renders the LX-001 “Skilčių lenta” board and, when admin mode is active, exposes inline edit affordances for section cards; `src/routes/sections/[code]/+page.svelte` hosts the LX-002 collapsible curriculum tree; `src/routes/concepts/[slug]/+page.svelte` delivers the LX-003 concept detail workspace; `src/routes/admin/+layout.svelte` guards admin pages, and `src/routes/admin/concepts/+page.svelte` mounts the ADM-002 concept manager drawer.
 - **Data Loading** – Page-level `+page.ts` files use `getSupabaseClient()` (SSR disabled) to query public Supabase views `burburiuok_curriculum_nodes`, `burburiuok_curriculum_items`, and `burburiuok_concepts`. The tree route lazy-loads child nodes/items when a branch expands and enriches items with concept slugs for deep links.
 - **Layouts** – `src/routes/+layout.svelte` wires global styles and the shared `AppShell` component (now hosting the global theme picker, the quiz modal entry point, and the persistent admin mode toggle rendered when impersonation is enabled).
-- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links, required badges, and admin drag/drop events), `ConceptDetail` for the LX-003 workspace shell, the shared `ConceptEditModal`, and optional layout helpers such as `PageHeading` when a view needs hero-style framing. Admin-only widgets currently sit next to their routes (e.g., `src/routes/admin/concepts/ConceptManager.svelte`) until a design system split is justified. `AppShell` now binds to the `adminMode` store so the “Aktyvuoti Admin” control mirrors global impersonation state.
+- **Shared UI** – Components live in `src/lib/components/`. Core pieces include `AppShell`, `Card`, the recursive `CurriculumTree` + `CurriculumTreeBranch` pair (now emitting concept links, required badges, and admin drag/drop events), `ConceptDetail` for the LX-003 workspace shell, the shared `ConceptEditModal` that now also powers section edits on the homepage, and optional layout helpers such as `PageHeading` when a view needs hero-style framing. Admin-only widgets currently sit next to their routes (e.g., `src/routes/admin/concepts/ConceptManager.svelte`) until a design system split is justified. `AppShell` now binds to the `adminMode` store so the “Aktyvuoti Admin” control mirrors global impersonation state.
 - **State & Data** – Supabase client utilities sit in `src/lib/supabase/`. Import helpers from there rather than creating ad-hoc clients. Cross-cutting Svelte stores live in `src/lib/stores/`, including `adminMode.ts` which persists admin impersonation choices in `localStorage` and exposes helpers (`initialize`, `toggle`, `ensureAdminImpersonation`).
 - **Styling** – Global CSS and theme tokens reside in `src/lib/styles/global.css`. Co-locate component styles using `<style>` blocks inside Svelte files when needed.
 
@@ -61,7 +61,7 @@ Run all commands from the repository root:
 - Use the helpers in `src/lib/api/curriculum.ts` (`fetchChildNodes`, `fetchNodeItems`) for curriculum navigation to keep prerequisite counts and ordering logic consistent. `fetchNodeItems` now enriches list entries with concept slugs/flags so the tree can link into the LX-003 view. Prerequisite badges currently fall back to zero counts until a public dependency view is introduced; the helper logs a warning when the fallback triggers.
 - Admin-specific requests live in `src/lib/api/admin/`. `adminFetch` pulls the Supabase access token before calling the Express API (defaults to `/api/admin`), and the concept helpers (`listAdminConcepts`, `saveAdminConcept`) reuse the shared Zod schema from `shared/validation/adminConceptSchema`.
 - Use `src/lib/api/concepts.ts::fetchConceptBySlug` when loading concept detail routes to avoid duplicating Supabase queries.
-- Inline concept editing components subscribe to `adminMode` so toggling the control in `AppShell` immediately flips between read-only and edit affordances without reloading the page.
+- Inline concept and section editing components subscribe to `adminMode` so toggling the control in `AppShell` immediately flips between read-only and edit affordances without reloading the page.
 
 ### Admin Curriculum Tree Workflow (Trimmed Launch)
 
@@ -77,7 +77,7 @@ Run all commands from the repository root:
 
 ## Roadmap Notes
 
-- LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders).
+- LX-001 Section Board now serves as the pattern reference for Supabase-driven pages (client-side load, retries, progress placeholders) and demonstrates inline admin editing for curriculum nodes using the shared modal.
 - LX-002 Collapsible Tree introduces lazy-loaded branches, prerequisite badges, and deep links into LX-003. Analytics instrumentation is currently disabled; wire up the real telemetry client once analytics is ready. Tree leaf items now open concept detail pages when a slug is available and tag required topics inline.
 - LX-003 Concept Detail provides the learner workspace with breadcrumbs, Lithuanian copy, peer-topic suggestions, and (when the admin toggle is active) inline edit controls powered by the shared `adminMode` store.
 - Document any global stores, layout hierarchy changes, or design system additions here so new contributors understand the abstraction layers.

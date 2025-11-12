@@ -55,6 +55,20 @@ Mounted under `/api/v1/admin/concepts`:
 - Audit rows store the acting email (preferred) or Supabase UID, the requested `status`, and a summary (`created via admin console` vs `updated via admin console`).
 - Reuse the same helper when additional admin endpoints go live so version history remains consistent.
 
+## Admin Curriculum Node Endpoints
+
+Mounted under `/api/v1/admin/curriculum/nodes`:
+
+| Method | Path     | Description                                                                 |
+| ------ | -------- | --------------------------------------------------------------------------- |
+| POST   | `/`      | Creates a curriculum node (section/subsection) with optional parent/ordinal |
+| PATCH  | `/:code` | Updates node title, summary, parent, or ordinal and records audit metadata. |
+| DELETE | `/:code` | Marks the node as archived (payload matches the returned `node` snapshot).  |
+
+- Responses reuse the `{ data: { node } }` envelope consumed by the frontend section board and tree editor.
+- Inline section editing on the learner homepage calls `PATCH /admin/curriculum/nodes/:code` with trimmed title/summary payloads; payload validation mirrors the backend schema guard that enforces non-empty titles and optional summaries.
+- New nodes immediately surface through `listCurriculumNodes` so the admin tree and section board stay in sync after create or delete operations.
+
 ## Environment Flags
 
 - Backend requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. These values already live in the repo root `.env` for local development.

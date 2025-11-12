@@ -53,6 +53,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Dashboard summarises pending media submissions, draft content, and high-impact concepts (e.g., high failure rate).
 - Editors can add/edit/delete nodes, items, and concepts inline with validation, dependency linking, and preview diffs prior to publish.
 - Inline concept editing is now accessible straight from `/concepts/[slug]` when the global “Aktyvuoti Admin” toggle is active, reflecting the persistent `adminMode` store shared across the shell.
+- Section board cards on the learner homepage now expose inline edit controls when admin mode is toggled on, reusing the same modal and validation helpers that power concept editing.
 - Versioning supports draft vs published states plus basic history for rollback.
 
 ### Media Moderation Flow
@@ -108,6 +109,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 - Trimmed launch scope captured in `docs/session/current_session.md`; full historical session notes archived under `docs/archive/` (see `2025-11-07-current-session.md`).
 - 2025-11-09: Admin AppShell refresh merged to `main`, inline concept editing reorganised for mobile, backend admin saves hardened against Supabase auth failures, and Supabase keys rotated with schema grants restored; documentation refresh queued.
+- 2025-11-10 (evening): Section board inline editing shipped—the learner homepage now surfaces edit affordances for root curriculum nodes when admin mode is active, persisting title/summary updates via the admin curriculum node endpoint and echoing toast feedback on success.
 - Planning deliverables are consolidated in `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`, `docs/references/ANALYTICS_EVENTS.md`, and `docs/references/ISSUE_TRACKER.md`.
 - 2025-11-09 (evening): Curriculum tree admin UX now ships drag-and-drop reorder with cancel/apply confirmation banner, gated pending highlights, auto-expanding edit/delete affordances, and restored “Pridėti poskyrį” controls pending backend item CRUD alignment.
 - Regression guardrail automation (seeds, curriculum snapshot, markdown validation) runs locally via Husky and in CI via `content-seed-guard.yml`.
