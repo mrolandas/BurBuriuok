@@ -42,6 +42,25 @@
 	);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 
+	function computeAdminConsoleHref(): string {
+		if (typeof window === 'undefined') {
+			return 'https://mrolandas.github.io/BurBuriuok/admin';
+		}
+
+		const origin = window.location.origin;
+		const base = window.location.hostname.endsWith('github.io')
+			? 'https://mrolandas.github.io/BurBuriuok'
+			: origin;
+		const url = new URL('/admin', base);
+
+		if (adminModeEnabled || impersonatingAdmin) {
+			url.searchParams.set('impersonate', 'admin');
+		}
+
+		return url.toString();
+	}
+	const adminConsoleHref = $derived(computeAdminConsoleHref());
+
 	const themeOptions = [
 		{
 			id: 'dawn',
@@ -375,6 +394,32 @@
 					<button class="app-shell__menu-action" type="button" onclick={openQuizModal}>
 						Pasitikrinti žinias
 					</button>
+				</li>
+
+				<li class="app-shell__menu-divider" aria-hidden="true"></li>
+
+				<li class="app-shell__menu-admin">
+					<a
+						href={adminConsoleHref}
+						target="_blank"
+						rel="noopener noreferrer"
+						onclick={closeMenus}
+						class="app-shell__menu-action app-shell__menu-admin-link"
+					>
+						Admin pultas
+						<span aria-hidden="true" class="app-shell__menu-admin-icon">&nearr;</span>
+					</a>
+					{#if impersonatingAdmin}
+						<p class="app-shell__menu-admin-hint">Imituojate administratoriaus paskyrą.</p>
+					{:else if adminModeEnabled}
+						<p class="app-shell__menu-admin-hint">
+							Administratoriaus režimas aktyvus šiame lange.
+						</p>
+					{:else}
+						<p class="app-shell__menu-admin-hint">
+							Naudotojo meniu galite įjungti administratoriaus režimą.
+						</p>
+					{/if}
 				</li>
 
 				<li class="app-shell__menu-divider" aria-hidden="true"></li>
@@ -924,6 +969,28 @@
 	.app-shell__menu-action:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.app-shell__menu-admin {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.app-shell__menu-admin-link {
+		text-decoration: none;
+	}
+
+	.app-shell__menu-admin-icon {
+		font-size: 0.9rem;
+	}
+
+	.app-shell__menu-admin-hint {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+		padding: 0 0.35rem;
+		line-height: 1.35;
 	}
 
 	.app-shell__menu-theme {
