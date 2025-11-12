@@ -1,14 +1,31 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { adminMode } from '$lib/stores/adminMode';
+	import { updateCurriculumNode } from '$lib/api/admin/curriculum';
+	import { AdminApiError } from '$lib/api/admin/client';
 	import type { PageData, SectionCard } from './+page';
 
-	export let data: PageData;
+	let { data } = $props<{ data: PageData }>();
 
-	let adminModeEnabled = false;
+	let adminModeEnabled = $state(false);
 	let unsubscribeAdmin: (() => void) | null = null;
+	let sections = $state<SectionCard[]>(data.sections.map((section: SectionCard) => ({ ...section })));
+	let lastDataSections: SectionCard[] = data.sections;
+
+	type SectionEditForm = {
+		code: string;
+		title: string;
+		summary: string;
+	};
+
+	let editForm = $state<SectionEditForm | null>(null);
+	let editSaving = $state(false);
+	let editError = $state<string | null>(null);
+	let editTitleInput = $state<HTMLInputElement | null>(null);
+	let successMessage = $state<string | null>(null);
+	let successTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	onMount(() => {
 		adminMode.initialize();
@@ -19,6 +36,17 @@
 
 	onDestroy(() => {
 		unsubscribeAdmin?.();
+		if (successTimeout) {
+			clearTimeout(successTimeout);
+			successTimeout = null;
+		}
+	});
+
+	$effect(() => {
+		if (data.sections !== lastDataSections) {
+			sections = data.sections.map((section: SectionCard) => ({ ...section }));
+			lastDataSections = data.sections;
+		}
 	});
 
 	const reloadSections = async () => {
@@ -143,12 +171,108 @@
 
 	const toDomId = (code: string) => code.replace(/[^a-zA-Z0-9_-]/g, '-');
 
-	const handleEditClick = (event: MouseEvent, section: SectionCard) => {
+	const openSectionEditor = async (section: SectionCard) => {
+		editForm = {
+			code: section.code,
+			title: section.title,
+			summary: section.summary ?? ''
+		};
+		editError = null;
+		editSaving = false;
+		await tick();
+		editTitleInput?.focus();
+	};
+
+	const closeSectionEditor = () => {
+		editForm = null;
+		editError = null;
+		editSaving = false;
+	};
+
+	const showSuccessMessage = (message: string) => {
+		successMessage = message;
+		if (successTimeout) {
+			clearTimeout(successTimeout);
+		}
+		successTimeout = setTimeout(() => {
+			successMessage = null;
+			successTimeout = null;
+		}, 4000);
+	};
+
+	const handleEditClick = async (event: MouseEvent, section: SectionCard) => {
 		event.preventDefault();
 		event.stopPropagation();
-		// Inline editing hook will be attached in the upcoming admin slice.
+		await openSectionEditor(section);
 	};
+
+	const handleEditSubmit = async (event: Event) => {
+		event.preventDefault();
+		if (!editForm) {
+			return;
+		}
+
+		const title = editForm.title.trim();
+		const summary = editForm.summary.trim();
+
+		if (!title.length) {
+			editError = 'Įrašykite skilties pavadinimą.';
+			return;
+		}
+
+		editSaving = true;
+		editError = null;
+
+		try {
+			const updated = await updateCurriculumNode(editForm.code, {
+				title,
+				summary: summary.length ? summary : null
+			});
+			sections = sections.map((entry: SectionCard) =>
+				entry.code === updated.code
+					? {
+						...entry,
+						title: updated.title,
+						summary: updated.summary,
+						ordinal: typeof updated.ordinal === 'number' ? updated.ordinal : entry.ordinal
+					}
+					: entry
+			);
+			closeSectionEditor();
+			showSuccessMessage('Skiltis atnaujinta.');
+		} catch (error) {
+			if (error instanceof AdminApiError) {
+				editError = error.message || 'Nepavyko atnaujinti skilties.';
+			} else if (error instanceof Error) {
+				editError = error.message;
+			} else {
+				editError = 'Nepavyko atnaujinti skilties.';
+			}
+		} finally {
+			editSaving = false;
+		}
+	};
+
+
+	$effect(() => {
+		if (!editForm) {
+			return;
+		}
+
+		const handleKey = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				closeSectionEditor();
+			}
+		};
+
+		window.addEventListener('keydown', handleKey);
+		return () => {
+			window.removeEventListener('keydown', handleKey);
+		};
+	});
 </script>
+
 
 
 {#if data.loadError}
@@ -163,13 +287,17 @@
 	</section>
 {/if}
 
+{#if successMessage}
+	<div class="sections-toast" role="status" aria-live="polite">{successMessage}</div>
+{/if}
+
 <section class="sections-grid" aria-live="polite">
-	{#if !data.sections.length && !data.loadError}
+	{#if !sections.length && !data.loadError}
 		<div class="sections-grid__placeholder">
 			<p>Kraunama skilčių lenta...</p>
 		</div>
 	{:else}
-		{#each data.sections as section (section.code)}
+		{#each sections as section (section.code)}
 			{@const title = cleanTitle(section.title)}
 			{@const description = formatSummary(section.summary, title)}
 			{@const theme = selectTheme(section.code)}
@@ -241,6 +369,90 @@
 	{/if}
 </section>
 
+
+{#if editForm}
+	<div class="section-edit-layer">
+		<button
+			type="button"
+			class="section-edit-backdrop"
+			aria-label="Uždaryti redagavimo langą"
+			onclick={closeSectionEditor}
+		></button>
+		<div
+			class="section-edit-dialog"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="section-edit-title"
+			tabindex="-1"
+		>
+			<header class="section-edit-header">
+				<div>
+					<h2 id="section-edit-title">Redaguoti skiltį</h2>
+					<p class="section-edit-subtitle">{editForm.code}</p>
+				</div>
+				<button
+					type="button"
+					class="section-edit-close"
+					onclick={closeSectionEditor}
+					aria-label="Uždaryti redagavimo langą"
+				>
+					<span aria-hidden="true">×</span>
+				</button>
+			</header>
+			<form class="section-edit-form" onsubmit={handleEditSubmit}>
+				<div class="section-edit-field">
+					<label for="section-edit-title-input">Pavadinimas</label>
+					<input
+						id="section-edit-title-input"
+						type="text"
+						bind:value={editForm.title}
+						required
+						maxlength="150"
+						placeholder="Skilties pavadinimas"
+						bind:this={editTitleInput}
+					/>
+				</div>
+				<div class="section-edit-field">
+					<label for="section-edit-summary-input">Aprašas</label>
+					<textarea
+						id="section-edit-summary-input"
+						rows="5"
+						bind:value={editForm.summary}
+						placeholder="Trumpas skilties aprašas"
+					></textarea>
+					<p class="section-edit-hint">
+						Palikite tuščią, jei aprašas dar neparengtas.
+					</p>
+				</div>
+				{#if editError}
+					<p class="section-edit-error" role="alert">{editError}</p>
+				{/if}
+				<div class="section-edit-actions">
+					<button
+						type="button"
+						class="section-edit-button section-edit-button--ghost"
+						onclick={closeSectionEditor}
+						disabled={editSaving}
+					>
+						Atšaukti
+					</button>
+					<button
+						type="submit"
+						class="section-edit-button section-edit-button--primary"
+						disabled={editSaving}
+					>
+						{#if editSaving}
+							Išsaugoma...
+						{:else}
+							Išsaugoti
+						{/if}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{/if}
+
 <style>
 	.sections-grid {
 		width: min(100%, var(--layout-max-width));
@@ -302,6 +514,19 @@
 	.status-block__action:hover,
 	.status-block__action:focus-visible {
 		transform: translateY(-1px);
+	}
+
+	.sections-toast {
+		position: fixed;
+		top: clamp(1rem, 3vw, 1.6rem);
+		right: clamp(1rem, 3vw, 1.6rem);
+		background: rgba(16, 185, 129, 0.95);
+		color: #fff;
+		padding: 0.6rem 1rem;
+		border-radius: 0.85rem;
+		font-weight: 600;
+		box-shadow: 0 18px 45px rgba(16, 185, 129, 0.25);
+		z-index: 60;
 	}
 
 	.section-card {
@@ -443,6 +668,170 @@
 	.section-card__edit:focus-visible {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--color-accent-faint-strong);
+	}
+
+	.section-edit-layer {
+		position: fixed;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: clamp(1rem, 4vw, 2.5rem);
+		z-index: 50;
+	}
+
+	.section-edit-backdrop {
+		position: absolute;
+		inset: 0;
+		border: none;
+		background: rgba(15, 23, 42, 0.6);
+		cursor: pointer;
+		z-index: 0;
+	}
+
+	.section-edit-backdrop:focus-visible {
+		outline: 2px solid rgba(56, 189, 248, 0.6);
+		outline-offset: 2px;
+	}
+
+	.section-edit-dialog {
+		position: relative;
+		z-index: 1;
+		width: min(600px, 100%);
+		display: grid;
+		gap: 1rem;
+		padding: clamp(1.25rem, 3vw, 1.8rem);
+		border-radius: 1rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface, #fff);
+		box-shadow: 0 30px 70px rgba(15, 23, 42, 0.35);
+	}
+
+	.section-edit-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.section-edit-header h2 {
+		margin: 0;
+		font-size: 1.35rem;
+	}
+
+	.section-edit-subtitle {
+		margin: 0.2rem 0 0;
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
+	}
+
+	.section-edit-close {
+		border: none;
+		background: transparent;
+		color: var(--color-text-muted);
+		font-size: 1.5rem;
+		padding: 0.15rem;
+		cursor: pointer;
+		line-height: 1;
+	}
+
+	.section-edit-close:hover,
+	.section-edit-close:focus-visible {
+		color: var(--color-text);
+	}
+
+	.section-edit-form {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.section-edit-field {
+		display: grid;
+		gap: 0.45rem;
+	}
+
+	.section-edit-field label {
+		font-weight: 600;
+		font-size: 0.9rem;
+	}
+
+	.section-edit-field input,
+	.section-edit-field textarea {
+		border-radius: 0.75rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel, #fff);
+		padding: 0.6rem 0.75rem;
+		font: inherit;
+		color: inherit;
+	}
+
+	.section-edit-field textarea {
+		resize: vertical;
+		min-height: 120px;
+	}
+
+	.section-edit-field input:focus-visible,
+	.section-edit-field textarea:focus-visible {
+		outline: 2px solid rgba(56, 189, 248, 0.6);
+		outline-offset: 2px;
+	}
+
+	.section-edit-hint {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+	}
+
+	.section-edit-error {
+		margin: 0;
+		color: var(--color-error, #ef4444);
+		font-weight: 600;
+	}
+
+	.section-edit-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.75rem;
+	}
+
+	.section-edit-button {
+		border-radius: 999px;
+		font-weight: 600;
+		padding: 0.45rem 1.1rem;
+		border: 1px solid transparent;
+		cursor: pointer;
+		font: inherit;
+		transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+	}
+
+	.section-edit-button[disabled] {
+		opacity: 0.65;
+		cursor: default;
+	}
+
+	.section-edit-button--ghost {
+		background: var(--color-surface-alt, rgba(148, 163, 184, 0.12));
+		color: var(--color-text);
+	}
+
+	.section-edit-button--ghost:hover,
+	.section-edit-button--ghost:focus-visible {
+		border-color: var(--color-border);
+		transform: translateY(-1px);
+	}
+
+	.section-edit-button--primary {
+		background: var(--color-pill-bg);
+		color: var(--color-pill-text);
+		border-color: var(--color-pill-border);
+	}
+
+	.section-edit-button--primary:hover,
+	.section-edit-button--primary:focus-visible {
+		background: var(--color-pill-hover-bg);
+		border-color: var(--color-pill-hover-border);
+		color: var(--color-text);
+		transform: translateY(-1px);
 	}
 
 	@media (max-width: 640px) {
