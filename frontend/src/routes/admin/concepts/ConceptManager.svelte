@@ -65,7 +65,7 @@
 	let editorOpen = false;
 	let editorMode: 'create' | 'edit' = 'create';
 	let activeConcept: AdminConceptResource | null = null;
-	let formState: ConceptFormState = createEmptyFormState();
+	let formState: ConceptFormState;
 	let metadataSnapshot: Record<string, unknown> = { status: 'draft' };
 	let formErrors: FieldErrors = {};
 	let saveError: string | null = null;
@@ -86,9 +86,6 @@
 	let deletingSlug: string | null = null;
 	let deleteError: string | null = null;
 	const sectionLabelId = 'concept-section-select';
-	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
-	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
-	$: discardDisabled = saving || !editorDirty;
 
 	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
 		const trimmed = (title ?? '').trim();
@@ -420,6 +417,12 @@
 			status: 'draft'
 		};
 	}
+
+	formState = createEmptyFormState();
+
+	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
+	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
+	$: discardDisabled = saving || !editorDirty;
 
 	function handleTermLtInput(): void {
 		markDirty();
