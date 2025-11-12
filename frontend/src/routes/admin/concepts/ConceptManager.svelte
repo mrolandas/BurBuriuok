@@ -87,6 +87,69 @@
 	let deleteError: string | null = null;
 	const sectionLabelId = 'concept-section-select';
 
+	const MAX_SLUG_LENGTH = 90;
+	const SLUG_RANDOM_SEGMENT_LENGTH = 6;
+	const SLUG_PREFIX = 'c';
+
+	function randomSegment(length: number): string {
+		const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		let segment = '';
+
+		if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+			const buffer = new Uint32Array(length);
+			crypto.getRandomValues(buffer);
+			for (const value of buffer) {
+				segment += alphabet[value % alphabet.length];
+			}
+			return segment;
+		}
+
+		for (let index = 0; index < length; index += 1) {
+			const next = Math.floor(Math.random() * alphabet.length);
+			segment += alphabet[next];
+		}
+
+		return segment;
+	}
+
+	function generateRandomSlug(): string {
+		const existing = new Set(concepts.map((concept) => concept.slug));
+		let candidate = '';
+
+		do {
+			const partA = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
+			const partB = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
+			candidate = `${SLUG_PREFIX}-${partA}-${partB}`.slice(0, MAX_SLUG_LENGTH);
+		} while (existing.has(candidate));
+
+		return candidate;
+	}
+
+	function createEmptyFormState(): ConceptFormState {
+		return {
+			slug: generateRandomSlug(),
+			termLt: '',
+			termEn: '',
+			descriptionLt: '',
+			descriptionEn: '',
+			sectionCode: '',
+			sectionTitle: '',
+			subsectionCode: '',
+			subsectionTitle: '',
+			curriculumNodeCode: '',
+			curriculumItemOrdinal: '',
+			sourceRef: '',
+			isRequired: true,
+			status: 'draft'
+		};
+	}
+
+	formState = createEmptyFormState();
+
+	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
+	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
+	$: discardDisabled = saving || !editorDirty;
+
 	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
 		const trimmed = (title ?? '').trim();
 		return trimmed.length ? trimmed : fallback;
@@ -360,69 +423,6 @@
 
 	$: filteredConcepts = concepts.filter((concept) => matchesSearch(concept, searchTerm));
 	$: totalMatches = filteredConcepts.length;
-
-	const MAX_SLUG_LENGTH = 90;
-	const SLUG_RANDOM_SEGMENT_LENGTH = 6;
-	const SLUG_PREFIX = 'c';
-
-	function randomSegment(length: number): string {
-		const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
-		let segment = '';
-
-		if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
-			const buffer = new Uint32Array(length);
-			crypto.getRandomValues(buffer);
-			for (const value of buffer) {
-				segment += alphabet[value % alphabet.length];
-			}
-			return segment;
-		}
-
-		for (let index = 0; index < length; index += 1) {
-			const next = Math.floor(Math.random() * alphabet.length);
-			segment += alphabet[next];
-		}
-
-		return segment;
-	}
-
-	function generateRandomSlug(): string {
-		const existing = new Set(concepts.map((concept) => concept.slug));
-		let candidate = '';
-
-		do {
-			const partA = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
-			const partB = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
-			candidate = `${SLUG_PREFIX}-${partA}-${partB}`.slice(0, MAX_SLUG_LENGTH);
-		} while (existing.has(candidate));
-
-		return candidate;
-	}
-
-	function createEmptyFormState(): ConceptFormState {
-		return {
-			slug: generateRandomSlug(),
-			termLt: '',
-			termEn: '',
-			descriptionLt: '',
-			descriptionEn: '',
-			sectionCode: '',
-			sectionTitle: '',
-			subsectionCode: '',
-			subsectionTitle: '',
-			curriculumNodeCode: '',
-			curriculumItemOrdinal: '',
-			sourceRef: '',
-			isRequired: true,
-			status: 'draft'
-		};
-	}
-
-	formState = createEmptyFormState();
-
-	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
-	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
-	$: discardDisabled = saving || !editorDirty;
 
 	function handleTermLtInput(): void {
 		markDirty();
