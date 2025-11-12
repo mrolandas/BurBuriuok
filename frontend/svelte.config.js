@@ -13,7 +13,7 @@ const config = {
 	kit: {
 		// Use a static site adapter to generate GitHub Pages output with SPA fallback.
 		adapter: adapter({
-			fallback: 'index.html'
+			fallback: '404.html'
 		}),
 		alias: {},
 		paths: {
