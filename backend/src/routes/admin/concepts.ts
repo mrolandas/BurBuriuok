@@ -1,4 +1,5 @@
 import { Router } from "express";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   listConcepts,
   getConceptBySlug,
@@ -6,6 +7,7 @@ import {
   upsertConcepts,
 } from "../../../../data/repositories/conceptsRepository.ts";
 import { deleteCurriculumItemAdminBySlug } from "../../../../data/repositories/curriculumRepository.ts";
+import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
 import { listContentVersionsForEntity } from "../../../../data/repositories/contentVersionsRepository.ts";
 import type {
   Concept,
@@ -150,9 +152,12 @@ router.post(
       return;
     }
 
-    const payload = validation.data;
+  let payload = validation.data;
 
-    const existing = await getConceptBySlug(payload.slug);
+  const existing = await getConceptBySlug(payload.slug);
+
+  const supabase = getSupabaseClient({ service: true, schema: "burburiuok" });
+  payload = await prepareCurriculumFields(payload, existing ?? null, supabase);
 
     const isEditingExisting = Boolean(existing && payload.originalSlug === existing.slug);
 
@@ -202,6 +207,7 @@ router.post(
 
     try {
       await upsertConcepts([upsertPayload]);
+      await syncCurriculumItemRecord(payload, existing ?? null, supabase);
     } catch (error) {
       if (isSupabaseAuthError(error)) {
         throw unauthorized(
@@ -413,6 +419,145 @@ function mapCurriculumItemForLog(item: CurriculumItem, concept: Concept) {
     conceptTerm: concept.termLt,
     isRequired: concept.isRequired,
   } satisfies Record<string, unknown>;
+}
+
+async function prepareCurriculumFields(
+  payload: AdminConceptMutationInput,
+  existing: Concept | null,
+  client: SupabaseClient
+): Promise<AdminConceptMutationInput> {
+  const result: AdminConceptMutationInput = {
+    ...payload,
+  };
+
+  const hadExistingLink = Boolean(
+    existing?.curriculumNodeCode && existing.curriculumItemOrdinal !== null
+  );
+
+  if (!result.curriculumNodeCode) {
+    const canDerive = !hadExistingLink;
+    if (canDerive) {
+      const fallbackNode = result.subsectionCode ?? result.sectionCode ?? null;
+      if (fallbackNode) {
+        result.curriculumNodeCode = fallbackNode;
+      }
+    }
+  }
+
+  if (!result.curriculumNodeCode) {
+    result.curriculumItemOrdinal = null;
+    result.curriculumItemLabel = null;
+    return result;
+  }
+
+  const labelSource = (result.curriculumItemLabel ?? result.termLt).trim();
+  result.curriculumItemLabel = labelSource;
+
+  if (result.curriculumItemOrdinal === null || Number.isNaN(result.curriculumItemOrdinal)) {
+    result.curriculumItemOrdinal = await fetchNextCurriculumOrdinal(
+      client,
+      result.curriculumNodeCode
+    );
+  }
+
+  return result;
+}
+
+async function fetchNextCurriculumOrdinal(client: SupabaseClient, nodeCode: string): Promise<number> {
+  const { data, error } = await (client as any)
+    .from("curriculum_items")
+    .select("ordinal")
+    .eq("node_code", nodeCode)
+    .order("ordinal", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    throw new Error(`Failed to fetch next ordinal for '${nodeCode}': ${error.message}`);
+  }
+
+  const latest = Array.isArray(data) && data.length ? data[0]?.ordinal : null;
+  const parsed =
+    typeof latest === "number"
+      ? latest
+      : typeof latest === "string"
+      ? Number.parseInt(latest, 10)
+      : 0;
+
+  return Number.isFinite(parsed) && parsed >= 1 ? parsed + 1 : 1;
+}
+
+async function syncCurriculumItemRecord(
+  payload: AdminConceptMutationInput,
+  existing: Concept | null,
+  client: SupabaseClient
+): Promise<void> {
+  const newNodeCode = payload.curriculumNodeCode ?? null;
+  const newOrdinal =
+    typeof payload.curriculumItemOrdinal === "number" ? payload.curriculumItemOrdinal : null;
+  const oldNodeCode = existing?.curriculumNodeCode ?? null;
+  const oldOrdinal =
+    typeof existing?.curriculumItemOrdinal === "number"
+      ? existing.curriculumItemOrdinal
+      : null;
+
+  const moved =
+    oldNodeCode && oldOrdinal !== null && (oldNodeCode !== newNodeCode || oldOrdinal !== newOrdinal);
+
+  if (!newNodeCode || newOrdinal === null) {
+    if (moved || (oldNodeCode && oldOrdinal !== null && !newNodeCode)) {
+      await deleteCurriculumItemRecord(client, oldNodeCode, oldOrdinal);
+    }
+    return;
+  }
+
+  const label = (payload.curriculumItemLabel ?? payload.termLt).trim();
+  await upsertCurriculumItemRecord(client, newNodeCode, newOrdinal, label);
+
+  if (moved) {
+    await deleteCurriculumItemRecord(client, oldNodeCode!, oldOrdinal!);
+  }
+}
+
+async function upsertCurriculumItemRecord(
+  client: SupabaseClient,
+  nodeCode: string,
+  ordinal: number,
+  label: string
+): Promise<void> {
+  const { error } = await (client as any)
+    .from("curriculum_items")
+    .upsert(
+      {
+        node_code: nodeCode,
+        ordinal,
+        label,
+      },
+      { onConflict: "node_code,ordinal" }
+    );
+
+  if (error) {
+    throw new Error(
+      `Failed to upsert curriculum item '${nodeCode}:${ordinal}' with label '${label}': ${error.message}`
+    );
+  }
+}
+
+async function deleteCurriculumItemRecord(
+  client: SupabaseClient,
+  nodeCode: string,
+  ordinal: number
+): Promise<void> {
+  const { error } = await (client as any)
+    .from("curriculum_items")
+    .delete()
+    .eq("node_code", nodeCode)
+    .eq("ordinal", ordinal);
+
+  if (error) {
+    throw new Error(
+      `Failed to delete curriculum item '${nodeCode}:${ordinal}': ${error.message}`
+    );
+  }
 }
 
 function toUpsertConceptInput(
