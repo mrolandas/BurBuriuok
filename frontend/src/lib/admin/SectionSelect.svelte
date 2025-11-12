@@ -276,8 +276,8 @@
 		if (option.disabled) {
 			return;
 		}
-		dispatch('change', option);
 		closeDropdown();
+		dispatch('change', option);
 	}
 
 	function handleButtonKeydown(event: KeyboardEvent): void {

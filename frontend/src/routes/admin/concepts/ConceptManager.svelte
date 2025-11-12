@@ -29,7 +29,6 @@
 		subsectionTitle: string;
 		curriculumNodeCode: string;
 		curriculumItemOrdinal: string;
-		curriculumItemLabel: string;
 		sourceRef: string;
 		isRequired: boolean;
 		status: AdminConceptStatus;
@@ -82,12 +81,14 @@
 	let lastPrefilledSlug: string | null = null;
 	let requestedSlug: string | null = null;
 	let showAdvancedFields = false;
-	let slugManuallyEdited = false;
 	let discardPromptVisible = false;
 	let deleteConfirmSlug: string | null = null;
 	let deletingSlug: string | null = null;
 	let deleteError: string | null = null;
 	const sectionLabelId = 'concept-section-select';
+	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
+	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
+	$: discardDisabled = saving || !editorDirty;
 
 	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
 		const trimmed = (title ?? '').trim();
@@ -363,9 +364,47 @@
 	$: filteredConcepts = concepts.filter((concept) => matchesSearch(concept, searchTerm));
 	$: totalMatches = filteredConcepts.length;
 
+	const MAX_SLUG_LENGTH = 90;
+	const SLUG_RANDOM_SEGMENT_LENGTH = 6;
+	const SLUG_PREFIX = 'c';
+
+	function randomSegment(length: number): string {
+		const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		let segment = '';
+
+		if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+			const buffer = new Uint32Array(length);
+			crypto.getRandomValues(buffer);
+			for (const value of buffer) {
+				segment += alphabet[value % alphabet.length];
+			}
+			return segment;
+		}
+
+		for (let index = 0; index < length; index += 1) {
+			const next = Math.floor(Math.random() * alphabet.length);
+			segment += alphabet[next];
+		}
+
+		return segment;
+	}
+
+	function generateRandomSlug(): string {
+		const existing = new Set(concepts.map((concept) => concept.slug));
+		let candidate = '';
+
+		do {
+			const partA = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
+			const partB = randomSegment(SLUG_RANDOM_SEGMENT_LENGTH);
+			candidate = `${SLUG_PREFIX}-${partA}-${partB}`.slice(0, MAX_SLUG_LENGTH);
+		} while (existing.has(candidate));
+
+		return candidate;
+	}
+
 	function createEmptyFormState(): ConceptFormState {
 		return {
-			slug: '',
+			slug: generateRandomSlug(),
 			termLt: '',
 			termEn: '',
 			descriptionLt: '',
@@ -376,57 +415,13 @@
 			subsectionTitle: '',
 			curriculumNodeCode: '',
 			curriculumItemOrdinal: '',
-			curriculumItemLabel: '',
 			sourceRef: '',
 			isRequired: true,
 			status: 'draft'
 		};
 	}
 
-	const MAX_SLUG_LENGTH = 90;
-	const slugDiacriticRegex = /[\u0300-\u036f]/g;
-	const slugSeparatorRegex = /[\s_]+/g;
-	const slugTrimHyphenRegex = /^-+|-+$/g;
-
-	function slugifyTerm(value: string): string {
-		const ascii = value
-			.normalize('NFD')
-			.replace(slugDiacriticRegex, '')
-			.replace(/[^A-Za-z0-9\s-]/g, ' ');
-
-		const collapsed = ascii
-			.trim()
-			.replace(slugSeparatorRegex, '-')
-			.replace(/-+/g, '-');
-
-		return collapsed.replace(slugTrimHyphenRegex, '').toLowerCase();
-	}
-
-	function maybeAutofillSlug(term: string): void {
-		if (editorMode !== 'create' || slugManuallyEdited) {
-			return;
-		}
-
-		const generated = slugifyTerm(term);
-		const nextSlug = generated.slice(0, MAX_SLUG_LENGTH);
-
-		if (formState.slug === nextSlug) {
-			return;
-		}
-
-		formState = { ...formState, slug: nextSlug };
-		markDirty();
-	}
-
-	function handleTermLtInput(event: Event): void {
-		const target = event.currentTarget as HTMLInputElement | null;
-		const value = target?.value ?? '';
-		markDirty();
-		maybeAutofillSlug(value);
-	}
-
-	function handleSlugInput(): void {
-		slugManuallyEdited = true;
+	function handleTermLtInput(): void {
 		markDirty();
 	}
 
@@ -436,6 +431,9 @@
 		const subsectionTitle = option.subsectionTitle?.trim().length
 			? option.subsectionTitle.trim()
 			: subsectionCode;
+		const previousNode = formState.curriculumNodeCode.trim();
+		const nextNode = option.nodeCode ?? '';
+		const preserveOrdinal = previousNode.length && previousNode === nextNode;
 
 		selectedSectionOptionKey = option.key;
 		selectedSectionFallbackLabel = sectionOptionLabel(option);
@@ -446,7 +444,8 @@
 			sectionTitle,
 			subsectionCode,
 			subsectionTitle: subsectionCode.length ? subsectionTitle : '',
-			curriculumNodeCode: option.nodeCode ?? ''
+			curriculumNodeCode: nextNode,
+			curriculumItemOrdinal: preserveOrdinal ? formState.curriculumItemOrdinal : ''
 		};
 
 		formErrors = {
@@ -455,23 +454,15 @@
 			sectionTitle: [],
 			subsectionCode: [],
 			subsectionTitle: [],
-			curriculumNodeCode: []
+			curriculumNodeCode: [],
+			curriculumItemOrdinal: []
 		};
 
 		markDirty();
 		syncSelectedSectionFromForm();
 	}
 
-	const ADVANCED_FIELDS = new Set([
-		'slug',
-		'subsectionCode',
-		'subsectionTitle',
-		'curriculumNodeCode',
-		'curriculumItemOrdinal',
-		'curriculumItemLabel',
-		'sourceRef',
-		'isRequired'
-	]);
+	const ADVANCED_FIELDS = new Set(['slug', 'sourceRef', 'isRequired']);
 
 	function ensureAdvancedVisibleForErrors(errors: FieldErrors): void {
 		if (showAdvancedFields) {
@@ -492,7 +483,6 @@
 		formErrors = {};
 		saveError = null;
 		showAdvancedFields = false;
-		slugManuallyEdited = false;
 		setInitialSnapshot(formState, metadataSnapshot);
 		syncSelectedSectionFromForm();
 	}
@@ -516,7 +506,6 @@
 		formState = conceptToFormState(concept);
 		metadataSnapshot = cloneMetadata(concept.metadata);
 		showAdvancedFields = false;
-		slugManuallyEdited = true;
 		discardPromptVisible = false;
 		deleteConfirmSlug = null;
 		deleteError = null;
@@ -544,7 +533,6 @@
 		editorDirty = false;
 		discardPromptVisible = false;
 		showAdvancedFields = false;
-		slugManuallyEdited = false;
 		historyEntries = [];
 		historyError = null;
 		historyLoading = false;
@@ -590,7 +578,6 @@
 				concept.curriculumItemOrdinal === null || concept.curriculumItemOrdinal === undefined
 					? ''
 					: String(concept.curriculumItemOrdinal),
-			curriculumItemLabel: concept.curriculumItemLabel ?? '',
 			sourceRef: concept.sourceRef ?? '',
 			isRequired: concept.isRequired,
 			status: concept.status
@@ -712,7 +699,7 @@
 			subsectionTitle: optionalString(state.subsectionTitle),
 			curriculumNodeCode: optionalString(state.curriculumNodeCode),
 			curriculumItemOrdinal: optionalNumber(state.curriculumItemOrdinal),
-			curriculumItemLabel: optionalString(state.curriculumItemLabel),
+			curriculumItemLabel: null,
 			sourceRef: optionalString(state.sourceRef),
 			isRequired: state.isRequired,
 			metadata: { ...metadataSnapshot, status: state.status },
@@ -761,8 +748,19 @@
 		})}`;
 	}
 
-	async function handleSubmit(): Promise<void> {
+	async function handleSubmit(intent: 'draft' | 'publish'): Promise<void> {
+		if (saving) {
+			return;
+		}
+
 		saveError = null;
+		const targetStatus: AdminConceptStatus = intent === 'publish' ? 'published' : 'draft';
+		if (formState.status !== targetStatus || metadataSnapshot.status !== targetStatus) {
+			setStatus(targetStatus);
+		} else {
+			formErrors = { ...formErrors, status: [], 'metadata.status': [] };
+		}
+
 		const payload = buildPayload(formState);
 		const validation = adminConceptFormSchema.safeParse(payload);
 
@@ -786,12 +784,47 @@
 				await refreshConcepts();
 			}
 			const wasEdit = editorMode === 'edit';
-			showSuccess(wasEdit ? 'Sąvoka atnaujinta.' : 'Sąvoka sukurta.');
+			const successText = intent === 'publish'
+				? 'Sąvoka publikuota.'
+				: wasEdit
+				? 'Sąvoka atnaujinta.'
+				: 'Sąvoka sukurta.';
+			showSuccess(successText);
 			finalizeCloseEditor();
 		} catch (error) {
 			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti sąvokų.';
 		} finally {
 			saving = false;
+		}
+	}
+
+	function submitDraft(): void {
+		void handleSubmit('draft');
+	}
+
+	function submitPublish(): void {
+		void handleSubmit('publish');
+	}
+
+	function restoreInitialState(): void {
+		if (!initialSnapshot) {
+			return;
+		}
+
+		try {
+			const parsed = JSON.parse(initialSnapshot) as {
+				state: ConceptFormState;
+				metadata: Record<string, unknown>;
+			};
+			formState = parsed.state;
+			metadataSnapshot = parsed.metadata ?? { status: 'draft' };
+			formErrors = {};
+			saveError = null;
+			syncSelectedSectionFromForm();
+			setInitialSnapshot(formState, metadataSnapshot);
+			clearSuccessMessage();
+		} catch (error) {
+			console.warn('Nepavyko atkurti pradinės būsenos.', error);
 		}
 	}
 
@@ -985,7 +1018,7 @@
 {/if}
 
 <aside class:drawer--open={editorOpen} class="drawer" aria-hidden={!editorOpen}>
-	<form class="drawer__form" on:submit|preventDefault={handleSubmit}>
+	<form class="drawer__form" on:submit|preventDefault={submitDraft}>
 		<header class="drawer__header">
 			<div>
 				<h2>{editorMode === 'edit' ? 'Redaguoti sąvoką' : 'Nauja sąvoka'}</h2>
@@ -1057,8 +1090,18 @@
 					{/if}
 					{#if getFirstError('sectionCode')}
 						<p class="field-error">{getFirstError('sectionCode')}</p>
-					{:else if getFirstError('sectionTitle')}
+					{/if}
+					{#if getFirstError('sectionTitle')}
 						<p class="field-error">{getFirstError('sectionTitle')}</p>
+					{/if}
+					{#if getFirstError('subsectionCode')}
+						<p class="field-error">{getFirstError('subsectionCode')}</p>
+					{/if}
+					{#if getFirstError('curriculumNodeCode')}
+						<p class="field-error">{getFirstError('curriculumNodeCode')}</p>
+					{/if}
+					{#if getFirstError('curriculumItemOrdinal')}
+						<p class="field-error">{getFirstError('curriculumItemOrdinal')}</p>
 					{/if}
 				</label>
 			</div>
@@ -1082,58 +1125,12 @@
 						bind:value={formState.slug}
 						name="slug"
 						required
-						disabled={editorMode === 'edit'}
-						on:input={handleSlugInput}
+						readonly
 					/>
 					{#if getFirstError('slug')}
 						<p class="field-error">{getFirstError('slug')}</p>
 					{/if}
-				</label>
-
-				<label>
-					<span>Poskyrio kodas</span>
-					<input bind:value={formState.subsectionCode} name="subsectionCode" on:input={markDirty} />
-					{#if getFirstError('subsectionCode')}
-						<p class="field-error">{getFirstError('subsectionCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Poskyrio pavadinimas</span>
-					<input bind:value={formState.subsectionTitle} name="subsectionTitle" on:input={markDirty} />
-					{#if getFirstError('subsectionTitle')}
-						<p class="field-error">{getFirstError('subsectionTitle')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Curriculum node kodas</span>
-					<input bind:value={formState.curriculumNodeCode} name="curriculumNodeCode" on:input={markDirty} />
-					{#if getFirstError('curriculumNodeCode')}
-						<p class="field-error">{getFirstError('curriculumNodeCode')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Pozicijos numeris</span>
-					<input
-						bind:value={formState.curriculumItemOrdinal}
-						name="curriculumItemOrdinal"
-						type="number"
-						min="0"
-						on:input={markDirty}
-					/>
-					{#if getFirstError('curriculumItemOrdinal')}
-						<p class="field-error">{getFirstError('curriculumItemOrdinal')}</p>
-					{/if}
-				</label>
-
-				<label>
-					<span>Pozicijos pavadinimas</span>
-					<input bind:value={formState.curriculumItemLabel} name="curriculumItemLabel" on:input={markDirty} />
-					{#if getFirstError('curriculumItemLabel')}
-						<p class="field-error">{getFirstError('curriculumItemLabel')}</p>
-					{/if}
+					<p class="field-hint">Slug generuojamas automatiškai ir nėra redaguojamas.</p>
 				</label>
 
 				<label>
@@ -1150,31 +1147,6 @@
 				</label>
 			</div>
 			{/if}
-
-			<div class="status-toggle" role="radiogroup" aria-label="Temos būsena">
-				<span>Būsena *</span>
-				<div class="status-toggle__buttons">
-					<button
-						type="button"
-						on:click={() => setStatus('draft')}
-						class:status-toggle__button--active={formState.status === 'draft'}
-					>
-						Juodraštis
-					</button>
-					<button
-						type="button"
-						on:click={() => setStatus('published')}
-						class:status-toggle__button--active={formState.status === 'published'}
-					>
-						Publikuota
-					</button>
-				</div>
-				{#if getFirstError('status')}
-					<p class="field-error">{getFirstError('status')}</p>
-				{:else if getFirstError('metadata.status')}
-					<p class="field-error">{getFirstError('metadata.status')}</p>
-				{/if}
-			</div>
 
 		</div>
 
@@ -1193,11 +1165,40 @@
 				</div>
 			{:else}
 				<button type="button" class="text" on:click={requestCloseEditor} disabled={saving}>
-					Atšaukti
+					Uždaryti
 				</button>
-				<button class="primary" type="submit" disabled={saving}>
-					{saving ? 'Saugoma...' : 'Išsaugoti'}
-				</button>
+				<div class="drawer__actions">
+					<div class="concept-admin-actions">
+						<button
+							type="submit"
+							class="concept-admin-button concept-admin-button--primary"
+							disabled={draftDisabled}
+						>
+							{saving && formState.status !== 'published' ? 'Saugoma…' : 'Į juodraštį'}
+						</button>
+						<button
+							type="button"
+							class="concept-admin-button concept-admin-button--publish"
+							on:click={submitPublish}
+							disabled={publishDisabled}
+						>
+							{saving && formState.status === 'published' ? 'Publikuojama…' : 'Publikuoti'}
+						</button>
+						<button
+							type="button"
+							class="concept-admin-button"
+							on:click={restoreInitialState}
+							disabled={discardDisabled}
+						>
+							Atmesti
+						</button>
+					</div>
+					{#if getFirstError('status')}
+						<p class="field-error drawer__status-error">{getFirstError('status')}</p>
+					{:else if getFirstError('metadata.status')}
+						<p class="field-error drawer__status-error">{getFirstError('metadata.status')}</p>
+					{/if}
+				</div>
 			{/if}
 		</footer>
 	</form>
@@ -1506,12 +1507,6 @@
 		width: auto;
 	}
 
-	.status-toggle {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
 	.advanced-toggle button {
 		padding: 0;
 		background: none;
@@ -1521,23 +1516,10 @@
 		cursor: pointer;
 	}
 
-	.status-toggle__buttons {
-		display: inline-flex;
-		gap: 0.4rem;
-	}
-
-	.status-toggle__buttons button {
-		padding: 0.4rem 0.9rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-border);
-		background: var(--color-panel-soft);
-		cursor: pointer;
-	}
-
-	.status-toggle__button--active {
-		background: rgba(59, 130, 246, 0.15);
-		border-color: rgba(59, 130, 246, 0.4);
-		color: rgb(37, 99, 235);
+	.field-hint {
+		margin: 0.35rem 0 0;
+		font-size: 0.82rem;
+		color: var(--color-text-soft);
 	}
 
 	.drawer__confirm {
@@ -1567,7 +1549,9 @@
 
 	.drawer__footer {
 		display: flex;
-		justify-content: flex-end;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
 		gap: 0.8rem;
 		padding: 1.1rem 1.6rem 1.4rem;
 		border-top: 1px solid var(--color-border);
@@ -1576,6 +1560,61 @@
 	.drawer__footer--confirm {
 		flex-direction: column;
 		align-items: stretch;
+	}
+
+	.drawer__actions {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		align-items: flex-end;
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.drawer__status-error {
+		text-align: right;
+	}
+
+	.concept-admin-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		justify-content: flex-end;
+	}
+
+	.concept-admin-button {
+		border: 1px solid var(--color-border-light);
+		background: var(--color-panel-secondary);
+		border-radius: 0.65rem;
+		padding: 0.6rem 1rem;
+		font-weight: 600;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.concept-admin-button:hover,
+	.concept-admin-button:focus-visible {
+		border-color: var(--color-border);
+		background: var(--color-panel-hover);
+		box-shadow: 0 0 0 2px var(--color-accent-faint-strong);
+	}
+
+	.concept-admin-button--primary {
+		background: var(--color-panel);
+		border-color: var(--color-border);
+	}
+
+	.concept-admin-button--publish {
+		background: var(--color-accent-faint);
+		border-color: var(--color-accent-border-strong);
+		color: var(--color-accent-strong);
+	}
+
+	.concept-admin-button:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
 	}
 
 	@media (max-width: 720px) {
@@ -1591,6 +1630,20 @@
 
 		.drawer {
 			width: min(100vw, 420px);
+		}
+
+		.drawer__footer {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.drawer__actions {
+			align-items: stretch;
+		}
+
+		.concept-admin-actions {
+			flex-direction: column;
+			align-items: stretch;
 		}
 	}
 </style>
