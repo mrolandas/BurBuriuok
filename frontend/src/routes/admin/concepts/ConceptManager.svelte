@@ -5,6 +5,7 @@
 	import {
 		listAdminConcepts,
 		saveAdminConcept,
+		deleteAdminConcept,
 		fetchAdminConceptHistory,
 		type AdminConceptResource,
 		type AdminConceptStatus,
@@ -65,6 +66,12 @@
 	let beforeUnloadAttached = false;
 	let lastPrefilledSlug: string | null = null;
 	let requestedSlug: string | null = null;
+	let showAdvancedFields = false;
+	let slugManuallyEdited = false;
+	let discardPromptVisible = false;
+	let deleteConfirmSlug: string | null = null;
+	let deletingSlug: string | null = null;
+	let deleteError: string | null = null;
 
 	onMount(() => {
 		void refreshConcepts();
@@ -221,21 +228,97 @@
 		};
 	}
 
+	const MAX_SLUG_LENGTH = 90;
+	const slugDiacriticRegex = /[\u0300-\u036f]/g;
+	const slugSeparatorRegex = /[\s_]+/g;
+	const slugTrimHyphenRegex = /^-+|-+$/g;
+
+	function slugifyTerm(value: string): string {
+		const ascii = value
+			.normalize('NFD')
+			.replace(slugDiacriticRegex, '')
+			.replace(/[^A-Za-z0-9\s-]/g, ' ');
+
+		const collapsed = ascii
+			.trim()
+			.replace(slugSeparatorRegex, '-')
+			.replace(/-+/g, '-');
+
+		return collapsed.replace(slugTrimHyphenRegex, '').toLowerCase();
+	}
+
+	function maybeAutofillSlug(term: string): void {
+		if (editorMode !== 'create' || slugManuallyEdited) {
+			return;
+		}
+
+		const generated = slugifyTerm(term);
+		const nextSlug = generated.slice(0, MAX_SLUG_LENGTH);
+
+		if (formState.slug === nextSlug) {
+			return;
+		}
+
+		formState = { ...formState, slug: nextSlug };
+		markDirty();
+	}
+
+	function handleTermLtInput(event: Event): void {
+		const target = event.currentTarget as HTMLInputElement | null;
+		const value = target?.value ?? '';
+		markDirty();
+		maybeAutofillSlug(value);
+	}
+
+	function handleSlugInput(): void {
+		slugManuallyEdited = true;
+		markDirty();
+	}
+
+	const ADVANCED_FIELDS = new Set([
+		'slug',
+		'subsectionCode',
+		'subsectionTitle',
+		'curriculumNodeCode',
+		'curriculumItemOrdinal',
+		'curriculumItemLabel',
+		'sourceRef',
+		'isRequired'
+	]);
+
+	function ensureAdvancedVisibleForErrors(errors: FieldErrors): void {
+		if (showAdvancedFields) {
+			return;
+		}
+
+		for (const [field, issues] of Object.entries(errors)) {
+			if (issues && issues.length && ADVANCED_FIELDS.has(field)) {
+				showAdvancedFields = true;
+				return;
+			}
+		}
+	}
+
 	function resetForm(): void {
 		formState = createEmptyFormState();
 		metadataSnapshot = { status: 'draft' };
 		formErrors = {};
 		saveError = null;
+		showAdvancedFields = false;
+		slugManuallyEdited = false;
 		setInitialSnapshot(formState, metadataSnapshot);
 	}
 
 	function openCreate(): void {
 		editorMode = 'create';
 		activeConcept = null;
+		discardPromptVisible = false;
 		resetForm();
 		historyEntries = [];
 		historyError = null;
 		historyLoading = false;
+		deleteConfirmSlug = null;
+		deleteError = null;
 		editorOpen = true;
 	}
 
@@ -244,6 +327,11 @@
 		activeConcept = concept;
 		formState = conceptToFormState(concept);
 		metadataSnapshot = cloneMetadata(concept.metadata);
+		showAdvancedFields = false;
+		slugManuallyEdited = true;
+		discardPromptVisible = false;
+		deleteConfirmSlug = null;
+		deleteError = null;
 
 		if (typeof metadataSnapshot.status !== 'string') {
 			metadataSnapshot.status = concept.status;
@@ -259,17 +347,42 @@
 		editorOpen = true;
 	}
 
-	function closeEditor(): void {
+	function finalizeCloseEditor(): void {
+		resetForm();
+		activeConcept = null;
+		editorMode = 'create';
+		editorOpen = false;
+		editorDirty = false;
+		discardPromptVisible = false;
+		showAdvancedFields = false;
+		slugManuallyEdited = false;
+		historyEntries = [];
+		historyError = null;
+		historyLoading = false;
+		deleteConfirmSlug = null;
+		deleteError = null;
+	}
+
+	function requestCloseEditor(): void {
 		if (saving) {
 			return;
 		}
 
-		if (!confirmDiscard()) {
+		if (!hasUnsavedChanges()) {
+			finalizeCloseEditor();
 			return;
 		}
 
-		editorOpen = false;
-		editorDirty = false;
+		discardPromptVisible = true;
+	}
+
+	function cancelDiscardPrompt(): void {
+		discardPromptVisible = false;
+	}
+
+	function confirmDiscardChanges(): void {
+		discardPromptVisible = false;
+		finalizeCloseEditor();
 	}
 
 	function conceptToFormState(concept: AdminConceptResource): ConceptFormState {
@@ -399,6 +512,7 @@
 	function buildPayload(state: ConceptFormState): AdminConceptMutationInput {
 		return {
 			slug: state.slug.trim(),
+			originalSlug: editorMode === 'edit' && activeConcept ? activeConcept.slug : undefined,
 			termLt: state.termLt.trim(),
 			termEn: optionalString(state.termEn),
 			descriptionLt: state.descriptionLt.trim(),
@@ -432,13 +546,13 @@
 	function handleBackdropKeydown(event: KeyboardEvent): void {
 		if (event.key === 'Escape') {
 			event.preventDefault();
-			closeEditor();
+			requestCloseEditor();
 			return;
 		}
 
 		if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
 			event.preventDefault();
-			closeEditor();
+			requestCloseEditor();
 		}
 	}
 
@@ -466,6 +580,7 @@
 		if (!validation.success) {
 			const flattened = validation.error.flatten();
 			formErrors = flattened.fieldErrors as FieldErrors;
+			ensureAdvancedVisibleForErrors(formErrors);
 			const general = flattened.formErrors.filter(Boolean);
 			saveError = general.length ? general.join(' ') : null;
 			return;
@@ -481,17 +596,52 @@
 			} else {
 				await refreshConcepts();
 			}
-			activeConcept = saved;
-			editorDirty = false;
-			editorOpen = false;
-			showSuccess(editorMode === 'edit' ? 'Sąvoka atnaujinta.' : 'Sąvoka sukurta.');
-			if (editorMode === 'edit') {
-				void loadHistory(saved.slug);
-			}
+			const wasEdit = editorMode === 'edit';
+			showSuccess(wasEdit ? 'Sąvoka atnaujinta.' : 'Sąvoka sukurta.');
+			finalizeCloseEditor();
 		} catch (error) {
 			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti sąvokų.';
 		} finally {
 			saving = false;
+		}
+	}
+
+	function requestDeleteConcept(concept: AdminConceptResource): void {
+		deleteConfirmSlug = concept.slug;
+		deleteError = null;
+	}
+
+	function cancelDeleteRequest(): void {
+		if (deletingSlug) {
+			return;
+		}
+		deleteConfirmSlug = null;
+		deleteError = null;
+	}
+
+	async function confirmDeleteConcept(): Promise<void> {
+		if (!deleteConfirmSlug || deletingSlug) {
+			return;
+		}
+
+		const targetSlug = deleteConfirmSlug;
+		deletingSlug = targetSlug;
+		deleteError = null;
+
+		try {
+			await deleteAdminConcept(targetSlug);
+			const remaining = concepts.filter((concept) => concept.slug !== targetSlug);
+			concepts = sortConcepts(remaining);
+			updateSectionOptions(concepts);
+			if (activeConcept && activeConcept.slug === targetSlug) {
+				finalizeCloseEditor();
+			}
+			showSuccess('Sąvoka pašalinta.');
+			deleteConfirmSlug = null;
+		} catch (error) {
+			deleteError = error instanceof Error ? error.message : 'Nepavyko ištrinti sąvokos.';
+		} finally {
+			deletingSlug = null;
 		}
 	}
 
@@ -523,7 +673,7 @@
 <section class="concepts-shell">
 	<header class="concepts-shell__header">
 		<div>
-			<h1>Sąvokų tvarkyklė</h1>
+			<h1>Sąvokų administravimas</h1>
 			<p>
 				Kurti ir atnaujinti mokomąsias sąvokas. Administratoriaus pakeitimai saugomi ir žymimi kaip
 				juodraščiai arba publikuoti įrašai.
@@ -531,6 +681,10 @@
 		</div>
 		<button class="primary" type="button" on:click={openCreate}>Nauja sąvoka</button>
 	</header>
+
+	{#if successMessage}
+		<div class="alert alert--success">{successMessage}</div>
+	{/if}
 
 	{#if loadError}
 		<div class="alert alert--error">{loadError}</div>
@@ -587,7 +741,41 @@
 									>
 										Atverti sąvoką
 									</a>
+									<button
+										type="button"
+										class="danger"
+										on:click={() => requestDeleteConcept(concept)}
+									>
+										Šalinti
+									</button>
 								</div>
+								{#if deleteConfirmSlug === concept.slug}
+									<div class="concept-table__delete-confirm">
+										<p>
+											Ar tikrai norite pašalinti "{concept.termLt}" sąvoką?
+										</p>
+										{#if deleteError}
+											<p class="concept-table__delete-error">{deleteError}</p>
+										{/if}
+										<div class="concept-table__delete-actions">
+											<button
+												type="button"
+												class="danger"
+												on:click={confirmDeleteConcept}
+												disabled={deletingSlug === concept.slug}
+											>
+												{deletingSlug === concept.slug ? 'Šalinama...' : 'Patvirtinti'}
+											</button>
+											<button
+												type="button"
+												on:click={cancelDeleteRequest}
+												disabled={deletingSlug === concept.slug}
+											>
+												Atšaukti
+											</button>
+										</div>
+									</div>
+								{/if}
 							</td>
 						</tr>
 					{/each}
@@ -603,7 +791,7 @@
 		role="button"
 		tabindex="0"
 		aria-label="Uždaryti sąvokų redagavimo formą"
-		on:click={closeEditor}
+		on:click={requestCloseEditor}
 		on:keydown={handleBackdropKeydown}
 	></div>
 {/if}
@@ -617,128 +805,157 @@
 					<p class="muted">Redaguojama: <code>{activeConcept.slug}</code></p>
 				{/if}
 			</div>
-			<button type="button" on:click={closeEditor} class="text">Uždaryti</button>
+			<button type="button" on:click={requestCloseEditor} class="text">Uždaryti</button>
 		</header>
 
-		{#if saveError}
-			<div class="alert alert--error">{saveError}</div>
-		{/if}
+		<div class="drawer__content">
+			{#if saveError}
+				<div class="alert alert--error">{saveError}</div>
+			{/if}
 
-		<div class="form-grid">
-			<label>
-				<span>Slug *</span>
-				<input bind:value={formState.slug} name="slug" required disabled={editorMode === 'edit'} on:input={markDirty} />
-				{#if getFirstError('slug')}
-					<p class="field-error">{getFirstError('slug')}</p>
-				{/if}
-			</label>
+			<div class="form-grid form-grid--basic">
+				<label>
+					<span>Sąvoka (LT) *</span>
+					<input bind:value={formState.termLt} name="termLt" required on:input={handleTermLtInput} />
+					{#if getFirstError('termLt')}
+						<p class="field-error">{getFirstError('termLt')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Sąvoka (LT) *</span>
-				<input bind:value={formState.termLt} name="termLt" required on:input={markDirty} />
-				{#if getFirstError('termLt')}
-					<p class="field-error">{getFirstError('termLt')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Sąvoka (EN)</span>
+					<input bind:value={formState.termEn} name="termEn" on:input={markDirty} />
+					{#if getFirstError('termEn')}
+						<p class="field-error">{getFirstError('termEn')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Sąvoka (EN)</span>
-				<input bind:value={formState.termEn} name="termEn" on:input={markDirty} />
-				{#if getFirstError('termEn')}
-					<p class="field-error">{getFirstError('termEn')}</p>
-				{/if}
-			</label>
+				<label class="form-grid__full">
+					<span>Aprašymas (LT) *</span>
+					<textarea
+						bind:value={formState.descriptionLt}
+						name="descriptionLt"
+						rows="4"
+						required
+						on:input={markDirty}
+					></textarea>
+					{#if getFirstError('descriptionLt')}
+						<p class="field-error">{getFirstError('descriptionLt')}</p>
+					{/if}
+				</label>
 
-			<label class="form-grid__full">
-				<span>Aprašymas (LT) *</span>
-				<textarea bind:value={formState.descriptionLt} name="descriptionLt" rows="4" required on:input={markDirty}></textarea>
-				{#if getFirstError('descriptionLt')}
-					<p class="field-error">{getFirstError('descriptionLt')}</p>
-				{/if}
-			</label>
+				<label class="form-grid__full">
+					<span>Aprašymas (EN)</span>
+					<textarea bind:value={formState.descriptionEn} name="descriptionEn" rows="3" on:input={markDirty}></textarea>
+					{#if getFirstError('descriptionEn')}
+						<p class="field-error">{getFirstError('descriptionEn')}</p>
+					{/if}
+				</label>
 
-			<label class="form-grid__full">
-				<span>Aprašymas (EN)</span>
-				<textarea bind:value={formState.descriptionEn} name="descriptionEn" rows="3" on:input={markDirty}></textarea>
-				{#if getFirstError('descriptionEn')}
-					<p class="field-error">{getFirstError('descriptionEn')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Skyriaus kodas *</span>
+					<input bind:value={formState.sectionCode} name="sectionCode" required on:input={markDirty} />
+					{#if getFirstError('sectionCode')}
+						<p class="field-error">{getFirstError('sectionCode')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Skyriaus kodas *</span>
-				<input bind:value={formState.sectionCode} name="sectionCode" required on:input={markDirty} />
-				{#if getFirstError('sectionCode')}
-					<p class="field-error">{getFirstError('sectionCode')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Skyriaus pavadinimas *</span>
+					<input bind:value={formState.sectionTitle} name="sectionTitle" required on:input={markDirty} />
+					{#if getFirstError('sectionTitle')}
+						<p class="field-error">{getFirstError('sectionTitle')}</p>
+					{/if}
+				</label>
+			</div>
 
-			<label>
-				<span>Skyriaus pavadinimas *</span>
-				<input bind:value={formState.sectionTitle} name="sectionTitle" required on:input={markDirty} />
-				{#if getFirstError('sectionTitle')}
-					<p class="field-error">{getFirstError('sectionTitle')}</p>
-				{/if}
-			</label>
+			<div class="advanced-toggle">
+				<button
+					type="button"
+					on:click={() => (showAdvancedFields = !showAdvancedFields)}
+					aria-expanded={showAdvancedFields}
+					aria-controls="concept-advanced-fields"
+				>
+					{showAdvancedFields ? 'Slėpti papildomus laukus' : 'Rodyti papildomus laukus'}
+				</button>
+			</div>
 
-			<label>
-				<span>Poskyrio kodas</span>
-				<input bind:value={formState.subsectionCode} name="subsectionCode" on:input={markDirty} />
-				{#if getFirstError('subsectionCode')}
-					<p class="field-error">{getFirstError('subsectionCode')}</p>
-				{/if}
-			</label>
+			{#if showAdvancedFields}
+				<div class="form-grid form-grid--advanced" id="concept-advanced-fields">
+				<label>
+					<span>Slug *</span>
+					<input
+						bind:value={formState.slug}
+						name="slug"
+						required
+						disabled={editorMode === 'edit'}
+						on:input={handleSlugInput}
+					/>
+					{#if getFirstError('slug')}
+						<p class="field-error">{getFirstError('slug')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Poskyrio pavadinimas</span>
-				<input bind:value={formState.subsectionTitle} name="subsectionTitle" on:input={markDirty} />
-				{#if getFirstError('subsectionTitle')}
-					<p class="field-error">{getFirstError('subsectionTitle')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Poskyrio kodas</span>
+					<input bind:value={formState.subsectionCode} name="subsectionCode" on:input={markDirty} />
+					{#if getFirstError('subsectionCode')}
+						<p class="field-error">{getFirstError('subsectionCode')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Curriculum node kodas</span>
-				<input bind:value={formState.curriculumNodeCode} name="curriculumNodeCode" on:input={markDirty} />
-				{#if getFirstError('curriculumNodeCode')}
-					<p class="field-error">{getFirstError('curriculumNodeCode')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Poskyrio pavadinimas</span>
+					<input bind:value={formState.subsectionTitle} name="subsectionTitle" on:input={markDirty} />
+					{#if getFirstError('subsectionTitle')}
+						<p class="field-error">{getFirstError('subsectionTitle')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Pozicijos numeris</span>
-				<input
-					bind:value={formState.curriculumItemOrdinal}
-					name="curriculumItemOrdinal"
-					type="number"
-					min="0"
-					on:input={markDirty}
-				/>
-				{#if getFirstError('curriculumItemOrdinal')}
-					<p class="field-error">{getFirstError('curriculumItemOrdinal')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Curriculum node kodas</span>
+					<input bind:value={formState.curriculumNodeCode} name="curriculumNodeCode" on:input={markDirty} />
+					{#if getFirstError('curriculumNodeCode')}
+						<p class="field-error">{getFirstError('curriculumNodeCode')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Pozicijos pavadinimas</span>
-				<input bind:value={formState.curriculumItemLabel} name="curriculumItemLabel" on:input={markDirty} />
-				{#if getFirstError('curriculumItemLabel')}
-					<p class="field-error">{getFirstError('curriculumItemLabel')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Pozicijos numeris</span>
+					<input
+						bind:value={formState.curriculumItemOrdinal}
+						name="curriculumItemOrdinal"
+						type="number"
+						min="0"
+						on:input={markDirty}
+					/>
+					{#if getFirstError('curriculumItemOrdinal')}
+						<p class="field-error">{getFirstError('curriculumItemOrdinal')}</p>
+					{/if}
+				</label>
 
-			<label>
-				<span>Šaltinio nuoroda</span>
-				<input bind:value={formState.sourceRef} name="sourceRef" on:input={markDirty} />
-				{#if getFirstError('sourceRef')}
-					<p class="field-error">{getFirstError('sourceRef')}</p>
-				{/if}
-			</label>
+				<label>
+					<span>Pozicijos pavadinimas</span>
+					<input bind:value={formState.curriculumItemLabel} name="curriculumItemLabel" on:input={markDirty} />
+					{#if getFirstError('curriculumItemLabel')}
+						<p class="field-error">{getFirstError('curriculumItemLabel')}</p>
+					{/if}
+				</label>
 
-			<label class="checkbox">
-				<input type="checkbox" bind:checked={formState.isRequired} on:change={markDirty} />
-				<span>Privaloma sąvoka</span>
-			</label>
+				<label>
+					<span>Šaltinio nuoroda</span>
+					<input bind:value={formState.sourceRef} name="sourceRef" on:input={markDirty} />
+					{#if getFirstError('sourceRef')}
+						<p class="field-error">{getFirstError('sourceRef')}</p>
+					{/if}
+				</label>
+
+				<label class="checkbox">
+					<input type="checkbox" bind:checked={formState.isRequired} on:change={markDirty} />
+					<span>Privaloma sąvoka</span>
+				</label>
+			</div>
+			{/if}
 
 			<div class="status-toggle" role="radiogroup" aria-label="Temos būsena">
 				<span>Būsena *</span>
@@ -764,10 +981,22 @@
 					<p class="field-error">{getFirstError('metadata.status')}</p>
 				{/if}
 			</div>
+
+			{#if discardPromptVisible}
+				<div class="drawer__confirm">
+					<p>Yra neišsaugotų pakeitimų. Ar norite juos atmesti?</p>
+					<div class="drawer__confirm-actions">
+						<button type="button" on:click={cancelDiscardPrompt}>Tęsti redagavimą</button>
+						<button type="button" class="danger" on:click={confirmDiscardChanges}>
+							Atmesti pakeitimus
+						</button>
+					</div>
+				</div>
+			{/if}
 		</div>
 
 		<footer class="drawer__footer">
-			<button type="button" class="text" on:click={closeEditor} disabled={saving}>
+			<button type="button" class="text" on:click={requestCloseEditor} disabled={saving}>
 				Atšaukti
 			</button>
 			<button class="primary" type="submit" disabled={saving}>
@@ -817,6 +1046,22 @@
 		border-color: var(--color-pill-hover-border);
 	}
 
+	.danger {
+		background: rgba(220, 38, 38, 0.08);
+		color: rgb(185, 28, 28);
+		border: 1px solid rgba(220, 38, 38, 0.35);
+		border-radius: 0.55rem;
+		padding: 0.45rem 0.9rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.danger:hover,
+	.danger:focus-visible {
+		background: rgba(220, 38, 38, 0.16);
+		border-color: rgba(220, 38, 38, 0.5);
+	}
+
 	.text {
 		background: none;
 		border: none;
@@ -834,6 +1079,12 @@
 		background: rgba(220, 38, 38, 0.1);
 		border: 1px solid rgba(220, 38, 38, 0.4);
 		color: rgb(185, 28, 28);
+	}
+
+	.alert--success {
+		background: rgba(22, 163, 74, 0.12);
+		border: 1px solid rgba(22, 163, 74, 0.35);
+		color: rgb(22, 101, 52);
 	}
 
 	.muted {
@@ -863,6 +1114,30 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.4rem;
+	}
+	.concept-table__delete-confirm {
+		margin-top: 0.6rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: 0.6rem;
+		background: rgba(220, 38, 38, 0.08);
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.concept-table__delete-confirm p {
+		margin: 0;
+	}
+
+	.concept-table__delete-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.concept-table__delete-error {
+		margin: 0;
+		color: rgb(185, 28, 28);
+		font-size: 0.9rem;
 	}
 
 	.concept-table__actions a {
@@ -993,11 +1268,24 @@
 		font-size: 1.4rem;
 	}
 
-	.form-grid {
+	.drawer__content {
 		overflow-y: auto;
-		padding: 0 1.6rem;
+		padding: 0 1.6rem 1.4rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.4rem;
+	}
+
+	.form-grid {
 		display: grid;
 		gap: 1rem;
+	}
+
+	.form-grid--basic {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.form-grid--advanced {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
@@ -1039,6 +1327,15 @@
 		gap: 0.5rem;
 	}
 
+	.advanced-toggle button {
+		padding: 0;
+		background: none;
+		border: none;
+		color: var(--color-link);
+		font-weight: 600;
+		cursor: pointer;
+	}
+
 	.status-toggle__buttons {
 		display: inline-flex;
 		gap: 0.4rem;
@@ -1056,6 +1353,25 @@
 		background: rgba(59, 130, 246, 0.15);
 		border-color: rgba(59, 130, 246, 0.4);
 		color: rgb(37, 99, 235);
+	}
+
+	.drawer__confirm {
+		border: 1px solid var(--color-border);
+		border-radius: 0.75rem;
+		padding: 0.9rem 1rem;
+		display: grid;
+		gap: 0.6rem;
+		background: var(--color-panel-soft);
+	}
+
+	.drawer__confirm p {
+		margin: 0;
+	}
+
+	.drawer__confirm-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
 	}
 
 	.field-error {
@@ -1078,7 +1394,8 @@
 			align-items: stretch;
 		}
 
-		.form-grid {
+		.form-grid--basic,
+		.form-grid--advanced {
 			grid-template-columns: 1fr;
 		}
 
