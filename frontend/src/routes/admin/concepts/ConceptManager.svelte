@@ -887,7 +887,6 @@
 					<tr>
 						<th scope="col">Sąvoka</th>
 						<th scope="col">Skyrius</th>
-						<th scope="col">Slug</th>
 						<th scope="col">Būsena</th>
 						<th scope="col">Atnaujinta</th>
 						<th scope="col">Veiksmai</th>
@@ -898,7 +897,14 @@
 						<tr>
 							<td>
 								<div class="concept-name">
-									<span class="concept-name__primary">{concept.termLt}</span>
+									<a
+										href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
+										target="_blank"
+										rel="noreferrer"
+										class="concept-name__primary"
+									>
+										{concept.termLt}
+									</a>
 									{#if concept.termEn}
 										<span class="concept-name__secondary">{concept.termEn}</span>
 									{/if}
@@ -906,13 +912,14 @@
 							</td>
 							<td>
 								<div class="concept-section">
-									<span>{concept.sectionCode}</span>
-									{#if concept.sectionTitle}
-										<span class="concept-section__title">{concept.sectionTitle}</span>
+									<span>{concept.subsectionCode ?? concept.sectionCode}</span>
+									{#if concept.subsectionTitle ?? concept.sectionTitle}
+										<span class="concept-section__title">
+											{concept.subsectionTitle ?? concept.sectionTitle}
+										</span>
 									{/if}
 								</div>
 							</td>
-							<td><code>{concept.slug}</code></td>
 							<td>
 								<span class:status-badge--published={concept.status === 'published'} class="status-badge">
 									{statusLabels[concept.status]}
@@ -922,13 +929,6 @@
 							<td>
 								<div class="concept-table__actions">
 									<button type="button" on:click={() => openEdit(concept)}>Redaguoti</button>
-									<a
-										href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
-										target="_blank"
-										rel="noreferrer"
-									>
-										Atverti sąvoką
-									</a>
 									<button
 										type="button"
 										class="danger"
@@ -1176,26 +1176,29 @@
 				{/if}
 			</div>
 
+		</div>
+
+		<footer class="drawer__footer" class:drawer__footer--confirm={discardPromptVisible}>
 			{#if discardPromptVisible}
 				<div class="drawer__confirm">
-					<p>Yra neišsaugotų pakeitimų. Ar norite juos atmesti?</p>
+					<p>Yra neišsaugotų pakeitimų. Ar tikrai uždaryti be išsaugojimo?</p>
 					<div class="drawer__confirm-actions">
-						<button type="button" on:click={cancelDiscardPrompt}>Tęsti redagavimą</button>
+						<button type="button" on:click={cancelDiscardPrompt}>
+							Tęsti redagavimą
+						</button>
 						<button type="button" class="danger" on:click={confirmDiscardChanges}>
 							Atmesti pakeitimus
 						</button>
 					</div>
 				</div>
+			{:else}
+				<button type="button" class="text" on:click={requestCloseEditor} disabled={saving}>
+					Atšaukti
+				</button>
+				<button class="primary" type="submit" disabled={saving}>
+					{saving ? 'Saugoma...' : 'Išsaugoti'}
+				</button>
 			{/if}
-		</div>
-
-		<footer class="drawer__footer">
-			<button type="button" class="text" on:click={requestCloseEditor} disabled={saving}>
-				Atšaukti
-			</button>
-			<button class="primary" type="submit" disabled={saving}>
-				{saving ? 'Saugoma...' : 'Išsaugoti'}
-			</button>
 		</footer>
 	</form>
 </aside>
@@ -1334,19 +1337,6 @@
 		font-size: 0.9rem;
 	}
 
-	.concept-table__actions a {
-		display: inline-flex;
-		align-items: center;
-		padding: 0.35rem 0.75rem;
-		border-radius: 0.45rem;
-		border: 1px solid var(--color-border-light);
-		background: var(--color-panel);
-		text-decoration: none;
-		color: inherit;
-		font-size: 0.85rem;
-		transition: background 0.2s ease, border-color 0.2s ease;
-	}
-
 	.concept-table__actions button {
 		border: 1px solid var(--color-border-light);
 		background: var(--color-panel);
@@ -1354,12 +1344,6 @@
 		padding: 0.35rem 0.75rem;
 		cursor: pointer;
 		transition: background 0.2s ease, border-color 0.2s ease;
-	}
-
-	.concept-table__actions a:hover,
-	.concept-table__actions a:focus-visible {
-		border-color: var(--color-border);
-		background: var(--color-panel-hover);
 	}
 
 	.concept-table__actions button:hover,
@@ -1380,6 +1364,13 @@
 
 	.concept-name__primary {
 		font-weight: 600;
+		color: var(--color-link);
+		text-decoration: none;
+	}
+
+	.concept-name__primary:hover,
+	.concept-name__primary:focus-visible {
+		text-decoration: underline;
 	}
 
 	.concept-name__secondary {
@@ -1580,6 +1571,11 @@
 		gap: 0.8rem;
 		padding: 1.1rem 1.6rem 1.4rem;
 		border-top: 1px solid var(--color-border);
+	}
+
+	.drawer__footer--confirm {
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	@media (max-width: 720px) {
