@@ -47,30 +47,34 @@
 
 	type AvatarTheme = {
 		background: string;
-		color: string;
+		border: string;
+		iconColor: string;
 		icon: AvatarSegment[];
 	};
 
 	const avatarThemes: AvatarTheme[] = [
 		{
-			background: '#e0f2fe',
-			color: '#0f172a',
+			background: 'rgba(56, 189, 248, 0.16)',
+			border: 'rgba(14, 165, 233, 0.36)',
+			iconColor: '#0f172a',
 			icon: [
 				{ d: 'M12 4l5.5 9H6.5z', fill: 'currentColor', fillRule: 'evenodd' },
 				{ d: 'M5 18h14', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' }
 			]
 		},
 		{
-			background: '#fef3c7',
-			color: '#92400e',
+			background: 'rgba(249, 115, 22, 0.18)',
+			border: 'rgba(234, 88, 12, 0.32)',
+			iconColor: '#7c2d12',
 			icon: [
 				{ d: 'M12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z', stroke: 'currentColor', strokeWidth: 1.4 },
 				{ d: 'M12 8l2.4 4L10 13.6z', fill: 'currentColor', fillRule: 'evenodd' }
 			]
 		},
 		{
-			background: '#ecfdf5',
-			color: '#047857',
+			background: 'rgba(16, 185, 129, 0.16)',
+			border: 'rgba(5, 150, 105, 0.28)',
+			iconColor: '#065f46',
 			icon: [
 				{
 					d: 'M4 15c2.2 2 4.4 2 6.6 0s4.4-2 6.6 0 4.4 2 6.6 0',
@@ -81,15 +85,17 @@
 			]
 		},
 		{
-			background: '#fef2f2',
-			color: '#be123c',
+			background: 'rgba(236, 72, 153, 0.16)',
+			border: 'rgba(219, 39, 119, 0.32)',
+			iconColor: '#9d174d',
 			icon: [
 				{ d: 'M12 6l1.8 3.8 4.2.6-3 3 0.7 4.2L12 16.6 8.3 17.6 9 13.4l-3-3 4.2-.6z', fill: 'currentColor', fillRule: 'evenodd' }
 			]
 		},
 		{
-			background: '#ede9fe',
-			color: '#5b21b6',
+			background: 'rgba(129, 140, 248, 0.18)',
+			border: 'rgba(99, 102, 241, 0.32)',
+			iconColor: '#4338ca',
 			icon: [
 				{ d: 'M6 8l6-2 6 2v8l-6 2-6-2z', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round' },
 				{ d: 'M6 8l6 2 6-2', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round' }
@@ -114,6 +120,9 @@
 	const formatCount = (value: number, singular: string, few: string, many: string) => {
 		const modTen = value % 10;
 		const modHundred = value % 100;
+		if (value === 0) {
+			return `0 ${many}`;
+		}
 		if (modHundred >= 10 && modHundred <= 20) {
 			return `${value} ${many}`;
 		}
@@ -165,6 +174,7 @@
 			{@const description = formatSummary(section.summary, title)}
 			{@const theme = selectTheme(section.code)}
 			{@const metaLabel = formatMeta(section)}
+			{@const sectionLabel = `Skyrius #${section.ordinal}`}
 			{@const domId = toDomId(section.code)}
 
 			<article class="section-card">
@@ -175,14 +185,14 @@
 				>
 					<span
 						class="section-card__avatar"
-						style={`background:${theme.background};color:${theme.color};`}
+						style={`background:${theme.background};border-color:${theme.border};color:${theme.iconColor};`}
 					>
 						<svg viewBox="0 0 24 24" role="presentation" focusable="false" aria-hidden="true">
 							{#each theme.icon as segment, index (index)}
 								<path
 									d={segment.d}
 									fill={segment.fill ?? 'none'}
-									stroke={segment.stroke ?? theme.color}
+									stroke={segment.stroke ?? theme.iconColor}
 									stroke-width={segment.strokeWidth}
 									stroke-linecap={segment.strokeLinecap}
 									stroke-linejoin={segment.strokeLinejoin}
@@ -197,31 +207,34 @@
 					</div>
 				</a>
 				<div class="section-card__meta">
-					<span class="section-card__meta-label">{metaLabel}</span>
-					{#if adminModeEnabled}
-						<button
-							type="button"
-							class="section-card__edit"
-							onclick={(event) => handleEditClick(event, section)}
-						>
-							<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-								<path
-									d="M4 20h16"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-								></path>
-								<path
-									d="M14.5 4.5l5 5L9 20l-5 1 1-5z"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linejoin="round"
-								></path>
-							</svg>
+					<span class="section-card__meta-counts">{metaLabel}</span>
+					<div class="section-card__meta-actions">
+						<span class="section-card__meta-ordinal">{sectionLabel}</span>
+						{#if adminModeEnabled}
+							<button
+								type="button"
+								class="section-card__edit"
+								onclick={(event) => handleEditClick(event, section)}
+							>
+								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<path
+										d="M4 20h16"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+									></path>
+									<path
+										d="M14.5 4.5l5 5L9 20l-5 1 1-5z"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linejoin="round"
+									></path>
+								</svg>
 								<span>Redaguoti skiltį</span>
-						</button>
-					{/if}
+							</button>
+						{/if}
+					</div>
 				</div>
 			</article>
 		{/each}
@@ -306,12 +319,12 @@
 			transform 0.2s ease,
 			box-shadow 0.25s ease,
 			border-color 0.25s ease;
-		transform: translateY(var(--card-offset, 0));
+		transform: translateY(0);
 	}
 
 	.section-card:hover,
 	.section-card:focus-within {
-		transform: translateY(calc(var(--card-offset, 0) - 4px));
+		transform: translateY(-4px);
 		border-color: rgba(56, 189, 248, 0.38);
 		box-shadow: 0 24px 55px -32px rgba(56, 189, 248, 0.5);
 	}
@@ -332,13 +345,13 @@
 
 	.section-card__avatar {
 		flex: 0 0 auto;
-		width: 3.25rem;
-		height: 3.25rem;
-		border-radius: 1.05rem;
+		width: 3.6rem;
+		height: 3.6rem;
+		border-radius: 0.9rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid rgba(15, 23, 42, 0.08);
+		border: 1px solid transparent;
 	}
 
 	.section-card__avatar svg {
@@ -372,16 +385,32 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
+		gap: 1rem;
 		font-size: 0.85rem;
 		color: var(--color-text-muted);
 		border-top: 1px solid var(--color-border);
-		padding-top: 0.75rem;
-		margin-top: 0.35rem;
+		padding-top: 0.85rem;
+		margin-top: auto;
 	}
 
-	.section-card__meta-label {
+	.section-card__meta-counts {
 		flex: 1 1 auto;
+		font-weight: 600;
+		letter-spacing: 0.01em;
+	}
+
+	.section-card__meta-actions {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.8rem;
+		flex: 0 0 auto;
+	}
+
+	.section-card__meta-ordinal {
+		font-weight: 600;
+		color: var(--color-text);
+		white-space: nowrap;
+		font-size: 0.82rem;
 	}
 
 	.section-card__edit {
@@ -435,12 +464,6 @@
 	@media (min-width: 720px) {
 		.sections-grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
-	@media (min-width: 940px) {
-		.section-card:nth-child(2n) {
-			--card-offset: 1.4rem;
 		}
 	}
 </style>
