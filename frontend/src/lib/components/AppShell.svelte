@@ -43,15 +43,9 @@
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 
 	function computeAdminConsoleHref(): string {
-		if (typeof window === 'undefined') {
-			return 'https://mrolandas.github.io/BurBuriuok/admin';
-		}
-
-		const origin = window.location.origin;
-		const base = window.location.hostname.endsWith('github.io')
-			? 'https://mrolandas.github.io/BurBuriuok'
-			: origin;
-		const url = new URL('/admin', base);
+		const adminPath = resolve('/admin');
+		const base = typeof window === 'undefined' ? 'https://mrolandas.github.io' : window.location.origin;
+		const url = new URL(adminPath, base);
 
 		if (adminModeEnabled || impersonatingAdmin) {
 			url.searchParams.set('impersonate', 'admin');
