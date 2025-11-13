@@ -41,6 +41,8 @@ _Update 2025-11-13_: Concepts history drawer now shows version snapshots and off
 
 _Update 2025-11-13 (p.m.)_: Admin saves now persist working copies in `burburiuok.content_drafts` (auto-reconciled by the backend audit logger) and Supabase RLS ensures only admin/service-role sessions can access draft + version history tables.
 
+_Update 2025-11-13 (late)_: Added automated smoke coverage via `npm run test:db002` to verify draft → publish flows, `content_drafts` cleanup, and version snapshots after migrations or policy changes. Reference `docs/TESTING_GUIDE.md` for execution cadence.
+
 ## Screen Details
 
 ### 1. Overview

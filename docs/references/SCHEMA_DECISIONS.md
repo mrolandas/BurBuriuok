@@ -84,6 +84,7 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - Granted `select` on history tables to `authenticated` role (admin JWT path) and full CRUD to `service_role`; drafts expose CRUD to `authenticated` so the future admin client can save directly when auth is live.
 - **Workflow Alignment**:
   - Backend audit logger now reconciles `content_drafts`: draft/in-review saves upsert the working copy (tracking the new version id), while publish/archive operations remove the draft row. Empty snapshots skip persistence to avoid lingering blank drafts.
+  - Regression guard `npm run test:db002` provisions disposable concepts, exercises draft→publish transitions via the backend service, and confirms RLS access for service-role keys; run this after migrations/policy updates.
 
 ## 2025-11-03 – Media Moderation
 

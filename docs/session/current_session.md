@@ -80,11 +80,12 @@ This session refocuses on DB-002: harden the content versioning workflow so admi
 - 2025-11-13: Applied migration `0010_db002_content_drafts_and_policies.sql` to the hosted Supabase project; RLS policies now enforce admin/service-role access to history tables.
 - 2025-11-13: Added `tests/db002ContentVersioning.test.ts` plus `npm run test:db002` to exercise draft→publish transitions end-to-end against Supabase with automated cleanup.
 - 2025-11-13: Updated testing guidance to document when the DB-002 smoke test should be executed (pre-migration pushes, post-key rotation, release validation).
+- 2025-11-13: Refreshed schema decisions, backend runbook, and admin setup docs with DB-002 draft reconciliation details and regression test references; Issue tracker now points to the smoke test as part of DB-002 readiness.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 
 - [ ] DB-002 migrations applied (local + staging) with audit logging verified end-to-end.
 - [ ] Supabase policies updated, reviewed, and documented with rollback guidance.
 - [x] Backend/admin endpoints expose draft/publish history with regression tests in place (DB-002 smoke script covers draft/publish lifecycle).
-- [ ] Documentation refreshed (`SCHEMA_DECISIONS.md`, `BACKEND.md`, `ADMIN_SETUP.md`, `TESTING_GUIDE.md`).
+- [x] Documentation refreshed (`SCHEMA_DECISIONS.md`, `BACKEND.md`, `ADMIN_SETUP.md`, `TESTING_GUIDE.md`).
 - [ ] Follow-up tasks for ADM-002, media, and auth backlog captured in `ISSUE_TRACKER.md` with current status.

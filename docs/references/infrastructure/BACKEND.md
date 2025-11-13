@@ -49,11 +49,17 @@ Mounted under `/api/v1/admin/concepts`:
 - The schema normalises optional text fields (`termEn`, `descriptionEn`, subsection titles) to `null` and constrains slug format to lowercase kebab-case (`^[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?$`).
 - When validation fails on the server, the endpoint returns HTTP 400 with the flattened Zod error payload (`{ error: { message, details } }`).
 
-## Audit Logging
+## Audit Logging & Draft Reconciliation
 
 - `POST /admin/concepts` calls `logContentMutation` with `entityType: "concept"`. The helper calculates diffs between the previous and updated payload and persists them to `content_versions` plus `content_version_changes`.
 - Audit rows store the acting email (preferred) or Supabase UID, the requested `status`, and a summary (`created via admin console` vs `updated via admin console`).
+- Draft saves (`status: draft` or `in_review`) now upsert a working copy in `burburiuok.content_drafts`, linking the newly inserted version via `version_id`. Publish/archived states remove the draft row so only pending edits linger in the table.
+- Empty snapshots are skipped to avoid polluting history with no-op saves; ensure callers pass the fully hydrated admin payload whenever a visible change occurs.
 - Reuse the same helper when additional admin endpoints go live so version history remains consistent.
+
+### Regression Checks
+
+- Run `npm run test:db002` after touching audit logging, Supabase RLS policies, or migrations. The script spins up a disposable concept, exercises draft→publish flows through the backend service, checks `content_drafts` cleanup, and validates `content_versions.snapshot` persistence using service-role credentials.
 
 ## Admin Curriculum Node Endpoints
 
