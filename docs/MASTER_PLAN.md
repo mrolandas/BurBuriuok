@@ -22,6 +22,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - PDF exports or external LMS integrations are explicitly out of scope.
 - UI is designed mobile-first (sub-6" screens) with responsive enhancements for tablet/desktop.
 - Media submissions (images, video links, PDFs, audio) require human approval before they surface publicly.
+- Learner authentication launches with Supabase magic-link sign-in while device-key progress syncing remains available until the dedicated retirement task (AUTH-003) ships.
 
 ## Experience Blueprint
 
@@ -85,6 +86,14 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Modular component library (AppShell, curriculum board/tree, concept view, study runner) keeps data fetching, layout, and interaction logic separated for easy iteration.
 
 ### Media Handling
+
+- Media uploads defer to a post-auth milestone; initial authentication work (AUTH-001/002) must land before learner-facing storage opens up beyond the current admin tooling.
+
+### Authentication & Sessions
+
+- Supabase Auth backs the learner experience with magic-link sessions; admin invites live inside AUTH-002 so privileged accounts stay curated.
+- Device-key progress tracking continues as a fallback until AUTH-003 introduces migration tools and observability around session adoption.
+- The backend enforces persona roles via `app_role` claims and continues to treat unauthenticated learners as `guest` users with read-only access.
 
 ## Trimmed Launch Scope (2025-11-07)
 
@@ -192,3 +201,12 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Do we need per-module admin permissions before instructor moderation begins?
 - What metrics define success for engagement features (minimum streak length, quiz accuracy thresholds, etc.)?
 - How will we collect structured feedback from learners (in-app form, periodic survey, or later forum integration)?
+
+## Appendix
+
+### Device-Key Sunset Sketch
+
+- Target post-AUTH-003 once operational telemetry confirms magic-link adoption above the agreed threshold.
+- Provide a read-only migration script that maps existing device-key progress records onto authenticated profiles without dropping anonymous history.
+- Announce the cutoff in-product at least one sprint ahead, including fallback guidance for learners who delay account creation.
+- Capture the final rollback plan (how to re-enable device-key writes) and storage hygiene steps before flipping the switch.

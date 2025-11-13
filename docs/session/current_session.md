@@ -1,6 +1,6 @@
-# Current Session Plan – Media Intake & Embeds (2025-11-12)
+# Current Session Plan – Content Versioning & Media MVP (2025-11-13)
 
-We are pivoting from trimmed-launch hierarchy work to the media experience. This session plan drives everything required to accept contributor uploads, support YouTube-style embeds, review submissions, and surface approved media inside concepts.
+This plan delivers the post-trimmed-launch MVP workstream: finish content versioning safeguards, tighten the admin concept editor, and then implement the media ingestion pipeline (storage, uploads, moderation, embeds).
 
 ## Orientation Checklist (run at the start of each work block)
 
@@ -10,42 +10,51 @@ We are pivoting from trimmed-launch hierarchy work to the media experience. This
 - Sync with `docs/references/ISSUE_TRACKER.md` to ensure media tasks are tracked and cross-linked with GitHub issues.
 - Skim the archive `docs/archive/2025-11-12_current_session.md` if context about the trimmed-scope sprint is needed.
 
-## Objectives for the Media Slice
+## Objectives for This Sprint
 
-- Stand up a resilient uploader that handles images and documents with Supabase Storage and generates signed URLs.
-- Enable concepts to reference external media, starting with YouTube video embeds that respect moderation flow.
-- Provide admins with queue management to approve, reject, or request changes on submissions.
-- Capture all schema, API, and UX changes in the reference docs so future assistants inherit accurate guidance.
+- Land the content versioning workflow (DB-002) so admin saves remain auditable.
+- Finalise concept editor polish (ADM-002) including filters, optimistic updates, and history drawers.
+- Stand up the media pipeline: storage foundations, upload APIs, contributor UX, admin moderation upgrades, and sanitised embeds (MEDIA-001 → MEDIA-005).
+- Keep documentation, tests, and GitHub issues in lockstep with each deliverable.
+- Capture the authentication backlog (AUTH-001 → AUTH-003) so magic-link rollout planning stays unblocked once media MVP stabilises.
 
-## Workstream Milestones
+## Workstream Milestones & Dependencies
 
-- [ ] **Storage & API foundation** – finalise Supabase buckets, migrations (`media_assets`, `media_reviews`), and Express endpoints for create/upload/sign/approve flows.
-  - ⏳ Confirm bucket naming and security policies (`public`, `restricted`, signed URL expirations) in `references/infrastructure/SUPABASE.md`.
-  - ⏳ Implement `POST /api/v1/media/submissions` for resumable uploads and `POST /api/v1/admin/media/:id/decision` with audit logging.
-- [ ] **Contributor upload UX** – design/admin UI updates allowing file selection, metadata capture, and upload progress with validation messages.
-  - ⏳ Add learner-facing upload entry point (eventually hidden behind a flag) and admin panel detail views.
-  - ⏳ Integrate storage signatures and show thumbnail previews using approved media.
-- [ ] **YouTube & external embeds** – define schema to store provider metadata, add validation for whitelisted domains, and render approved embeds on concept pages.
-  - ⏳ Extend shared validation schemas so admins can capture video URL, caption, language, and attribution.
-  - ⏳ Ensure frontend sanitises `iframe` parameters and provides accessible fallbacks.
-- [ ] **Moderation queue & notifications** – upgrade admin console to prioritise pending assets, capture decision reasons, and trigger dispatcher hooks.
-  - ⏳ Surface SLA indicators, batch actions, and filter/search enhancements in the queue UI.
-  - ⏳ Wire the dispatcher stub to log decisions and send placeholder events for future Slack/email integrations.
-- [ ] **Documentation & ops readiness** – update reference docs, testing scripts, and runbooks so media workflows remain reproducible.
-  - ⏳ Record schema updates in `SCHEMA_DECISIONS.md`, document CLI/storage steps in `SUPABASE.md`, and add manual QA steps in `TESTING_GUIDE.md`.
-  - ⏳ Create runbooks for rotating storage keys and cleaning orphaned assets.
+- [ ] **DB-002 – Content Versioning Model**
+  - ⏳ Finalise migrations (content drafts/history), Supabase policies, and regression tests.
+  - ⏳ Update docs (`SCHEMA_DECISIONS.md`, `BACKEND.md`) with workflow + rollback guidance.
+- [ ] **ADM-002 – Concept Editor MVP polish**
+  - ⏳ Ship filters, optimistic updates, and history drawer powered by DB-002.
+  - ⏳ Document UX flows in `ADMIN_SETUP.md` and align tests.
+- [ ] **MEDIA-001 – Storage Foundation**
+  - ⏳ Create `media_assets`, `media_asset_variants`, `media_reviews` migrations and bucket policies.
+  - ⏳ Document storage topology and maintenance scripts in `SUPABASE.md` and `SCHEMA_DECISIONS.md`.
+- [ ] **MEDIA-002 – Media Submission API**
+  - ⏳ Implement Express endpoints for contributor uploads, admin review decisions, and audit logging.
+  - ⏳ Add contract tests and update `API_CONTRACTS.md`, `BACKEND.md`.
+- [ ] **MEDIA-003 – Contributor Upload UX**
+  - ⏳ Build feature-flagged uploader modal with progress, metadata validation, and Supabase integration.
+  - ⏳ Extend `TESTING_GUIDE.md` with manual QA steps.
+- [ ] **MEDIA-004 – Admin Moderation Queue Upgrade**
+  - ⏳ Enhance queue views, detail drawers, and decision workflows consuming MEDIA-002 endpoints.
+  - ⏳ Trigger dispatcher stub (ADM-004) hooks and refresh `ADMIN_SETUP.md`.
+- [ ] **MEDIA-005 – YouTube & External Embeds**
+  - ⏳ Define schema, sanitise embeds, add admin preview, and document security posture.
+  - ⏳ Update frontend references and example usage.
 
-## Immediate Focus (week of 2025-11-12)
+## Immediate Focus (week of 2025-11-13)
 
-- Draft migrations and Supabase storage configuration required for `media_assets`, `media_asset_variants`, and `media_reviews` tables.
-- Prototype the backend upload/sign endpoint contract and align with the frontend `adminFetch` helpers.
-- Outline frontend component skeletons for contributor upload modal and admin review drawer, noting shared state and stores.
-- Add checklist items to `references/ISSUE_TRACKER.md` mapping each milestone bullet to issues/PRs.
-- Document YouTube embed validation rules (allowed hosts, parameter sanitisation) ahead of implementation.
+- Close DB-002 gaps: migrations review, policy test coverage, documentation updates.
+- Scope ADM-002 polish with UX notes + task breakdown (filters, optimistic saves, history panel).
+- Finalise MEDIA-001 acceptance criteria and open corresponding GitHub issue.
+- Draft architecture notes for MEDIA-002 (endpoint contracts, rate limits).
+- Ensure `ISSUE_TRACKER.md` + GitHub issues reflect the new MVP order.
+- Draft AUTH-001/AUTH-002 briefs (magic links, profiles, admin invites) and confirm device-key fallback expectations with product before raising GitHub issues.
 
 ## Dependencies & Open Questions
 
-- Confirm whether uploads require authenticated learners or can rely on device tokens; capture the decision in `PERSONAS_PERMISSIONS.md`.
+- Uploads continue to rely on device tokens until learner auth ships; revisit this in AUTH-002 planning and update `PERSONAS_PERMISSIONS.md` if the policy shifts.
+- Track magic-link adoption readiness (AUTH-001) and define the data needed to retire device-key fallback in AUTH-003; record signals in `MASTER_PLAN.md` appendix.
 - Decide on thumbnail generation strategy (client-side vs worker) and record follow-up tasks.
 - Verify Render hosting limits for large file uploads; note any constraints in `INFRASTRUCTURE.md`.
 - Determine fallback plan for storage outages (retry queue vs user prompts).
@@ -60,10 +69,10 @@ We are pivoting from trimmed-launch hierarchy work to the media experience. This
 
 ## Documentation & Tracking Rules
 
-- Every schema change must ship with entries in `SCHEMA_DECISIONS.md` and `references/infrastructure/SUPABASE.md` plus migration filenames logged in this plan.
+- Every schema change must ship with entries in `SCHEMA_DECISIONS.md` and `references/infrastructure/SUPABASE.md`, with migration filenames logged in this plan.
 - API additions require updates to `docs/references/API_CONTRACTS.md` and backend overview sections.
 - Frontend component work should update `references/infrastructure/FRONTEND.md` with new stores/components.
-- Keep `references/ISSUE_TRACKER.md` synced after each GitHub issue/PR merge tied to media work.
+- After each work session, run the commit hook to confirm GitHub issues and `ISSUE_TRACKER.md` are aligned before pushing.
 
 ## Risks & Mitigations
 
@@ -74,7 +83,9 @@ We are pivoting from trimmed-launch hierarchy work to the media experience. This
 
 ## Session Log
 
-- 2025-11-12: Archived the trimmed-scope Build Sprint plan to `docs/archive/2025-11-12_current_session.md` and established this media-focused plan (storage, uploads, embeds, moderation).
+- 2025-11-12: Archived the trimmed-scope Build Sprint plan to `docs/archive/2025-11-12_current_session.md` and established the media-focused plan (storage, uploads, embeds, moderation).
+- 2025-11-13: Refreshed the session scope to include content versioning hardening and the full media MVP pipeline; reordered backlog and documentation rules to enforce GitHub sync via commit hook.
+- 2025-11-13: Opened AUTH-001/002/003 issues ([#20](https://github.com/mrolandas/BurBuriuok/issues/20), [#21](https://github.com/mrolandas/BurBuriuok/issues/21), [#22](https://github.com/mrolandas/BurBuriuok/issues/22)) after aligning backlog briefs with documentation.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 

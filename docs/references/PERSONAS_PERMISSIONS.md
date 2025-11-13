@@ -25,8 +25,9 @@ Supabase Auth `app_role` custom claim drives API policies.
 Authentication flow:
 
 1. Anonymous navigation allowed (role `guest`).
-2. Upon Supabase magic-link login, backend sets session with `app_role='learner'` unless the email belongs to the admin allowlist.
-3. Admin accounts maintained via Supabase dashboard; future instructor roles fetched from dedicated `profiles` table.
+2. Supabase magic-link login is the only sign-in path; backend sets session with `app_role='learner'` unless the email belongs to the admin allowlist.
+3. Admin invitations ship with AUTH-002, consolidating allowlist management alongside learner profile bootstrap.
+4. Device-key progress syncing remains available (role `guest`) until AUTH-003 lands the migration/sunset tooling.
 
 ## API Permissions Summary
 
@@ -54,6 +55,7 @@ Legend: ✅ full access; ❌ denied; ⚠️ constrained to own submissions.
 - Admins receive weekly digest of outstanding moderation tasks.
 - Learners can flag content via `/media-submissions` with `status='flagged'` (future) – escalates to admin queue.
 - Contributor role will require review/approval before elevation (`profiles.role = 'contributor'`).
+- Monitor magic-link adoption metrics during the AUTH-001/002 rollout and defer any device-key policy changes until AUTH-003 is complete.
 
 ## Open Questions
 
@@ -66,5 +68,5 @@ Legend: ✅ full access; ❌ denied; ⚠️ constrained to own submissions.
 - **Frontend Guard**: The `/admin` SvelteKit layout reads the Supabase session during `load()`, asserts `app_role === 'admin'`, renders persona banner for authorised users, and surfaces friendly guidance for everyone else. When `VITE_ENABLE_ADMIN_IMPERSONATION=true`, developers may pass `?impersonate=admin` to preview the shell without a privileged session; never enable this flag in production.
 - **Backend Middleware**: Express middleware `requireAdminRole` checks the decoded JWT claim (`app_role`) for every `/admin/**` endpoint. Requests failing the check return HTTP 401/403 and are logged for analytics (ADM-001).
 - **Telemetry**: Both layers emit `admin_session_checked` events (console + `CustomEvent`) containing decision outcome, role, and email to support upcoming ADM-005 analytics work.
-- **Allowlist Management**: Short term, maintain admin emails via Supabase dashboard (Auth → Users → Add user). Longer term, mirror the list inside a `profiles` table with `role` column so onboarding/offboarding can be automated.
+- **Allowlist Management**: Until AUTH-002 lands, maintain admin emails via the Supabase dashboard (Auth → Users → Add user). The auth backlog replaces this with an invite console backed by the `profiles` table and documented auditing.
 - **Local Development Story**: For UI previews without Supabase auth, enable `VITE_ENABLE_ADMIN_IMPERSONATION=true` locally and append `?impersonate=admin` to the `/admin` URL. Remove/disable before committing or deploying.
