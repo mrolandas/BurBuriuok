@@ -16,6 +16,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - Toggle the AppShell admin control (“Aktyvuoti Admin” / “Deaktyvuoti Admin”) and follow a few concept links to confirm the impersonation query flag persists and inline edit affordances stay visible without requiring a page refresh.
   - On the section board (`/`), open the inline section editor (admin mode must be active), update a title/summary, save, and verify the toast confirmation appears plus the card reflects the new copy without a reload.
   - Run an admin inline edit rehearsal: with the toggle active, update a draft concept, confirm the inline save returns 201, verify audit logging succeeds, and attempt a publish that currently fails with the expected validation 400 (no 500s). Repeat after any Supabase key rotation.
+  - In the Concept Manager drawer, open “Nauja sąvoka”, confirm the section selector populates within a second, pick a section and ensure the dropdown closes, trigger validation errors by leaving a required field blank to verify inline hints, then publish a concept to observe the status-aware toast and filter visibility note.
 
 ### Automated Connectivity Check
 
@@ -75,6 +76,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 ## Planned Automated Coverage
 
 - **Frontend** – component/unit tests with Vitest or Jest; end-to-end flows with Playwright.
+- **Concept Manager** – targeted component tests for `SectionSelect` (option grouping, async load sequencing, auto-close behaviour) and toast copy guards ensuring saved status/filter messaging stays in sync with the shared constants.
 - **Backend** (V2) – API contract tests, schema validation, and data access integration tests.
 - **Content** – schema validation for glossary data files to ensure required fields are present, plus automated checks that confirm the markdown master file parses successfully before CI regenerates seeds.
 - **Media** – upload/delete flows respecting the 4-image quota per user per concept, file-type/size validation, and moderation queue handling once Supabase storage is active.
