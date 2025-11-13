@@ -178,18 +178,6 @@
 	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
 	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
 	$: discardDisabled = saving || !editorDirty;
-	$: sectionFilterOptions = (() => {
-		const map = new Map<string, string>();
-		for (const option of sectionOptions) {
-			if (!option.sectionCode) {
-				continue;
-			}
-			if (!map.has(option.sectionCode)) {
-				map.set(option.sectionCode, normalizeNodeTitle(option.sectionTitle, option.sectionCode));
-			}
-		}
-		return Array.from(map.entries()).map(([code, label]) => ({ code, label }));
-	})();
 	$: isFiltered =
 		filterSectionCode !== 'all' ||
 		filterStatus !== 'all' ||
@@ -285,6 +273,12 @@
 		try {
 			const compiled: SectionSelectOption[] = [];
 			const rootNodes = await listCurriculumNodes(null);
+			sectionFilterOptions = rootNodes
+				.map((root) => ({
+					code: root.code,
+					label: normalizeNodeTitle(root.title, root.code)
+				}))
+				.sort((a, b) => a.label.localeCompare(b.label, 'lt-LT'));
 
 			for (const root of rootNodes) {
 				const sectionTitle = normalizeNodeTitle(root.title, root.code);
@@ -309,6 +303,7 @@
 			sectionOptionsError =
 				error instanceof Error ? error.message : 'Nepavyko įkelti skyrių iš mokymo plano.';
 			sectionOptions = [];
+			sectionFilterOptions = [];
 			syncSelectedSectionFromForm();
 		} finally {
 			sectionOptionsLoading = false;
