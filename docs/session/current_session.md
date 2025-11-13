@@ -1,6 +1,6 @@
-# Current Session Plan – Content Versioning & Media MVP (2025-11-13)
+# Current Session Plan – DB-002 Content Versioning (2025-11-13)
 
-This plan delivers the post-trimmed-launch MVP workstream: finish content versioning safeguards, tighten the admin concept editor, and then implement the media ingestion pipeline (storage, uploads, moderation, embeds).
+This session refocuses on DB-002: harden the content versioning workflow so admin edits stay auditable, reversible, and policy-compliant before expanding further media work.
 
 ## Orientation Checklist (run at the start of each work block)
 
@@ -12,86 +12,69 @@ This plan delivers the post-trimmed-launch MVP workstream: finish content versio
 
 ## Objectives for This Sprint
 
-- Land the content versioning workflow (DB-002) so admin saves remain auditable.
-- Finalise concept editor polish (ADM-002) including filters, optimistic updates, and history drawers.
-- Stand up the media pipeline: storage foundations, upload APIs, contributor UX, admin moderation upgrades, and sanitised embeds (MEDIA-001 → MEDIA-005).
-- Keep documentation, tests, and GitHub issues in lockstep with each deliverable.
-- Capture the authentication backlog (AUTH-001 → AUTH-003) so magic-link rollout planning stays unblocked once media MVP stabilises.
+- Deliver DB-002 content versioning migrations, Supabase policies, and regression coverage.
+- Wire backend/admin flows to persist draft/history records with clear rollback paths.
+- Document the workflow updates across runbooks and reference guides.
+- Capture follow-up work (ADM-002 polish, media backlog, auth rollout) as post-DB-002 dependencies.
 
 ## Workstream Milestones & Dependencies
 
 - [ ] **DB-002 – Content Versioning Model**
-  - ⏳ Finalise migrations (content drafts/history), Supabase policies, and regression tests.
-  - ⏳ Update docs (`SCHEMA_DECISIONS.md`, `BACKEND.md`) with workflow + rollback guidance.
-- [ ] **ADM-002 – Concept Editor MVP polish**
-  - ⏳ Ship filters, optimistic updates, and history drawer powered by DB-002.
-  - ⏳ Document UX flows in `ADMIN_SETUP.md` and align tests.
-- [ ] **MEDIA-001 – Storage Foundation**
-  - ⏳ Create `media_assets`, `media_asset_variants`, `media_reviews` migrations and bucket policies.
-  - ⏳ Document storage topology and maintenance scripts in `SUPABASE.md` and `SCHEMA_DECISIONS.md`.
-- [ ] **MEDIA-002 – Media Submission API**
-  - ⏳ Implement Express endpoints for contributor uploads, admin review decisions, and audit logging.
-  - ⏳ Add contract tests and update `API_CONTRACTS.md`, `BACKEND.md`.
-- [ ] **MEDIA-003 – Contributor Upload UX**
-  - ⏳ Build feature-flagged uploader modal with progress, metadata validation, and Supabase integration.
-  - ⏳ Extend `TESTING_GUIDE.md` with manual QA steps.
-- [ ] **MEDIA-004 – Admin Moderation Queue Upgrade**
-  - ⏳ Enhance queue views, detail drawers, and decision workflows consuming MEDIA-002 endpoints.
-  - ⏳ Trigger dispatcher stub (ADM-004) hooks and refresh `ADMIN_SETUP.md`.
-- [ ] **MEDIA-005 – YouTube & External Embeds**
-  - ⏳ Define schema, sanitise embeds, add admin preview, and document security posture.
-  - ⏳ Update frontend references and example usage.
+  - ⏳ Finalise migrations for `content_drafts`, `content_versions`, and supporting triggers.
+  - ⏳ Tighten Supabase policies covering draft/publish transitions and admin audit access.
+  - ⏳ Extend backend services to persist diff metadata and expose rollback endpoints.
+  - ⏳ Update `SCHEMA_DECISIONS.md`, `BACKEND.md`, and `ADMIN_SETUP.md` with the approved workflow.
+- [ ] **Post-DB-002 Follow-ups** (tracking only)
+  - ADM-002 polish depends on DB-002 history tables.
+  - MEDIA-001 and MEDIA-002 start once DB-002 lands.
+  - AUTH-001→003 backlog prepped; execution queued after DB-002.
 
 ## Immediate Focus (week of 2025-11-13)
 
-- Close DB-002 gaps: migrations review, policy test coverage, documentation updates.
-- Scope ADM-002 polish with UX notes + task breakdown (filters, optimistic saves, history panel).
-- Finalise MEDIA-001 acceptance criteria and open corresponding GitHub issue.
-- Draft architecture notes for MEDIA-002 (endpoint contracts, rate limits).
-- Ensure `ISSUE_TRACKER.md` + GitHub issues reflect the new MVP order.
-- Draft AUTH-001/AUTH-002 briefs (magic links, profiles, admin invites) and confirm device-key fallback expectations with product before raising GitHub issues.
+- Validate existing migrations against supabase/migrations history; generate any missing drafts/history tables.
+- Implement Supabase RLS + RPC updates ensuring admins can review drafts while learners remain read-only.
+- Add backend regression coverage for draft creation, publish transitions, and rollback flows.
+- Document operational runbook for reverting to previous versions and link it from `ADMIN_SETUP.md`.
 
 ## Dependencies & Open Questions
 
-- Uploads continue to rely on device tokens until learner auth ships; revisit this in AUTH-002 planning and update `PERSONAS_PERMISSIONS.md` if the policy shifts.
-- Track magic-link adoption readiness (AUTH-001) and define the data needed to retire device-key fallback in AUTH-003; record signals in `MASTER_PLAN.md` appendix.
-- Decide on thumbnail generation strategy (client-side vs worker) and record follow-up tasks.
-- Verify Render hosting limits for large file uploads; note any constraints in `INFRASTRUCTURE.md`.
-- Determine fallback plan for storage outages (retry queue vs user prompts).
+- Confirm whether `content_versions` needs additional indexes for rollback queries (review EXPLAIN output).
+- Validate audit trail payload shape with product—capture field requirements for future moderation tools.
+- Decide how many historical versions to retain per concept and whether to add scheduled cleanup tooling.
+- Ensure ADM-002 backlog items stay updated once DB-002 fields are live (filters, history drawer inputs).
 
 ## Testing & Verification Plan
 
-- Extend `npm run test` suite with backend contract tests for media endpoints (`tests/media/*.test.ts`).
-- Add Playwright smoke covering upload workflow, admin approval, and concept embed render.
-- Update `npm run backend:typecheck` coverage to include new services/modules.
-- Introduce `npm run media:smoke` (follow-up script) that uploads a sample file to a local bucket, approves it, and fetches the signed asset.
-- Insert manual QA steps into `docs/TESTING_GUIDE.md` once the flows are live (upload, approve, revoke, embed view).
+- Extend backend unit/integration tests covering draft creation, publish transitions, rollback, and diff summaries.
+- Add Vitest coverage for shared validation schemas to ensure draft vs publish status stays in sync.
+- Create a CLI smoke script (`npm run db002:smoke`) that creates a draft, publishes it, performs a rollback, and verifies audit entries.
+- Update `docs/TESTING_GUIDE.md` with manual QA steps for reviewing version history inside the admin console.
 
 ## Documentation & Tracking Rules
 
-- Every schema change must ship with entries in `SCHEMA_DECISIONS.md` and `references/infrastructure/SUPABASE.md`, with migration filenames logged in this plan.
-- API additions require updates to `docs/references/API_CONTRACTS.md` and backend overview sections.
-- Frontend component work should update `references/infrastructure/FRONTEND.md` with new stores/components.
-- After each work session, run the commit hook to confirm GitHub issues and `ISSUE_TRACKER.md` are aligned before pushing.
+- Log each migration filename and policy update in this plan plus `SCHEMA_DECISIONS.md`.
+- Refresh `references/infrastructure/BACKEND.md` when admin endpoints change.
+- Update `references/features/implemented/ADMIN_SETUP.md` with the new versioning UX and rollback steps.
+- Keep `docs/references/ISSUE_TRACKER.md` synced with DB-002 status and dependent tasks (ADM-002, media backlog).
 
 ## Risks & Mitigations
 
-- **Large file handling** – limit uploads (size/type) in validation, document rejection messaging, and plan chunked uploads if needed.
-- **Embed abuse** – whitelist providers, strip query parameters, and ensure moderation catches unsafe content.
-- **Storage costs** – schedule review jobs to archive or delete rejected/orphaned files; automate cleanup scripts.
-- **UX complexity** – ship MVP with clear roles (contributor vs admin) and iterate once baseline is stable.
+- **Rollback data gaps** – ensure diff payloads capture all fields; add regression tests around optional columns.
+- **Policy regressions** – double-check Supabase RLS on drafts to avoid learner write access; add canary tests.
+- **Migration drift** – run `supabase db diff` before shipping to confirm staging/prod parity.
+- **Admin UX confusion** – pair documentation with UI hints; schedule feedback loop after rollout.
 
 ## Session Log
 
 - 2025-11-12: Archived the trimmed-scope Build Sprint plan to `docs/archive/2025-11-12_current_session.md` and established the media-focused plan (storage, uploads, embeds, moderation).
 - 2025-11-13: Refreshed the session scope to include content versioning hardening and the full media MVP pipeline; reordered backlog and documentation rules to enforce GitHub sync via commit hook.
 - 2025-11-13: Opened AUTH-001/002/003 issues ([#20](https://github.com/mrolandas/BurBuriuok/issues/20), [#21](https://github.com/mrolandas/BurBuriuok/issues/21), [#22](https://github.com/mrolandas/BurBuriuok/issues/22)) after aligning backlog briefs with documentation.
+- 2025-11-13: Narrowed the active session to DB-002 delivery, deferring media/auth execution until versioning policies, migrations, and rollback tooling are complete.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 
-- [ ] Storage buckets, migrations, and media API endpoints deployed and documented.
-- [ ] Contributor upload UI (including progress and validation) shipped behind a feature flag.
-- [ ] YouTube/external embed support live with sanitised rendering and admin metadata controls.
-- [ ] Moderation queue upgraded with decision workflows, dispatcher events, and audit logging.
-- [ ] Documentation updates complete across `API_CONTRACTS.md`, `SUPABASE.md`, `FRONTEND.md`, `ADMIN_SETUP.md`, `TESTING_GUIDE.md`, and `SCHEMA_DECISIONS.md`.
-- [ ] Issue tracker and runbooks updated; follow-up tasks (e.g., thumbnail automation, notifications) captured for future sessions.
+- [ ] DB-002 migrations applied (local + staging) with audit logging verified end-to-end.
+- [ ] Supabase policies updated, reviewed, and documented with rollback guidance.
+- [ ] Backend/admin endpoints expose draft/publish history with regression tests in place.
+- [ ] Documentation refreshed (`SCHEMA_DECISIONS.md`, `BACKEND.md`, `ADMIN_SETUP.md`, `TESTING_GUIDE.md`).
+- [ ] Follow-up tasks for ADM-002, media, and auth backlog captured in `ISSUE_TRACKER.md` with current status.
