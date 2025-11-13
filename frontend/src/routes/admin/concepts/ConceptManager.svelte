@@ -127,6 +127,10 @@
 	const MAX_SLUG_LENGTH = 90;
 	const SLUG_RANDOM_SEGMENT_LENGTH = 6;
 	const SLUG_PREFIX = 'c';
+	const STATUS_LABELS: Record<AdminConceptStatus, string> = {
+		draft: 'Juodraštis',
+		published: 'Publikuota'
+	};
 
 	function randomSegment(length: number): string {
 		const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -995,18 +999,28 @@
 			saving = true;
 			applyOptimisticConcept(targetStatus);
 			const saved = await saveAdminConcept(validation.data);
-			if (matchesActiveFilters(saved)) {
+			const conceptVisible = matchesActiveFilters(saved);
+			if (conceptVisible) {
 				applySavedConcept(saved);
 			} else {
 				await refreshConcepts();
 			}
 			optimisticContext = null;
 			const wasEdit = editorMode === 'edit';
-			const successText = intent === 'publish'
-				? 'Sąvoka publikuota.'
-				: wasEdit
-				? 'Sąvoka atnaujinta.'
-				: 'Sąvoka sukurta.';
+			const statusLabel = STATUS_LABELS[saved.status] ?? saved.status;
+			let successText: string;
+			if (intent === 'publish') {
+				successText = wasEdit
+					? `Sąvoka publikuota. Dabartinė būsena: ${statusLabel}.`
+					: `Sąvoka sukurta ir publikuota. Dabartinė būsena: ${statusLabel}.`;
+			} else {
+				successText = wasEdit
+					? `Sąvoka atnaujinta. Dabartinė būsena: ${statusLabel}.`
+					: `Sąvoka įrašyta kaip juodraštis. Dabartinė būsena: ${statusLabel}.`;
+			}
+			if (!conceptVisible) {
+				successText += ' Ji šiuo metu nerodoma dėl aktyvių filtrų.';
+			}
 			showSuccess(successText);
 			finalizeCloseEditor();
 		} catch (error) {
@@ -1084,11 +1098,6 @@
 			deletingSlug = null;
 		}
 	}
-
-	const statusLabels: Record<AdminConceptStatus, string> = {
-		draft: 'Juodraštis',
-		published: 'Publikuota'
-	};
 
 	const historyStatusLabels: Record<AdminConceptVersionStatus, string> = {
 		draft: 'Juodraštis',
@@ -1242,8 +1251,12 @@
 								</div>
 							</td>
 							<td>
-								<span class:status-badge--published={concept.status === 'published'} class="status-badge">
-									{statusLabels[concept.status]}
+								<span
+									class="status-badge"
+									class:status-badge--published={concept.status === 'published'}
+									class:status-badge--draft={concept.status === 'draft'}
+								>
+									{STATUS_LABELS[concept.status]}
 								</span>
 							</td>
 							<td>{formatTimestamp(concept.updatedAt)}</td>
@@ -1806,6 +1819,11 @@
 		color: rgb(31, 41, 55);
 		font-size: 0.85rem;
 		font-weight: 600;
+	}
+
+	.status-badge--draft {
+		background: rgba(37, 99, 235, 0.12);
+		color: rgb(29, 78, 216);
 	}
 
 	.status-badge--published {
