@@ -103,6 +103,14 @@
 	let historyError: string | null = null;
 	let rollingBackVersionId: string | null = null;
 	let rollbackError: string | null = null;
+	let optimisticContext:
+		| {
+			previousSlug: string;
+			newSlug: string;
+			previousConcept: AdminConceptResource;
+			removed: boolean;
+		}
+		| null = null;
 
 	let editorDirty = false;
 	let initialSnapshot = '';
@@ -657,6 +665,15 @@
 		}
 	}
 
+	function cloneConcept(concept: AdminConceptResource): AdminConceptResource {
+		try {
+			return structuredClone(concept);
+		} catch (error) {
+			console.warn('Nepavyko nukopijuoti sąvokos naudojant structuredClone, bus taikomas JSON kopijavimas.', error);
+			return JSON.parse(JSON.stringify(concept)) as AdminConceptResource;
+		}
+	}
+
 	function optionalString(value: string): string | null {
 		const trimmed = value.trim();
 		return trimmed.length ? trimmed : null;
@@ -825,6 +842,92 @@
 		return list && list.length ? list[0] : null;
 	}
 
+	function buildOptimisticConcept(
+		base: AdminConceptResource,
+		status: AdminConceptStatus
+	): AdminConceptResource {
+		const metadata = {
+			...base.metadata,
+			...metadataSnapshot,
+			status
+		};
+
+		return {
+			...base,
+			slug: formState.slug.trim(),
+			termLt: formState.termLt.trim(),
+			termEn: optionalString(formState.termEn),
+			descriptionLt: formState.descriptionLt.trim(),
+			descriptionEn: optionalString(formState.descriptionEn),
+			sectionCode: formState.sectionCode.trim(),
+			sectionTitle: optionalString(formState.sectionTitle) ?? null,
+			subsectionCode: optionalString(formState.subsectionCode),
+			subsectionTitle: optionalString(formState.subsectionTitle),
+			curriculumNodeCode: optionalString(formState.curriculumNodeCode),
+			curriculumItemOrdinal: optionalNumber(formState.curriculumItemOrdinal),
+			sourceRef: optionalString(formState.sourceRef),
+			isRequired: formState.isRequired,
+			metadata,
+			status,
+			updatedAt: new Date().toISOString()
+		};
+	}
+
+	function applyOptimisticConcept(status: AdminConceptStatus): void {
+		if (editorMode !== 'edit' || !activeConcept) {
+			optimisticContext = null;
+			return;
+		}
+
+		const previous = cloneConcept(activeConcept);
+		const optimistic = buildOptimisticConcept(previous, status);
+		const next = concepts.filter((concept) => concept.slug !== previous.slug);
+		const matchesFilters = matchesActiveFilters(optimistic);
+
+		if (!matchesFilters) {
+			concepts = sortConcepts(next);
+			optimisticContext = {
+				previousSlug: previous.slug,
+				newSlug: optimistic.slug,
+				previousConcept: previous,
+				removed: true
+			};
+			return;
+		}
+
+		next.push(optimistic);
+		concepts = sortConcepts(next);
+		optimisticContext = {
+			previousSlug: previous.slug,
+			newSlug: optimistic.slug,
+			previousConcept: previous,
+			removed: false
+		};
+	}
+
+	function revertOptimisticConcept(): void {
+		if (!optimisticContext) {
+			return;
+		}
+
+		const { previousConcept, newSlug, removed } = optimisticContext;
+		const next = [...concepts];
+
+		if (removed) {
+			next.push(previousConcept);
+		} else {
+			const index = next.findIndex((concept) => concept.slug === newSlug);
+			if (index === -1) {
+				next.push(previousConcept);
+			} else {
+				next[index] = previousConcept;
+			}
+		}
+
+		concepts = sortConcepts(next);
+		optimisticContext = null;
+	}
+
 	function setStatus(status: AdminConceptStatus): void {
 		formState = { ...formState, status };
 		metadataSnapshot = { ...metadataSnapshot, status };
@@ -890,12 +993,14 @@
 
 		try {
 			saving = true;
+			applyOptimisticConcept(targetStatus);
 			const saved = await saveAdminConcept(validation.data);
 			if (matchesActiveFilters(saved)) {
 				applySavedConcept(saved);
 			} else {
 				await refreshConcepts();
 			}
+			optimisticContext = null;
 			const wasEdit = editorMode === 'edit';
 			const successText = intent === 'publish'
 				? 'Sąvoka publikuota.'
@@ -905,6 +1010,7 @@
 			showSuccess(successText);
 			finalizeCloseEditor();
 		} catch (error) {
+			revertOptimisticConcept();
 			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti sąvokų.';
 		} finally {
 			saving = false;
