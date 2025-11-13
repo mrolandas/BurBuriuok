@@ -1,10 +1,15 @@
 import {
   recordContentVersion,
 } from "../../../data/repositories/contentVersionsRepository.ts";
+import {
+  deleteContentDraft,
+  upsertContentDraft,
+} from "../../../data/repositories/contentDraftsRepository.ts";
 import type {
   ContentEntityType,
   ContentVersionStatus,
   ContentVersionChangeType,
+  ContentDraftStatus,
 } from "../../../data/types.ts";
 
 export interface ContentMutationPayload<T extends Record<string, unknown>> {
@@ -49,6 +54,16 @@ export async function logContentMutation<T extends Record<string, unknown>>(
       newValue: op.next,
       changeType: op.changeType,
     })),
+  });
+
+  await reconcileContentDraft({
+    entityType: payload.entityType,
+    entityId: payload.entityId,
+    status: payload.status,
+    actor: payload.actor ?? null,
+    changeSummary: payload.changeSummary ?? null,
+    snapshot: serializeSnapshot(payload.after),
+    versionId,
   });
 
   return versionId;
@@ -203,4 +218,59 @@ function serializeSnapshot(value: unknown): unknown {
   }
 
   return value;
+}
+
+async function reconcileContentDraft(options: {
+  entityType: ContentEntityType;
+  entityId: string;
+  status?: ContentVersionStatus;
+  actor: string | null;
+  changeSummary: string | null;
+  snapshot: unknown;
+  versionId: string;
+}): Promise<void> {
+  const shouldPersist = needsDraftPersistence(options.status);
+  const hasPayload = hasPersistableSnapshot(options.snapshot);
+
+  if (shouldPersist && hasPayload) {
+    await upsertContentDraft({
+      entityType: options.entityType,
+      entityPrimaryKey: options.entityId,
+      payload: options.snapshot ?? {},
+      status: toDraftStatus(options.status),
+      changeSummary: options.changeSummary,
+      versionId: options.versionId,
+      actor: options.actor ?? undefined,
+    });
+    return;
+  }
+
+  await deleteContentDraft(options.entityType, options.entityId);
+}
+
+function needsDraftPersistence(status?: ContentVersionStatus): boolean {
+  return status === "draft" || status === "in_review" || typeof status === "undefined";
+}
+
+function toDraftStatus(status?: ContentVersionStatus): ContentDraftStatus {
+  if (status === "in_review") {
+    return "in_review";
+  }
+  return "draft";
+}
+
+function hasPersistableSnapshot(snapshot: unknown): boolean {
+  if (snapshot === null || typeof snapshot === "undefined") {
+    return false;
+  }
+
+  if (Array.isArray(snapshot)) {
+    return snapshot.length > 0;
+  }
+
+  if (typeof snapshot === "object") {
+    return Object.keys(snapshot as Record<string, unknown>).length > 0;
+  }
+
+  return true;
 }

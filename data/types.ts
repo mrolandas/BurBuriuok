@@ -171,6 +171,8 @@ export type ContentVersionStatus =
 
 export type ContentVersionChangeType = "create" | "update" | "delete";
 
+export type ContentDraftStatus = "draft" | "in_review";
+
 export interface ContentVersionChangeInput {
   fieldPath: string;
   oldValue: unknown;
@@ -187,4 +189,28 @@ export interface ContentVersionInput {
   snapshot?: unknown;
   actor?: string | null;
   changes?: ContentVersionChangeInput[];
+}
+
+export interface ContentDraftDbRow {
+  id: string;
+  entity_type: ContentEntityType;
+  entity_primary_key: string;
+  payload: unknown;
+  status: ContentDraftStatus;
+  change_summary: string | null;
+  version_id: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContentDraftInput {
+  entityType: ContentEntityType;
+  entityPrimaryKey: string;
+  payload: unknown;
+  status?: ContentDraftStatus;
+  changeSummary?: string | null;
+  versionId?: string | null;
+  actor?: string | null;
 }

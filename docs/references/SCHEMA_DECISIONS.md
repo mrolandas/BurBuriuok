@@ -61,7 +61,29 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - `diff` payload is optional for MVP; downstream services can parse it for review tooling.
   - `content_version_changes` is optional to populate from services until automated diffing lands.
 - **Policies**:
-  - No RLS yet; inserts limited to service role. Introduce role-bound policies once admin/auth scaffolding lands.
+  - Superseded by the 2025-11-13 update: RLS now restricts access to service-role or admin JWT sessions (`burburiuok.is_admin_session()`), keeping learner/anon clients out of history tables.
+
+## 2025-11-13 – Content Drafts & RLS Guardrails
+
+- **Tables**: `content_drafts`
+  - `id` (uuid default `gen_random_uuid()`) primary key.
+  - `entity_type` (text) constrained to the same enum values as `content_versions` (`curriculum_node`, `curriculum_item`, `concept`, `media_asset`).
+  - `entity_primary_key` (text) stores the upstream identifier (slug/code/uuid) of the entity being drafted. Unique together with `entity_type` to keep a single working copy per entity.
+  - `payload` (jsonb default `{}`) stores the serialised draft body; hydration mirrors the admin form payload.
+  - `status` (text) constrained to `draft` or `in_review` with default `draft`.
+  - `change_summary` (text) optional narrative describing the work-in-progress.
+  - `version_id` (uuid nullable) references the latest `content_versions.id` recorded for the draft save, enabling quick diff lookups.
+  - `created_by` / `updated_by` (text) capture Supabase JWT subject when present; trigger falls back to `system` for service-role writes.
+  - `created_at` / `updated_at` (timestamptz) auto-stamped via triggers `content_drafts_set_defaults` and `content_drafts_set_update_metadata`.
+- **Triggers**:
+  - `content_drafts_set_defaults` mirrors the history table defaults, ensuring metadata + payload never land null and actor attribution survives service-role calls.
+  - `content_drafts_set_update_metadata` refreshes timestamps/actor on every mutation and guards against null payload assignments.
+- **Row Level Security**:
+  - Added helper `burburiuok.is_admin_session()` returning `true` for service-role, Supabase dashboard sessions, or JWTs carrying `app_role='admin'`.
+  - Enabled RLS on `content_versions`, `content_version_changes`, and `content_drafts`; single policy per table (`*_admin_manage`) grants full access only when `is_admin_session()` is true. Non-admin/authenticated clients can read/write drafts only after real Supabase auth lands.
+  - Granted `select` on history tables to `authenticated` role (admin JWT path) and full CRUD to `service_role`; drafts expose CRUD to `authenticated` so the future admin client can save directly when auth is live.
+- **Workflow Alignment**:
+  - Backend audit logger now reconciles `content_drafts`: draft/in-review saves upsert the working copy (tracking the new version id), while publish/archive operations remove the draft row. Empty snapshots skip persistence to avoid lingering blank drafts.
 
 ## 2025-11-03 – Media Moderation
 

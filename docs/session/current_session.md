@@ -20,11 +20,11 @@ This session refocuses on DB-002: harden the content versioning workflow so admi
 ## Workstream Milestones & Dependencies
 
 - [ ] **DB-002 – Content Versioning Model**
-  - ⏳ Finalise migrations for `content_drafts`, `content_versions`, and supporting triggers.
-  - ⏳ Tighten Supabase policies covering draft/publish transitions and admin audit access.
+  - [x] Finalise migrations for `content_drafts`, `content_versions`, and supporting triggers (0010 shipped with default/metadata triggers).
+  - [x] Tighten Supabase policies covering draft/publish transitions and admin audit access (RLS enabled with `burburiuok.is_admin_session()` helper).
   - [x] Extend backend services to persist diff metadata and expose rollback endpoints.
   - [x] Apply Supabase migration 0009 to the hosted project and verify snapshot rows populate via audit logging.
-  - ⏳ Update `SCHEMA_DECISIONS.md`, `BACKEND.md`, and `ADMIN_SETUP.md` with the approved workflow.
+  - ⏳ Update `SCHEMA_DECISIONS.md`, `BACKEND.md`, and `ADMIN_SETUP.md` with the approved workflow (schema decision log refreshed; backend runbook still pending).
 - [ ] **Post-DB-002 Follow-ups** (tracking only)
   - ADM-002 polish depends on DB-002 history tables.
   - MEDIA-001 and MEDIA-002 start once DB-002 lands.
@@ -74,6 +74,9 @@ This session refocuses on DB-002: harden the content versioning workflow so admi
 - 2025-11-13: Added `content_versions.snapshot` column, Supabase rollback endpoint, and admin UI controls to restore concepts (section → subsection → concept bundle) using authenticated sessions.
 - 2025-11-13: Applied migration `0009_db002_rollback_bundle.sql` to the hosted Supabase project and confirmed seeds were already aligned.
 - 2025-11-13: Created test subsection/concept bundle via the admin console and verified `content_versions` snapshots for nodes/items/concepts persist remotely.
+- 2025-11-13: Drafted migration `0010_db002_content_drafts_and_policies.sql` introducing `content_drafts`, helper triggers, and RLS policies for version/draft tables.
+- 2025-11-13: Wired backend audit logger to reconcile `content_drafts` entries (upsert for draft/in-review saves, cleanup on publish/archive) and updated repositories/types accordingly.
+- 2025-11-13: Applied migration `0010_db002_content_drafts_and_policies.sql` to the hosted Supabase project; RLS policies now enforce admin/service-role access to history tables.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 

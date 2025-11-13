@@ -39,6 +39,8 @@ _Update 2025-11-11_: Section board inline editing landed on the learner homepage
 
 _Update 2025-11-13_: Concepts history drawer now shows version snapshots and offers a Supabase-authenticated “Atkurti” action that rolls the concept and its linked curriculum item back to the selected version, logging the rollback in `content_versions`.
 
+_Update 2025-11-13 (p.m.)_: Admin saves now persist working copies in `burburiuok.content_drafts` (auto-reconciled by the backend audit logger) and Supabase RLS ensures only admin/service-role sessions can access draft + version history tables.
+
 ## Screen Details
 
 ### 1. Overview

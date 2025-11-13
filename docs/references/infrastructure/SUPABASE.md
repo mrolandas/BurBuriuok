@@ -27,6 +27,8 @@ This document captures how BurKursas uses Supabase during early development (sta
 
 - Ran `npx supabase db push --include-seed` to apply migration `0009_db002_rollback_bundle.sql` on the hosted project; seeds remained current.
 - Confirmed rollback snapshots populate by creating a concept bundle in the admin console and querying `content_versions` via REST (`Accept-Profile: burburiuok`, filter `snapshot=not.is.null`).
+- Added migration `0010_db002_content_drafts_and_policies.sql` defining the `content_drafts` table, default triggers, and RLS policies for versioning tables. Apply via `npx supabase db push` (include `--include-seed` if seeds changed) before relying on draft persistence.
+- Helper function `burburiuok.is_admin_session()` + policies (`content_versions_admin_manage`, etc.) now ensure only service-role or admin JWT sessions can access draft/version rows. Update Supabase Auth `app_role` claims before validating policies via the SQL editor.
 
 ## Database Layout (Current + Planned)
 
