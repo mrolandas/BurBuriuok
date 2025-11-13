@@ -59,10 +59,16 @@
 		depth?: number;
 	};
 
+	type SectionFilterOption = {
+		code: string;
+		label: string;
+	};
+
 
 	let concepts: AdminConceptResource[] = [];
 	let filteredConcepts: AdminConceptResource[] = [];
 	let sectionOptions: SectionSelectOption[] = [];
+	let sectionFilterOptions: SectionFilterOption[] = [];
 	let sectionOptionsLoading = false;
 	let sectionOptionsError: string | null = null;
 
@@ -70,6 +76,7 @@
 	let filterStatus: 'all' | AdminConceptStatus = 'all';
 	let searchTerm = '';
 	let totalMatches = 0;
+	let isFiltered = false;
 
 	let selectedSectionOptionKey = '';
 	let selectedSectionFallbackLabel: string | null = null;
@@ -171,6 +178,22 @@
 	$: draftDisabled = saving || (!editorDirty && formState.status === 'draft');
 	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
 	$: discardDisabled = saving || !editorDirty;
+	$: sectionFilterOptions = (() => {
+		const map = new Map<string, string>();
+		for (const option of sectionOptions) {
+			if (!option.sectionCode) {
+				continue;
+			}
+			if (!map.has(option.sectionCode)) {
+				map.set(option.sectionCode, normalizeNodeTitle(option.sectionTitle, option.sectionCode));
+			}
+		}
+		return Array.from(map.entries()).map(([code, label]) => ({ code, label }));
+	})();
+	$: isFiltered =
+		filterSectionCode !== 'all' ||
+		filterStatus !== 'all' ||
+		searchTerm.trim().length > 0;
 
 	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
 		const trimmed = (title ?? '').trim();
@@ -434,6 +457,16 @@
 		}
 		filterStatus = status;
 		await refreshConcepts();
+	}
+
+	function onSectionFilterChange(event: Event): void {
+		const target = event.currentTarget as HTMLSelectElement;
+		void handleSectionFilterChange(target.value);
+	}
+
+	function onStatusFilterChange(event: Event): void {
+		const target = event.currentTarget as HTMLSelectElement;
+		void handleStatusFilterChange(target.value as 'all' | AdminConceptStatus);
 	}
 
 	async function clearFilters(): Promise<void> {
@@ -1011,22 +1044,76 @@
 		<div class="alert alert--error">{loadError}</div>
 	{:else if loading}
 		<p class="muted">Įkeliama...</p>
-	{:else if !concepts.length}
+	{:else if !concepts.length && !isFiltered}
 		<p class="muted">Dar nėra sukurtų sąvokų.</p>
 	{:else}
-		<div class="table-wrapper">
-			<table class="concept-table">
-				<thead>
-					<tr>
-						<th scope="col">Sąvoka</th>
-						<th scope="col">Skyrius</th>
-						<th scope="col">Būsena</th>
-						<th scope="col">Atnaujinta</th>
-						<th scope="col">Veiksmai</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each concepts as concept (concept.id)}
+		<div class="concepts-toolbar">
+			<div class="concept-filters">
+				<label class="concept-filters__field">
+					<span>Skyrius</span>
+					<select value={filterSectionCode} on:change={onSectionFilterChange}>
+						<option value="all">Visi skyriai</option>
+						{#each sectionFilterOptions as option (option.code)}
+							<option value={option.code}>{option.label}</option>
+						{/each}
+					</select>
+				</label>
+				<label class="concept-filters__field">
+					<span>Būsena</span>
+					<select value={filterStatus} on:change={onStatusFilterChange}>
+						<option value="all">Visos būsenos</option>
+						<option value="draft">Juodraštis</option>
+						<option value="published">Publikuota</option>
+					</select>
+				</label>
+				<label class="concept-filters__field concept-filters__field--search">
+					<span>Paieška</span>
+					<input
+						type="search"
+						placeholder="Ieškoti sąvokų"
+						bind:value={searchTerm}
+					/>
+				</label>
+				{#if isFiltered}
+					<button type="button" class="concept-filters__clear" on:click={() => void clearFilters()}>
+						Išvalyti filtrus
+					</button>
+				{/if}
+			</div>
+			<p class="concepts-toolbar__count muted">
+				Rodoma {totalMatches} iš {concepts.length} sąvokų.
+			</p>
+		</div>
+
+		{#if !filteredConcepts.length}
+			<div class="concepts-empty">
+				<p class="muted">
+					{#if isFiltered}
+						Pagal pasirinktus filtrus rezultatų nėra.
+					{:else}
+						Dar nėra sukurtų sąvokų.
+					{/if}
+				</p>
+				{#if isFiltered}
+					<button type="button" on:click={() => void clearFilters()}>
+						Išvalyti filtrus
+					</button>
+				{/if}
+			</div>
+		{:else}
+			<div class="table-wrapper">
+				<table class="concept-table">
+					<thead>
+						<tr>
+							<th scope="col">Sąvoka</th>
+							<th scope="col">Skyrius</th>
+							<th scope="col">Būsena</th>
+							<th scope="col">Atnaujinta</th>
+							<th scope="col">Veiksmai</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each filteredConcepts as concept (concept.id)}
 						<tr>
 							<td>
 								<div class="concept-name">
@@ -1104,6 +1191,7 @@
 			</table>
 		</div>
 	{/if}
+{/if}
 </section>
 
 {#if editorOpen}
@@ -1433,6 +1521,77 @@
 
 	.muted {
 		color: var(--color-text-soft);
+	}
+
+	.concepts-toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.concept-filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		align-items: flex-end;
+	}
+
+	.concept-filters__field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		font-size: 0.9rem;
+		color: var(--color-text-soft);
+	}
+
+	.concept-filters__field select,
+	.concept-filters__field input {
+		min-width: 12rem;
+		padding: 0.5rem 0.75rem;
+		border-radius: 0.6rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-soft);
+		color: var(--color-text);
+	}
+
+	.concept-filters__field--search input {
+		min-width: 16rem;
+	}
+
+	.concept-filters__clear {
+		border: none;
+		background: none;
+		color: var(--color-link);
+		font-weight: 600;
+		cursor: pointer;
+		padding: 0.2rem 0.4rem;
+	}
+
+	.concepts-toolbar__count {
+		margin: 0;
+		font-size: 0.9rem;
+	}
+
+	.concepts-empty {
+		border: 1px dashed var(--color-border-light);
+		border-radius: 0.9rem;
+		padding: 1.2rem 1.4rem;
+		display: grid;
+		gap: 0.6rem;
+		background: var(--color-panel-soft);
+	}
+
+	.concepts-empty button {
+		justify-self: start;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel);
+		border-radius: 0.55rem;
+		padding: 0.45rem 0.9rem;
+		font-weight: 600;
+		cursor: pointer;
 	}
 
 	.table-wrapper {
@@ -1855,6 +2014,27 @@
 		.concepts-shell__header {
 			flex-direction: column;
 			align-items: stretch;
+		}
+
+		.concepts-toolbar {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.75rem;
+		}
+
+		.concept-filters {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.concept-filters__field select,
+		.concept-filters__field input {
+			min-width: 0;
+		}
+
+		.concept-filters__clear {
+			align-self: flex-start;
+			padding-left: 0;
 		}
 
 		.form-grid--basic,
