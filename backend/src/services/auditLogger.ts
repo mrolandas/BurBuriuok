@@ -41,6 +41,7 @@ export async function logContentMutation<T extends Record<string, unknown>>(
     status: payload.status,
     changeSummary: payload.changeSummary,
     diff: normalizedDiff.length ? normalizedDiff : [],
+    snapshot: serializeSnapshot(payload.after),
     actor: payload.actor ?? null,
     changes: operations.map((op) => ({
       fieldPath: op.path,
@@ -178,6 +179,27 @@ function normalizeForJson(value: unknown): unknown {
 
   if (value instanceof Date) {
     return value.toISOString();
+  }
+
+  return value;
+}
+
+function serializeSnapshot(value: unknown): unknown {
+  if (typeof value === "undefined") {
+    return null;
+  }
+
+  if (value === null) {
+    return null;
+  }
+
+  if (typeof value === "object") {
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn("Failed to serialize snapshot for content version", error);
+    }
   }
 
   return value;

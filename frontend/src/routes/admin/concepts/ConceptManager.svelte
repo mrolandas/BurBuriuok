@@ -7,14 +7,17 @@
 		saveAdminConcept,
 		deleteAdminConcept,
 		fetchAdminConceptHistory,
+		rollbackAdminConcept,
 		type AdminConceptResource,
 		type AdminConceptStatus,
 		type AdminConceptVersion,
+		type AdminConceptVersionStatus,
 		adminConceptFormSchema
 	} from '$lib/api/admin/concepts';
 	import SectionSelect from '$lib/admin/SectionSelect.svelte';
 	import { listCurriculumNodes } from '$lib/api/admin/curriculum';
 	import type { AdminCurriculumNode } from '$lib/api/admin/curriculum';
+
 	import type { AdminConceptMutationInput } from '../../../../../shared/validation/adminConceptSchema';
 
 	type ConceptFormState = {
@@ -22,6 +25,7 @@
 		termLt: string;
 		termEn: string;
 		descriptionLt: string;
+
 		descriptionEn: string;
 		sectionCode: string;
 		sectionTitle: string;
@@ -30,15 +34,23 @@
 		curriculumNodeCode: string;
 		curriculumItemOrdinal: string;
 		sourceRef: string;
+
 		isRequired: boolean;
 		status: AdminConceptStatus;
 	};
 
 	type FieldErrors = Record<string, string[]>;
+	type HistoryAction = AdminConceptVersion & {
+
+		statusLabel: string;
+		isRollbackDisabled: boolean;
+	};
+
 	type SectionSelectOption = {
 		key: string;
 		label: string;
 		sectionCode: string;
+
 		sectionTitle: string;
 		subsectionCode: string | null;
 		subsectionTitle: string | null;
@@ -47,11 +59,13 @@
 		depth?: number;
 	};
 
+
 	let concepts: AdminConceptResource[] = [];
 	let filteredConcepts: AdminConceptResource[] = [];
 	let sectionOptions: SectionSelectOption[] = [];
 	let sectionOptionsLoading = false;
 	let sectionOptionsError: string | null = null;
+
 	let filterSectionCode = 'all';
 	let filterStatus: 'all' | AdminConceptStatus = 'all';
 	let searchTerm = '';
@@ -60,21 +74,29 @@
 	let selectedSectionOptionKey = '';
 	let selectedSectionFallbackLabel: string | null = null;
 
+
 	let loading = false;
 	let loadError: string | null = null;
 	let editorOpen = false;
 	let editorMode: 'create' | 'edit' = 'create';
 	let activeConcept: AdminConceptResource | null = null;
+
 	let formState: ConceptFormState;
 	let metadataSnapshot: Record<string, unknown> = { status: 'draft' };
 	let formErrors: FieldErrors = {};
 	let saveError: string | null = null;
+
 	let saving = false;
 	let successMessage: string | null = null;
 	let successTimeout: ReturnType<typeof setTimeout> | null = null;
 	let historyEntries: AdminConceptVersion[] = [];
+
+	let historyActions: HistoryAction[] = [];
 	let historyLoading = false;
 	let historyError: string | null = null;
+	let rollingBackVersionId: string | null = null;
+	let rollbackError: string | null = null;
+
 	let editorDirty = false;
 	let initialSnapshot = '';
 	let beforeUnloadAttached = false;
@@ -496,8 +518,11 @@
 		discardPromptVisible = false;
 		resetForm();
 		historyEntries = [];
+	 	historyActions = [];
 		historyError = null;
 		historyLoading = false;
+		rollingBackVersionId = null;
+		rollbackError = null;
 		deleteConfirmSlug = null;
 		deleteError = null;
 		editorOpen = true;
@@ -522,8 +547,11 @@
 		setInitialSnapshot(formState, metadataSnapshot);
 		syncSelectedSectionFromForm();
 		historyEntries = [];
+	 	historyActions = [];
 		historyError = null;
 		historyLoading = false;
+		rollingBackVersionId = null;
+		rollbackError = null;
 		void loadHistory(concept.slug);
 		editorOpen = true;
 	}
@@ -537,6 +565,7 @@
 		discardPromptVisible = false;
 		showAdvancedFields = false;
 		historyEntries = [];
+	 	historyActions = [];
 		historyError = null;
 		historyLoading = false;
 		deleteConfirmSlug = null;
@@ -678,13 +707,66 @@
 	async function loadHistory(slug: string): Promise<void> {
 		historyLoading = true;
 		historyError = null;
+		rollbackError = null;
+		rollingBackVersionId = null;
 		try {
 			historyEntries = await fetchAdminConceptHistory(slug, { limit: 20 });
+			historyActions = historyEntries.map((entry) => ({
+				...entry,
+				statusLabel: resolveHistoryStatus(entry.status),
+				isRollbackDisabled: !entry.hasSnapshot
+			}));
 		} catch (error) {
 			historyError = error instanceof Error ? error.message : 'Nepavyko įkelti istorijos.';
 			historyEntries = [];
+			historyActions = [];
 		} finally {
 			historyLoading = false;
+		}
+	}
+
+	async function handleRollback(version: HistoryAction): Promise<void> {
+		if (!activeConcept) {
+			rollbackError = 'Nėra aktyviai redaguojamos sąvokos.';
+			return;
+		}
+
+		if (!version.hasSnapshot) {
+			rollbackError = 'Pasirinkta versija neturi pilnos kopijos atkūrimui.';
+			return;
+		}
+
+		if (rollingBackVersionId) {
+			return;
+		}
+
+		if (hasUnsavedChanges() && !confirmDiscard()) {
+			rollingBackVersionId = null;
+			return;
+		}
+
+		if (typeof window !== 'undefined') {
+			const confirmed = window.confirm(
+				`Atkurti sąvoką į ${version.version ?? 'pasirinktą'} versiją? Dabartiniai juodraščio pakeitimai bus prarasti.`
+			);
+			if (!confirmed) {
+				return;
+			}
+		}
+
+		rollingBackVersionId = version.id;
+		rollbackError = null;
+
+		try {
+			const restored = await rollbackAdminConcept(activeConcept.slug, version.id);
+			applySavedConcept(restored);
+			openEdit(restored);
+			showSuccess('Sąvoka atkurta į pasirinktą versiją.');
+		} catch (error) {
+			rollbackError =
+				error instanceof Error ? error.message : 'Nepavyko atkurti sąvokos versijos.';
+		} finally {
+			rollingBackVersionId = null;
 		}
 	}
 
@@ -873,6 +955,21 @@
 		draft: 'Juodraštis',
 		published: 'Publikuota'
 	};
+
+	const historyStatusLabels: Record<AdminConceptVersionStatus, string> = {
+		draft: 'Juodraštis',
+		in_review: 'Peržiūroje',
+		published: 'Publikuota',
+		archived: 'Archyvuota'
+	};
+
+	function resolveHistoryStatus(status: AdminConceptVersionStatus | null | undefined): string {
+		if (!status) {
+			return 'Nežinoma būsena';
+		}
+
+		return historyStatusLabels[status] ?? status;
+	}
 
 	$: {
 		if (typeof window !== 'undefined') {
@@ -1150,6 +1247,52 @@
 				</label>
 			</div>
 			{/if}
+
+			<section class="history-panel" aria-live="polite">
+				<header class="history-panel__header">
+					<h3>Versijų istorija</h3>
+					<p class="muted">Atkūrimas apima sekciją, poskyrius ir susietą sąvoką.</p>
+				</header>
+				{#if rollbackError}
+					<div class="alert alert--error">{rollbackError}</div>
+				{/if}
+				{#if historyLoading}
+					<p class="muted">Įkeliama versijų istorija…</p>
+				{:else if historyError}
+					<p class="field-error">{historyError}</p>
+				{:else if !historyActions.length}
+					<p class="muted">Dar nėra užfiksuotų versijų.</p>
+				{:else}
+					<ul class="history-list">
+						{#each historyActions as version (version.id)}
+							<li class="history-item">
+								<div class="history-item__summary">
+									<span class="history-item__version">Versija {version.version ?? '–'}</span>
+									<span class="history-item__status">{version.statusLabel}</span>
+								</div>
+								<div class="history-item__details">
+									<span>{formatTimestamp(version.createdAt)}</span>
+									{#if version.createdBy}
+										<span>{version.createdBy}</span>
+									{/if}
+								</div>
+								<div class="history-item__actions">
+									<button
+										type="button"
+										on:click={() => handleRollback(version)}
+										disabled={version.isRollbackDisabled || !!rollingBackVersionId}
+									>
+										{rollingBackVersionId === version.id ? 'Atkuriama…' : 'Atkurti'}
+									</button>
+									{#if version.isRollbackDisabled}
+										<span class="history-item__hint">Trūksta kopijos atkūrimui</span>
+									{/if}
+								</div>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</section>
 
 		</div>
 
@@ -1618,6 +1761,94 @@
 	.concept-admin-button:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.history-panel {
+		border: 1px solid var(--color-border);
+		border-radius: 0.9rem;
+		padding: 1rem 1.1rem;
+		display: grid;
+		gap: 0.8rem;
+		background: var(--color-panel-soft);
+	}
+
+	.history-panel__header {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.history-panel__header h3 {
+		margin: 0;
+		font-size: 1.08rem;
+	}
+
+	.history-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.history-item {
+		display: grid;
+		gap: 0.45rem;
+		padding: 0.75rem 0.85rem;
+		border: 1px solid var(--color-border-light);
+		border-radius: 0.75rem;
+		background: var(--color-panel);
+	}
+
+	.history-item__summary {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 600;
+	}
+
+	.history-item__status {
+		color: var(--color-text-soft);
+		font-size: 0.9rem;
+	}
+
+	.history-item__details {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		color: var(--color-text-soft);
+		font-size: 0.9rem;
+	}
+
+	.history-item__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.history-item__actions button {
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-secondary);
+		border-radius: 0.55rem;
+		padding: 0.45rem 0.9rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.history-item__actions button:hover,
+	.history-item__actions button:focus-visible {
+		border-color: var(--color-border);
+		background: var(--color-panel-hover);
+	}
+
+	.history-item__actions button:disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+
+	.history-item__hint {
+		font-size: 0.82rem;
+		color: var(--color-text-soft);
 	}
 
 	@media (max-width: 720px) {

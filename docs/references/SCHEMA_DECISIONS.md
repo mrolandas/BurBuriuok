@@ -45,6 +45,7 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - `status` (text) constrained to `draft`, `in_review`, `published`, `archived` with default `draft`.
   - `change_summary` (text) provides human-readable context.
   - `diff` (jsonb) captures serialized field deltas for tooling.
+  - `snapshot` (jsonb, 2025-11-13) persists the full serialized entity state at the time of the change so rollback flows can restore concept + curriculum bundles without relying on inferred diffs. Older versions without snapshots remain view-only in history.
   - `created_by` (text) defaults to request JWT `sub` claim or `system` fallback in trigger.
   - `created_at` (timestamptz) default `timezone('utc', now())`.
 - **Tables**: `content_version_changes`

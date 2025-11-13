@@ -8,7 +8,11 @@ import {
 } from "../../../../data/repositories/conceptsRepository.ts";
 import { deleteCurriculumItemAdminBySlug } from "../../../../data/repositories/curriculumRepository.ts";
 import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
-import { listContentVersionsForEntity } from "../../../../data/repositories/contentVersionsRepository.ts";
+import {
+  getContentVersionById,
+  listContentVersionsForEntity,
+  type ContentVersionDbRow,
+} from "../../../../data/repositories/contentVersionsRepository.ts";
 import type {
   Concept,
   ContentVersionStatus,
@@ -16,7 +20,7 @@ import type {
   UpsertConceptInput,
 } from "../../../../data/types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { unauthorized } from "../../utils/httpError.ts";
+import { HttpError, unauthorized } from "../../utils/httpError.ts";
 import { logContentMutation } from "../../services/auditLogger.ts";
 import {
   adminConceptMutationSchema,
@@ -98,6 +102,69 @@ router.get(
         fetchedAt: new Date().toISOString(),
       },
     });
+  })
+);
+
+router.post(
+  "/:slug/rollback",
+  asyncHandler(async (req, res) => {
+    const slug = req.params.slug?.trim();
+
+    if (!slug) {
+      res.status(400).json({
+        error: {
+          message: "Slug parameter is required.",
+          code: "SLUG_REQUIRED",
+        },
+      });
+      return;
+    }
+
+    const versionId =
+      typeof req.body?.versionId === "string" ? req.body.versionId.trim() : "";
+
+    if (!versionId) {
+      res.status(400).json({
+        error: {
+          message: "versionId body parameter is required.",
+          code: "VERSION_ID_REQUIRED",
+        },
+      });
+      return;
+    }
+
+    const actor = req.authUser?.email ?? req.authUser?.id ?? null;
+
+    try {
+      const result = await rollbackConceptVersion({
+        slug,
+        versionId,
+        actor,
+      });
+
+      res.json({
+        data: {
+          concept: mapConceptForResponse(result.concept),
+        },
+        meta: {
+          rollbackAt: new Date().toISOString(),
+          rolledBackToVersionId: versionId,
+          version: result.versionNumber,
+        },
+      });
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({
+          error: {
+            message: error.message,
+            code: error.code,
+          },
+        });
+        return;
+      }
+
+      throw error;
+    }
   })
 );
 
@@ -463,6 +530,189 @@ async function prepareCurriculumFields(
   return result;
 }
 
+type RollbackConceptParams = {
+  slug: string;
+  versionId: string;
+  actor: string | null;
+};
+
+async function rollbackConceptVersion(
+  params: RollbackConceptParams
+): Promise<{ concept: Concept; versionNumber: number | null }> {
+  const supabase = getSupabaseClient({ service: true, schema: "burburiuok" });
+
+  const version = await getContentVersionById(params.versionId, supabase);
+
+  if (!version) {
+    throw new HttpError(404, `Version '${params.versionId}' was not found.`, "VERSION_NOT_FOUND");
+  }
+
+  if (version.entity_type !== "concept") {
+    throw new HttpError(
+      400,
+      `Version '${params.versionId}' does not describe a concept entry and cannot be rolled back via this endpoint.`,
+      "VERSION_UNSUPPORTED_ENTITY"
+    );
+  }
+
+  if (version.entity_primary_key !== params.slug) {
+    throw new HttpError(
+      400,
+      `Version '${params.versionId}' does not belong to concept '${params.slug}'.`,
+      "VERSION_ENTITY_MISMATCH"
+    );
+  }
+
+  const payload = snapshotToAdminPayload(version);
+  const existing = await getConceptBySlug(params.slug, supabase);
+  const prepared = await prepareCurriculumFields(payload, existing ?? null, supabase);
+
+  const upsertPayload = toUpsertConceptInput(prepared, {});
+  await upsertConcepts([upsertPayload], supabase);
+  await syncCurriculumItemRecord(prepared, existing ?? null, supabase);
+
+  const refreshed = await getConceptBySlug(params.slug, supabase);
+
+  if (!refreshed) {
+    throw new Error(`Concept '${params.slug}' could not be reloaded after rollback.`);
+  }
+
+  await logContentMutation({
+    entityType: "concept",
+    entityId: params.slug,
+    before: existing ? mapConceptForResponse(existing) : null,
+    after: mapConceptForResponse(refreshed),
+    actor: params.actor ?? null,
+    status: prepared.status,
+    changeSummary: `Concept '${params.slug}' rolled back to version ${version.version ?? "?"}.`,
+  });
+
+  return {
+    concept: refreshed,
+    versionNumber: version.version ?? null,
+  };
+}
+
+function snapshotToAdminPayload(version: ContentVersionDbRow): AdminConceptMutationInput {
+  if (!isPlainObject(version.snapshot) || !Object.keys(version.snapshot as Record<string, unknown>).length) {
+    throw new HttpError(
+      409,
+      "Selected version does not contain snapshot data required for rollback.",
+      "VERSION_MISSING_SNAPSHOT"
+    );
+  }
+
+  const raw = version.snapshot as Record<string, unknown>;
+  const slug = readRequiredString(raw, "slug");
+  const termLt = readRequiredString(raw, "termLt");
+  const descriptionLt = readRequiredString(raw, "descriptionLt");
+  const sectionCode = readRequiredString(raw, "sectionCode");
+  const statusCandidate =
+    (typeof raw.status === "string" ? raw.status : null) ?? version.status ?? "draft";
+  const statusParse = adminConceptStatusSchema.safeParse(statusCandidate);
+
+  if (!statusParse.success) {
+    throw new HttpError(
+      409,
+      `Snapshot status '${String(statusCandidate)}' is not supported for rollback.`,
+      "VERSION_INVALID_STATUS"
+    );
+  }
+
+  const status = statusParse.data;
+  const sectionTitle = readOptionalString(raw, "sectionTitle") ?? sectionCode;
+  const metadata = cloneSnapshotMetadata(raw.metadata);
+  metadata.status = status;
+
+  const candidate = {
+    slug,
+    originalSlug: slug,
+    termLt,
+    termEn: readOptionalString(raw, "termEn"),
+    descriptionLt,
+    descriptionEn: readOptionalString(raw, "descriptionEn"),
+    sectionCode,
+    sectionTitle,
+    subsectionCode: readOptionalString(raw, "subsectionCode"),
+    subsectionTitle: readOptionalString(raw, "subsectionTitle"),
+    curriculumNodeCode: readOptionalString(raw, "curriculumNodeCode"),
+    curriculumItemOrdinal: readOptionalNumber(raw, "curriculumItemOrdinal"),
+    curriculumItemLabel: readOptionalString(raw, "curriculumItemLabel") ?? termLt,
+    sourceRef: readOptionalString(raw, "sourceRef"),
+    isRequired: typeof raw.isRequired === "boolean" ? raw.isRequired : true,
+    metadata,
+    status,
+  } satisfies Partial<AdminConceptMutationInput>;
+
+  const validation = adminConceptMutationSchema.safeParse(candidate);
+
+  if (!validation.success) {
+    throw new HttpError(
+      409,
+      "Snapshot data is incomplete or malformed for rollback.",
+      "VERSION_SNAPSHOT_INVALID"
+    );
+  }
+
+  return validation.data;
+}
+
+function readRequiredString(source: Record<string, unknown>, key: string): string {
+  const value = source[key];
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.length) {
+      return trimmed;
+    }
+  }
+  throw new HttpError(409, `Snapshot is missing required field '${key}'.`, "VERSION_SNAPSHOT_MISSING_FIELD");
+}
+
+function readOptionalString(source: Record<string, unknown>, key: string): string | null {
+  const value = source[key];
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed.length ? trimmed : null;
+  }
+  return null;
+}
+
+function readOptionalNumber(source: Record<string, unknown>, key: string): number | null {
+  const value = source[key];
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed.length) {
+      return null;
+    }
+    const parsed = Number.parseInt(trimmed, 10);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function cloneSnapshotMetadata(source: unknown): Record<string, unknown> {
+  if (!isPlainObject(source)) {
+    return {};
+  }
+
+  try {
+    return structuredClone(source as Record<string, unknown>);
+  } catch (error) {
+    try {
+      return JSON.parse(JSON.stringify(source)) as Record<string, unknown>;
+    } catch {
+      return { ...((source as Record<string, unknown>) ?? {}) };
+    }
+  }
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 async function fetchNextCurriculumOrdinal(client: SupabaseClient, nodeCode: string): Promise<number> {
   const { data, error } = await (client as any)
     .from("curriculum_items")
@@ -597,17 +847,10 @@ type ConceptVersionResponse = {
   createdAt: string;
   createdBy: string | null;
   version: number | null;
+  hasSnapshot: boolean;
 };
 
-function mapVersionForResponse(row: {
-  id: string;
-  status: ContentVersionStatus | null;
-  change_summary: string | null;
-  diff: unknown;
-  created_at: string;
-  created_by: string | null;
-  version: number | null;
-}): ConceptVersionResponse {
+function mapVersionForResponse(row: ContentVersionDbRow): ConceptVersionResponse {
   return {
     id: row.id,
     status: row.status ?? null,
@@ -616,5 +859,7 @@ function mapVersionForResponse(row: {
     createdAt: row.created_at,
     createdBy: row.created_by ?? null,
     version: row.version ?? null,
+    hasSnapshot:
+      isPlainObject(row.snapshot) && Object.keys(row.snapshot as Record<string, unknown>).length > 0,
   } satisfies ConceptVersionResponse;
 }

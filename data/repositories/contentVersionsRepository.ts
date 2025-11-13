@@ -15,13 +15,14 @@ interface VersionRow {
   id: string;
 }
 
-interface ContentVersionRow {
+export interface ContentVersionDbRow {
   id: string;
-  entity_type: string;
+  entity_type: ContentEntityType;
   entity_primary_key: string;
   status: ContentVersionStatus | null;
   change_summary: string | null;
   diff: unknown;
+  snapshot: unknown;
   created_by: string | null;
   created_at: string;
   version: number | null;
@@ -52,6 +53,7 @@ export async function recordContentVersion(
         status: input.status,
         change_summary: input.changeSummary ?? null,
         diff: input.diff ?? null,
+        snapshot: input.snapshot ?? null,
         created_by: input.actor ?? null,
       };
 
@@ -151,14 +153,14 @@ export async function listContentVersionsForEntity(
   entityPrimaryKey: string,
   limit = 20,
   client: SupabaseClient | null = null
-): Promise<ContentVersionRow[]> {
+): Promise<ContentVersionDbRow[]> {
   const supabase =
     client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
 
   const { data, error } = await (supabase as any)
     .from(VERSIONS_TABLE)
     .select(
-      "id, entity_type, entity_primary_key, status, change_summary, diff, created_by, created_at, version"
+      "id, entity_type, entity_primary_key, status, change_summary, diff, snapshot, created_by, created_at, version"
     )
     .eq("entity_type", entityType)
     .eq("entity_primary_key", entityPrimaryKey)
@@ -171,7 +173,29 @@ export async function listContentVersionsForEntity(
     );
   }
 
-  return (data ?? []) as ContentVersionRow[];
+  return (data ?? []) as ContentVersionDbRow[];
+}
+
+export async function getContentVersionById(
+  versionId: string,
+  client: SupabaseClient | null = null
+): Promise<ContentVersionDbRow | null> {
+  const supabase =
+    client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
+
+  const { data, error } = await (supabase as any)
+    .from(VERSIONS_TABLE)
+    .select(
+      "id, entity_type, entity_primary_key, status, change_summary, diff, snapshot, created_by, created_at, version"
+    )
+    .eq("id", versionId)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Failed to load content version '${versionId}': ${error.message}`);
+  }
+
+  return data ? (data as ContentVersionDbRow) : null;
 }
 
 function toChangeRow(

@@ -23,6 +23,11 @@ This document captures how BurKursas uses Supabase during early development (sta
 4. Validate connectivity with `node tests/checkSupabaseConnection.mjs`, then perform an admin draft save + publish attempt in the UI to confirm 201/400 responses and audit logging. GitHub Pages deploys now run a Supabase anon key smoke test, so a failed deploy is an early warning that Pages secrets are stale.
 5. Clean up any test content inserted during validation, and log the rotation date in `docs/INFRASTRUCTURE.md` + this file. Target quarterly rotations unless incidents dictate otherwise.
 
+### Recent Updates (2025-11-13)
+
+- Ran `npx supabase db push --include-seed` to apply migration `0009_db002_rollback_bundle.sql` on the hosted project; seeds remained current.
+- Confirmed rollback snapshots populate by creating a concept bundle in the admin console and querying `content_versions` via REST (`Accept-Profile: burburiuok`, filter `snapshot=not.is.null`).
+
 ## Database Layout (Current + Planned)
 
 - **Database name/schema** – create a dedicated schema `burburiuok` in the shared instance to avoid collisions with other projects.

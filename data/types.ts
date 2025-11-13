@@ -184,6 +184,7 @@ export interface ContentVersionInput {
   status?: ContentVersionStatus;
   changeSummary?: string | null;
   diff?: unknown;
+  snapshot?: unknown;
   actor?: string | null;
   changes?: ContentVersionChangeInput[];
 }

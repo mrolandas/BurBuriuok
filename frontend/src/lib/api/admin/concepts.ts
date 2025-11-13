@@ -6,6 +6,8 @@ import {
 	type AdminConceptMutationInput
 } from '../../../../../shared/validation/adminConceptSchema';
 
+const conceptVersionStatusSchema = z.enum(['draft', 'in_review', 'published', 'archived']);
+
 const nullableString = z.union([z.string(), z.null()]).optional();
 const nullableNumber = z.union([z.number(), z.null()]).optional();
 
@@ -113,12 +115,13 @@ const deleteResponseSchema = z.object({
 
 const conceptVersionSchema = z.object({
 	id: z.string(),
-	status: adminConceptStatusSchema.nullable().optional(),
+	status: conceptVersionStatusSchema.nullable().optional(),
 	changeSummary: z.string().nullable().optional(),
 	diff: z.unknown().optional(),
 	createdAt: z.string(),
 	createdBy: z.string().nullable().optional(),
-	version: z.number().int().nullable().optional()
+	version: z.number().int().nullable().optional(),
+	hasSnapshot: z.boolean().default(false)
 });
 
 const historyResponseSchema = z.object({
@@ -134,9 +137,24 @@ const historyResponseSchema = z.object({
 		.optional()
 });
 
+const rollbackResponseSchema = z.object({
+	data: z.object({
+		concept: adminConceptResourceSchema
+	}),
+	meta: z
+		.object({
+			rollbackAt: z.string(),
+			rolledBackToVersionId: z.string(),
+			version: z.number().nullable().optional()
+		})
+		.passthrough()
+		.optional()
+});
+
 export type AdminConceptResource = z.infer<typeof adminConceptResourceSchema>;
 export type AdminConceptStatus = z.infer<typeof adminConceptStatusSchema>;
 export type AdminConceptVersion = z.infer<typeof conceptVersionSchema>;
+export type AdminConceptVersionStatus = z.infer<typeof conceptVersionStatusSchema>;
 export type AdminDeletedCurriculumItem = z.infer<typeof deletedCurriculumItemSchema>;
 
 export async function listAdminConcepts(params: {
@@ -207,6 +225,19 @@ export async function fetchAdminConceptHistory(
 	const response = await adminFetch<unknown>(target);
 	const parsed = historyResponseSchema.parse(response);
 	return parsed.data.versions;
+}
+
+export async function rollbackAdminConcept(
+	slug: string,
+	versionId: string
+): Promise<AdminConceptResource> {
+	const response = await adminFetch<unknown>(`/concepts/${slug}/rollback`, {
+		method: 'POST',
+		body: JSON.stringify({ versionId })
+	});
+
+	const parsed = rollbackResponseSchema.parse(response);
+	return parsed.data.concept;
 }
 
 export const adminConceptFormSchema = adminConceptMutationSchema;

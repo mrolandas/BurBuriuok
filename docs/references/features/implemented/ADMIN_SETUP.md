@@ -37,6 +37,8 @@ _Update 2025-11-10_: Concept editing now includes a dedicated modal that mirrors
 
 _Update 2025-11-11_: Section board inline editing landed on the learner homepage. When admin mode is active the root cards expose a “Redaguoti skiltį” action that opens the shared modal, posts updates through the curriculum node endpoint, and displays toast feedback after saves.
 
+_Update 2025-11-13_: Concepts history drawer now shows version snapshots and offers a Supabase-authenticated “Atkurti” action that rolls the concept and its linked curriculum item back to the selected version, logging the rollback in `content_versions`.
+
 ## Screen Details
 
 ### 1. Overview

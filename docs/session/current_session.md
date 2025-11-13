@@ -22,7 +22,8 @@ This session refocuses on DB-002: harden the content versioning workflow so admi
 - [ ] **DB-002 – Content Versioning Model**
   - ⏳ Finalise migrations for `content_drafts`, `content_versions`, and supporting triggers.
   - ⏳ Tighten Supabase policies covering draft/publish transitions and admin audit access.
-  - ⏳ Extend backend services to persist diff metadata and expose rollback endpoints.
+  - [x] Extend backend services to persist diff metadata and expose rollback endpoints.
+  - [x] Apply Supabase migration 0009 to the hosted project and verify snapshot rows populate via audit logging.
   - ⏳ Update `SCHEMA_DECISIONS.md`, `BACKEND.md`, and `ADMIN_SETUP.md` with the approved workflow.
 - [ ] **Post-DB-002 Follow-ups** (tracking only)
   - ADM-002 polish depends on DB-002 history tables.
@@ -70,6 +71,9 @@ This session refocuses on DB-002: harden the content versioning workflow so admi
 - 2025-11-13: Refreshed the session scope to include content versioning hardening and the full media MVP pipeline; reordered backlog and documentation rules to enforce GitHub sync via commit hook.
 - 2025-11-13: Opened AUTH-001/002/003 issues ([#20](https://github.com/mrolandas/BurBuriuok/issues/20), [#21](https://github.com/mrolandas/BurBuriuok/issues/21), [#22](https://github.com/mrolandas/BurBuriuok/issues/22)) after aligning backlog briefs with documentation.
 - 2025-11-13: Narrowed the active session to DB-002 delivery, deferring media/auth execution until versioning policies, migrations, and rollback tooling are complete.
+- 2025-11-13: Added `content_versions.snapshot` column, Supabase rollback endpoint, and admin UI controls to restore concepts (section → subsection → concept bundle) using authenticated sessions.
+- 2025-11-13: Applied migration `0009_db002_rollback_bundle.sql` to the hosted Supabase project and confirmed seeds were already aligned.
+- 2025-11-13: Created test subsection/concept bundle via the admin console and verified `content_versions` snapshots for nodes/items/concepts persist remotely.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 
