@@ -33,7 +33,7 @@
 	let buttonEl: HTMLButtonElement | null = null;
 	let searchEl: HTMLInputElement | null = null;
 	let dropdownEl: HTMLDivElement | null = null;
-	let keyWhenOpened: string | null = null;
+ 	let previousValueKey = valueKey;
 
 	const componentId = `section-select-${Math.random().toString(36).slice(2, 9)}`;
 	const listboxId = `${componentId}-listbox`;
@@ -132,7 +132,6 @@
 			return;
 		}
 
-		keyWhenOpened = valueKey;
 		open = true;
 		query = '';
 		previousQuery = '';
@@ -162,25 +161,25 @@
 
 	function closeDropdown(focusButton = true): void {
 		if (!open) {
-			keyWhenOpened = null;
 			return;
 		}
 
 		open = false;
-		keyWhenOpened = null;
 		query = '';
 		previousQuery = '';
 		highlightedIndex = -1;
-		searchEl?.blur();
-		searchEl = null;
 
 		if (focusButton) {
 			buttonEl?.focus();
 		}
 	}
 
-	$: if (open && keyWhenOpened !== null && valueKey !== keyWhenOpened) {
-		closeDropdown();
+	$: if (valueKey !== previousValueKey) {
+		const shouldClose = open;
+		previousValueKey = valueKey;
+		if (shouldClose) {
+			closeDropdown();
+		}
 	}
 
 	function toggleDropdown(): void {
@@ -286,7 +285,7 @@
 		if (option.disabled) {
 			return;
 		}
-		closeDropdown(false);
+		closeDropdown();
 		dispatch('change', option);
 	}
 
