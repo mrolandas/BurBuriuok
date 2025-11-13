@@ -32,6 +32,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - **When to run:**
     - Before pushing migrations or backend changes that touch audit logging, draft handling, or rollback endpoints.
     - After rotating Supabase keys or refreshing RLS policies to confirm service-role access still works.
+    - After Concept Manager front-end changes that impact draft/publish flows (e.g., toast copy, error handling) to ensure the shared lifecycle remains intact.
     - Ahead of releases that rely on DB-002 behaviour (admin concept editing, rollback UI flows) and during incident response involving content history.
 
 ### Backend Type Safety

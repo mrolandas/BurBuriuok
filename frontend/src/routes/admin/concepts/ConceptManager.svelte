@@ -92,6 +92,7 @@
 	let metadataSnapshot: Record<string, unknown> = { status: 'draft' };
 	let formErrors: FieldErrors = {};
 	let saveError: string | null = null;
+	let saveErrorHint: string | null = null;
 
 	let saving = false;
 	let successMessage: string | null = null;
@@ -306,7 +307,8 @@
 					depth: 0
 				});
 
-				await appendChildren(root, 1, root, compiled);
+				const branchOptions = await appendChildren(root, 1, root);
+				compiled.push(...branchOptions);
 			}
 
 			sectionOptions = compiled;
@@ -325,19 +327,17 @@
 	async function appendChildren(
 		parent: AdminCurriculumNode,
 		depth: number,
-		sectionRoot: AdminCurriculumNode,
-		collector: SectionSelectOption[]
-	): Promise<void> {
+		sectionRoot: AdminCurriculumNode
+	): Promise<SectionSelectOption[]> {
 		const children = await listCurriculumNodes(parent.code);
 		if (!children.length) {
-			return;
+			return [];
 		}
 
 		const sectionTitle = normalizeNodeTitle(sectionRoot.title, sectionRoot.code);
-
-		for (const child of children) {
+		const branchPromises = children.map(async (child) => {
 			const childTitle = normalizeNodeTitle(child.title, child.code);
-			collector.push({
+			const option: SectionSelectOption = {
 				key: `node:${sectionRoot.code}:${child.code}`,
 				label: childTitle,
 				sectionCode: sectionRoot.code,
@@ -347,10 +347,18 @@
 				nodeCode: child.code,
 				disabled: false,
 				depth
-			});
+			};
 
-			await appendChildren(child, depth + 1, sectionRoot, collector);
+			const descendants = await appendChildren(child, depth + 1, sectionRoot);
+			return [option, ...descendants];
+		});
+
+		const resolved = await Promise.all(branchPromises);
+		const flattened: SectionSelectOption[] = [];
+		for (const branch of resolved) {
+			flattened.push(...branch);
 		}
+		return flattened;
 	}
 
 	onMount(() => {
@@ -546,7 +554,7 @@
 		formState = createEmptyFormState();
 		metadataSnapshot = { status: 'draft' };
 		formErrors = {};
-		saveError = null;
+		resetSaveErrors();
 		showAdvancedFields = false;
 		setInitialSnapshot(formState, metadataSnapshot);
 		syncSelectedSectionFromForm();
@@ -556,6 +564,7 @@
 		editorMode = 'create';
 		activeConcept = null;
 		discardPromptVisible = false;
+		resetSaveErrors();
 		resetForm();
 		historyEntries = [];
 	 	historyActions = [];
@@ -577,13 +586,14 @@
 		discardPromptVisible = false;
 		deleteConfirmSlug = null;
 		deleteError = null;
+		resetSaveErrors();
 
 		if (typeof metadataSnapshot.status !== 'string') {
 			metadataSnapshot.status = concept.status;
 		}
 
 		formErrors = {};
-		saveError = null;
+		resetSaveErrors();
 		setInitialSnapshot(formState, metadataSnapshot);
 		syncSelectedSectionFromForm();
 		historyEntries = [];
@@ -604,6 +614,7 @@
 		editorDirty = false;
 		discardPromptVisible = false;
 		showAdvancedFields = false;
+		resetSaveErrors();
 		historyEntries = [];
 	 	historyActions = [];
 		historyError = null;
@@ -728,6 +739,11 @@
 			successMessage = null;
 			successTimeout = null;
 		}, 4000);
+	}
+
+	function resetSaveErrors(): void {
+		saveError = null;
+		saveErrorHint = null;
 	}
 
 	function hasUnsavedChanges(): boolean {
@@ -989,7 +1005,8 @@
 			formErrors = flattened.fieldErrors as FieldErrors;
 			ensureAdvancedVisibleForErrors(formErrors);
 			const general = flattened.formErrors.filter(Boolean);
-			saveError = general.length ? general.join(' ') : null;
+			saveError = general.length ? general.join(' ') : 'Pataisykite pažymėtus laukus.';
+			saveErrorHint = 'Laukeliai su klaidomis paryškinti žemiau. Patikrinkite statusą ir sekciją bei bandykite dar kartą.';
 			return;
 		}
 
@@ -1025,17 +1042,26 @@
 			finalizeCloseEditor();
 		} catch (error) {
 			revertOptimisticConcept();
-			saveError = error instanceof Error ? error.message : 'Nepavyko išsaugoti sąvokų.';
+			if (error instanceof Error) {
+				const message = error.message.trim();
+				saveError = message.length ? message : 'Nepavyko išsaugoti sąvokos dėl nenumatytos klaidos.';
+				saveErrorHint = 'Patikrinkite tinklo ryšį ir bandykite dar kartą. Jei klaida kartojasi, peržiūrėkite Supabase žurnalus.';
+			} else {
+				saveError = 'Nepavyko išsaugoti sąvokos dėl nenumatytos klaidos.';
+				saveErrorHint = 'Patikrinkite tinklo ryšį ir bandykite dar kartą.';
+			}
 		} finally {
 			saving = false;
 		}
 	}
 
 	function submitDraft(): void {
+		resetSaveErrors();
 		void handleSubmit('draft');
 	}
 
 	function submitPublish(): void {
+		resetSaveErrors();
 		void handleSubmit('publish');
 	}
 
@@ -1052,7 +1078,7 @@
 			formState = parsed.state;
 			metadataSnapshot = parsed.metadata ?? { status: 'draft' };
 			formErrors = {};
-			saveError = null;
+			resetSaveErrors();
 			syncSelectedSectionFromForm();
 			setInitialSnapshot(formState, metadataSnapshot);
 			clearSuccessMessage();
@@ -1333,7 +1359,12 @@
 
 		<div class="drawer__content">
 			{#if saveError}
-				<div class="alert alert--error">{saveError}</div>
+				<div class="alert alert--error" role="alert">
+					<strong>{saveError}</strong>
+					{#if saveErrorHint}
+						<p class="alert__hint">{saveErrorHint}</p>
+					{/if}
+				</div>
 			{/if}
 
 			<div class="form-grid form-grid--basic">
@@ -1625,6 +1656,12 @@
 		background: rgba(220, 38, 38, 0.1);
 		border: 1px solid rgba(220, 38, 38, 0.4);
 		color: rgb(185, 28, 28);
+	}
+
+	.alert__hint {
+		margin: 0.4rem 0 0;
+		font-size: 0.88rem;
+		color: rgb(120, 53, 15);
 	}
 
 	.alert--success {

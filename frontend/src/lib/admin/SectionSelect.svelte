@@ -33,6 +33,7 @@
 	let buttonEl: HTMLButtonElement | null = null;
 	let searchEl: HTMLInputElement | null = null;
 	let dropdownEl: HTMLDivElement | null = null;
+ 	let previousValueKey = valueKey;
 
 	const componentId = `section-select-${Math.random().toString(36).slice(2, 9)}`;
 	const listboxId = `${componentId}-listbox`;
@@ -170,6 +171,14 @@
 
 		if (focusButton) {
 			buttonEl?.focus();
+		}
+	}
+
+	$: if (valueKey !== previousValueKey) {
+		const shouldClose = open;
+		previousValueKey = valueKey;
+		if (shouldClose) {
+			closeDropdown();
 		}
 	}
 

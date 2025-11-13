@@ -45,6 +45,8 @@ _Update 2025-11-13 (late)_: Added automated smoke coverage via `npm run test:db0
 
 _Update 2025-11-13 (evening)_: Concept manager now includes a section/status/search toolbar with empty-state guidance, hides the global AppShell search while in the admin shell, and applies optimistic updates to the drawer saves (falling back to a refetch on Supabase errors).
 
+_Update 2025-11-13 (late night)_: Concept save toasts now echo the resulting publication status and mention when active filters hide the entry, while validation and Supabase failures show actionable guidance inside the drawer alert.
+
 ## Screen Details
 
 ### 1. Overview
