@@ -41,6 +41,8 @@
 			: navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
 	);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
+	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
+	const showSearch = $derived(!isAdminRoute);
 
 	function computeAdminConsoleHref(): string {
 		const adminPath = resolve('/admin');
@@ -473,32 +475,34 @@
 			<div class="app-shell__menu-overlay" onclick={closeMenus} aria-hidden="true"></div>
 		{/if}
 
-		<div class="app-shell__search" role="search">
-			<form class="app-shell__search-form" action={resolve('/search')} method="get">
-			<label class="app-shell__search-label" for="global-search">Paieška</label>
-			<div class="app-shell__search-field">
-				<input
-					id="global-search"
-					type="search"
-					name="q"
-					placeholder="Ieškokite sąvokose ir aprašymuose..."
-					autocomplete="off"
-					spellcheck="false"
-					bind:this={searchInput}
-					bind:value={searchTerm}
-					aria-label="Paieška temose"
-				/>
-				<button
-					class="app-shell__search-action"
-					type={searchTerm ? 'button' : 'submit'}
-					onclick={handleSearchButtonClick}
-					aria-label={searchTerm ? 'Išvalyti paiešką' : 'Ieškoti'}
-				>
-					<span aria-hidden="true">{searchTerm ? '✕' : '🔍'}</span>
-				</button>
+		{#if showSearch}
+			<div class="app-shell__search" role="search">
+				<form class="app-shell__search-form" action={resolve('/search')} method="get">
+				<label class="app-shell__search-label" for="global-search">Paieška</label>
+				<div class="app-shell__search-field">
+					<input
+						id="global-search"
+						type="search"
+						name="q"
+						placeholder="Ieškokite sąvokose ir aprašymuose..."
+						autocomplete="off"
+						spellcheck="false"
+						bind:this={searchInput}
+						bind:value={searchTerm}
+						aria-label="Paieška temose"
+					/>
+					<button
+						class="app-shell__search-action"
+						type={searchTerm ? 'button' : 'submit'}
+						onclick={handleSearchButtonClick}
+						aria-label={searchTerm ? 'Išvalyti paiešką' : 'Ieškoti'}
+					>
+						<span aria-hidden="true">{searchTerm ? '✕' : '🔍'}</span>
+					</button>
+				</div>
+			</form>
 			</div>
-		</form>
-	</div>
+		{/if}
 
 	<main class="app-shell__main" id="main-content">
 		{@render children()}
