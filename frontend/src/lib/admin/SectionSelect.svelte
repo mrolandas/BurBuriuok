@@ -175,10 +175,9 @@
 	}
 
 	$: if (valueKey !== previousValueKey) {
-		const shouldClose = open;
 		previousValueKey = valueKey;
-		if (shouldClose) {
-			closeDropdown();
+		if (open) {
+			queueMicrotask(() => closeDropdown());
 		}
 	}
 
@@ -285,8 +284,8 @@
 		if (option.disabled) {
 			return;
 		}
-		closeDropdown();
 		dispatch('change', option);
+		queueMicrotask(() => closeDropdown());
 	}
 
 	function handleButtonKeydown(event: KeyboardEvent): void {
