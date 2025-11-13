@@ -25,7 +25,7 @@ With DB-002 content versioning wrapped, this session shifts to ADM-002: elevatin
   - [x] Surface publication state changes more clearly (status chip + toast copy incorporating DB-002 outcomes).
   - [x] Harden error handling (validation messaging, Supabase failure toasts, retry affordances).
 - [ ] **Post-ADM-002 Planning** (tracking only)
-  - [x] Scope the history sidebar/diff preview requirements once core polish lands (DB-002 dependency).
+  - Scope the history sidebar/diff preview requirements once core polish lands (DB-002 dependency).
   - Confirm MEDIA-001/002 start window now that concept editor is stable.
   - Keep AUTH-001→003 backlog briefs up to date for the following cycle.
 
@@ -76,7 +76,6 @@ With DB-002 content versioning wrapped, this session shifts to ADM-002: elevatin
 - 2025-11-13: Optimized `SectionSelect` to load curriculum nodes concurrently, auto-close after selection, and re-ran `npm run test:db002` to confirm the concept lifecycle guard stays green.
 - 2025-11-13: Captured Concept Manager manual QA checklist and future SectionSelect automation goals in `docs/TESTING_GUIDE.md`.
 - 2025-11-13: ADM-002 core polish complete; next session block will scope the history sidebar/diff preview requirements and plan the MEDIA/AUTH follow-ups.
-- 2025-11-13: Scoped history sidebar work—plan covers paginated version fetch in the drawer, diff preview component with Lithuanian field labels (extensible for localisation), and inline rollback confirmation after reviewing the diff.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 
