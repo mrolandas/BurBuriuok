@@ -20,8 +20,8 @@ With DB-002 content versioning wrapped, this session shifts to ADM-002: elevatin
 ## Workstream Milestones & Dependencies
 
 - [ ] **ADM-002 – Concept Editor Polish**
-  - [ ] Add concept grid filters (section, status, search) plus empty-state guidance.
-  - [ ] Wire optimistic updates for inline edits/drawer saves so the list refreshes without full reloads.
+  - [x] Add concept grid filters (section, status, search) plus empty-state guidance.
+  - [x] Wire optimistic updates for inline edits/drawer saves so the list refreshes without full reloads.
   - [ ] Surface publication state changes more clearly (status chip + toast copy incorporating DB-002 outcomes).
   - [ ] Harden error handling (validation messaging, Supabase failure toasts, retry affordances).
 - [ ] **Post-ADM-002 Planning** (tracking only)
@@ -31,8 +31,8 @@ With DB-002 content versioning wrapped, this session shifts to ADM-002: elevatin
 
 ## Immediate Focus (week of 2025-11-13)
 
-- Prototype section/status filters in `ConceptManager.svelte` (reuse existing stores/services where possible).
-- Ensure optimistic save path updates the local concept collection and status chip without a full fetch.
+- Prototype section/status filters in `ConceptManager.svelte` (reuse existing stores/services where possible). (Done) Toolbar now covers section, status, and search with empty-state copy.
+- Ensure optimistic save path updates the local concept collection and status chip without a full fetch. (Done) Drawer saves now update the grid optimistically and roll back on failures.
 - Audit current toast + error messaging to align with DB-002 statuses (draft/published) and adjust copy where confusing.
 - Capture any backend API adjustments needed to support filtered fetch or metadata (only if absolutely required; prefer client-side filtering first).
 
@@ -69,11 +69,13 @@ With DB-002 content versioning wrapped, this session shifts to ADM-002: elevatin
 - 2025-11-13: Archived DB-002 session plan to `docs/archive/2025_11_13_current_session.md` and retargeted the active plan to ADM-002 concept editor polish.
 - 2025-11-13: Confirmed with product that grid filters + optimistic saves are the MVP priority; deeper history UX will follow once polish ships.
 - 2025-11-13: Captured manual testing expectations (filters + save flow) to revisit after implementation before adding automated coverage.
+- 2025-11-13: Implemented concept grid toolbar (section/status/search) with empty-state guidance and optimistic drawer saves that sync the list without a full refetch.
+- 2025-11-13: Hid the global AppShell search on `/admin` routes so the concept manager only exposes the new toolbar search while the learner shell keeps its global search.
 
 ## Wrap-up Checklist (close the session when all boxes are ticked)
 
-- [ ] Concept grid filters (section/status/search) shipped with empty-state handling.
-- [ ] Optimistic save experience live with consistent status chip/toast updates (fallback refetch documented).
+- [x] Concept grid filters (section/status/search) shipped with empty-state handling.
+- [x] Optimistic save experience live with consistent status chip/toast updates (fallback refetch documented).
 - [ ] Error handling reviewed (validation + Supabase failure messaging) and logged in documentation.
 - [ ] `ADMIN_SETUP.md` + `ISSUE_TRACKER.md` updated to reflect delivered polish and remaining history sidebar scope.
 - [ ] Manual QA notes captured plus plan for automated tests after polish (documented in `TESTING_GUIDE.md`).

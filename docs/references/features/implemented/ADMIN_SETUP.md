@@ -43,6 +43,8 @@ _Update 2025-11-13 (p.m.)_: Admin saves now persist working copies in `burburiuo
 
 _Update 2025-11-13 (late)_: Added automated smoke coverage via `npm run test:db002` to verify draft → publish flows, `content_drafts` cleanup, and version snapshots after migrations or policy changes. Reference `docs/TESTING_GUIDE.md` for execution cadence.
 
+_Update 2025-11-13 (evening)_: Concept manager now includes a section/status/search toolbar with empty-state guidance, hides the global AppShell search while in the admin shell, and applies optimistic updates to the drawer saves (falling back to a refetch on Supabase errors).
+
 ## Screen Details
 
 ### 1. Overview
