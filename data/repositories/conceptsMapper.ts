@@ -1,4 +1,4 @@
-import type { Concept, ConceptRow } from "../types";
+import type { Concept, ConceptRow } from "../types.ts";
 
 export function mapConceptRow(row: Partial<ConceptRow>): Concept {
   return {

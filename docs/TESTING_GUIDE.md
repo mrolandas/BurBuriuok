@@ -6,7 +6,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 
 ## Current Status (V1)
 
-- Automated coverage focuses on Supabase connectivity and repository helpers.
+- Automated coverage focuses on Supabase connectivity, repository helpers, and a DB-002 content versioning smoke test (see `npm run test:db002`).
 - Manual smoke tests target backend APIs and seed regeneration integrity:
   - Hit `/health` to confirm the Express service boots (`curl -s http://localhost:4000/health`).
   - Exercise curriculum read endpoints (`GET /api/v1/curriculum`, `/api/v1/concepts`, `/api/v1/dependencies`) and verify payload shape matches `docs/references/API_CONTRACTS.md`.
@@ -22,6 +22,17 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - `node tests/checkSupabaseConnection.mjs`
   - Confirms the hosted Supabase REST endpoint responds with HTTP 200 using the service role key.
   - Requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to be available in the environment (the script falls back to `.env` if variables are unset).
+
+### DB-002 Content Versioning Smoke Test
+
+- `npm run test:db002`
+  - Creates a throwaway concept, exercises draft and publish saves via `logContentMutation`, and asserts that `content_drafts` and `content_versions` reflect the expected lifecycle introduced by migrations `0009`/`0010`.
+  - Requires service-role credentials (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) and runs against the `burburiuok` schema. When running locally, ensure these variables are present in `.env` or exported in the shell.
+  - Cleans up the inserted concept, versions, and drafts after completion so repeated executions stay idempotent.
+  - **When to run:**
+    - Before pushing migrations or backend changes that touch audit logging, draft handling, or rollback endpoints.
+    - After rotating Supabase keys or refreshing RLS policies to confirm service-role access still works.
+    - Ahead of releases that rely on DB-002 behaviour (admin concept editing, rollback UI flows) and during incident response involving content history.
 
 ### Backend Type Safety
 
@@ -72,6 +83,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - `node tests/checkSupabaseConnection.mjs` – hosted Supabase availability check.
 - `npm run content:seed:generate` – rebuild seed SQL from the canonical markdown (treat failures as blockers before applying migrations/seeds).
 - `npm run test` – run the full suite locally.
+- `npm run test:db002` – DB-002 content versioning smoke test (requires service-role credentials).
 - `npm run backend:typecheck` / `npm run frontend:check` / `npm run content:markdown:validate` / `npm run content:seed:check` – combined “complete test” set exercised before releases to cover backend types, Svelte diagnostics, markdown integrity, and seed drift.
 - `npm run test:unit` – unit tests only.
 - `npm run test:e2e` – end-to-end tests (requires local backend once available).

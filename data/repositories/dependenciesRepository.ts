@@ -1,12 +1,12 @@
 /// <reference path="../shims.d.ts" />
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
+import { getSupabaseClient } from "../supabaseClient.ts";
 import type {
   CurriculumDependency,
   CurriculumDependencyRow,
   DependencyEntityType,
-} from "../types";
+} from "../types.ts";
 
 const TABLE = "curriculum_dependencies";
 

@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
-import type { Concept, UpsertConceptInput } from "../types";
-import { mapConceptRow } from "./conceptsMapper";
+import { getSupabaseClient } from "../supabaseClient.ts";
+import type { Concept, UpsertConceptInput } from "../types.ts";
+import { mapConceptRow } from "./conceptsMapper.ts";
 
 const PUBLIC_VIEW = "burburiuok_concepts";
 const PRIVATE_TABLE = "concepts";

@@ -1,14 +1,14 @@
 /// <reference path="../shims.d.ts" />
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
+import { getSupabaseClient } from "../supabaseClient.ts";
 import type {
   Concept,
   CurriculumItem,
   CurriculumItemRow,
   CurriculumNode,
   CurriculumNodeRow,
-} from "../types";
+} from "../types.ts";
 import {
   findConceptBySectionAndTerm,
   getConceptBySlug,

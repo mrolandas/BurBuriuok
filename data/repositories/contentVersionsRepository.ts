@@ -1,12 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
+import { getSupabaseClient } from "../supabaseClient.ts";
 import type {
   ContentEntityType,
   ContentVersionInput,
   ContentVersionChangeInput,
   ContentVersionChangeType,
   ContentVersionStatus,
-} from "../types";
+} from "../types.ts";
 
 const VERSIONS_TABLE = "content_versions";
 const CHANGES_TABLE = "content_version_changes";

@@ -1,11 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
+import { getSupabaseClient } from "../supabaseClient.ts";
 import type {
   ConceptProgress,
   ConceptProgressRow,
   ProgressStatus,
   UpsertProgressInput,
-} from "../types";
+} from "../types.ts";
 
 const TABLE = "concept_progress";
 const VIEW = "burburiuok_concept_progress";

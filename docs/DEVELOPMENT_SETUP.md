@@ -76,6 +76,7 @@ This document keeps the development environment expectations in one place. Updat
 - `npm run frontend:check` / `npm run frontend:lint` / `npm run frontend:format` – convenience wrappers for SvelteKit check, lint, and formatting.
 - `npm run test` / `npm run test:supabase` – Supabase connectivity smoke test.
 - `npm run test:concepts` – focused unit test for concept row mapping.
+- `npm run test:db002` – DB-002 draft/publish smoke test; run before shipping migrations/policy changes or after rotating Supabase keys.
 - `npm run content:seed:generate` – regenerate concept seeds from the canonical markdown.
 - `npm run content:seed:dependencies` – rebuild the curriculum dependency seed SQL.
 - `npm run content:seed:curriculum` – rebuild the curriculum hierarchy seed when nodes change.

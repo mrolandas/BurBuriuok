@@ -1,10 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getSupabaseClient } from "../supabaseClient";
+import { getSupabaseClient } from "../supabaseClient.ts";
 import type {
   ContentDraftDbRow,
   ContentDraftInput,
   ContentEntityType,
-} from "../types";
+} from "../types.ts";
 
 const DRAFTS_TABLE = "content_drafts";
 
