@@ -7,12 +7,7 @@ import {
 	type ConceptPageData
 } from '$lib/page-data/conceptDetail';
 
-export type {
-	ConceptBreadcrumb,
-	ConceptNeighbor,
-	ConceptNeighbors,
-	ConceptPageData
-};
+export type { ConceptBreadcrumb, ConceptNeighbor, ConceptNeighbors, ConceptPageData };
 
 export const ssr = false;
 

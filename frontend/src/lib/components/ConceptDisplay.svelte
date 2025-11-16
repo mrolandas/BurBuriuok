@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable svelte/prefer-writable-derived */
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
@@ -31,7 +32,15 @@
 		content?: Snippet;
 	};
 
-	let { concept, breadcrumbs = [], peerItems = [], neighbors, meta, actions, content }: Props = $props();
+	let {
+		concept,
+		breadcrumbs = [],
+		peerItems = [],
+		neighbors,
+		meta,
+		actions,
+		content
+	}: Props = $props();
 
 	let showAllBreadcrumbs = $state(false);
 
@@ -61,6 +70,8 @@
 	$effect(() => {
 		showAllBreadcrumbs = false;
 	});
+
+	/* eslint-enable svelte/prefer-writable-derived */
 </script>
 
 <section class="concept-detail">
@@ -342,7 +353,9 @@
 		text-decoration: none;
 		color: inherit;
 		background: var(--color-panel);
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.concept-detail__pager-link:hover,

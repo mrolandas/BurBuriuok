@@ -157,10 +157,12 @@ export type AdminConceptVersion = z.infer<typeof conceptVersionSchema>;
 export type AdminConceptVersionStatus = z.infer<typeof conceptVersionStatusSchema>;
 export type AdminDeletedCurriculumItem = z.infer<typeof deletedCurriculumItemSchema>;
 
-export async function listAdminConcepts(params: {
-	sectionCode?: string;
-	status?: AdminConceptStatus;
-} = {}): Promise<AdminConceptResource[]> {
+export async function listAdminConcepts(
+	params: {
+		sectionCode?: string;
+		status?: AdminConceptStatus;
+	} = {}
+): Promise<AdminConceptResource[]> {
 	const searchParams = new URLSearchParams();
 
 	if (params.sectionCode) {

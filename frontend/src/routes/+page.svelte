@@ -11,7 +11,9 @@
 
 	let adminModeEnabled = $state(false);
 	let unsubscribeAdmin: (() => void) | null = null;
-	let sections = $state<SectionCard[]>(data.sections.map((section: SectionCard) => ({ ...section })));
+	let sections = $state<SectionCard[]>(
+		data.sections.map((section: SectionCard) => ({ ...section }))
+	);
 	let lastDataSections: SectionCard[] = data.sections;
 
 	type SectionEditForm = {
@@ -117,7 +119,11 @@
 			border: 'rgba(219, 39, 119, 0.32)',
 			iconColor: '#9d174d',
 			icon: [
-				{ d: 'M12 6l1.8 3.8 4.2.6-3 3 0.7 4.2L12 16.6 8.3 17.6 9 13.4l-3-3 4.2-.6z', fill: 'currentColor', fillRule: 'evenodd' }
+				{
+					d: 'M12 6l1.8 3.8 4.2.6-3 3 0.7 4.2L12 16.6 8.3 17.6 9 13.4l-3-3 4.2-.6z',
+					fill: 'currentColor',
+					fillRule: 'evenodd'
+				}
 			]
 		},
 		{
@@ -125,7 +131,12 @@
 			border: 'rgba(99, 102, 241, 0.32)',
 			iconColor: '#4338ca',
 			icon: [
-				{ d: 'M6 8l6-2 6 2v8l-6 2-6-2z', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round' },
+				{
+					d: 'M6 8l6-2 6 2v8l-6 2-6-2z',
+					stroke: 'currentColor',
+					strokeWidth: 1.6,
+					strokeLinejoin: 'round'
+				},
 				{ d: 'M6 8l6 2 6-2', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round' }
 			]
 		}
@@ -231,11 +242,11 @@
 			sections = sections.map((entry: SectionCard) =>
 				entry.code === updated.code
 					? {
-						...entry,
-						title: updated.title,
-						summary: updated.summary,
-						ordinal: typeof updated.ordinal === 'number' ? updated.ordinal : entry.ordinal
-					}
+							...entry,
+							title: updated.title,
+							summary: updated.summary,
+							ordinal: typeof updated.ordinal === 'number' ? updated.ordinal : entry.ordinal
+						}
 					: entry
 			);
 			closeSectionEditor();
@@ -252,7 +263,6 @@
 			editSaving = false;
 		}
 	};
-
 
 	$effect(() => {
 		if (!editForm) {
@@ -272,8 +282,6 @@
 		};
 	});
 </script>
-
-
 
 {#if data.loadError}
 	<section class="status-block status-block--error" role="alert">
@@ -345,11 +353,7 @@
 								onclick={(event) => handleEditClick(event, section)}
 							>
 								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-									<path
-										d="M4 20h16"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linecap="round"
+									<path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
 									></path>
 									<path
 										d="M14.5 4.5l5 5L9 20l-5 1 1-5z"
@@ -368,7 +372,6 @@
 		{/each}
 	{/if}
 </section>
-
 
 {#if editForm}
 	<div class="section-edit-layer">
@@ -420,9 +423,7 @@
 						bind:value={editForm.summary}
 						placeholder="Trumpas skilties aprašas"
 					></textarea>
-					<p class="section-edit-hint">
-						Palikite tuščią, jei aprašas dar neparengtas.
-					</p>
+					<p class="section-edit-hint">Palikite tuščią, jei aprašas dar neparengtas.</p>
 				</div>
 				{#if editError}
 					<p class="section-edit-error" role="alert">{editError}</p>
@@ -650,7 +651,10 @@
 		font: inherit;
 		font-weight: 600;
 		cursor: pointer;
-		transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
 	}
 
 	.section-card__edit svg {
@@ -801,7 +805,10 @@
 		border: 1px solid transparent;
 		cursor: pointer;
 		font: inherit;
-		transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.section-edit-button[disabled] {

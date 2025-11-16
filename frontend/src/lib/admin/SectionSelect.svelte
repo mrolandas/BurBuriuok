@@ -33,7 +33,7 @@
 	let buttonEl: HTMLButtonElement | null = null;
 	let searchEl: HTMLInputElement | null = null;
 	let dropdownEl: HTMLDivElement | null = null;
- 	let previousValueKey = valueKey;
+	let previousValueKey = valueKey;
 
 	const componentId = `section-select-${Math.random().toString(36).slice(2, 9)}`;
 	const listboxId = `${componentId}-listbox`;
@@ -80,7 +80,7 @@
 	$: resolvedFallbackLabel = valueLabel && valueLabel.trim().length ? valueLabel : null;
 	$: displayLabel = selectedOption
 		? optionDisplay(selectedOption)
-		: resolvedFallbackLabel ?? placeholder;
+		: (resolvedFallbackLabel ?? placeholder);
 	$: displayCode = selectedOption ? optionCode(selectedOption) : '';
 	$: highlightedId =
 		highlightedIndex >= 0 && highlightedIndex < filteredOptions.length
@@ -237,7 +237,8 @@
 		}
 
 		if (highlightedIndex === -1) {
-			highlightedIndex = delta >= 0 ? findFirstEnabled(filteredOptions) : findLastEnabled(filteredOptions);
+			highlightedIndex =
+				delta >= 0 ? findFirstEnabled(filteredOptions) : findLastEnabled(filteredOptions);
 			scrollHighlightedIntoView();
 			return;
 		}
@@ -346,7 +347,9 @@
 			highlightedIndex = -1;
 		} else {
 			const preferred = selectedOption
-				? filteredOptions.findIndex((option) => !option.disabled && option.key === selectedOption.key)
+				? filteredOptions.findIndex(
+						(option) => !option.disabled && option.key === selectedOption.key
+					)
 				: -1;
 			const fallback = preferred >= 0 ? preferred : findFirstEnabled(filteredOptions);
 			highlightedIndex = fallback;

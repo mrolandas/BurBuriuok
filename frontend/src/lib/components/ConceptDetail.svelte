@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import ConceptDisplay from '$lib/components/ConceptDisplay.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
@@ -76,7 +77,6 @@
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
 
-
 	let currentUrl = $state($page.url);
 	const unsubscribePage = page.subscribe(({ url }) => {
 		currentUrl = url;
@@ -109,12 +109,7 @@
 	}
 
 	function buildConceptKey(entry: ConceptDetailData): string {
-		return [
-			entry.id,
-			entry.updatedAt ?? '',
-			entry.termLt ?? '',
-			entry.termEn ?? ''
-		].join('|');
+		return [entry.id, entry.updatedAt ?? '', entry.termLt ?? '', entry.termEn ?? ''].join('|');
 	}
 
 	const conceptKey = $derived(concept ? buildConceptKey(concept) : null);
@@ -146,7 +141,6 @@
 		}
 		lastConceptId = concept.id;
 	});
-
 
 	const getInlineError = (field: string): string | null => {
 		const list = inlineErrors[field];
@@ -189,9 +183,7 @@
 			const flattened = validation.error.flatten();
 			inlineErrors = flattened.fieldErrors as InlineFieldErrors;
 			const general = flattened.formErrors.filter(Boolean);
-			inlineErrorMessage = general.length
-				? general.join(' ')
-				: 'Patikrinkite pažymėtus laukus.';
+			inlineErrorMessage = general.length ? general.join(' ') : 'Patikrinkite pažymėtus laukus.';
 			return;
 		}
 
@@ -208,8 +200,7 @@
 			lastConceptId = nextConcept.id;
 			inlineSuccessMessage = intent === 'publish' ? 'Tema publikuota.' : 'Pakeitimai išsaugoti.';
 		} catch (error) {
-			inlineErrorMessage =
-				error instanceof Error ? error.message : 'Nepavyko išsaugoti pakeitimų.';
+			inlineErrorMessage = error instanceof Error ? error.message : 'Nepavyko išsaugoti pakeitimų.';
 		} finally {
 			inlineSaving = false;
 		}
@@ -232,7 +223,9 @@
 			url.searchParams.delete('admin');
 		}
 
-		await goto(`${url.pathname}${url.search}${url.hash}`, {
+		const resolvedPath = resolve(url.pathname as string);
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- need to preserve existing query/hash while using the resolved base path
+		await goto(`${resolvedPath}${url.search}${url.hash}`, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -341,10 +334,9 @@
 				data-admin-state={adminEditEnabled
 					? 'enabled'
 					: adminContext?.requested
-					? 'denied'
-					: 'available'}
+						? 'denied'
+						: 'available'}
 			>
-
 				{#if adminHasAccess}
 					<button
 						type="button"
@@ -585,7 +577,9 @@
 		border-radius: 999px;
 		font-size: 0.82rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.concept-detail__admin-toggle:hover,
@@ -664,7 +658,10 @@
 		font: inherit;
 		background: var(--color-panel);
 		color: inherit;
-		transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			box-shadow 0.2s ease;
 		box-shadow: 0 0 0 0 transparent;
 	}
 
@@ -708,7 +705,10 @@
 		font-weight: 600;
 		font-size: 0.9rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
 		white-space: nowrap;
 	}
 

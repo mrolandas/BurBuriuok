@@ -50,9 +50,8 @@ export function conceptToInlineForm(concept: ConceptDetail): InlineConceptForm {
 		subsectionCode: concept.subsectionCode ?? '',
 		subsectionTitle: concept.subsectionTitle ?? '',
 		curriculumNodeCode: concept.curriculumNodeCode ?? '',
-		curriculumItemOrdinal: concept.curriculumItemOrdinal === null
-			? ''
-			: String(concept.curriculumItemOrdinal),
+		curriculumItemOrdinal:
+			concept.curriculumItemOrdinal === null ? '' : String(concept.curriculumItemOrdinal),
 		curriculumItemLabel: concept.curriculumItemLabel ?? '',
 		status: deriveConceptStatus(concept.metadata ?? {}),
 		isRequired: concept.isRequired

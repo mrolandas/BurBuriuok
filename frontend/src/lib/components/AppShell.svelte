@@ -44,19 +44,6 @@
 	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
 
-	function computeAdminConsoleHref(): string {
-		const adminPath = resolve('/admin');
-		const base = typeof window === 'undefined' ? 'https://mrolandas.github.io' : window.location.origin;
-		const url = new URL(adminPath, base);
-
-		if (adminModeEnabled || impersonatingAdmin) {
-			url.searchParams.set('impersonate', 'admin');
-		}
-
-		return url.toString();
-	}
-	const adminConsoleHref = $derived(computeAdminConsoleHref());
-
 	const themeOptions = [
 		{
 			id: 'dawn',
@@ -213,7 +200,9 @@
 			return;
 		}
 
-		await goto(`${url.pathname}${url.search}${url.hash}`, {
+		const resolvedPath = resolve(url.pathname as string);
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- need to preserve existing query/hash while using the resolved base path
+		await goto(`${resolvedPath}${url.search}${url.hash}`, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -293,10 +282,7 @@
 					<span class="app-shell__user-icon" aria-hidden="true">
 						<svg viewBox="0 0 24 24" role="presentation" focusable="false">
 							{#if adminModeEnabled}
-								<path
-									d="M8 9.5a4 4 0 1 1 8 0v.5H8z"
-									class="app-shell__user-icon-hat"
-								></path>
+								<path d="M8 9.5a4 4 0 1 1 8 0v.5H8z" class="app-shell__user-icon-hat"></path>
 							{/if}
 							<circle cx="12" cy="10" r="3" class="app-shell__user-icon-head"></circle>
 							<path
@@ -318,7 +304,7 @@
 						aria-label="Naudotojo parinktys"
 					>
 						<a
-							href="/login"
+							href={resolve('/login')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -326,7 +312,7 @@
 							Prisijungti
 						</a>
 						<a
-							href="/register"
+							href={resolve('/register')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -396,7 +382,9 @@
 
 				<li class="app-shell__menu-admin">
 					<a
-						href={adminConsoleHref}
+						href={resolve(
+							adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
+						)}
 						target="_blank"
 						rel="noopener noreferrer"
 						onclick={closeMenus}
@@ -408,9 +396,7 @@
 					{#if impersonatingAdmin}
 						<p class="app-shell__menu-admin-hint">Imituojate administratoriaus paskyrą.</p>
 					{:else if adminModeEnabled}
-						<p class="app-shell__menu-admin-hint">
-							Administratoriaus režimas aktyvus šiame lange.
-						</p>
+						<p class="app-shell__menu-admin-hint">Administratoriaus režimas aktyvus šiame lange.</p>
 					{:else}
 						<p class="app-shell__menu-admin-hint">
 							Naudotojo meniu galite įjungti administratoriaus režimą.
@@ -469,15 +455,15 @@
 				</li>
 			</ul>
 		</nav>
-		</header>
+	</header>
 
-		{#if menuOpen || userMenuOpen}
-			<div class="app-shell__menu-overlay" onclick={closeMenus} aria-hidden="true"></div>
-		{/if}
+	{#if menuOpen || userMenuOpen}
+		<div class="app-shell__menu-overlay" onclick={closeMenus} aria-hidden="true"></div>
+	{/if}
 
-		{#if showSearch}
-			<div class="app-shell__search" role="search">
-				<form class="app-shell__search-form" action={resolve('/search')} method="get">
+	{#if showSearch}
+		<div class="app-shell__search" role="search">
+			<form class="app-shell__search-form" action={resolve('/search')} method="get">
 				<label class="app-shell__search-label" for="global-search">Paieška</label>
 				<div class="app-shell__search-field">
 					<input
@@ -501,8 +487,8 @@
 					</button>
 				</div>
 			</form>
-			</div>
-		{/if}
+		</div>
+	{/if}
 
 	<main class="app-shell__main" id="main-content">
 		{@render children()}
@@ -773,7 +759,10 @@
 		border: 1px solid transparent;
 		background: transparent;
 		cursor: pointer;
-		transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+		transition:
+			background-color 0.18s ease,
+			border-color 0.18s ease,
+			color 0.18s ease;
 		text-align: left;
 	}
 
@@ -1097,13 +1086,12 @@
 		width: 2.2rem;
 		height: 2.2rem;
 		border-radius: 0.6rem;
-		background:
-			linear-gradient(
-				135deg,
-				var(--preview-primary) 0%,
-				var(--preview-accent) 55%,
-				var(--preview-secondary) 100%
-			);
+		background: linear-gradient(
+			135deg,
+			var(--preview-primary) 0%,
+			var(--preview-accent) 55%,
+			var(--preview-secondary) 100%
+		);
 		position: relative;
 		box-shadow:
 			inset 0 0 0 1px rgba(255, 255, 255, 0.45),
@@ -1157,5 +1145,4 @@
 		line-height: 1.4;
 		text-align: center;
 	}
-
 </style>

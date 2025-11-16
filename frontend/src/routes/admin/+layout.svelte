@@ -20,13 +20,18 @@
 	const homeHref = resolve('/');
 
 	const statusCopy: Record<string, string> = {
-		'missing-session': 'Norėdami pasiekti administratoriaus įrankius, prisijunkite kaip administratorius.',
+		'missing-session':
+			'Norėdami pasiekti administratoriaus įrankius, prisijunkite kaip administratorius.',
 		'session-error': 'Nepavyko perskaityti prisijungimo sesijos. Bandykite dar kartą.',
-		'insufficient-role': 'Šiai paskyrai nesuteiktos administratoriaus teisės. Susisiekite su komanda, jei manote, kad taip neturėtų būti.',
-		'supabase-unconfigured': 'Supabase konfigūracija nepasiekiama. Administratoriaus aplinka laikinai išjungta.'
+		'insufficient-role':
+			'Šiai paskyrai nesuteiktos administratoriaus teisės. Susisiekite su komanda, jei manote, kad taip neturėtų būti.',
+		'supabase-unconfigured':
+			'Supabase konfigūracija nepasiekiama. Administratoriaus aplinka laikinai išjungta.'
 	};
 
-	const fallbackMessage = guard.errorMessage ?? statusCopy[guard.reason] ??
+	const fallbackMessage =
+		guard.errorMessage ??
+		statusCopy[guard.reason] ??
 		'Administratoriaus sritis pasiekiama tik turint reikiamas teises.';
 
 	const personaLabel = guard.impersonating ? 'Imituojamas administratorius' : 'Administratorius';
@@ -52,7 +57,8 @@
 
 		{#if impersonationEnabled}
 			<p class="admin-fallback__hint">
-				Režimas <code>?impersonate=admin</code> leidžiamas tik kūrėjams, kai sukonfigūruotas aplinkos kintamasis
+				Režimas <code>?impersonate=admin</code> leidžiamas tik kūrėjams, kai sukonfigūruotas
+				aplinkos kintamasis
 				<code>VITE_ENABLE_ADMIN_IMPERSONATION</code>.
 			</p>
 		{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable svelte/infinite-reactive-loop */
 	import { createEventDispatcher } from 'svelte';
 	import { onDestroy } from 'svelte';
 	import {
@@ -195,9 +196,7 @@
 			const flattened = validation.error.flatten();
 			inlineErrors = flattened.fieldErrors as InlineFieldErrors;
 			const general = flattened.formErrors.filter(Boolean);
-			inlineErrorMessage = general.length
-				? general.join(' ')
-				: 'Patikrinkite pažymėtus laukus.';
+			inlineErrorMessage = general.length ? general.join(' ') : 'Patikrinkite pažymėtus laukus.';
 			return;
 		}
 
@@ -215,8 +214,7 @@
 			dispatch('saved', { concept: saved });
 			dispatch('close');
 		} catch (error) {
-			inlineErrorMessage =
-				error instanceof Error ? error.message : 'Nepavyko išsaugoti pakeitimų.';
+			inlineErrorMessage = error instanceof Error ? error.message : 'Nepavyko išsaugoti pakeitimų.';
 		} finally {
 			inlineSaving = false;
 		}
@@ -250,6 +248,8 @@
 	onDestroy(() => {
 		resetValidation();
 	});
+
+	/* eslint-enable svelte/infinite-reactive-loop */
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -274,7 +274,12 @@
 						{currentStatus === 'published' ? 'Publikuota' : 'Juodraštis'}
 					</span>
 				</div>
-				<button type="button" class="concept-modal__close" on:click={handleClose} aria-label="Uždaryti">
+				<button
+					type="button"
+					class="concept-modal__close"
+					on:click={handleClose}
+					aria-label="Uždaryti"
+				>
 					✕
 				</button>
 			</header>
@@ -288,7 +293,10 @@
 					<p class="concept-modal__status concept-modal__status--error">{loadError}</p>
 				</div>
 			{:else}
-				<form class="concept-modal__form concept-detail__admin-form" on:submit|preventDefault={submitDraft}>
+				<form
+					class="concept-modal__form concept-detail__admin-form"
+					on:submit|preventDefault={submitDraft}
+				>
 					{#if inlineErrorMessage}
 						<div class="concept-detail__admin-alert concept-detail__admin-alert--error">
 							{inlineErrorMessage}
@@ -462,7 +470,10 @@
 		font-size: 1.05rem;
 		line-height: 1;
 		padding: 0.35rem 0.65rem;
-		transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease;
 	}
 
 	.concept-modal__close:hover,
@@ -556,7 +567,10 @@
 		background: var(--color-surface-00, #fff);
 		font-size: 0.95rem;
 		color: var(--color-text);
-		transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			background 0.2s ease;
 	}
 
 	.concept-detail__form-grid input:hover,
@@ -599,7 +613,10 @@
 		font-weight: 600;
 		padding: 0.5rem 1.2rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
 	}
 
 	.concept-detail__admin-button:hover,

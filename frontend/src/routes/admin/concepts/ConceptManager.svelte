@@ -14,56 +14,21 @@
 		type AdminConceptVersionStatus,
 		adminConceptFormSchema
 	} from '$lib/api/admin/concepts';
-	import SectionSelect from '$lib/admin/SectionSelect.svelte';
 	import { listCurriculumNodes } from '$lib/api/admin/curriculum';
 	import type { AdminCurriculumNode } from '$lib/api/admin/curriculum';
 
+	import SectionSelect from '$lib/admin/SectionSelect.svelte';
+
+	import type {
+		ConceptEditorMode,
+		ConceptFormState,
+		FieldErrors,
+		HistoryAction,
+		OptimisticContext,
+		SectionFilterOption,
+		SectionSelectOption
+	} from './types';
 	import type { AdminConceptMutationInput } from '../../../../../shared/validation/adminConceptSchema';
-
-	type ConceptFormState = {
-		slug: string;
-		termLt: string;
-		termEn: string;
-		descriptionLt: string;
-
-		descriptionEn: string;
-		sectionCode: string;
-		sectionTitle: string;
-		subsectionCode: string;
-		subsectionTitle: string;
-		curriculumNodeCode: string;
-		curriculumItemOrdinal: string;
-		sourceRef: string;
-
-		isRequired: boolean;
-		status: AdminConceptStatus;
-	};
-
-	type FieldErrors = Record<string, string[]>;
-	type HistoryAction = AdminConceptVersion & {
-
-		statusLabel: string;
-		isRollbackDisabled: boolean;
-	};
-
-	type SectionSelectOption = {
-		key: string;
-		label: string;
-		sectionCode: string;
-
-		sectionTitle: string;
-		subsectionCode: string | null;
-		subsectionTitle: string | null;
-		nodeCode: string;
-		disabled?: boolean;
-		depth?: number;
-	};
-
-	type SectionFilterOption = {
-		code: string;
-		label: string;
-	};
-
 
 	let concepts: AdminConceptResource[] = [];
 	let filteredConcepts: AdminConceptResource[] = [];
@@ -81,11 +46,10 @@
 	let selectedSectionOptionKey = '';
 	let selectedSectionFallbackLabel: string | null = null;
 
-
 	let loading = false;
 	let loadError: string | null = null;
 	let editorOpen = false;
-	let editorMode: 'create' | 'edit' = 'create';
+	let editorMode: ConceptEditorMode = 'create';
 	let activeConcept: AdminConceptResource | null = null;
 
 	let formState: ConceptFormState;
@@ -104,14 +68,7 @@
 	let historyError: string | null = null;
 	let rollingBackVersionId: string | null = null;
 	let rollbackError: string | null = null;
-	let optimisticContext:
-		| {
-			previousSlug: string;
-			newSlug: string;
-			previousConcept: AdminConceptResource;
-			removed: boolean;
-		}
-		| null = null;
+	let optimisticContext: OptimisticContext | null = null;
 
 	let editorDirty = false;
 	let initialSnapshot = '';
@@ -192,9 +149,7 @@
 	$: publishDisabled = saving || (!editorDirty && formState.status === 'published');
 	$: discardDisabled = saving || !editorDirty;
 	$: isFiltered =
-		filterSectionCode !== 'all' ||
-		filterStatus !== 'all' ||
-		searchTerm.trim().length > 0;
+		filterSectionCode !== 'all' || filterStatus !== 'all' || searchTerm.trim().length > 0;
 
 	function normalizeNodeTitle(title: string | null | undefined, fallback: string): string {
 		const trimmed = (title ?? '').trim();
@@ -236,7 +191,9 @@
 	function findMatchingOptionForForm(): SectionSelectOption | null {
 		const nodeCode = formState.curriculumNodeCode.trim();
 		if (nodeCode.length) {
-			const byNode = sectionOptions.find((option) => !option.disabled && option.nodeCode === nodeCode);
+			const byNode = sectionOptions.find(
+				(option) => !option.disabled && option.nodeCode === nodeCode
+			);
 			if (byNode) {
 				return byNode;
 			}
@@ -410,7 +367,6 @@
 		}
 	}
 
-
 	function sortConcepts(list: AdminConceptResource[]): AdminConceptResource[] {
 		return [...list].sort((a, b) => a.termLt.localeCompare(b.termLt, 'lt-LT'));
 	}
@@ -441,8 +397,8 @@
 			concept.subsectionTitle ?? undefined
 		];
 
-		return candidates.some((value) =>
-			typeof value === 'string' && value.toLowerCase().includes(trimmed)
+		return candidates.some(
+			(value) => typeof value === 'string' && value.toLowerCase().includes(trimmed)
 		);
 	}
 
@@ -499,7 +455,9 @@
 	}
 
 	function handleSectionChange(option: SectionSelectOption): void {
-		const sectionTitle = option.sectionTitle?.trim().length ? option.sectionTitle.trim() : option.sectionCode;
+		const sectionTitle = option.sectionTitle?.trim().length
+			? option.sectionTitle.trim()
+			: option.sectionCode;
 		const subsectionCode = option.subsectionCode ?? '';
 		const subsectionTitle = option.subsectionTitle?.trim().length
 			? option.subsectionTitle.trim()
@@ -567,7 +525,7 @@
 		resetSaveErrors();
 		resetForm();
 		historyEntries = [];
-	 	historyActions = [];
+		historyActions = [];
 		historyError = null;
 		historyLoading = false;
 		rollingBackVersionId = null;
@@ -597,7 +555,7 @@
 		setInitialSnapshot(formState, metadataSnapshot);
 		syncSelectedSectionFromForm();
 		historyEntries = [];
-	 	historyActions = [];
+		historyActions = [];
 		historyError = null;
 		historyLoading = false;
 		rollingBackVersionId = null;
@@ -616,7 +574,7 @@
 		showAdvancedFields = false;
 		resetSaveErrors();
 		historyEntries = [];
-	 	historyActions = [];
+		historyActions = [];
 		historyError = null;
 		historyLoading = false;
 		deleteConfirmSlug = null;
@@ -684,7 +642,10 @@
 		try {
 			return structuredClone(concept);
 		} catch (error) {
-			console.warn('Nepavyko nukopijuoti sąvokos naudojant structuredClone, bus taikomas JSON kopijavimas.', error);
+			console.warn(
+				'Nepavyko nukopijuoti sąvokos naudojant structuredClone, bus taikomas JSON kopijavimas.',
+				error
+			);
 			return JSON.parse(JSON.stringify(concept)) as AdminConceptResource;
 		}
 	}
@@ -704,17 +665,11 @@
 		return Number.isNaN(parsed) ? null : parsed;
 	}
 
-	function computeSnapshot(
-		state: ConceptFormState,
-		metadata: Record<string, unknown>
-	): string {
+	function computeSnapshot(state: ConceptFormState, metadata: Record<string, unknown>): string {
 		return JSON.stringify({ state, metadata });
 	}
 
-	function setInitialSnapshot(
-		state: ConceptFormState,
-		metadata: Record<string, unknown>
-	): void {
+	function setInitialSnapshot(state: ConceptFormState, metadata: Record<string, unknown>): void {
 		initialSnapshot = computeSnapshot(state, metadata);
 		editorDirty = false;
 	}
@@ -828,8 +783,7 @@
 			openEdit(restored);
 			showSuccess('Sąvoka atkurta į pasirinktą versiją.');
 		} catch (error) {
-			rollbackError =
-				error instanceof Error ? error.message : 'Nepavyko atkurti sąvokos versijos.';
+			rollbackError = error instanceof Error ? error.message : 'Nepavyko atkurti sąvokos versijos.';
 		} finally {
 			rollingBackVersionId = null;
 		}
@@ -1006,7 +960,8 @@
 			ensureAdvancedVisibleForErrors(formErrors);
 			const general = flattened.formErrors.filter(Boolean);
 			saveError = general.length ? general.join(' ') : 'Pataisykite pažymėtus laukus.';
-			saveErrorHint = 'Laukeliai su klaidomis paryškinti žemiau. Patikrinkite statusą ir sekciją bei bandykite dar kartą.';
+			saveErrorHint =
+				'Laukeliai su klaidomis paryškinti žemiau. Patikrinkite statusą ir sekciją bei bandykite dar kartą.';
 			return;
 		}
 
@@ -1044,8 +999,11 @@
 			revertOptimisticConcept();
 			if (error instanceof Error) {
 				const message = error.message.trim();
-				saveError = message.length ? message : 'Nepavyko išsaugoti sąvokos dėl nenumatytos klaidos.';
-				saveErrorHint = 'Patikrinkite tinklo ryšį ir bandykite dar kartą. Jei klaida kartojasi, peržiūrėkite Supabase žurnalus.';
+				saveError = message.length
+					? message
+					: 'Nepavyko išsaugoti sąvokos dėl nenumatytos klaidos.';
+				saveErrorHint =
+					'Patikrinkite tinklo ryšį ir bandykite dar kartą. Jei klaida kartojasi, peržiūrėkite Supabase žurnalus.';
 			} else {
 				saveError = 'Nepavyko išsaugoti sąvokos dėl nenumatytos klaidos.';
 				saveErrorHint = 'Patikrinkite tinklo ryšį ir bandykite dar kartą.';
@@ -1204,11 +1162,7 @@
 				</label>
 				<label class="concept-filters__field concept-filters__field--search">
 					<span>Paieška</span>
-					<input
-						type="search"
-						placeholder="Ieškoti sąvokų"
-						bind:value={searchTerm}
-					/>
+					<input type="search" placeholder="Ieškoti sąvokų" bind:value={searchTerm} />
 				</label>
 				{#if isFiltered}
 					<button type="button" class="concept-filters__clear" on:click={() => void clearFilters()}>
@@ -1231,9 +1185,7 @@
 					{/if}
 				</p>
 				{#if isFiltered}
-					<button type="button" on:click={() => void clearFilters()}>
-						Išvalyti filtrus
-					</button>
+					<button type="button" on:click={() => void clearFilters()}> Išvalyti filtrus </button>
 				{/if}
 			</div>
 		{:else}
@@ -1250,88 +1202,88 @@
 					</thead>
 					<tbody>
 						{#each filteredConcepts as concept (concept.id)}
-						<tr>
-							<td>
-								<div class="concept-name">
-									<a
-										href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
-										target="_blank"
-										rel="noreferrer"
-										class="concept-name__primary"
-									>
-										{concept.termLt}
-									</a>
-									{#if concept.termEn}
-										<span class="concept-name__secondary">{concept.termEn}</span>
-									{/if}
-								</div>
-							</td>
-							<td>
-								<div class="concept-section">
-									<span>{concept.subsectionCode ?? concept.sectionCode}</span>
-									{#if concept.subsectionTitle ?? concept.sectionTitle}
-										<span class="concept-section__title">
-											{concept.subsectionTitle ?? concept.sectionTitle}
-										</span>
-									{/if}
-								</div>
-							</td>
-							<td>
-								<span
-									class="status-badge"
-									class:status-badge--published={concept.status === 'published'}
-									class:status-badge--draft={concept.status === 'draft'}
-								>
-									{STATUS_LABELS[concept.status]}
-								</span>
-							</td>
-							<td>{formatTimestamp(concept.updatedAt)}</td>
-							<td>
-								<div class="concept-table__actions">
-									<button type="button" on:click={() => openEdit(concept)}>Redaguoti</button>
-									<button
-										type="button"
-										class="danger"
-										on:click={() => requestDeleteConcept(concept)}
-									>
-										Šalinti
-									</button>
-								</div>
-								{#if deleteConfirmSlug === concept.slug}
-									<div class="concept-table__delete-confirm">
-										<p>
-											Ar tikrai norite pašalinti "{concept.termLt}" sąvoką?
-										</p>
-										{#if deleteError}
-											<p class="concept-table__delete-error">{deleteError}</p>
+							<tr>
+								<td>
+									<div class="concept-name">
+										<a
+											href={resolve('/concepts/[slug]?admin=1', { slug: concept.slug })}
+											target="_blank"
+											rel="noreferrer"
+											class="concept-name__primary"
+										>
+											{concept.termLt}
+										</a>
+										{#if concept.termEn}
+											<span class="concept-name__secondary">{concept.termEn}</span>
 										{/if}
-										<div class="concept-table__delete-actions">
-											<button
-												type="button"
-												class="danger"
-												on:click={confirmDeleteConcept}
-												disabled={deletingSlug === concept.slug}
-											>
-												{deletingSlug === concept.slug ? 'Šalinama...' : 'Patvirtinti'}
-											</button>
-											<button
-												type="button"
-												on:click={cancelDeleteRequest}
-												disabled={deletingSlug === concept.slug}
-											>
-												Atšaukti
-											</button>
-										</div>
 									</div>
-								{/if}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+								</td>
+								<td>
+									<div class="concept-section">
+										<span>{concept.subsectionCode ?? concept.sectionCode}</span>
+										{#if concept.subsectionTitle ?? concept.sectionTitle}
+											<span class="concept-section__title">
+												{concept.subsectionTitle ?? concept.sectionTitle}
+											</span>
+										{/if}
+									</div>
+								</td>
+								<td>
+									<span
+										class="status-badge"
+										class:status-badge--published={concept.status === 'published'}
+										class:status-badge--draft={concept.status === 'draft'}
+									>
+										{STATUS_LABELS[concept.status]}
+									</span>
+								</td>
+								<td>{formatTimestamp(concept.updatedAt)}</td>
+								<td>
+									<div class="concept-table__actions">
+										<button type="button" on:click={() => openEdit(concept)}>Redaguoti</button>
+										<button
+											type="button"
+											class="danger"
+											on:click={() => requestDeleteConcept(concept)}
+										>
+											Šalinti
+										</button>
+									</div>
+									{#if deleteConfirmSlug === concept.slug}
+										<div class="concept-table__delete-confirm">
+											<p>
+												Ar tikrai norite pašalinti "{concept.termLt}" sąvoką?
+											</p>
+											{#if deleteError}
+												<p class="concept-table__delete-error">{deleteError}</p>
+											{/if}
+											<div class="concept-table__delete-actions">
+												<button
+													type="button"
+													class="danger"
+													on:click={confirmDeleteConcept}
+													disabled={deletingSlug === concept.slug}
+												>
+													{deletingSlug === concept.slug ? 'Šalinama...' : 'Patvirtinti'}
+												</button>
+												<button
+													type="button"
+													on:click={cancelDeleteRequest}
+													disabled={deletingSlug === concept.slug}
+												>
+													Atšaukti
+												</button>
+											</div>
+										</div>
+									{/if}
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{/if}
 	{/if}
-{/if}
 </section>
 
 {#if editorOpen}
@@ -1370,7 +1322,12 @@
 			<div class="form-grid form-grid--basic">
 				<label>
 					<span>Sąvoka (LT) *</span>
-					<input bind:value={formState.termLt} name="termLt" required on:input={handleTermLtInput} />
+					<input
+						bind:value={formState.termLt}
+						name="termLt"
+						required
+						on:input={handleTermLtInput}
+					/>
 					{#if getFirstError('termLt')}
 						<p class="field-error">{getFirstError('termLt')}</p>
 					{/if}
@@ -1400,7 +1357,12 @@
 
 				<label class="form-grid__full">
 					<span>Aprašymas (EN)</span>
-					<textarea bind:value={formState.descriptionEn} name="descriptionEn" rows="3" on:input={markDirty}></textarea>
+					<textarea
+						bind:value={formState.descriptionEn}
+						name="descriptionEn"
+						rows="3"
+						on:input={markDirty}
+					></textarea>
 					{#if getFirstError('descriptionEn')}
 						<p class="field-error">{getFirstError('descriptionEn')}</p>
 					{/if}
@@ -1452,33 +1414,28 @@
 
 			{#if showAdvancedFields}
 				<div class="form-grid form-grid--advanced" id="concept-advanced-fields">
-				<label>
-					<span>Slug *</span>
-					<input
-						bind:value={formState.slug}
-						name="slug"
-						required
-						readonly
-					/>
-					{#if getFirstError('slug')}
-						<p class="field-error">{getFirstError('slug')}</p>
-					{/if}
-					<p class="field-hint">Slug generuojamas automatiškai ir nėra redaguojamas.</p>
-				</label>
+					<label>
+						<span>Slug *</span>
+						<input bind:value={formState.slug} name="slug" required readonly />
+						{#if getFirstError('slug')}
+							<p class="field-error">{getFirstError('slug')}</p>
+						{/if}
+						<p class="field-hint">Slug generuojamas automatiškai ir nėra redaguojamas.</p>
+					</label>
 
-				<label>
-					<span>Šaltinio nuoroda</span>
-					<input bind:value={formState.sourceRef} name="sourceRef" on:input={markDirty} />
-					{#if getFirstError('sourceRef')}
-						<p class="field-error">{getFirstError('sourceRef')}</p>
-					{/if}
-				</label>
+					<label>
+						<span>Šaltinio nuoroda</span>
+						<input bind:value={formState.sourceRef} name="sourceRef" on:input={markDirty} />
+						{#if getFirstError('sourceRef')}
+							<p class="field-error">{getFirstError('sourceRef')}</p>
+						{/if}
+					</label>
 
-				<label class="checkbox">
-					<input type="checkbox" bind:checked={formState.isRequired} on:change={markDirty} />
-					<span>Privaloma sąvoka</span>
-				</label>
-			</div>
+					<label class="checkbox">
+						<input type="checkbox" bind:checked={formState.isRequired} on:change={markDirty} />
+						<span>Privaloma sąvoka</span>
+					</label>
+				</div>
 			{/if}
 
 			<section class="history-panel" aria-live="polite">
@@ -1526,7 +1483,6 @@
 					</ul>
 				{/if}
 			</section>
-
 		</div>
 
 		<footer class="drawer__footer" class:drawer__footer--confirm={discardPromptVisible}>
@@ -1534,9 +1490,7 @@
 				<div class="drawer__confirm">
 					<p>Yra neišsaugotų pakeitimų. Ar tikrai uždaryti be išsaugojimo?</p>
 					<div class="drawer__confirm-actions">
-						<button type="button" on:click={cancelDiscardPrompt}>
-							Tęsti redagavimą
-						</button>
+						<button type="button" on:click={cancelDiscardPrompt}> Tęsti redagavimą </button>
 						<button type="button" class="danger" on:click={confirmDiscardChanges}>
 							Atmesti pakeitimus
 						</button>
@@ -1800,7 +1754,9 @@
 		border-radius: 0.45rem;
 		padding: 0.35rem 0.75rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.concept-table__actions button:hover,
@@ -1889,7 +1845,9 @@
 		box-shadow: -6px 0 24px rgba(15, 23, 42, 0.16);
 		border-left: 1px solid var(--color-border);
 		z-index: 41;
-		transition: transform 0.3s ease, right 0.3s ease;
+		transition:
+			transform 0.3s ease,
+			right 0.3s ease;
 		transform: translateX(0);
 	}
 
@@ -2051,7 +2009,10 @@
 		font-weight: 600;
 		font-size: 0.9rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
 		white-space: nowrap;
 	}
 

@@ -2,10 +2,7 @@ import type { ConceptDetail } from '$lib/api/concepts';
 import { fetchConceptBySlug } from '$lib/api/concepts';
 import type { CurriculumItem } from '$lib/api/curriculum';
 import { fetchNodeItems } from '$lib/api/curriculum';
-import {
-	type ConceptAdminEditContext,
-	resolveConceptAdminContext
-} from '$lib/admin/session';
+import { type ConceptAdminEditContext, resolveConceptAdminContext } from '$lib/admin/session';
 
 export type ConceptBreadcrumb = {
 	label: string;

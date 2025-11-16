@@ -133,7 +133,9 @@ export async function createCurriculumItem(
 	return response.data.item;
 }
 
-export async function listCurriculumNodes(parentCode: string | null = null): Promise<AdminCurriculumNode[]> {
+export async function listCurriculumNodes(
+	parentCode: string | null = null
+): Promise<AdminCurriculumNode[]> {
 	const search = new URLSearchParams();
 
 	if (parentCode) {

@@ -3,14 +3,16 @@ import { getSupabaseClient } from '$lib/supabase/client';
 
 const impersonationEnv = import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION;
 const impersonationEnabled =
-	impersonationEnv === 'true' ||
-	impersonationEnv === '1' ||
-	impersonationEnv === 'enabled';
+	impersonationEnv === 'true' || impersonationEnv === '1' || impersonationEnv === 'enabled';
 
 function resolveAdminApiBase(): string {
 	const configuredBase = (appConfig.admin?.apiBase ?? '').trim();
 	const envBase = (import.meta.env.VITE_ADMIN_API_BASE ?? '').trim();
-	const rawBase = configuredBase.length ? configuredBase : envBase.length ? envBase : '/api/v1/admin';
+	const rawBase = configuredBase.length
+		? configuredBase
+		: envBase.length
+			? envBase
+			: '/api/v1/admin';
 	return rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
 }
 

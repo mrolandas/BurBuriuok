@@ -54,7 +54,10 @@
 		background: var(--color-panel);
 		text-decoration: none;
 		color: inherit;
-		transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease,
+			transform 0.2s ease;
 	}
 
 	.admin-card h2 {

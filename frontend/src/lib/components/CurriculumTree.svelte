@@ -12,6 +12,7 @@
 	import { deleteAdminConcept } from '$lib/api/admin/concepts';
 	import { adminMode } from '$lib/stores/adminMode';
 	import { onDestroy, onMount } from 'svelte';
+	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { AdminApiError } from '$lib/api/admin/client';
 	import type {
 		TreeNodeState,
@@ -26,7 +27,6 @@
 		TreeNodeConceptConflict,
 		TreeItemAdminState
 	} from './curriculumTreeTypes';
-	import { resolve } from '$app/paths';
 
 	type SectionSummary = {
 		code: string;
@@ -122,10 +122,10 @@
 		orderedNodes: TreeNodeState[];
 	};
 
-	let pendingReorders = new Map<string | null, PendingReorder>();
-	let pendingParentCodes = new Set<string | null>();
-	let pendingNodeCodes = new Set<string>();
-	let baselinePositions = new Map<string, { parentCode: string | null; ordinal: number }>();
+	let pendingReorders = new SvelteMap<string | null, PendingReorder>();
+	let pendingParentCodes = new SvelteSet<string | null>();
+	let pendingNodeCodes = new SvelteSet<string>();
+	let baselinePositions = new SvelteMap<string, { parentCode: string | null; ordinal: number }>();
 	let reorderSaving = false;
 	let reorderError: string | null = null;
 	let pendingChangeCount = 0;
@@ -207,7 +207,11 @@
 			if (target && state.node.code === target.node.code) {
 				return;
 			}
-			if (state.admin.createChild.open || state.admin.createChild.error || state.admin.createChild.busy) {
+			if (
+				state.admin.createChild.open ||
+				state.admin.createChild.error ||
+				state.admin.createChild.busy
+			) {
 				state.admin.createChild = createCreateChildState();
 			}
 		});
@@ -218,7 +222,11 @@
 			if (target && state.node.code === target.node.code) {
 				return;
 			}
-			if (state.admin.createItem.open || state.admin.createItem.error || state.admin.createItem.busy) {
+			if (
+				state.admin.createItem.open ||
+				state.admin.createItem.error ||
+				state.admin.createItem.busy
+			) {
 				state.admin.createItem = createCreateItemState();
 			}
 		});
@@ -228,8 +236,7 @@
 		roots = [...roots];
 	};
 
-	const buildItemKey = (nodeCode: string, ordinal: number): string =>
-		`${nodeCode}:${ordinal}`;
+	const buildItemKey = (nodeCode: string, ordinal: number): string => `${nodeCode}:${ordinal}`;
 
 	const syncItemAdminState = (
 		current: Record<string, TreeItemAdminState>,
@@ -260,8 +267,8 @@
 	};
 
 	const refreshPendingSets = () => {
-		pendingParentCodes = new Set(pendingReorders.keys());
-		const nextNodes = new Set<string>();
+		pendingParentCodes = new SvelteSet(pendingReorders.keys());
+		const nextNodes = new SvelteSet<string>();
 		for (const code of baselinePositions.keys()) {
 			nextNodes.add(code);
 		}
@@ -274,7 +281,7 @@
 		if (!collection.length) {
 			return;
 		}
-		const next = new Map(baselinePositions);
+		const next = new SvelteMap(baselinePositions);
 		for (const node of collection) {
 			if (!next.has(node.node.code)) {
 				next.set(node.node.code, {
@@ -292,7 +299,7 @@
 		if (!baselinePositions.size) {
 			return;
 		}
-		const next = new Map(baselinePositions);
+		const next = new SvelteMap(baselinePositions);
 		for (const [code, initial] of baselinePositions.entries()) {
 			const nodeState = findNodeState(code);
 			if (!nodeState) {
@@ -314,12 +321,12 @@
 	const pruneResolvedPending = () => {
 		if (!pendingReorders.size) {
 			if (pendingParentCodes.size || pendingNodeCodes.size) {
-				pendingParentCodes = new Set();
-				pendingNodeCodes = new Set();
+				pendingParentCodes = new SvelteSet();
+				pendingNodeCodes = new SvelteSet();
 			}
 			return;
 		}
-		const next = new Map<string | null, PendingReorder>();
+		const next = new SvelteMap<string | null, PendingReorder>();
 		for (const [parentCode, entry] of pendingReorders.entries()) {
 			const hasBaselineNode = entry.orderedIds.some((id) => baselinePositions.has(id));
 			if (hasBaselineNode) {
@@ -350,7 +357,7 @@
 			orderedIds: collection.map((state) => state.node.code),
 			orderedNodes: [...collection]
 		};
-		const next = new Map(pendingReorders);
+		const next = new SvelteMap(pendingReorders);
 		next.set(parentCode, pending);
 		pendingReorders = next;
 	};
@@ -707,7 +714,7 @@
 	const applyNodeOrderChange = (change: TreeNodeOrderChange) => {
 		const parentState = change.parentCode ? findNodeState(change.parentCode) : null;
 		const nodesToAssign = [...change.orderedNodes];
-		const parentsToNormalize = new Set<TreeNodeState | null>();
+		const parentsToNormalize = new SvelteSet<TreeNodeState | null>();
 
 		if (!nodesToAssign.length) {
 			if (parentState) {
@@ -804,15 +811,17 @@
 			return;
 		}
 
-		const previousParentCode = snapshot && snapshot.nodeId === change.draggedId
-			? snapshot.originParentCode
-			: (() => {
-				const fallbackParent = findParentState(change.draggedId);
-				return fallbackParent ? fallbackParent.node.code : null;
-			})();
-		const previousOrdinal = snapshot && snapshot.nodeId === change.draggedId && snapshot.originOrdinal > -1
-			? snapshot.originOrdinal
-			: draggedNode.node.ordinal;
+		const previousParentCode =
+			snapshot && snapshot.nodeId === change.draggedId
+				? snapshot.originParentCode
+				: (() => {
+						const fallbackParent = findParentState(change.draggedId);
+						return fallbackParent ? fallbackParent.node.code : null;
+					})();
+		const previousOrdinal =
+			snapshot && snapshot.nodeId === change.draggedId && snapshot.originOrdinal > -1
+				? snapshot.originOrdinal
+				: draggedNode.node.ordinal;
 		const targetParentCode = change.parentCode ?? null;
 
 		captureBaselineForParent(previousParentCode);
@@ -823,7 +832,10 @@
 		const newIndex = change.orderedIds.findIndex((id) => id === change.draggedId);
 		const newOrdinal = newIndex === -1 ? null : newIndex + 1;
 
-		if (previousParentCode === targetParentCode && (newOrdinal === null || previousOrdinal === newOrdinal)) {
+		if (
+			previousParentCode === targetParentCode &&
+			(newOrdinal === null || previousOrdinal === newOrdinal)
+		) {
 			refreshPendingState();
 			return;
 		}
@@ -841,7 +853,7 @@
 			return;
 		}
 
-		const parentEntries = new Map<string | null, { code: string; ordinal: number }[]>();
+		const parentEntries = new SvelteMap<string | null, { code: string; ordinal: number }[]>();
 		for (const [code, position] of baselinePositions.entries()) {
 			const list = parentEntries.get(position.parentCode) ?? [];
 			list.push({ code, ordinal: position.ordinal });
@@ -871,8 +883,8 @@
 			}
 		}
 
-		pendingReorders = new Map();
-		baselinePositions = new Map();
+		pendingReorders = new SvelteMap();
+		baselinePositions = new SvelteMap();
 		reorderError = null;
 		dragSessionActive = false;
 		activeDragSnapshot = null;
@@ -885,7 +897,7 @@
 			return;
 		}
 
-		const updates = new Map<string, { parentCode: string | null; ordinal: number }>();
+		const updates = new SvelteMap<string, { parentCode: string | null; ordinal: number }>();
 		for (const [code, baseline] of baselinePositions.entries()) {
 			const nodeState = findNodeState(code);
 			if (!nodeState) {
@@ -906,10 +918,10 @@
 		}
 
 		if (!updates.size) {
-			pendingReorders = new Map();
-			baselinePositions = new Map();
-			pendingParentCodes = new Set();
-			pendingNodeCodes = new Set();
+			pendingReorders = new SvelteMap();
+			baselinePositions = new SvelteMap();
+			pendingParentCodes = new SvelteSet();
+			pendingNodeCodes = new SvelteSet();
 			reorderError = null;
 			refreshPendingSets();
 			refreshTree();
@@ -943,10 +955,10 @@
 				nodeState.admin.reorder = createReorderState();
 			}
 
-			pendingReorders = new Map();
-			baselinePositions = new Map();
-			pendingParentCodes = new Set();
-			pendingNodeCodes = new Set();
+			pendingReorders = new SvelteMap();
+			baselinePositions = new SvelteMap();
+			pendingParentCodes = new SvelteSet();
+			pendingNodeCodes = new SvelteSet();
 			reorderError = null;
 			refreshPendingSets();
 			refreshTree();
@@ -1115,24 +1127,24 @@
 			state.items = items;
 			state.itemAdmin = syncItemAdminState(state.itemAdmin, items);
 			state.loaded = true;
-				if (adminEnabled) {
-					const missingSlugs = items
-						.filter((item) => !item.conceptSlug)
-						.map((item) => ({ ordinal: item.ordinal, label: item.label }));
-					if (missingSlugs.length) {
-						console.warn('[CurriculumTree] Loaded items without concept slug', {
-							sectionCode: section.code,
-							nodeCode: state.node.code,
-							missingSlugs
-						});
-					} else {
-						console.debug('[CurriculumTree] Loaded node items', {
-							sectionCode: section.code,
-							nodeCode: state.node.code,
-							itemCount: items.length
-						});
-					}
+			if (adminEnabled) {
+				const missingSlugs = items
+					.filter((item) => !item.conceptSlug)
+					.map((item) => ({ ordinal: item.ordinal, label: item.label }));
+				if (missingSlugs.length) {
+					console.warn('[CurriculumTree] Loaded items without concept slug', {
+						sectionCode: section.code,
+						nodeCode: state.node.code,
+						missingSlugs
+					});
+				} else {
+					console.debug('[CurriculumTree] Loaded node items', {
+						sectionCode: section.code,
+						nodeCode: state.node.code,
+						itemCount: items.length
+					});
 				}
+			}
 		} catch (err) {
 			state.error = err instanceof Error ? err.message : 'Nepavyko įkelti duomenų.';
 		} finally {
@@ -1155,9 +1167,9 @@
 
 	export const retryNode = async (state: TreeNodeState) => {
 		if (!state.expanded) {
-				state.expanded = true;
+			state.expanded = true;
 		}
-			refreshTree();
+		refreshTree();
 		await ensureChildren(state, { force: true });
 	};
 
@@ -1310,7 +1322,7 @@
 			parentState={null}
 			onToggle={toggleNode}
 			onRetry={retryNode}
-			adminEnabled={adminEnabled}
+			{adminEnabled}
 			onOpenCreateChild={openCreateChildForm}
 			onCancelCreateChild={cancelCreateChildForm}
 			onCreateChildFieldChange={updateCreateChildField}
@@ -1318,11 +1330,11 @@
 			onOpenCreateItem={openCreateItemForm}
 			onCancelCreateItem={cancelCreateItemForm}
 			onCreateItemFieldChange={updateCreateItemField}
-				onSubmitCreateItem={submitCreateItem}
-				onEditItem={openConceptEditor}
-				onRequestDeleteItem={requestConceptDeletion}
-				onCancelDeleteItem={cancelConceptDeletion}
-				onConfirmDeleteItem={confirmConceptDeletion}
+			onSubmitCreateItem={submitCreateItem}
+			onEditItem={openConceptEditor}
+			onRequestDeleteItem={requestConceptDeletion}
+			onCancelDeleteItem={cancelConceptDeletion}
+			onConfirmDeleteItem={confirmConceptDeletion}
 			onOpenEdit={openEditForm}
 			onCancelEdit={cancelEditForm}
 			onEditFieldChange={updateEditField}
@@ -1331,13 +1343,13 @@
 			onCancelDelete={cancelDeleteConfirmation}
 			onConfirmDelete={confirmDeleteNode}
 			onMoveNode={moveNode}
-			dragAndDropEnabled={dragAndDropEnabled}
+			{dragAndDropEnabled}
 			onNodeDragConsider={handleNodeDragConsider}
 			onNodeDragFinalize={handleNodeDragFinalize}
-			pendingParentCodes={pendingParentCodes}
-			pendingNodeCodes={pendingNodeCodes}
-			dragSessionActive={dragSessionActive}
-			allowCreateChild={allowCreateChild}
+			{pendingParentCodes}
+			{pendingNodeCodes}
+			{dragSessionActive}
+			{allowCreateChild}
 			pendingActive={Boolean(pendingChangeCount)}
 		/>
 	{/if}
@@ -1392,38 +1404,38 @@
 		accent-color: var(--color-accent);
 	}
 
-		.curriculum-tree__pending-container {
-			position: fixed;
-			left: 50%;
-			bottom: clamp(0.75rem, 4vw, 1.75rem);
-			transform: translateX(-50%);
-			width: min(calc(100% - 2rem), 40rem);
-			z-index: 20;
-			pointer-events: none;
-			display: grid;
-			gap: 0.45rem;
-		}
+	.curriculum-tree__pending-container {
+		position: fixed;
+		left: 50%;
+		bottom: clamp(0.75rem, 4vw, 1.75rem);
+		transform: translateX(-50%);
+		width: min(calc(100% - 2rem), 40rem);
+		z-index: 20;
+		pointer-events: none;
+		display: grid;
+		gap: 0.45rem;
+	}
 
-		.curriculum-tree__pending-banner {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			gap: 0.75rem;
-			padding: 0.85rem 1.1rem;
-			border-radius: 999px;
-			border: 1px solid rgba(37, 99, 235, 0.35);
-			background: rgba(37, 99, 235, 0.95);
-			box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
-			pointer-events: auto;
-		}
+	.curriculum-tree__pending-banner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.85rem 1.1rem;
+		border-radius: 999px;
+		border: 1px solid rgba(37, 99, 235, 0.35);
+		background: rgba(37, 99, 235, 0.95);
+		box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+		pointer-events: auto;
+	}
 
-		.curriculum-tree__pending-banner[data-saving='true'] {
-			opacity: 0.8;
-		}
+	.curriculum-tree__pending-banner[data-saving='true'] {
+		opacity: 0.8;
+	}
 
 	.curriculum-tree__pending-text {
 		font-weight: 600;
-			color: var(--color-button-text-on-accent, #fff);
+		color: var(--color-button-text-on-accent, #fff);
 	}
 
 	.curriculum-tree__pending-actions {
@@ -1439,7 +1451,10 @@
 		padding: 0.35rem 0.9rem;
 		border: 1px solid transparent;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
 	}
 
 	.curriculum-tree__pending-button--primary {

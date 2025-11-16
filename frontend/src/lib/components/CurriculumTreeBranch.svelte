@@ -1,9 +1,13 @@
 <script lang="ts">
-	 import { resolve } from '$app/paths';
-	 import { onDestroy } from 'svelte';
-	 import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
-	 import type { CurriculumItem } from '$lib/api/curriculum';
-	 import type { TreeNodeOrderChange, TreeNodeOrderFinalize, TreeNodeState } from './curriculumTreeTypes';
+	import { resolve } from '$app/paths';
+	import { onDestroy } from 'svelte';
+	import { dndzone, SHADOW_PLACEHOLDER_ITEM_ID, type DndEvent } from 'svelte-dnd-action';
+	import type { CurriculumItem } from '$lib/api/curriculum';
+	import type {
+		TreeNodeOrderChange,
+		TreeNodeOrderFinalize,
+		TreeNodeState
+	} from './curriculumTreeTypes';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -28,9 +32,18 @@
 	) => void;
 	export let onSubmitCreateItem: (state: TreeNodeState) => Promise<void> | void;
 	export let onEditItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
-	export let onRequestDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
-	export let onCancelDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
-	export let onConfirmDeleteItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
+	export let onRequestDeleteItem: (
+		state: TreeNodeState,
+		item: CurriculumItem
+	) => Promise<void> | void;
+	export let onCancelDeleteItem: (
+		state: TreeNodeState,
+		item: CurriculumItem
+	) => Promise<void> | void;
+	export let onConfirmDeleteItem: (
+		state: TreeNodeState,
+		item: CurriculumItem
+	) => Promise<void> | void;
 	export let onOpenEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onCancelEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onEditFieldChange: (
@@ -41,7 +54,10 @@
 	export let onSubmitEdit: (state: TreeNodeState) => Promise<void> | void;
 	export let onRequestDelete: (state: TreeNodeState) => Promise<void> | void;
 	export let onCancelDelete: (state: TreeNodeState) => Promise<void> | void;
-	export let onConfirmDelete: (state: TreeNodeState, parent: TreeNodeState | null) => Promise<void> | void;
+	export let onConfirmDelete: (
+		state: TreeNodeState,
+		parent: TreeNodeState | null
+	) => Promise<void> | void;
 	export let onMoveNode: (
 		state: TreeNodeState,
 		parent: TreeNodeState | null,
@@ -61,8 +77,10 @@
 	let hoverTargetCode: string | null = null;
 
 	const resolveBranchParentCode = () => (parentState ? parentState.node.code : null);
-	const isBranchPending = () => pendingActive && (pendingParentCodes?.has(resolveBranchParentCode()) ?? false);
-	const isNodePending = (state: TreeNodeState) => pendingActive && (pendingNodeCodes?.has(state.node.code) ?? false);
+	const isBranchPending = () =>
+		pendingActive && (pendingParentCodes?.has(resolveBranchParentCode()) ?? false);
+	const isNodePending = (state: TreeNodeState) =>
+		pendingActive && (pendingNodeCodes?.has(state.node.code) ?? false);
 	const resolveItemKey = (item: CurriculumItem) => `${item.nodeCode}:${item.ordinal}`;
 	const getItemAdminState = (state: TreeNodeState, item: CurriculumItem) =>
 		state.itemAdmin?.[resolveItemKey(item)];
@@ -188,7 +206,6 @@
 	});
 </script>
 
-
 <ul
 	class="tree-branch"
 	class:tree-branch--drag-over={isDragOver}
@@ -204,7 +221,7 @@
 			? {
 					outline: '2px solid var(--curriculum-drop-outline, #2563eb)',
 					backgroundColor: 'rgba(37, 99, 235, 0.06)'
-			  }
+				}
 			: {},
 		dropTargetClasses: dragAndDropEnabled ? ['tree-branch--active-drop'] : [],
 		dropAnimationDisabled: true
@@ -217,536 +234,521 @@
 	data-drag-enabled={dragAndDropEnabled}
 >
 	{#each nodes as state, index (state.id)}
-				<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
-					<div
-						class="tree-node__header"
-						class:tree-node__header--pending={isNodePending(state)}
-						class:tree-node__header--hover-target={dragSessionActive && hoverTargetCode === state.node.code}
-						on:pointerenter={() => handleHeaderPointerEnter(state)}
-						on:pointerleave={() => handleHeaderPointerLeave(state)}
+		<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
+			<div
+				class="tree-node__header"
+				class:tree-node__header--pending={isNodePending(state)}
+				class:tree-node__header--hover-target={dragSessionActive &&
+					hoverTargetCode === state.node.code}
+				on:pointerenter={() => handleHeaderPointerEnter(state)}
+				on:pointerleave={() => handleHeaderPointerLeave(state)}
+			>
+				<button
+					type="button"
+					class="tree-node__toggle"
+					aria-expanded={state.expanded}
+					on:click={() => onToggle(state)}
+				>
+					<span class="tree-node__chevron" aria-hidden="true">
+						{#if state.loading}
+							•
+						{:else if state.expanded}
+							▾
+						{:else}
+							▸
+						{/if}
+					</span>
+					<span class="tree-node__title">{state.node.title}</span>
+				</button>
+				{#if state.node.prerequisiteCount}
+					<span
+						class="tree-node__badge"
+						aria-label={`Turi ${state.node.prerequisiteCount} prielaidas`}
 					>
+						{state.node.prerequisiteCount} prielaidos
+					</span>
+				{/if}
+			</div>
+
+			{#if adminEnabled}
+				<div class="tree-node__admin-toolbar" use:preventDragPointerPropagation>
+					<button
+						type="button"
+						class="tree-node__item-action"
+						on:click={() => onMoveNode(state, parentState, 'up')}
+						disabled={index === 0 || state.admin.reorder.busy || state.admin.remove.busy}
+						aria-label="Perkelti aukštyn"
+					>
+						↑
+					</button>
+					<button
+						type="button"
+						class="tree-node__item-action"
+						on:click={() => onMoveNode(state, parentState, 'down')}
+						disabled={index === nodes.length - 1 ||
+							state.admin.reorder.busy ||
+							state.admin.remove.busy}
+						aria-label="Perkelti žemyn"
+					>
+						↓
+					</button>
+					{#if allowCreateChild}
 						<button
 							type="button"
-							class="tree-node__toggle"
-							aria-expanded={state.expanded}
-							on:click={() => onToggle(state)}
+							class="tree-node__item-action"
+							on:click={() => onOpenCreateChild(state)}
+							disabled={state.admin.createChild.busy ||
+								state.admin.createChild.open ||
+								state.admin.remove.busy}
 						>
-							<span class="tree-node__chevron" aria-hidden="true">
-								{#if state.loading}
-									•
-								{:else if state.expanded}
-									▾
-								{:else}
-									▸
-								{/if}
-							</span>
-							<span class="tree-node__title">{state.node.title}</span>
+							Pridėti poskyrį
 						</button>
-						{#if state.node.prerequisiteCount}
-							<span
-								class="tree-node__badge"
-								aria-label={`Turi ${state.node.prerequisiteCount} prielaidas`}
-							>
-								{state.node.prerequisiteCount} prielaidos
-							</span>
-						{/if}
-					</div>
-
-					{#if adminEnabled}
-						<div class="tree-node__admin-toolbar" use:preventDragPointerPropagation>
-							<button
-								type="button"
-								class="tree-node__item-action"
-								on:click={() => onMoveNode(state, parentState, 'up')}
-								disabled={index === 0 || state.admin.reorder.busy || state.admin.remove.busy}
-								aria-label="Perkelti aukštyn"
-							>
-								↑
-							</button>
-							<button
-								type="button"
-								class="tree-node__item-action"
-								on:click={() => onMoveNode(state, parentState, 'down')}
-								disabled={index === nodes.length - 1 || state.admin.reorder.busy || state.admin.remove.busy}
-								aria-label="Perkelti žemyn"
-							>
-								↓
-							</button>
-							{#if allowCreateChild}
-								<button
-									type="button"
-									class="tree-node__item-action"
-									on:click={() => onOpenCreateChild(state)}
-									disabled={state.admin.createChild.busy || state.admin.createChild.open || state.admin.remove.busy}
-								>
-									Pridėti poskyrį
-								</button>
-							{/if}
-							<button
-								type="button"
-								class="tree-node__item-action"
-								on:click={() => onOpenCreateItem(state)}
-								disabled={state.admin.createItem.busy || state.admin.createItem.open || state.admin.remove.busy}
-							>
-								Pridėti sąvoką
-							</button>
-							<button
-								type="button"
-								class="tree-node__item-action"
-								on:click={() => onOpenEdit(state)}
-								disabled={state.admin.edit.busy || state.admin.edit.open || state.admin.remove.busy}
-							>
-								Redaguoti
-							</button>
-							<button
-								type="button"
-								class="tree-node__item-action tree-node__item-action--danger"
-								on:click={() => onRequestDelete(state)}
-								disabled={state.admin.remove.busy || state.admin.remove.confirming}
-							>
-								Šalinti
-							</button>
-						</div>
-						{#if state.admin.reorder.error}
-							<p class="tree-node__admin-status tree-node__admin-status--error">
-								{state.admin.reorder.error}
-							</p>
-						{/if}
 					{/if}
+					<button
+						type="button"
+						class="tree-node__item-action"
+						on:click={() => onOpenCreateItem(state)}
+						disabled={state.admin.createItem.busy ||
+							state.admin.createItem.open ||
+							state.admin.remove.busy}
+					>
+						Pridėti sąvoką
+					</button>
+					<button
+						type="button"
+						class="tree-node__item-action"
+						on:click={() => onOpenEdit(state)}
+						disabled={state.admin.edit.busy || state.admin.edit.open || state.admin.remove.busy}
+					>
+						Redaguoti
+					</button>
+					<button
+						type="button"
+						class="tree-node__item-action tree-node__item-action--danger"
+						on:click={() => onRequestDelete(state)}
+						disabled={state.admin.remove.busy || state.admin.remove.confirming}
+					>
+						Šalinti
+					</button>
+				</div>
+				{#if state.admin.reorder.error}
+					<p class="tree-node__admin-status tree-node__admin-status--error">
+						{state.admin.reorder.error}
+					</p>
+				{/if}
+			{/if}
 
-					{#if state.expanded}
-						<div class="tree-node__panel">
-							{#if state.loading}
-								<p class="tree-node__status">Kraunama...</p>
-							{:else if state.error}
-								<p class="tree-node__status tree-node__status--error">{state.error}</p>
-								<button type="button" class="tree-node__retry" on:click={() => onRetry(state)}>
-									Bandyti dar kartą
-								</button>
-							{:else}
-								{#if state.items.length}
-									<ul class="tree-node__items" use:preventDragPointerPropagation>
-										{#each state.items as item (item.ordinal)}
-											{@const displayLabel = item.conceptTerm ?? item.label}
-											{@const itemAdmin = getItemAdminState(state, item)}
-											<li
-												class="tree-node__item"
-												class:tree-node__item--admin={adminEnabled}
-												class:tree-node__item--busy={adminEnabled && (itemAdmin?.busy ?? false)}
-											>
-												<div class="tree-node__item-content">
-													{#if item.conceptSlug}
-														<a
-															class="tree-node__item-link"
-															href={resolve(`/concepts/${encodeURIComponent(item.conceptSlug)}`)}
-														>
-															<span class="tree-node__item-ordinal">{item.ordinal}.</span>
-															<span class="tree-node__item-label">{displayLabel}</span>
-														</a>
-													{:else}
-														<span class="tree-node__item-text">
-															<span class="tree-node__item-ordinal">{item.ordinal}.</span>
-															<span>{displayLabel}</span>
-														</span>
-													{/if}
+			{#if state.expanded}
+				<div class="tree-node__panel">
+					{#if state.loading}
+						<p class="tree-node__status">Kraunama...</p>
+					{:else if state.error}
+						<p class="tree-node__status tree-node__status--error">{state.error}</p>
+						<button type="button" class="tree-node__retry" on:click={() => onRetry(state)}>
+							Bandyti dar kartą
+						</button>
+					{:else}
+						{#if state.items.length}
+							<ul class="tree-node__items" use:preventDragPointerPropagation>
+								{#each state.items as item (item.ordinal)}
+									{@const displayLabel = item.conceptTerm ?? item.label}
+									{@const itemAdmin = getItemAdminState(state, item)}
+									<li
+										class="tree-node__item"
+										class:tree-node__item--admin={adminEnabled}
+										class:tree-node__item--busy={adminEnabled && (itemAdmin?.busy ?? false)}
+									>
+										<div class="tree-node__item-content">
+											{#if item.conceptSlug}
+												<a
+													class="tree-node__item-link"
+													href={resolve(`/concepts/${encodeURIComponent(item.conceptSlug)}`)}
+												>
+													<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+													<span class="tree-node__item-label">{displayLabel}</span>
+												</a>
+											{:else}
+												<span class="tree-node__item-text">
+													<span class="tree-node__item-ordinal">{item.ordinal}.</span>
+													<span>{displayLabel}</span>
+												</span>
+											{/if}
 
-													{#if adminEnabled}
-														<div class="tree-node__item-toolbar" use:preventDragPointerPropagation>
-															<button
-																type="button"
-																class="tree-node__item-action"
-																on:click={() => onEditItem(state, item)}
-																disabled={!item.conceptSlug || itemAdmin?.busy}
-															>
-																Redaguoti
-															</button>
-															<button
-																type="button"
-																class="tree-node__item-action tree-node__item-action--danger"
-																on:click={() => onRequestDeleteItem(state, item)}
-																disabled={itemAdmin?.busy}
-															>
-																Šalinti
-															</button>
-														</div>
-													{/if}
+											{#if adminEnabled}
+												<div class="tree-node__item-toolbar" use:preventDragPointerPropagation>
+													<button
+														type="button"
+														class="tree-node__item-action"
+														on:click={() => onEditItem(state, item)}
+														disabled={!item.conceptSlug || itemAdmin?.busy}
+													>
+														Redaguoti
+													</button>
+													<button
+														type="button"
+														class="tree-node__item-action tree-node__item-action--danger"
+														on:click={() => onRequestDeleteItem(state, item)}
+														disabled={itemAdmin?.busy}
+													>
+														Šalinti
+													</button>
 												</div>
+											{/if}
+										</div>
 
-												{#if adminEnabled}
-													{#if itemAdmin?.confirmingDelete}
-														<div class="tree-node__item-confirm" use:preventDragPointerPropagation>
-															<p class="tree-node__item-confirm-message">
-																Ar tikrai norite pašalinti sąvoką „{displayLabel}”?
-															</p>
-															{#if itemAdmin.error}
-																<p class="tree-node__admin-status tree-node__admin-status--error">
-																	{itemAdmin.error}
-																</p>
-															{/if}
-															<div class="tree-node__item-confirm-actions">
-																<button
-																	type="button"
-																	class="tree-node__item-action"
-																	on:click={() => onCancelDeleteItem(state, item)}
-																	disabled={itemAdmin?.busy}
-																>
-																	Atšaukti
-																</button>
-																<button
-																	type="button"
-																	class="tree-node__item-action tree-node__item-action--danger"
-																	on:click={() => onConfirmDeleteItem(state, item)}
-																	disabled={itemAdmin?.busy}
-																>
-																	{itemAdmin?.busy ? 'Šalinama…' : 'Patvirtinti'}
-																</button>
-															</div>
-														</div>
-													{:else if itemAdmin?.error}
+										{#if adminEnabled}
+											{#if itemAdmin?.confirmingDelete}
+												<div class="tree-node__item-confirm" use:preventDragPointerPropagation>
+													<p class="tree-node__item-confirm-message">
+														Ar tikrai norite pašalinti sąvoką „{displayLabel}”?
+													</p>
+													{#if itemAdmin.error}
 														<p class="tree-node__admin-status tree-node__admin-status--error">
 															{itemAdmin.error}
 														</p>
 													{/if}
-												{/if}
-											</li>
-										{/each}
-									</ul>
+													<div class="tree-node__item-confirm-actions">
+														<button
+															type="button"
+															class="tree-node__item-action"
+															on:click={() => onCancelDeleteItem(state, item)}
+															disabled={itemAdmin?.busy}
+														>
+															Atšaukti
+														</button>
+														<button
+															type="button"
+															class="tree-node__item-action tree-node__item-action--danger"
+															on:click={() => onConfirmDeleteItem(state, item)}
+															disabled={itemAdmin?.busy}
+														>
+															{itemAdmin?.busy ? 'Šalinama…' : 'Patvirtinti'}
+														</button>
+													</div>
+												</div>
+											{:else if itemAdmin?.error}
+												<p class="tree-node__admin-status tree-node__admin-status--error">
+													{itemAdmin.error}
+												</p>
+											{/if}
+										{/if}
+									</li>
+								{/each}
+							</ul>
+						{/if}
+
+						{#if state.children.length}
+							<svelte:self
+								nodes={state.children}
+								level={level + 1}
+								parentState={state}
+								{onToggle}
+								{onRetry}
+								{adminEnabled}
+								{onOpenCreateChild}
+								{onCancelCreateChild}
+								{onCreateChildFieldChange}
+								{onSubmitCreateChild}
+								{onOpenCreateItem}
+								{onCancelCreateItem}
+								{onCreateItemFieldChange}
+								{onSubmitCreateItem}
+								{onEditItem}
+								{onRequestDeleteItem}
+								{onCancelDeleteItem}
+								{onConfirmDeleteItem}
+								{onOpenEdit}
+								{onCancelEdit}
+								{onEditFieldChange}
+								{onSubmitEdit}
+								{onRequestDelete}
+								{onCancelDelete}
+								{onConfirmDelete}
+								{onMoveNode}
+								{dragAndDropEnabled}
+								{onNodeDragConsider}
+								{onNodeDragFinalize}
+								{pendingParentCodes}
+								{pendingNodeCodes}
+								{dragSessionActive}
+								{allowCreateChild}
+								{pendingActive}
+							/>
+						{:else if !state.items.length}
+							<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
+						{/if}
+
+						{#if adminEnabled && ((allowCreateChild && state.admin.createChild.open) || state.admin.createItem.open || state.admin.edit.open || state.admin.remove.confirming)}
+							<div class="tree-node__admin" use:preventDragPointerPropagation>
+								{#if allowCreateChild && state.admin.createChild.open}
+									<form
+										class="tree-node__admin-form"
+										on:submit|preventDefault={() => onSubmitCreateChild(state)}
+										use:preventDragPointerPropagation
+									>
+										<div class="tree-node__admin-grid">
+											<label class="tree-node__admin-field">
+												<span>Pavadinimas</span>
+												<input
+													type="text"
+													value={state.admin.createChild.title}
+													on:input={(event) =>
+														onCreateChildFieldChange(state, 'title', event.currentTarget.value)}
+													placeholder="Naujo poskyrio pavadinimas"
+													disabled={state.admin.createChild.busy}
+												/>
+											</label>
+											<label class="tree-node__admin-field tree-node__admin-field--full">
+												<span>Santrauka (nebūtina)</span>
+												<textarea
+													rows={3}
+													value={state.admin.createChild.summary}
+													on:input={(event) =>
+														onCreateChildFieldChange(state, 'summary', event.currentTarget.value)}
+													placeholder="Trumpas aprašas apie poskyrio turinį"
+													disabled={state.admin.createChild.busy}
+												></textarea>
+											</label>
+											<label class="tree-node__admin-field">
+												<span>Kodas (nebūtinas)</span>
+												<input
+													type="text"
+													value={state.admin.createChild.code}
+													on:input={(event) =>
+														onCreateChildFieldChange(state, 'code', event.currentTarget.value)}
+													placeholder="Palikite tuščią, jei nurodysime automatiškai"
+													autocomplete="off"
+													disabled={state.admin.createChild.busy}
+												/>
+											</label>
+										</div>
+
+										{#if state.admin.createChild.error}
+											<p class="tree-node__admin-status tree-node__admin-status--error">
+												{state.admin.createChild.error}
+											</p>
+										{/if}
+
+										<div class="tree-node__admin-actions">
+											<button
+												type="button"
+												class="tree-node__admin-button tree-node__admin-button--ghost"
+												on:click={() => onCancelCreateChild(state)}
+												disabled={state.admin.createChild.busy}
+											>
+												Atšaukti
+											</button>
+											<button
+												type="submit"
+												class="tree-node__admin-button tree-node__admin-button--primary"
+												disabled={state.admin.createChild.busy}
+											>
+												{state.admin.createChild.busy ? 'Saugoma…' : 'Išsaugoti'}
+											</button>
+										</div>
+									</form>
 								{/if}
 
-								{#if state.children.length}
-									<svelte:self
-										nodes={state.children}
-										level={level + 1}
-										parentState={state}
-										{onToggle}
-										{onRetry}
-										{adminEnabled}
-										{onOpenCreateChild}
-										{onCancelCreateChild}
-										{onCreateChildFieldChange}
-										{onSubmitCreateChild}
-										{onOpenCreateItem}
-										{onCancelCreateItem}
-										{onCreateItemFieldChange}
-										{onSubmitCreateItem}
-										{onEditItem}
-										{onRequestDeleteItem}
-										{onCancelDeleteItem}
-										{onConfirmDeleteItem}
-										{onOpenEdit}
-										{onCancelEdit}
-										{onEditFieldChange}
-										{onSubmitEdit}
-										{onRequestDelete}
-										{onCancelDelete}
-										{onConfirmDelete}
-										{onMoveNode}
-										{dragAndDropEnabled}
-										{onNodeDragConsider}
-										{onNodeDragFinalize}
-										{pendingParentCodes}
-										{pendingNodeCodes}
-										{dragSessionActive}
-										{allowCreateChild}
-										{pendingActive}
-									/>
-								{:else if !state.items.length}
-									<p class="tree-node__status tree-node__status--muted">Šiame lygyje turinio nėra.</p>
+								{#if state.admin.createItem.open}
+									<form
+										class="tree-node__admin-form"
+										on:submit|preventDefault={() => onSubmitCreateItem(state)}
+										use:preventDragPointerPropagation
+									>
+										<div class="tree-node__admin-grid">
+											<label class="tree-node__admin-field tree-node__admin-field--full">
+												<span>Sąvoka</span>
+												<input
+													type="text"
+													value={state.admin.createItem.term}
+													on:input={(event) =>
+														onCreateItemFieldChange(state, 'term', event.currentTarget.value)}
+													placeholder="Įveskite sąvokos pavadinimą"
+													disabled={state.admin.createItem.busy}
+												/>
+											</label>
+											<label class="tree-node__admin-field tree-node__admin-field--full">
+												<span>Aprašymas (nebūtina)</span>
+												<textarea
+													rows={3}
+													value={state.admin.createItem.description}
+													on:input={(event) =>
+														onCreateItemFieldChange(
+															state,
+															'description',
+															event.currentTarget.value
+														)}
+													placeholder="Trumpas sąvokos paaiškinimas"
+													disabled={state.admin.createItem.busy}
+												></textarea>
+											</label>
+											<label class="tree-node__admin-field">
+												<span>Angliškas atitikmuo (nebūtina)</span>
+												<input
+													type="text"
+													value={state.admin.createItem.termEn}
+													on:input={(event) =>
+														onCreateItemFieldChange(state, 'termEn', event.currentTarget.value)}
+													placeholder="Pvz., „Centreboard boat“"
+													disabled={state.admin.createItem.busy}
+												/>
+											</label>
+											<label class="tree-node__admin-field">
+												<span>Šaltinis (nebūtina)</span>
+												<input
+													type="text"
+													value={state.admin.createItem.sourceRef}
+													on:input={(event) =>
+														onCreateItemFieldChange(state, 'sourceRef', event.currentTarget.value)}
+													placeholder="Pvz., LBS_programa.md"
+													disabled={state.admin.createItem.busy}
+												/>
+											</label>
+											<label class="tree-node__admin-checkbox">
+												<input
+													type="checkbox"
+													checked={state.admin.createItem.isRequired}
+													on:change={(event) =>
+														onCreateItemFieldChange(
+															state,
+															'isRequired',
+															event.currentTarget.checked
+														)}
+													disabled={state.admin.createItem.busy}
+												/>
+												<span>Privaloma sąvoka</span>
+											</label>
+										</div>
+
+										{#if state.admin.createItem.error}
+											<p class="tree-node__admin-status tree-node__admin-status--error">
+												{state.admin.createItem.error}
+												{#if state.admin.createItem.conflict}
+													<a
+														class="tree-node__admin-link"
+														href={resolve(
+															`/concepts/${encodeURIComponent(state.admin.createItem.conflict.slug)}`
+														)}
+													>
+														Peržiūrėti sąvoką
+													</a>
+												{/if}
+											</p>
+										{/if}
+
+										<div class="tree-node__admin-actions">
+											<button
+												type="button"
+												class="tree-node__admin-button tree-node__admin-button--ghost"
+												on:click={() => onCancelCreateItem(state)}
+												disabled={state.admin.createItem.busy}
+											>
+												Atšaukti
+											</button>
+											<button
+												type="submit"
+												class="tree-node__admin-button tree-node__admin-button--primary"
+												disabled={state.admin.createItem.busy}
+											>
+												{state.admin.createItem.busy ? 'Saugoma…' : 'Išsaugoti'}
+											</button>
+										</div>
+									</form>
 								{/if}
 
-								{#if adminEnabled && ((allowCreateChild && state.admin.createChild.open) || state.admin.createItem.open || state.admin.edit.open || state.admin.remove.confirming)}
-									<div class="tree-node__admin" use:preventDragPointerPropagation>
-										{#if allowCreateChild && state.admin.createChild.open}
-											<form
-												class="tree-node__admin-form"
-												on:submit|preventDefault={() => onSubmitCreateChild(state)}
-												use:preventDragPointerPropagation
+								{#if state.admin.edit.open}
+									<form
+										class="tree-node__admin-form"
+										on:submit|preventDefault={() => onSubmitEdit(state)}
+										use:preventDragPointerPropagation
+									>
+										<div class="tree-node__admin-grid">
+											<label class="tree-node__admin-field tree-node__admin-field--full">
+												<span>Pavadinimas</span>
+												<input
+													type="text"
+													value={state.admin.edit.title}
+													on:input={(event) =>
+														onEditFieldChange(state, 'title', event.currentTarget.value)}
+													disabled={state.admin.edit.busy}
+												/>
+											</label>
+											<label class="tree-node__admin-field tree-node__admin-field--full">
+												<span>Santrauka (nebūtina)</span>
+												<textarea
+													rows={3}
+													value={state.admin.edit.summary}
+													on:input={(event) =>
+														onEditFieldChange(state, 'summary', event.currentTarget.value)}
+													disabled={state.admin.edit.busy}
+												></textarea>
+											</label>
+										</div>
+
+										{#if state.admin.edit.error}
+											<p class="tree-node__admin-status tree-node__admin-status--error">
+												{state.admin.edit.error}
+											</p>
+										{/if}
+
+										<div class="tree-node__admin-actions">
+											<button
+												type="button"
+												class="tree-node__admin-button tree-node__admin-button--ghost"
+												on:click={() => onCancelEdit(state)}
+												disabled={state.admin.edit.busy}
 											>
-												<div class="tree-node__admin-grid">
-													<label class="tree-node__admin-field">
-														<span>Pavadinimas</span>
-														<input
-															type="text"
-															value={state.admin.createChild.title}
-															on:input={(event) =>
-																onCreateChildFieldChange(
-																	state,
-																	'title',
-																	event.currentTarget.value
-																)}
-															placeholder="Naujo poskyrio pavadinimas"
-															disabled={state.admin.createChild.busy}
-														/>
-													</label>
-													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Santrauka (nebūtina)</span>
-														<textarea
-															rows={3}
-															value={state.admin.createChild.summary}
-															on:input={(event) =>
-																onCreateChildFieldChange(
-																	state,
-																	'summary',
-																	event.currentTarget.value
-																)}
-															placeholder="Trumpas aprašas apie poskyrio turinį"
-															disabled={state.admin.createChild.busy}
-														></textarea>
-													</label>
-													<label class="tree-node__admin-field">
-														<span>Kodas (nebūtinas)</span>
-														<input
-															type="text"
-															value={state.admin.createChild.code}
-															on:input={(event) =>
-																onCreateChildFieldChange(
-																	state,
-																	'code',
-																	event.currentTarget.value
-																)}
-															placeholder="Palikite tuščią, jei nurodysime automatiškai"
-															autocomplete="off"
-															disabled={state.admin.createChild.busy}
-														/>
-													</label>
-												</div>
-
-												{#if state.admin.createChild.error}
-													<p class="tree-node__admin-status tree-node__admin-status--error">
-														{state.admin.createChild.error}
-													</p>
-												{/if}
-
-												<div class="tree-node__admin-actions">
-													<button
-														type="button"
-														class="tree-node__admin-button tree-node__admin-button--ghost"
-														on:click={() => onCancelCreateChild(state)}
-														disabled={state.admin.createChild.busy}
-													>
-														Atšaukti
-													</button>
-													<button
-														type="submit"
-														class="tree-node__admin-button tree-node__admin-button--primary"
-														disabled={state.admin.createChild.busy}
-													>
-														{state.admin.createChild.busy ? 'Saugoma…' : 'Išsaugoti'}
-													</button>
-												</div>
-											</form>
-										{/if}
-
-										{#if state.admin.createItem.open}
-											<form
-												class="tree-node__admin-form"
-												on:submit|preventDefault={() => onSubmitCreateItem(state)}
-												use:preventDragPointerPropagation
+												Atšaukti
+											</button>
+											<button
+												type="submit"
+												class="tree-node__admin-button tree-node__admin-button--primary"
+												disabled={state.admin.edit.busy}
 											>
-												<div class="tree-node__admin-grid">
-													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Sąvoka</span>
-														<input
-															type="text"
-															value={state.admin.createItem.term}
-															on:input={(event) =>
-																onCreateItemFieldChange(
-																	state,
-																	'term',
-																	event.currentTarget.value
-																)}
-															placeholder="Įveskite sąvokos pavadinimą"
-															disabled={state.admin.createItem.busy}
-														/>
-													</label>
-													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Aprašymas (nebūtina)</span>
-														<textarea
-															rows={3}
-															value={state.admin.createItem.description}
-															on:input={(event) =>
-																onCreateItemFieldChange(
-																	state,
-																	'description',
-																	event.currentTarget.value
-																)}
-															placeholder="Trumpas sąvokos paaiškinimas"
-															disabled={state.admin.createItem.busy}
-														></textarea>
-													</label>
-													<label class="tree-node__admin-field">
-														<span>Angliškas atitikmuo (nebūtina)</span>
-														<input
-															type="text"
-															value={state.admin.createItem.termEn}
-															on:input={(event) =>
-																onCreateItemFieldChange(
-																	state,
-																	'termEn',
-																	event.currentTarget.value
-																)}
-															placeholder="Pvz., „Centreboard boat“"
-															disabled={state.admin.createItem.busy}
-														/>
-													</label>
-													<label class="tree-node__admin-field">
-														<span>Šaltinis (nebūtina)</span>
-														<input
-															type="text"
-															value={state.admin.createItem.sourceRef}
-															on:input={(event) =>
-																onCreateItemFieldChange(
-																	state,
-																	'sourceRef',
-																	event.currentTarget.value
-																)}
-															placeholder="Pvz., LBS_programa.md"
-															disabled={state.admin.createItem.busy}
-														/>
-													</label>
-													<label class="tree-node__admin-checkbox">
-														<input
-															type="checkbox"
-															checked={state.admin.createItem.isRequired}
-															on:change={(event) =>
-																onCreateItemFieldChange(
-																	state,
-																	'isRequired',
-																	event.currentTarget.checked
-																)}
-															disabled={state.admin.createItem.busy}
-														/>
-														<span>Privaloma sąvoka</span>
-													</label>
-												</div>
+												{state.admin.edit.busy ? 'Saugoma…' : 'Išsaugoti'}
+											</button>
+										</div>
+									</form>
+								{/if}
 
-												{#if state.admin.createItem.error}
-													<p class="tree-node__admin-status tree-node__admin-status--error">
-														{state.admin.createItem.error}
-														{#if state.admin.createItem.conflict}
-															<a
-																class="tree-node__admin-link"
-																href={resolve(`/concepts/${encodeURIComponent(state.admin.createItem.conflict.slug)}`)}
-															>
-																Peržiūrėti sąvoką
-															</a>
-														{/if}
-													</p>
-												{/if}
-
-												<div class="tree-node__admin-actions">
-													<button
-														type="button"
-														class="tree-node__admin-button tree-node__admin-button--ghost"
-														on:click={() => onCancelCreateItem(state)}
-														disabled={state.admin.createItem.busy}
-													>
-														Atšaukti
-													</button>
-													<button
-														type="submit"
-														class="tree-node__admin-button tree-node__admin-button--primary"
-														disabled={state.admin.createItem.busy}
-													>
-														{state.admin.createItem.busy ? 'Saugoma…' : 'Išsaugoti'}
-													</button>
-												</div>
-											</form>
+								{#if state.admin.remove.confirming}
+									<div class="tree-node__admin-delete" use:preventDragPointerPropagation>
+										<p class="tree-node__admin-status">
+											Ar tikrai norite pašalinti šį poskyrį? Visi vidiniai poskyriai bus ištrinti.
+										</p>
+										{#if state.admin.remove.error}
+											<p class="tree-node__admin-status tree-node__admin-status--error">
+												{state.admin.remove.error}
+											</p>
 										{/if}
-
-										{#if state.admin.edit.open}
-											<form
-												class="tree-node__admin-form"
-												on:submit|preventDefault={() => onSubmitEdit(state)}
-												use:preventDragPointerPropagation
+										<div class="tree-node__admin-actions">
+											<button
+												type="button"
+												class="tree-node__admin-button tree-node__admin-button--ghost"
+												on:click={() => onCancelDelete(state)}
+												disabled={state.admin.remove.busy}
 											>
-												<div class="tree-node__admin-grid">
-													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Pavadinimas</span>
-														<input
-															type="text"
-															value={state.admin.edit.title}
-															on:input={(event) =>
-																onEditFieldChange(state, 'title', event.currentTarget.value)
-															}
-															disabled={state.admin.edit.busy}
-														/>
-													</label>
-													<label class="tree-node__admin-field tree-node__admin-field--full">
-														<span>Santrauka (nebūtina)</span>
-														<textarea
-															rows={3}
-															value={state.admin.edit.summary}
-															on:input={(event) =>
-																onEditFieldChange(state, 'summary', event.currentTarget.value)
-															}
-															disabled={state.admin.edit.busy}
-														></textarea>
-													</label>
-												</div>
-
-												{#if state.admin.edit.error}
-													<p class="tree-node__admin-status tree-node__admin-status--error">
-														{state.admin.edit.error}
-													</p>
-												{/if}
-
-												<div class="tree-node__admin-actions">
-													<button
-														type="button"
-														class="tree-node__admin-button tree-node__admin-button--ghost"
-														on:click={() => onCancelEdit(state)}
-														disabled={state.admin.edit.busy}
-													>
-														Atšaukti
-													</button>
-													<button
-														type="submit"
-														class="tree-node__admin-button tree-node__admin-button--primary"
-														disabled={state.admin.edit.busy}
-													>
-														{state.admin.edit.busy ? 'Saugoma…' : 'Išsaugoti'}
-													</button>
-												</div>
-											</form>
-										{/if}
-
-										{#if state.admin.remove.confirming}
-											<div class="tree-node__admin-delete" use:preventDragPointerPropagation>
-												<p class="tree-node__admin-status">Ar tikrai norite pašalinti šį poskyrį? Visi vidiniai poskyriai bus ištrinti.</p>
-												{#if state.admin.remove.error}
-													<p class="tree-node__admin-status tree-node__admin-status--error">
-														{state.admin.remove.error}
-													</p>
-												{/if}
-												<div class="tree-node__admin-actions">
-													<button
-														type="button"
-														class="tree-node__admin-button tree-node__admin-button--ghost"
-														on:click={() => onCancelDelete(state)}
-														disabled={state.admin.remove.busy}
-													>
-														Atšaukti
-													</button>
-													<button
-														type="button"
-														class="tree-node__admin-button tree-node__admin-button--primary tree-node__admin-button--danger"
-														on:click={() => onConfirmDelete(state, parentState)}
-														disabled={state.admin.remove.busy}
-													>
-														{state.admin.remove.busy ? 'Šalinama…' : 'Patvirtinti šalinimą'}
-													</button>
-												</div>
-											</div>
-										{/if}
+												Atšaukti
+											</button>
+											<button
+												type="button"
+												class="tree-node__admin-button tree-node__admin-button--primary tree-node__admin-button--danger"
+												on:click={() => onConfirmDelete(state, parentState)}
+												disabled={state.admin.remove.busy}
+											>
+												{state.admin.remove.busy ? 'Šalinama…' : 'Patvirtinti šalinimą'}
+											</button>
+										</div>
 									</div>
 								{/if}
-							{/if}
-						</div>
+							</div>
+						{/if}
 					{/if}
-				</li>
-			{/each}
-		</ul>
+				</div>
+			{/if}
+		</li>
+	{/each}
+</ul>
 
 <style>
 	.tree-branch {
@@ -968,7 +970,9 @@
 		font-weight: 600;
 		cursor: pointer;
 		border: 1px solid transparent;
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.tree-node__admin-button[disabled] {
@@ -1081,7 +1085,10 @@
 		font-weight: 600;
 		padding: 0.25rem 0.75rem;
 		cursor: pointer;
-		transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
 		white-space: nowrap;
 	}
 
