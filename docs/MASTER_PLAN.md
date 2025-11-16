@@ -55,6 +55,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Editors can add/edit/delete nodes, items, and concepts inline with validation, dependency linking, and preview diffs prior to publish.
 - Inline concept editing is now accessible straight from `/concepts/[slug]` when the global “Aktyvuoti Admin” toggle is active, reflecting the persistent `adminMode` store shared across the shell.
 - Section board cards on the learner homepage now expose inline edit controls when admin mode is toggled on, reusing the same modal and validation helpers that power concept editing.
+- Concept manager orchestration lives in `ConceptManager.svelte`, while extracted modules (`components/ConceptFilters.svelte`, `components/ConceptList.svelte`, `components/ConceptEditorDrawer.svelte`) and shared admin types in `types.ts` keep toolbar/search/list/drawer logic modular for faster iteration.
 - Versioning supports draft vs published states plus basic history for rollback.
 
 ### Media Moderation Flow

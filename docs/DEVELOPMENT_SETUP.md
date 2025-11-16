@@ -5,7 +5,7 @@ This document keeps the development environment expectations in one place. Updat
 ## Repository Layout
 
 - `backend/` – Express API service (routes, middleware, services, validation, rate limiting).
-- `frontend/` – SvelteKit learner experience shell (Workstream B).
+- `frontend/` – SvelteKit learner experience shell (Workstream B). Admin concept tooling now lives under `src/routes/admin/concepts/`, with extracted UI modules (`components/ConceptFilters.svelte`, `ConceptList.svelte`, `ConceptEditorDrawer.svelte`) and shared types in `types.ts`.
 - `data/` – Supabase client wrapper, repositories, and shared type definitions.
 - `content/` – Curriculum seed data, CSV/JSON imports, transformation scripts.
 - `docs/` – Project documentation (this folder).
@@ -52,7 +52,7 @@ This document keeps the development environment expectations in one place. Updat
 - TypeScript preferred for new application code (frontend and backend).
 - ESLint + Prettier baseline (rules TBD).
 - Keep UI strings in Lithuanian; internal identifiers and comments in English.
-- In SvelteKit components, wrap internal `href` values with `$app/paths.resolve(...)` so lint (`svelte/no-navigation-without-resolve`) stays green and base paths work across adapters.
+- In SvelteKit components, wrap internal `href` values with `$app/paths.resolve(...)` so lint (`svelte/no-navigation-without-resolve`) stays green and base paths work across adapters. When modifying the concept manager, update the extracted components (`ConceptFilters`, `ConceptList`, `ConceptEditorDrawer`) instead of re-introducing inline markup in `ConceptManager.svelte`—keep orchestration/business logic in the route file and presentation in the component folder.
 - Close the loop on GitHub issues: leave a status comment and close the ticket when a slice merges so the tracker stays accurate.
 
 ## Reference Guides

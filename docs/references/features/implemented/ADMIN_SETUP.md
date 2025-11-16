@@ -47,6 +47,8 @@ _Update 2025-11-13 (evening)_: Concept manager now includes a section/status/sea
 
 _Update 2025-11-13 (late night)_: Concept save toasts now echo the resulting publication status and mention when active filters hide the entry, while validation and Supabase failures show actionable guidance inside the drawer alert.
 
+_Update 2025-11-16_: Concept manager extracted its toolbar/list/drawer into `components/ConceptFilters.svelte`, `components/ConceptList.svelte`, and `components/ConceptEditorDrawer.svelte` backed by shared types in `types.ts`, clarifying extension points and reducing churn in the route file.
+
 ## Screen Details
 
 ### 1. Overview
@@ -70,6 +72,7 @@ _Update 2025-11-13 (late night)_: Concept save toasts now echo the resulting pub
 - **Row actions**: View, edit (opens modal or full-page editor), duplicate to create variants, archive.
 - **Editor**: Multi-step form capturing core definition, translations, metadata, coverage (linked items + dependencies). Displays preview panes for learners.
 - **Version history**: Sidebar listing `content_versions` entries with diff preview before publish.
+- **Implementation note**: `ConceptManager.svelte` now orchestrates `ConceptFilters`, `ConceptList`, and `ConceptEditorDrawer`, passing shared types from `types.ts` so filter/list/drawer logic can evolve independently of the route skeleton.
 
 ### 4. Media Queue
 

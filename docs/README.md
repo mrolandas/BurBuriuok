@@ -18,7 +18,7 @@ Use this guide to find the right document quickly and understand when it needs a
 
 ## Reference Hubs
 
-- `references/` – canonical specifications and design notes shared across teams. Update these alongside feature or schema changes and remember to append new entries to `references/README.md`.
+- `references/` – canonical specifications and design notes shared across teams. Update these alongside feature or schema changes and remember to append new entries to `references/README.md`. The front-end runbook now captures the extracted Concept Manager modules (`ConceptFilters`, `ConceptList`, `ConceptEditorDrawer`) so future admin UX tweaks stay consistent.
   - `references/infrastructure/` – stack-specific guides (`BACKEND.md`, `FRONTEND.md`, `SUPABASE.md`). Use its `README.md` for navigation and refresh whenever backend/frontend architecture or Supabase workflows evolve.
   - `references/features/implemented/` – living docs for shipped experiences (`ADMIN_SETUP.md`, etc.). Update as production behaviour changes.
   - `references/features/ideas/` – discovery notes and future concepts (`QUIZ.md`, `STUDY_PATHS.md`, `GAMIFICATION_MODEL.md`). Extend when ideation outcomes shift or new backlog items emerge.
