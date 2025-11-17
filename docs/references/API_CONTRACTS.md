@@ -5,7 +5,7 @@ Defines the service surface area that sits in front of Supabase for BurBuriuok. 
 ## Roles & Authentication
 
 - **Public** – no token; read-only curriculum and concept browsing.
-- **Learner** – Supabase JWT; can manage personal progress, study queue, and media submissions (pending review).
+- **Learner** – Supabase JWT; can manage personal progress and study queue (media submissions deferred).
 - **Admin** – Supabase JWT with `app_role = 'admin'`; full access to content CRUD, moderation, and audit views. Future instructor role can reuse the same endpoints with scope-restricted policies.
 
 JWTs are verified with Supabase public keys. Requests without a valid token are treated as public. Admin-only endpoints must assert role claims server-side before executing.
@@ -54,10 +54,10 @@ All responses follow `{ data: <payload>, meta: { ... } }` with camelCased keys. 
 | DELETE | `/progress/:conceptId`    | Removes the progress record for the device/concept combination.                        |
 | POST   | `/study-queue`            | Adds concept to personal queue. Later backed by dedicated table.                       |
 | DELETE | `/study-queue/:conceptId` | Removes concept from queue.                                                            |
-| POST   | `/media-submissions`      | Upload metadata payload; signed upload URL returned for storage.                       |
-| PATCH  | `/media-submissions/:id`  | Allow contributor to withdraw pending submission.                                      |
 
 Progress endpoints require a device binding: send `x-device-key` or `deviceKey` query when auth flow is absent. Rate limit (stubbed in-memory) caps progress writes at 120/hour per device. Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/features/ideas/GAMIFICATION_MODEL.md`.
+
+Media submission endpoints are deferred; learners will gain upload APIs when MEDIA-003 revives. Progress endpoints require a device binding: send `x-device-key` or `deviceKey` query when auth flow is absent. Rate limit (stubbed in-memory) caps progress writes at 120/hour per device. Learner endpoints also accept optional `confidence` payload values (`high`, `medium`, `low`) when marking progress, feeding the spaced repetition model described in `docs/references/features/ideas/GAMIFICATION_MODEL.md`.
 
 ## Admin Endpoints
 
@@ -83,20 +83,22 @@ Progress endpoints require a device binding: send `x-device-key` or `deviceKey` 
 
 Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once archive semantics and RLS policies are finalised. Until then `POST` handles create and update in a single flow.
 
-### Media Moderation
+### Media Library (Admin upload)
 
-| Method | Path                                                       | Description                                                           |
-| ------ | ---------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| GET    | `/admin/media`, query `status=pending\|approved\|rejected` | Paginates submissions with contributor info.                          |
-| POST   | `/admin/media/:id/decision`                                | Body `{ decision: 'approved'                                          | 'rejected', notes? }`updates`media_assets.status`, creates `media_reviews` row, notifies contributor. |
-| POST   | `/admin/media/:id/reassign`                                | Optional future endpoint to re-map asset to a different concept/node. |
+| Method | Path                   | Description                                                                                                                                                                                                                                            |
+| ------ | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| POST   | `/admin/media`         | Body `{ conceptId, assetType, title?, captionEn?, captionLt?, source }` where `source` is either `{ kind: 'upload', fileName }` or `{ kind: 'external', url }`. Creates `media_assets` row, requests storage upload if needed, returns asset metadata. |
+| GET    | `/admin/media`         | Query `conceptId?`, `assetType?`. Returns paginated admin-owned assets for reference/attachment pickers.                                                                                                                                               |
+| GET    | `/admin/media/:id`     | Returns metadata for a single asset.                                                                                                                                                                                                                   |
+| GET    | `/admin/media/:id/url` | Generates a signed URL (default 1-hour expiry) for learner rendering.                                                                                                                                                                                  |
+| DELETE | `/admin/media/:id`     | Deletes the asset record and, if `assetType` is upload-backed, removes the storage object.                                                                                                                                                             |
 
 ### Audit & Versioning
 
 | Method | Path                   | Description                                                                                      |
 | ------ | ---------------------- | ------------------------------------------------------------------------------------------------ |
 | GET    | `/admin/audit/content` | Returns paginated `content_versions` entries with filters (`entityType`, `status`, `createdBy`). |
-| GET    | `/admin/audit/media`   | Returns moderation history from `media_reviews`.                                                 |
+| GET    | `/admin/audit/media`   | Reserved for future contributor moderation history (no-op in admin-only MVP).                    |
 
 ## Validation Rules
 
@@ -107,7 +109,7 @@ The backend enforces input validation in addition to Supabase constraints.
 - **Curriculum items**: `label` non-empty, max 400 chars, ordinals sequential (duplicates rejected; gaps allowed but flagged as warning in response metadata).
 - **Dependencies**: No self-dependency; server detects simple cycles by checking existing graph before insert. Mixed type links allowed (concept→node) but must reflect real prerequisite order.
 - **Concepts**: `termLt` required, `termEn` optional but trimmed. `slug` lowercase kebab-case; generated from Lithuanian term with transliteration. `metadata` defaults to `{}` and must be JSON-serialisable. `isRequired` defaults from seed alignment.
-- **Media submissions**: `media_type` must align with stored file; `storage_path` required for uploads, `external_url` for embeds. Captions limited to 300 chars per language.
+- **Media assets (admin)**: `assetType` must align with stored file; `storage_path` required when `source.kind='upload'`, `external_url` required for curated links. Captions limited to 300 chars per language; enforce 50 MB size cap in service before requesting upload.
 - **Progress**: Status limited to `learning|known|review`. `lastReviewedAt` ISO string; server injects timestamp when absent.
 
 Validation errors return HTTP 422 with `{ error: { code: 'VALIDATION_ERROR', fieldErrors: { ... } } }` shape.
@@ -120,7 +122,7 @@ Validation errors return HTTP 422 with `{ error: { code: 'VALIDATION_ERROR', fie
   - `status` transitions (`draft` → `in_review` → `published` → `archived`).
   - `diff` storing JSON Patch-style deltas to aid review diffing.
 - Backend exposes `logContentMutation` helper that computes field-level changes and persists them to `content_versions` + `content_version_changes`.
-- Media decisions append to `media_reviews` capturing reviewer, decision, notes, and timestamp.
+- Media uploads create a `content_versions` entry only when metadata changes are significant. No dedicated moderation table is touched in the admin-only MVP; log storage deletions to stdout for later ingestion.
 - For high-risk operations (delete/archive), service emits structured logs (JSON) to stdout for ingestion by hosting provider.
 - Future improvement: add Supabase triggers to capture direct table edits (if any) and push to the same tables so the audit trail stays consistent.
 
@@ -130,7 +132,7 @@ Implemented with an in-memory store (Redis later) using token bucket semantics.
 
 - **Public search**: 60 requests/minute per IP. Burst 10.
 - **Progress updates**: 120 writes/hour per learner. Excess attempts return 429 with retry-after.
-- **Media submissions**: 10 pending assets per learner across all concepts; hard cap 20 uploads/day. Admin override available via backend flag.
+- **Media uploads (admin)**: 40 uploads/day per admin with burst of 10; configurable via environment variable.
 - **Concept edits**: 30 writes/hour per admin. Additional edits require waiting or manual override.
 - **Dependency changes**: 20 writes/hour per admin; prevents frantic remapping.
 

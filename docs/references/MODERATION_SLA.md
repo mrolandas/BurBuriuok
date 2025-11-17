@@ -2,16 +2,19 @@
 
 Defines service levels and communication rules for reviewing learner-generated assets.
 
+> Status: Deferred during admin-only media MVP (2025-11-17). Keep for contributor upload relaunch.
+
 ## Scope
 
 Covers media uploaded to `media_assets` (images, video, documents, audio) and text comments once community features launch.
+Paused until learner/contributor submissions are reinstated.
 
 ## Roles
 
-- **Learner**: submits asset. Receives status notifications.
-- **Moderator**: triages queue, reviews assets.
-- **Escalation Lead**: handles overdue or sensitive cases.
-- **Automation Bot**: syncs Slack/email alerts.
+- **Learner**: submits asset. Receives status notifications (inactive).
+- **Moderator**: triages queue, reviews assets (inactive).
+- **Escalation Lead**: handles overdue or sensitive cases (inactive).
+- **Automation Bot**: syncs Slack/email alerts (inactive).
 
 ## SLA Targets
 
@@ -57,3 +60,5 @@ Covers media uploaded to `media_assets` (images, video, documents, audio) and te
 2. Build Edge Function template for Slack + email notifications.
 3. Define on-call rotation roster and document in Ops handbook.
 4. Integrate metrics dashboard (Metabase/Looker) for live tracking.
+
+> On hold until contributor or learner submissions return.

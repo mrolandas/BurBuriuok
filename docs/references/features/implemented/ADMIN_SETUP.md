@@ -7,7 +7,7 @@ Captured screens, flows, and access mechanics for the BurBuriuok admin console. 
 1. **Overview** – snapshot of pending tasks and global stats.
 2. **Curriculum** – tree editor for nodes/items and dependency management.
 3. **Concepts** – data table filtered by section, status, and updated date.
-4. **Media Queue** – moderation inbox for pending/approved/rejected assets.
+4. **Media Library** – admin-managed uploads and concept attachments.
 5. **Audit Log** – chronological list of recent changes with diff previews.
 6. **Settings** (later) – manage quotas, integrations, and instructor roles.
 
@@ -19,9 +19,9 @@ The initial admin milestone targets a thin vertical slice that exercises authent
 
 1. **ADM-001 – Secure Admin Shell**: Gate `/admin` routes via Supabase session claims (`app_role='admin'`), provide fallback copy for non-admins, and surface a lightweight status banner showing active persona/role.
 2. **ADM-002 – Concept Editor MVP**: Render the Concepts data grid with create/edit drawer, Zod validation shared with backend, draft/publish toggle, and audit-log hook firing `content_versions` entries. _Status: backend endpoints and drawer MVP shipped; polish items pending (data grid filters, optimistic updates, full history sidebar)._
-3. **ADM-003 – Moderation Queue List**: Deliver the Media Queue list with status tabs, SLA priority badges (P0/P1/P2), bulk-select skeleton, and empty-state guidance.
-4. **ADM-004 – Notification Stubs**: Log Slack/email events when moderation decisions occur, mapping to `docs/references/MODERATION_SLA.md` (real integrations deferred).
-5. **ADM-005 – Analytics Mapping Notes**: Document which admin actions emit analytics events so instrumentation can follow once the concept editor and queue are interactive.
+3. **ADM-003 – Moderation Queue List**: Deferred – returns once contributor uploads are back in scope.
+4. **ADM-004 – Notification Stubs**: Deferred with ADM-003; no moderation notifications required for admin-only uploads.
+5. **ADM-005 – Analytics Mapping Notes**: Document which admin actions emit analytics events so instrumentation can follow; include media upload events once endpoints ship.
 
 Each deliverable should land behind feature flags where possible so the learner experience remains unaffected while the admin surface evolves.
 
@@ -49,12 +49,14 @@ _Update 2025-11-13 (late night)_: Concept save toasts now echo the resulting pub
 
 _Update 2025-11-16_: Concept manager extracted its toolbar/list/drawer into `components/ConceptFilters.svelte`, `components/ConceptList.svelte`, and `components/ConceptEditorDrawer.svelte` backed by shared types in `types.ts`, clarifying extension points and reducing churn in the route file.
 
+_Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The console will surface a lightweight “Pridėti mediją” action inside the concept editor, with moderation queue + SLA tooling deferred until contributor submissions return.
+
 ## Screen Details
 
 ### 1. Overview
 
 - **Hero cards**: Pending media, Draft concepts, Dependencies needing review (warnings for orphan nodes or circular refs).
-- **Activity feed**: Latest 10 actions from `content_versions`/`media_reviews` (who, what, when).
+- **Activity feed**: Latest 10 actions from `content_versions` and upcoming media uploads (once API emits events).
 - **Shortcuts**: Buttons to create a new concept, add a curriculum node, or review pending media.
 - **System health** (future): Supabase status, seed version hash.
 
@@ -74,13 +76,13 @@ _Update 2025-11-16_: Concept manager extracted its toolbar/list/drawer into `com
 - **Version history**: Sidebar listing `content_versions` entries with diff preview before publish.
 - **Implementation note**: `ConceptManager.svelte` now orchestrates `ConceptFilters`, `ConceptList`, and `ConceptEditorDrawer`, passing shared types from `types.ts` so filter/list/drawer logic can evolve independently of the route skeleton.
 
-### 4. Media Queue
+### 4. Media Library (Admin Uploads)
 
-- **Tabs**: Pending, Approved, Rejected, Archived.
-- **Card list**: Thumbnail, contributor, associated concept/node, submission notes.
-- **Review workspace**: Side-by-side media preview and metadata form (captions, alt text, tags). Buttons: Approve, Reject (with reason), Request changes (future).
-- **Bulk moderation**: Approve/Reject multiple selected assets with shared note.
-- **Automation** (future): Trigger re-scan, reassign to different concept, schedule publish.
+- **Entry point**: “Pridėti mediją” button in the concept editor drawer opens an upload dialog limited to admin users.
+- **Upload dialog**: Select file (image/video) or paste external URL, choose display title, captions (LT/EN), and optional attribution.
+- **Attachment list**: Shows existing media for the concept with thumbnail, type, and quick actions (copy embed link, delete, replace).
+- **Signed URL helper**: Copy button that generates a 1-hour signed URL for manual testing.
+- **Deferred items**: Contributor submissions, moderation tabs, and SLA badges move back into scope when MEDIA-003/004 resume.
 
 ### 5. Audit Log
 

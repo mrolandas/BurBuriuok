@@ -86,7 +86,36 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - Backend audit logger now reconciles `content_drafts`: draft/in-review saves upsert the working copy (tracking the new version id), while publish/archive operations remove the draft row. Empty snapshots skip persistence to avoid lingering blank drafts.
   - Regression guard `npm run test:db002` provisions disposable concepts, exercises draft→publish transitions via the backend service, and confirms RLS access for service-role keys; run this after migrations/policy updates.
 
-## 2025-11-03 – Media Moderation
+## 2025-11-17 – Admin Media MVP (supersedes moderation plan)
+
+- **Tables**: `media_assets`
+  - `id` (uuid default `gen_random_uuid()`) primary key.
+  - `concept_id` (uuid, not null) references `concepts.id` – current MVP scopes assets to concepts only.
+  - `asset_type` (text) constrained to `image` or `video` (enum created in migration).
+  - `storage_path` (text, not null) holds Supabase Storage object path (`media-admin` bucket).
+  - `external_url` (text, nullable) reserved for future embeds (ADMIN attaches curated URLs without upload).
+  - `title` (text) optional short label shown in admin list.
+  - `caption_en` / `caption_lt` (text, nullable) localised captions; MVP requires only `caption_lt` or `caption_en` but allows both.
+  - `created_by` (text, not null) stores admin identifier (email or Supabase UID).
+  - `created_at` (timestamptz default `timezone('utc', now())`).
+  - Unique constraint on `(concept_id, storage_path)` prevents duplicate attachments.
+- **Optional table**: `media_asset_variants`
+  - `id` (uuid) primary key.
+  - `asset_id` (uuid) references `media_assets.id` on delete cascade.
+  - `variant_type` (text) constrained to `thumbnail`, `preview`.
+  - `storage_path` (text) for derived asset location.
+  - `created_at` (timestamptz default `timezone('utc', now())`).
+  - Used only when we generate thumbnails – safe to defer creation until variant logic ships.
+- **Policies**:
+  - Enable RLS on `media_assets`; grant select/insert/delete/update to sessions where `burburiuok.is_admin_session()` returns true. Service role retains full access; learners remain blocked.
+  - No moderation states or review queues; admins are expected to upload only approved content.
+- **Storage**:
+  - Single Supabase bucket `media-admin` with read/write restricted to admins. Backend issues signed URLs for learner consumption.
+- **Migration notes**:
+  - Drop any obsolete moderation enum values (`pending`, `approved`, etc.) and the unused `media_reviews` table when generating the new migration.
+  - Seed script should remain empty until we add baseline curated assets.
+
+## 2025-11-03 – Media Moderation _(deferred until contributor uploads return)_
 
 - **Tables**: `media_assets`, `media_reviews`
   - `media_assets`

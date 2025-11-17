@@ -4,23 +4,23 @@ Aligns user archetypes with Supabase Auth roles and the capabilities exposed by 
 
 ## Personas
 
-| Persona         | Description                                                                                             | Primary Goals                                            | Typical Devices                        |
-| --------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------- |
-| Learner         | Student preparing for LBS skipper exams; consumes curriculum, tracks progress, practices quizzes.       | Build knowledge, stay motivated, review weak topics.     | Mobile (90%), Tablet (10%).            |
-| Contributor     | Advanced learner or assistant instructor who proposes content tweaks or media (pending future release). | Suggest improvements, submit media, flag issues.         | Mobile + occasional desktop.           |
-| Admin           | Curriculum maintainer/instructor of record. Manages content, approves media, monitors analytics.        | Keep data accurate, moderate submissions, view insights. | Desktop (primary), Tablet (secondary). |
-| Visitor (Guest) | Unauthenticated user browsing sample content.                                                           | Evaluate the tool, read basics.                          | Mobile web.                            |
+| Persona         | Description                                                                                       | Primary Goals                                           | Typical Devices                        |
+| --------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------- |
+| Learner         | Student preparing for LBS skipper exams; consumes curriculum, tracks progress, practices quizzes. | Build knowledge, stay motivated, review weak topics.    | Mobile (90%), Tablet (10%).            |
+| Contributor     | Advanced learner or assistant instructor who will propose content once contributor scope reopens. | Suggest improvements, flag issues for admins to review. | Mobile + occasional desktop.           |
+| Admin           | Curriculum maintainer/instructor of record and the only current media uploader.                   | Keep data accurate, manage media, monitor analytics.    | Desktop (primary), Tablet (secondary). |
+| Visitor (Guest) | Unauthenticated user browsing sample content.                                                     | Evaluate the tool, read basics.                         | Mobile web.                            |
 
 ## Role Mapping
 
 Supabase Auth `app_role` custom claim drives API policies.
 
-| Role                   | Personas    | Capabilities                                                                                                           |
-| ---------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `guest` (default)      | Visitor     | Read-only access to public endpoints (curriculum, concepts, search). No data writes.                                   |
-| `learner`              | Learner     | Everything in `guest` + progress management, study queue, quiz submissions, media submissions (pending review).        |
-| `contributor` (future) | Contributor | Same as `learner` plus ability to propose edits, comment in forum, limited view of moderation queue (own submissions). |
-| `admin`                | Admin       | Full CRUD on curriculum/concepts/media, access to audit logs, configure study paths, manage badges.                    |
+| Role                   | Personas    | Capabilities                                                                                        |
+| ---------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| `guest` (default)      | Visitor     | Read-only access to public endpoints (curriculum, concepts, search). No data writes.                |
+| `learner`              | Learner     | Everything in `guest` + progress management, study queue, quiz submissions.                         |
+| `contributor` (future) | Contributor | Same as `learner` plus ability to propose edits and limited moderation preview once re-enabled.     |
+| `admin`                | Admin       | Full CRUD on curriculum/concepts/media, access to audit logs, configure study paths, manage badges. |
 
 Authentication flow:
 
@@ -31,29 +31,29 @@ Authentication flow:
 
 ## API Permissions Summary
 
-| Endpoint Namespace                     | Guest | Learner | Contributor (future)      | Admin |
-| -------------------------------------- | ----- | ------- | ------------------------- | ----- |
-| `/curriculum`, `/concepts`, `/search`  | ✅    | ✅      | ✅                        | ✅    |
-| `/progress`, `/study-queue`            | ❌    | ✅      | ✅                        | ✅    |
-| `/media-submissions`                   | ❌    | ✅      | ✅ (own)                  | ✅    |
-| `/admin/curriculum`, `/admin/concepts` | ❌    | ❌      | ❌                        | ✅    |
-| `/admin/media`                         | ❌    | ❌      | ⚠️ (own submissions only) | ✅    |
-| `/admin/audit`                         | ❌    | ❌      | ❌                        | ✅    |
-| `/study-paths` (enrol/complete)        | ❌    | ✅      | ✅                        | ✅    |
-| `/practice` (quiz results)             | ❌    | ✅      | ✅                        | ✅    |
+| Endpoint Namespace                     | Guest | Learner | Contributor (future) | Admin |
+| -------------------------------------- | ----- | ------- | -------------------- | ----- |
+| `/curriculum`, `/concepts`, `/search`  | ✅    | ✅      | ✅                   | ✅    |
+| `/progress`, `/study-queue`            | ❌    | ✅      | ✅                   | ✅    |
+| `/media-submissions` (deferred)        | ❌    | ❌      | ❌                   | ❌    |
+| `/admin/curriculum`, `/admin/concepts` | ❌    | ❌      | ❌                   | ✅    |
+| `/admin/media`                         | ❌    | ❌      | ❌                   | ✅    |
+| `/admin/audit`                         | ❌    | ❌      | ❌                   | ✅    |
+| `/study-paths` (enrol/complete)        | ❌    | ✅      | ✅                   | ✅    |
+| `/practice` (quiz results)             | ❌    | ✅      | ✅                   | ✅    |
 
-Legend: ✅ full access; ❌ denied; ⚠️ constrained to own submissions.
+Legend: ✅ full access; ❌ denied. `/media-submissions` endpoints return once contributor scope resumes.
 
 ## Row-Level Security (RLS) Considerations
 
 - `concept_progress`, `study_queue`, `gamification_*`, `study_path_assignments`: rows restricted to matching `auth.uid()` or `device_key` hashed to session.
-- `media_assets`: learners can insert; select limited to own records unless status is `approved`. Admins bypass via `service_role` or policies tied to `app_role='admin'`.
-- `content_versions`, `media_reviews`: read-only for admins; hidden from learners.
+- `media_assets`: only admins insert/select during the media MVP; learner/contributor policies resume when contributor uploads return.
+- `content_versions`, `media_reviews`: remain admin-only until moderation flow reactivates.
 
 ## Audit & Escalation
 
-- Admins receive weekly digest of outstanding moderation tasks.
-- Learners can flag content via `/media-submissions` with `status='flagged'` (future) – escalates to admin queue.
+- Admins will receive moderation digests once contributor uploads relaunch; paused during admin-only MVP.
+- Learner flagging via `/media-submissions` deferred until contributor scope resumes.
 - Contributor role will require review/approval before elevation (`profiles.role = 'contributor'`).
 - Monitor magic-link adoption metrics during the AUTH-001/002 rollout and defer any device-key policy changes until AUTH-003 is complete.
 

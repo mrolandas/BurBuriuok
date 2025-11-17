@@ -21,7 +21,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - A single global admin manages content and media approvals in early releases.
 - PDF exports or external LMS integrations are explicitly out of scope.
 - UI is designed mobile-first (sub-6" screens) with responsive enhancements for tablet/desktop.
-- Media submissions (images, video links, PDFs, audio) require human approval before they surface publicly.
+- Media uploads are limited to admins for the MVP; contributor submissions and moderation queues return in a later phase.
 - Learner authentication launches with Supabase magic-link sign-in while device-key progress syncing remains available until the dedicated retirement task (AUTH-003) ships.
 
 ## Experience Blueprint
@@ -60,9 +60,11 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Media Moderation Flow
 
-- Authenticated users submit media with metadata (type, language, captions, credit).
-- Submissions queue for admin approval; automated checks enforce quota, MIME type, file size, and malicious content scanning.
-- Approved media inherits contributor attribution and can be revoked or edited at any time.
+> Deferred until contributor uploads resume; the admin-only MVP relies on manual judgement during upload.
+
+- When reopened, authenticated contributors will submit media with metadata (type, language, captions, credit).
+- Submissions will queue for admin approval; automated checks will enforce quota, MIME type, file size, and malicious content scanning.
+- Approved media will inherit contributor attribution and can be revoked or edited at any time.
 
 ## Engagement & Gamification
 
@@ -133,8 +135,8 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Audit logging utility persists admin content mutations to `content_versions` and `content_version_changes` via Supabase service client.
 - `0007_content_versioning_history.sql` extends the schema with `content_version_changes` and triggers that auto-increment versions and stamp audit metadata.
 
-- Supabase Storage buckets segregated by media type with signed URL access.
-- Metadata tables track moderation state (`pending`, `approved`, `rejected`, `archived`).
+- Supabase Storage plan now centres on a single admin-only bucket with signed URLs; contributor buckets return with MEDIA-003.
+- Moderation status tables (`media_reviews`, extended enums) remain deferred until contributor submissions come back online.
 - Automated scanning pipeline (e.g., via edge function or scheduled job) to flag suspicious uploads before admin review.
 
 ## Implementation Roadmap
@@ -151,8 +153,8 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 - [ ] Complete admin CRUD + hierarchy management (drag/drop, promote/demote) for nodes, items, and concepts, sharing validation between frontend and backend.
 - [ ] Ship the content versioning workflow (draft → review → publish) with audit logging, rollback notes, and documentation updates.
-- [ ] Stand up the media submission pipeline (upload surface, metadata capture, queued states) and record storage decisions.
-- [ ] Build the initial moderation queue with approve/reject actions, SLA signalling, and Slack/email notification stubs wired to the dispatcher seam.
+- [ ] Stand up the admin media upload pipeline (upload surface, metadata capture) and record storage decisions; moderation queue deferred.
+- [ ] Build the initial moderation queue with approve/reject actions, SLA signalling, and Slack/email notification stubs wired to the dispatcher seam. _(Deferred until contributor uploads return.)_
 - [ ] Harden validation, Supabase policies, and persona-based UI controls per `docs/references/PERSONAS_PERMISSIONS.md`.
 - [ ] Document every schema change in `SCHEMA_DECISIONS.md` and update reference guides as features land.
 
