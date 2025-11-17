@@ -1,86 +1,59 @@
-# Current Session Plan – ADM-002 Concept Editor Polish (2025-11-13)
+# Current Session Plan – Media Roadmap Kickoff (2025-11-17)
 
-With DB-002 content versioning wrapped, this session shifts to ADM-002: elevating the concept editor experience so admins can triage and update concepts quickly ahead of the trimmed launch.
+This block pivots from ADM-002 polish to preparing the media intake pipeline and lining up auth dependencies for the next implementation cycle.
 
-## Orientation Checklist (run at the start of each work block)
+## Orientation Checklist
 
-- Open `docs/README.md` for navigation updates and maintenance rules; keep it aligned when new docs appear.
-- Review `docs/MASTER_PLAN.md` and `docs/references/features/implemented/ADMIN_SETUP.md` to understand current admin affordances and how media fits the roadmap.
-- Study `docs/references/infrastructure/SUPABASE.md` plus `docs/references/SCHEMA_DECISIONS.md` for storage, table, and migration expectations.
-- Sync with `docs/references/ISSUE_TRACKER.md` to ensure media tasks are tracked and cross-linked with GitHub issues.
-- Skim the archive `docs/archive/2025_11_13_current_session.md` for the completed DB-002 workstream; previous trimmed-scope notes remain in `docs/archive/2025-11-12_current_session.md` if needed.
+- Review `docs/references/ISSUE_TRACKER.md` for MEDIA-001→005 and AUTH-001→003 scope notes.
+- Revisit `docs/references/features/implemented/ADMIN_SETUP.md` to confirm current admin affordances before layering media workflows.
+- Skim `docs/references/API_CONTRACTS.md`, `docs/references/SCHEMA_DECISIONS.md`, and `docs/references/infrastructure/SUPABASE.md` so storage, API, and policy changes stay consistent.
+- Check `docs/references/PHASE_BACKLOG.md` for roadmap sequencing when proposing schedule shifts.
 
-## Objectives for This Sprint
+## Objectives for This Block
 
-- Ship concept grid polish so everyday admin edits are fast and predictable (filters, responsive saves, error surfacing).
-- Keep DB-002 hooks (drafts/history) surfaced in the UI without regressions while UI updates land.
-- Capture any design or schema follow-ups required for history drawer/rollback UX, but defer implementation until core polish is done.
-- Maintain documentation hygiene so future contributors understand the polished flow.
+- Finalise the MEDIA-001 storage + migration blueprint so engineering work can begin immediately afterward.
+- Define MEDIA-002 REST contracts (submission + admin review) and document validation paths.
+- Capture contributor/admin UX requirements that will drive MEDIA-003 and MEDIA-004 implementation briefs.
+- Align AUTH-001→003 scope with media reviewer access so onboarding and moderation can launch together.
 
-## Workstream Milestones & Dependencies
+## Immediate Focus (week of 2025-11-17)
 
-- [x] **ADM-002 – Concept Editor Polish**
-  - [x] Add concept grid filters (section, status, search) plus empty-state guidance.
-  - [x] Wire optimistic updates for inline edits/drawer saves so the list refreshes without full reloads.
-  - [x] Surface publication state changes more clearly (status chip + toast copy incorporating DB-002 outcomes).
-  - [x] Harden error handling (validation messaging, Supabase failure toasts, retry affordances).
-- [ ] **Post-ADM-002 Planning** (tracking only)
-  - Scope the history sidebar/diff preview requirements once core polish lands (DB-002 dependency).
-  - Confirm MEDIA-001/002 start window now that concept editor is stable.
-  - Keep AUTH-001→003 backlog briefs up to date for the following cycle.
+- Draft Supabase bucket configuration, table layouts, and migration order for `media_assets` and supporting tables; record outcomes in `docs/references/infrastructure/SUPABASE.md` and `docs/references/SCHEMA_DECISIONS.md`.
+- Outline learner + admin endpoints, request/response payloads, and error handling in `docs/references/API_CONTRACTS.md`, including rate-limit and audit requirements.
+- List critical UX affordances (upload progress, moderation filters, SLA badges) and link them back to `MEDIA-003`/`MEDIA-004` rows in `docs/references/ISSUE_TRACKER.md`.
+- Review AUTH briefs to ensure admin invite + role management covers media reviewers; note any updates needed in `docs/references/PERSONAS_PERMISSIONS.md`.
 
-## Immediate Focus (week of 2025-11-13)
+## Planning Deliverables
 
-- Prototype section/status filters in `ConceptManager.svelte` (reuse existing stores/services where possible). (Done) Toolbar now covers section, status, and search with empty-state copy.
-- Ensure optimistic save path updates the local concept collection and status chip without a full fetch. (Done) Drawer saves now update the grid optimistically and roll back on failures.
-- Audit current toast + error messaging to align with DB-002 statuses (draft/published) and adjust copy where confusing. (Done) Toasts now echo the resulting status and flag filtered entries; drawer alerts include validation/Supabase guidance.
-- Capture any backend API adjustments needed to support filtered fetch or metadata (only if absolutely required; prefer client-side filtering first).
+- **MEDIA-001** – Inventory target buckets (public vs restricted), policy helpers, and migration filenames; define verification checklist and document rollback strategy.
+- **MEDIA-002** – Specify REST resources (`/api/v1/media/submissions`, `/api/v1/admin/media`, decision endpoints), payload schemas, quotas, and telemetry hooks.
+- **MEDIA-003** – Capture contributor upload UX flows (flag strategy, progress indicators, validation copy) and note feature flag requirements for rollout.
+- **MEDIA-004** – Outline moderation queue layout updates, SLA badge logic, decision drawer states, and integration hooks for dispatcher stubs.
+- **MEDIA-005** – List supported providers, embed sanitisation rules, localisation strategy, and accessibility acceptance criteria.
+- **AUTH alignment** – Map reviewer invite flow, required roles/claims, and migration or feature flag changes needed alongside media launch.
 
 ## Dependencies & Open Questions
 
-- Do we need backend-side filtering/pagination now, or can the current dataset stay client-side for MVP volume?
-- What UX guidance exists for empty concept lists after filtering? (Coordinate with design before shipping placeholders.)
-- Are additional DB-002 fields required in the concept list (e.g., `lastEditedBy`), or can we defer until history sidebar work?
-- Confirm analytics hooks needed for concept save/filter interactions (tie-in to ADM-005 when ready).
+- Confirm storage size/cost assumptions with infrastructure docs before locking bucket lifecycle policies.
+- Decide whether moderation queue enhancements can extend the Concept Manager shell or require a dedicated `/admin/media` route.
+- Determine initial safeguards for upload abuse (file type, size, rate limits) and who owns enforcement.
+- Clarify whether contributor uploads require immediate localization support or if English-first is acceptable for MVP.
 
-## Testing & Verification Plan
+## Documentation & Tracking
 
-- Snapshot current behaviour with manual QA (filters disabled) before refactors begin.
-- After polish lands, run focused manual smoke: apply filters, save concept, confirm list updates without refresh, verify status cues.
-- Backend `npm run test:db002` remains the regression guard for data integrity—run after each significant UI push touching drafts/publish logic.
-- Schedule automated testing pass once initial polish stabilises (Vitest/unit coverage comes after feature completion).
-
-## Documentation & Tracking Rules
-
-- Update `references/features/implemented/ADMIN_SETUP.md` to reflect new concept editor behaviours once released.
-- Log any API adjustments in `API_CONTRACTS.md` and note UX decisions in `ADMIN_SETUP.md` or design briefs.
-- Keep `ISSUE_TRACKER.md` ADM-002 row aligned with the polished deliverables and mark blockers for downstream workstreams.
-- Record follow-up design or tech-debt items in the session log before moving on to the next focus.
-
-## Risks & Mitigations
-
-- **Filter performance** – large client-side datasets might lag; prepare a backend pagination fallback if QA reveals issues.
-- **Optimistic save mismatches** – ensure local cache mirrors Supabase response to avoid stale state; fall back to refetch on mismatch.
-- **Error surfacing gaps** – watch for silent failures; instrument Sentry/console logging during dev to catch regressions early.
-- **Scope creep into history UX** – document discoveries but keep implementation focused on grid polish for MVP timeline.
+- Update `docs/references/infrastructure/SUPABASE.md`, `docs/references/SCHEMA_DECISIONS.md`, and `docs/references/API_CONTRACTS.md` as decisions land.
+- Reflect plan progress in `docs/references/ISSUE_TRACKER.md` (MEDIA-001→005, AUTH-001→003) so GitHub issue creation is turnkey.
+- Note UX research or design follow-ups in `docs/references/features/ideas/` if new concepts emerge during scoping.
 
 ## Session Log
 
-- 2025-11-13: Archived DB-002 session plan to `docs/archive/2025_11_13_current_session.md` and retargeted the active plan to ADM-002 concept editor polish.
-- 2025-11-13: Confirmed with product that grid filters + optimistic saves are the MVP priority; deeper history UX will follow once polish ships.
-- 2025-11-13: Captured manual testing expectations (filters + save flow) to revisit after implementation before adding automated coverage.
-- 2025-11-13: Implemented concept grid toolbar (section/status/search) with empty-state guidance and optimistic drawer saves that sync the list without a full refetch.
-- 2025-11-13: Hid the global AppShell search on `/admin` routes so the concept manager only exposes the new toolbar search while the learner shell keeps its global search.
-- 2025-11-13: Updated concept save toasts to highlight resulting publication status/filter visibility and added actionable validation/Supabase error hints inside the drawer alert.
-- 2025-11-13: Ran `npm run test:db002` after the Concept Manager error-handling updates; smoke test passed.
-- 2025-11-13: Optimized `SectionSelect` to load curriculum nodes concurrently, auto-close after selection, and re-ran `npm run test:db002` to confirm the concept lifecycle guard stays green.
-- 2025-11-13: Captured Concept Manager manual QA checklist and future SectionSelect automation goals in `docs/TESTING_GUIDE.md`.
-- 2025-11-13: ADM-002 core polish complete; next session block will scope the history sidebar/diff preview requirements and plan the MEDIA/AUTH follow-ups.
+- 2025-11-17: Archived ADM-002 session and kicked off media roadmap planning focused on storage, API surface, and auth alignment.
+- 2025-11-17: Broke down MEDIA-001→005 deliverables and documented planning artefacts required before implementation starts.
 
-## Wrap-up Checklist (close the session when all boxes are ticked)
+## Wrap-up Checklist (close when all items are complete)
 
-- [x] Concept grid filters (section/status/search) shipped with empty-state handling.
-- [x] Optimistic save experience live with consistent status chip/toast updates (fallback refetch documented).
-- [x] Error handling reviewed (validation + Supabase failure messaging) and logged in documentation.
-- [x] `ADMIN_SETUP.md` + `ISSUE_TRACKER.md` updated to reflect delivered polish and remaining history sidebar scope.
-- [x] Manual QA notes captured plus plan for automated tests after polish (documented in `TESTING_GUIDE.md`).
+- [ ] MEDIA-001 migration + bucket plan documented and reviewed.
+- [ ] MEDIA-002 endpoint contracts captured with error + audit notes.
+- [ ] MEDIA-003/004 UX requirements summarised and linked in the issue tracker.
+- [ ] AUTH backlog updated to reflect media reviewer access + invite needs.
+- [ ] Follow-up tasks noted in `docs/references/ISSUE_TRACKER.md` and ready for issue creation.
