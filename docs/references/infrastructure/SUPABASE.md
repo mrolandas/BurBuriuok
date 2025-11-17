@@ -72,6 +72,34 @@ This document captures how BurKursas uses Supabase during early development (sta
 - Lifecycle: no automatic cleanup required for MVP; add quarterly review reminder in `INFRASTRUCTURE.md` to evaluate storage growth and archival needs.
 - Future contributor flow: when MEDIA-003 restarts, either introduce a `media-contributor` bucket or extend this one with additional folders + RLS policies. Document revisit in the backlog.
 
+#### Rollout Checklist (MEDIA-001)
+
+1. **Create bucket** – Supabase Dashboard → Storage → `+ New bucket` → name `media-admin`, keep visibility `Private`.
+2. **Grant bucket policies** – SQL editor (`storage_policies.sql` scratchpad or CLI):
+   ```sql
+   begin;
+   revoke all on storage.objects from public;
+   create policy "Allow admin uploads" on storage.objects for insert using (
+     bucket_id = 'media-admin' and burburiuok.is_admin_session()
+   );
+   create policy "Allow admin updates" on storage.objects for update using (
+     bucket_id = 'media-admin' and burburiuok.is_admin_session()
+   );
+   create policy "Allow admin deletes" on storage.objects for delete using (
+     bucket_id = 'media-admin' and burburiuok.is_admin_session()
+   );
+   commit;
+   ```
+3. **Register migration** – Apply the MEDIA-001 SQL to hosted project (`npx supabase db push --include-seed`) after confirming bucket exists.
+4. **Verify access** – Using service-role key, insert a test asset metadata row; ensure learner JWTs receive 403 from Supabase REST.
+5. **Clean test data** – Delete placeholder object/row and note completion in session log.
+
+#### Rollback Steps
+
+- Drop bucket via Dashboard (Storage → `media-admin` → Delete) after confirming no production assets need retention.
+- Revoke bucket policies with `drop policy if exists ... on storage.objects` for the admin rules.
+- Re-run schema rollback (`drop table / drop type`) if the migration must be reversed (see `docs/references/SCHEMA_DECISIONS.md`).
+
 ## Auth Considerations
 
 - Start with email magic links using Supabase Auth once V2 work begins.

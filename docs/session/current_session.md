@@ -25,8 +25,8 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 
 ## Planning Deliverables
 
-- **MEDIA-001** – Lock storage bucket choice, table schema, seed data expectations, and rollback checklist.
-- **MEDIA-002** – Document admin upload/read endpoints, payload schemas, and signed URL strategy; learner submission path explicitly deferred.
+- **MEDIA-001** – Lock storage bucket choice, table schema, seed data expectations, and rollback checklist (see `docs/references/SCHEMA_DECISIONS.md` + `docs/references/infrastructure/SUPABASE.md`).
+- **MEDIA-002** – Document admin upload/read endpoints, payload schemas, and signed URL strategy; learner submission path explicitly deferred (see `docs/references/API_CONTRACTS.md` Implementation Checklist).
 - **MEDIA-005 (Slice)** – Record provider whitelist and sanitised embed rules for admin-curated media that will surface on the learner side.
 - **Deferred Notes** – Capture future scope for MEDIA-003/004 (contributor uploads & moderation) in `docs/references/ISSUE_TRACKER.md` with a clear “post-admin launch” tag.
 - **AUTH alignment** – Note that current `admin` role covers uploads; additional reviewer onboarding is shelved until contributor flows revive.
@@ -56,6 +56,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-17: Archived ADM-002 session and kicked off media roadmap planning focused on storage, API surface, and auth alignment.
 - 2025-11-17: Broke down MEDIA-001→005 deliverables and documented planning artefacts required before implementation starts.
 - 2025-11-17: Rescoped media MVP to admin-only uploads, dropping contributor moderation until after launch.
+- 2025-11-17: Captured MEDIA-001 rollout/rollback procedures and MEDIA-002 implementation checklist to unblock upcoming migrations and backend work.
 
 ## Wrap-up Checklist (close when all items are complete)
 

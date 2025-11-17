@@ -115,6 +115,28 @@ This log captures authoritative decisions about the evolving Supabase schema so 
   - Drop any obsolete moderation enum values (`pending`, `approved`, etc.) and the unused `media_reviews` table when generating the new migration.
   - Seed script should remain empty until we add baseline curated assets.
 
+### Implementation Checklist (MEDIA-001)
+
+1. Generate migration `supabase/migrations/<timestamp>_media_admin_mvp.sql` that:
+   - Creates `burburiuok.media_assets` with columns/constraints enumerated above.
+   - Defines enum `media_asset_type` (`image`, `video`) and references it from `media_assets.asset_type`.
+   - Creates optional `media_asset_variants` table guarded behind `DO $$ ... $$` so it can be skipped when variants are not needed yet.
+   - Grants usage/select/insert/update/delete on the new tables to `service_role` and `authenticated` (admin JWT path) as required.
+2. Enable RLS on `media_assets` (and `media_asset_variants` when created) with policy `media_assets_admin_manage` invoking `burburiuok.is_admin_session()` for all operations. Deny all by default.
+3. Add storage policy in Supabase dashboard/SQL editor:
+   - Bucket `media-admin` → insert/update/delete limited to `burburiuok.is_admin_session()`.
+   - Select requires signed URLs; leave public access disabled.
+4. Update tooling:
+   - Extend `npm run test:db002` (or new `npm run test:media001`) to validate CRUD against the admin policy, including failure case for learner JWT.
+   - Document bucket + migration roll-out steps in `docs/references/infrastructure/SUPABASE.md`.
+5. Apply migration locally (`npx supabase db push --include-seed`) and in staging/production after verifying bucket creation.
+
+#### Rollback Plan
+
+- Migration rollback: `drop table if exists burburiuok.media_asset_variants cascade; drop table if exists burburiuok.media_assets cascade; drop type if exists media_asset_type;` followed by re-creating the previous moderation tables if required.
+- Storage rollback: remove `media-admin` bucket (or clear contents) via Supabase dashboard and restore previous bucket policies.
+- Document rollback execution in `docs/session/current_session.md` session log if invoked.
+
 ## 2025-11-03 – Media Moderation _(deferred until contributor uploads return)_
 
 - **Tables**: `media_assets`, `media_reviews`

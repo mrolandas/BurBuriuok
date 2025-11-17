@@ -144,3 +144,34 @@ Quota breaches respond with `{ error: { code: 'RATE_LIMITED', retryAfterSeconds 
 - Add websocket channel for live moderation notifications.
 - Expand audit trail with end-user-visible changelog derived from `content_versions`.
 - Evaluate per-module instructor roles that limit admin endpoints to specific node code prefixes.
+
+## Implementation Checklist (MEDIA-002)
+
+1. **Express Routes**
+   - Add router `backend/src/routes/admin/media.ts` exposing `POST /admin/media`, `GET /admin/media`, `GET /admin/media/:id`, `GET /admin/media/:id/url`, `DELETE /admin/media/:id`.
+   - Wire routes into main server via `/api/v1/admin/media` mount guarded by `requireAdminRole` middleware.
+2. **Payload Handling**
+   - Introduce shared Zod schemas (`shared/validation/mediaAdmin.ts`) for request/response shapes, including size/type validation and optional captions.
+   - Normalize uploads to write `media_assets` row first, then request storage signed upload URL when `source.kind === 'upload'`.
+   - For external links, validate provider whitelist (YouTube/Vimeo) and normalise embed metadata.
+3. **Signed URL helper**
+   - Create utility `generateSignedMediaUrl(assetId, variant?)` that checks ownership (admin) before calling Supabase storage `createSignedUrl` with 1-hour expiry default and override via query `?expiresIn=`.
+4. **Rate Limiting & Quotas**
+   - Extend existing limiter to include `admin_media_uploads` bucket (40 uploads/day per admin) and `admin_media_deletes` (60/day) using token bucket with env-configurable values.
+   - Return `{ error: { code: 'RATE_LIMITED', retryAfterSeconds } }` on quota breach as documented.
+5. **Supabase Interactions**
+   - Use service-role client for Supabase operations; ensure RLS prevents learner access.
+   - On delete, remove storage object when `source.kind === 'upload'` and soft-fail (log warning) if delete response is 404.
+6. **Tests**
+   - Contract tests covering: successful upload metadata creation (external + upload), signed URL retrieval, list filters, delete cascade.
+   - Negative tests: invalid file type, oversized payload, missing concept, rate limit exceeded, learner JWT attempt.
+   - CLI smoke (`npm run test:media002`) hitting local Supabase test instance using fixtures.
+7. **Documentation & Observability**
+   - Update README/admin docs with new endpoints and example curl requests.
+   - Emit structured logs (`logger.info`) for create/delete operations with asset id, concept id, actor, and storage path.
+
+#### Deployment Steps
+
+1. Merge MEDIA-001 schema/bucket changes and deploy backend with new routes simultaneously.
+2. Run automated tests (`npm run test:media002`, `npm run backend:test`) in CI; block deploy on failures.
+3. After deploy, execute manual smoke: create test asset, fetch signed URL, delete asset; confirm entries in Supabase.
