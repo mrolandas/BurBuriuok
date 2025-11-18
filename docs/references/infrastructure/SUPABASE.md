@@ -90,8 +90,8 @@ This document captures how BurKursas uses Supabase during early development (sta
    );
    commit;
    ```
-3. **Register migration** – Apply the MEDIA-001 SQL to hosted project (`npx supabase db push --include-seed`) after confirming bucket exists.
-4. **Verify access** – Using service-role key, insert a test asset metadata row; ensure learner JWTs receive 403 from Supabase REST.
+3. **Register migration** – Apply the MEDIA-001 SQL to hosted project (`npx supabase db push --include-seed`). Completed on 2025-11-18 with `0011_media_admin_mvp.sql`.
+4. **Verify access** – Using service-role key, insert a test asset metadata row; ensure learner JWTs receive 403 from Supabase REST. Automate via `npm run test:media001`.
 5. **Clean test data** – Delete placeholder object/row and note completion in session log.
 
 #### Rollback Steps

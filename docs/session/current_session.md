@@ -25,7 +25,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 
 ## Planning Deliverables
 
-- **MEDIA-001** – Lock storage bucket choice, table schema, seed data expectations, and rollback checklist (see `docs/references/SCHEMA_DECISIONS.md` + `docs/references/infrastructure/SUPABASE.md`).
+- **MEDIA-001** – Lock storage bucket choice, table schema, seed data expectations, and rollback checklist (see `docs/references/SCHEMA_DECISIONS.md` + `docs/references/infrastructure/SUPABASE.md`). Migration `0011_media_admin_mvp.sql` + smoke test `npm run test:media001` now cover implementation.
 - **MEDIA-002** – Document admin upload/read endpoints, payload schemas, and signed URL strategy; learner submission path explicitly deferred (see `docs/references/API_CONTRACTS.md` Implementation Checklist).
 - **MEDIA-005 (Slice)** – Record provider whitelist and sanitised embed rules for admin-curated media that will surface on the learner side.
 - **Deferred Notes** – Capture future scope for MEDIA-003/004 (contributor uploads & moderation) in `docs/references/ISSUE_TRACKER.md` with a clear “post-admin launch” tag.
@@ -57,6 +57,8 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-17: Broke down MEDIA-001→005 deliverables and documented planning artefacts required before implementation starts.
 - 2025-11-17: Rescoped media MVP to admin-only uploads, dropping contributor moderation until after launch.
 - 2025-11-17: Captured MEDIA-001 rollout/rollback procedures and MEDIA-002 implementation checklist to unblock upcoming migrations and backend work.
+- 2025-11-18: Applied migration `0011_media_admin_mvp.sql` to Supabase and added automated smoke `npm run test:media001` to validate admin-only RLS.
+- 2025-11-18: Updated migration guards to suppress redundant drop notices and revalidated (`npx supabase db push --yes`, `npm run test:media001`).
 
 ## Wrap-up Checklist (close when all items are complete)
 
