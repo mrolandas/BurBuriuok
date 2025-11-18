@@ -34,7 +34,7 @@
 			<ul class="search-results__list">
 				{#each data.conceptHits as hit (hit.id)}
 					<li class="search-results__item">
-						<a class="search-results__link" href={resolve(`/concepts/${hit.slug}`)}>
+						<a class="search-results__link" href={resolve('/concepts/[slug]', { slug: hit.slug })}>
 							<span class="search-results__term">{hit.term}</span>
 							{#if hit.sectionTitle}
 								<span class="search-results__section-name">{hit.sectionTitle}</span>
@@ -58,7 +58,7 @@
 			<ul class="search-results__list">
 				{#each data.descriptionHits as hit (hit.id)}
 					<li class="search-results__item">
-						<a class="search-results__link" href={resolve(`/concepts/${hit.slug}`)}>
+						<a class="search-results__link" href={resolve('/concepts/[slug]', { slug: hit.slug })}>
 							<span class="search-results__term">{hit.term}</span>
 							{#if hit.sectionTitle}
 								<span class="search-results__section-name">{hit.sectionTitle}</span>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import ConceptDisplay from '$lib/components/ConceptDisplay.svelte';
+	import ConceptMediaGallery from '$lib/components/ConceptMediaGallery.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
+	import { fetchConceptMedia, type ConceptMediaItem } from '$lib/api/media';
 	import {
 		saveAdminConcept,
 		adminConceptFormSchema,
@@ -20,6 +21,8 @@
 	import { type InlineFieldErrors } from '$lib/admin/inlineAdvancedSummary';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
+	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
+	import type { MediaConceptOption, MediaCreateSuccessDetail } from '$lib/admin/media/types';
 
 	type Breadcrumb = {
 		label: string;
@@ -45,10 +48,20 @@
 		breadcrumbs?: Breadcrumb[];
 		peerItems?: CurriculumItem[];
 		neighbors?: NeighborSet;
+		media?: ConceptMediaItem[];
+		mediaError?: string | null;
 		adminContext?: ConceptAdminEditContext;
 	};
 
-	let { concept, breadcrumbs = [], peerItems = [], neighbors, adminContext }: Props = $props();
+	let {
+		concept,
+		breadcrumbs = [],
+		peerItems = [],
+		neighbors,
+		media = [],
+		mediaError = null,
+		adminContext
+	}: Props = $props();
 	const adminEditEnabled = $derived(Boolean(adminContext?.enabled));
 	const adminSessionError = $derived(adminContext?.session.errorMessage ?? null);
 	const adminHasAccess = $derived(Boolean(adminContext?.session.allowed));
@@ -74,8 +87,23 @@
 	let inlineInitialSnapshot = $state(computeInlineSnapshot(initialInlineForm));
 	let lastConceptKey: string | null = concept ? buildConceptKey(concept) : null;
 	let lastConceptId: string | null = concept?.id ?? null;
+	let mediaItems = $state<ConceptMediaItem[]>(media ?? []);
+	let mediaLoadError = $state<string | null>(mediaError ?? null);
+	let mediaLoading = $state(false);
+	let mediaDrawerOpen = $state(false);
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
+	const mediaConceptOptions = $derived(
+		concept
+			? ([
+				{
+					id: concept.id,
+					slug: concept.slug,
+					label: concept.termLt?.trim()?.length ? concept.termLt : concept.slug
+				}
+			] satisfies MediaConceptOption[])
+			: ([] as MediaConceptOption[])
+	);
 
 	let currentUrl = $state($page.url);
 	const unsubscribePage = page.subscribe(({ url }) => {
@@ -140,6 +168,11 @@
 			inlineSuccessMessage = null;
 		}
 		lastConceptId = concept.id;
+	});
+
+	$effect(() => {
+		mediaItems = media ?? [];
+		mediaLoadError = mediaError ?? null;
 	});
 
 	const getInlineError = (field: string): string | null => {
@@ -223,13 +256,42 @@
 			url.searchParams.delete('admin');
 		}
 
-		const resolvedPath = resolve(url.pathname as string);
-		// eslint-disable-next-line svelte/no-navigation-without-resolve -- need to preserve existing query/hash while using the resolved base path
-		await goto(`${resolvedPath}${url.search}${url.hash}`, {
+		await goto(url, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
 		});
+	}
+
+	async function reloadMedia(): Promise<void> {
+		if (!concept?.slug) {
+			return;
+		}
+		mediaLoading = true;
+		mediaLoadError = null;
+		try {
+			mediaItems = await fetchConceptMedia(concept.slug);
+		} catch (error) {
+			mediaLoadError = error instanceof Error ? error.message : 'Nepavyko įkelti medijos.';
+		} finally {
+			mediaLoading = false;
+		}
+	}
+
+	function openMediaDrawer(): void {
+		if (!adminHasAccess || !concept) {
+			return;
+		}
+		mediaDrawerOpen = true;
+	}
+
+	function closeMediaDrawer(): void {
+		mediaDrawerOpen = false;
+	}
+
+	function handleMediaCreated(_event: CustomEvent<MediaCreateSuccessDetail>): void {
+		mediaDrawerOpen = false;
+		void reloadMedia();
 	}
 
 	let learningChecked = $state(false);
@@ -461,6 +523,33 @@
 			</p>
 		{/if}
 
+		{#if mediaItems.length || mediaLoadError || mediaLoading || adminHasAccess}
+			<section class="concept-detail__media" aria-label="Papildoma medžiaga">
+				<header class="concept-detail__media-header">
+					<h3>Papildoma medžiaga</h3>
+					{#if adminHasAccess}
+						<button
+							type="button"
+							class="concept-detail__media-button"
+							onclick={openMediaDrawer}
+							disabled={mediaLoading}
+						>
+							Pridėti mediją
+						</button>
+					{/if}
+				</header>
+				{#if mediaLoading}
+					<p class="concept-detail__media-status">Kraunama medija...</p>
+				{:else if mediaLoadError}
+					<div class="concept-detail__media-alert concept-detail__media-alert--error">{mediaLoadError}</div>
+				{:else if mediaItems.length === 0}
+					<p class="concept-detail__media-status">Šiai temai dar nepriskirta vizualinės medžiagos.</p>
+				{:else}
+					<ConceptMediaGallery items={mediaItems} />
+				{/if}
+			</section>
+		{/if}
+
 		{@render conceptActions()}
 
 		{#if descriptionEn}
@@ -516,6 +605,16 @@
 	content={conceptContent}
 />
 
+{#if mediaDrawerOpen && concept && adminHasAccess}
+	<AdminMediaCreateDrawer
+		conceptOptions={mediaConceptOptions}
+		defaultConceptId={concept.id}
+		lockedConceptId={true}
+		on:close={closeMediaDrawer}
+		on:created={handleMediaCreated}
+	/>
+{/if}
+
 <style>
 	.concept-detail__actions-panel {
 		display: flex;
@@ -548,6 +647,70 @@
 		margin: 0;
 		font-size: 0.95rem;
 		color: var(--color-text-subtle);
+	}
+
+	.concept-detail__media {
+		display: grid;
+		gap: 0.9rem;
+		margin: 1.1rem 0;
+		padding: 1rem 1.1rem 1.2rem;
+		border-radius: 1rem;
+		border: 1px solid var(--color-border-light);
+		background: var(--color-panel);
+	}
+
+	.concept-detail__media-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.8rem;
+	}
+
+	.concept-detail__media-header h3 {
+		margin: 0;
+	}
+
+	.concept-detail__media-button {
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-soft);
+		color: var(--color-text);
+		border-radius: 999px;
+		padding: 0.4rem 1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.concept-detail__media-button:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.concept-detail__media-button:hover:not(:disabled),
+	.concept-detail__media-button:focus-visible:not(:disabled) {
+		background: var(--color-panel-secondary);
+		border-color: var(--color-border-strong);
+	}
+
+	.concept-detail__media-status {
+		margin: 0;
+		color: var(--color-text-soft);
+		font-size: 0.95rem;
+	}
+
+	.concept-detail__media-alert {
+		margin: 0;
+		padding: 0.75rem 0.9rem;
+		border-radius: 0.85rem;
+		font-size: 0.9rem;
+	}
+
+	.concept-detail__media-alert--error {
+		background: rgba(239, 68, 68, 0.12);
+		border: 1px solid rgba(239, 68, 68, 0.4);
+		color: rgb(185, 28, 28);
 	}
 
 	.concept-detail__admin-meta {

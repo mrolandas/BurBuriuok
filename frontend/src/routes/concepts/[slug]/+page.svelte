@@ -21,6 +21,8 @@
 			breadcrumbs={data.breadcrumbs}
 			peerItems={data.peerItems}
 			neighbors={data.neighbors}
+			media={data.media}
+			mediaError={data.mediaError}
 			adminContext={data.adminContext}
 		/>
 	{:else}

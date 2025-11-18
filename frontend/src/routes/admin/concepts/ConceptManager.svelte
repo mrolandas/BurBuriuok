@@ -879,7 +879,9 @@
 	}
 
 	function mediaWorkspaceLink(asset: AdminMediaAsset): string {
-		return resolve(`/admin/media?conceptId=${encodeURIComponent(asset.conceptId)}`);
+		const baseHref = resolve('/admin/media');
+		const search = new URLSearchParams({ conceptId: asset.conceptId }).toString();
+		return `${baseHref}?${search}`;
 	}
 
 	async function handleRollback(version: HistoryAction): Promise<void> {
@@ -1343,7 +1345,7 @@
 								<td>
 									<div class="concept-name">
 										<a
-											href={resolve('/concepts/[slug]?admin=1', { slug: concept.slug })}
+											href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
 											target="_blank"
 											rel="noreferrer"
 											class="concept-name__primary"

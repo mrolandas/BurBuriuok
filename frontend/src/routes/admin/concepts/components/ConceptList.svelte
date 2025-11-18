@@ -17,7 +17,10 @@
 	export let deleteConfirmSlug: string | null = null;
 	export let deletingSlug: string | null = null;
 	export let deleteError: string | null = null;
-	export let statusLabels: Record<AdminConceptStatus, string> = {};
+	export let statusLabels: Record<AdminConceptStatus, string> = {
+		draft: 'Juodraštis',
+		published: 'Publikuota'
+	};
 	export let formatTimestamp: (value: string | null | undefined) => string = () => '–';
 
 	const dispatch = createEventDispatcher<Events>();
@@ -74,7 +77,7 @@
 						<td>
 							<div class="concept-name">
 								<a
-									href={resolve('/concepts/[slug]?admin=1', { slug: concept.slug })}
+									href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
 									target="_blank"
 									rel="noreferrer"
 									class="concept-name__primary"

@@ -59,6 +59,19 @@ export interface ConceptRow {
   updated_at: string;
 }
 
+export interface MediaAssetRow {
+  id: string;
+  concept_id: string;
+  asset_type: "image" | "video";
+  storage_path: string;
+  external_url: string | null;
+  title: string | null;
+  caption_lt: string | null;
+  caption_en: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
 export interface Concept {
   id: string;
   sectionCode: string;

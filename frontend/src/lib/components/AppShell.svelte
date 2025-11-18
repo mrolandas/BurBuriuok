@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { base, resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
@@ -29,7 +29,7 @@
 	let menuOpen = $state(false);
 	let activePath = $state($page.url.pathname);
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
-	let searchInput: HTMLInputElement | null = null;
+	let searchInput = $state<HTMLInputElement | null>(null);
 	let adminModeEnabled = $state(adminMode.value);
 	let impersonatingAdmin = $state($page.url.searchParams.get('impersonate') === 'admin');
 	let adminModeUnsubscribe: (() => void) | null = null;
@@ -43,6 +43,13 @@
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
+
+	const withBase = (path: string): string => {
+		if (!base || base === '/') {
+			return path;
+		}
+		return `${base}${path}`;
+	};
 
 	const themeOptions = [
 		{
@@ -200,9 +207,7 @@
 			return;
 		}
 
-		const resolvedPath = resolve(url.pathname as string);
-		// eslint-disable-next-line svelte/no-navigation-without-resolve -- need to preserve existing query/hash while using the resolved base path
-		await goto(`${resolvedPath}${url.search}${url.hash}`, {
+		await goto(url, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -304,7 +309,7 @@
 						aria-label="Naudotojo parinktys"
 					>
 						<a
-							href={resolve('/login')}
+							href={withBase('/login')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -312,7 +317,7 @@
 							Prisijungti
 						</a>
 						<a
-							href={resolve('/register')}
+							href={withBase('/register')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -382,9 +387,11 @@
 
 				<li class="app-shell__menu-admin">
 					<a
-						href={resolve(
-							adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
-						)}
+						href={
+							withBase(
+								adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
+							)
+						}
 						target="_blank"
 						rel="noopener noreferrer"
 						onclick={closeMenus}

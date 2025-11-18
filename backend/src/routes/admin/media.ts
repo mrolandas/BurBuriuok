@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import { randomUUID } from "node:crypto";
 import { extname } from "node:path";
 import { URL } from "node:url";
@@ -14,10 +14,16 @@ import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { HttpError } from "../../utils/httpError.ts";
 import { createRateLimiter } from "../../middleware/rateLimiter.ts";
-
-const MEDIA_BUCKET = "media-admin";
-const UPLOAD_URL_EXPIRY_SECONDS = 300;
-const SIGNED_URL_DEFAULT_EXPIRY = 3600;
+import {
+  MEDIA_BUCKET,
+  SIGNED_URL_DEFAULT_EXPIRY,
+  UPLOAD_URL_EXPIRY_SECONDS,
+  type MediaAssetRow,
+  mapMediaAssetForResponse,
+  isExternalStoragePath,
+  buildExternalStoragePath,
+  extractAdminIdentifier,
+} from "../media/shared.ts";
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
 
 const DAILY_MS = 24 * 60 * 60 * 1000;
@@ -45,21 +51,6 @@ const ALLOWED_EXTERNAL_HOSTS = new Set([
   "vimeo.com",
   "player.vimeo.com",
 ]);
-
-type MediaAssetRow = {
-  id: string;
-  concept_id: string;
-  asset_type: "image" | "video";
-  storage_path: string;
-  external_url: string | null;
-  title: string | null;
-  caption_lt: string | null;
-  caption_en: string | null;
-  created_by: string | null;
-  created_at: string;
-};
-
-type MediaAssetResponse = ReturnType<typeof mapMediaAssetForResponse>;
 
 const router = Router();
 
@@ -638,14 +629,6 @@ function buildUploadStoragePath(conceptId: string, assetId: string, extension: s
   return `concept/${conceptId}/${assetId}${extension}`;
 }
 
-function buildExternalStoragePath(assetId: string): string {
-  return `external://${assetId}`;
-}
-
-function isExternalStoragePath(storagePath: string): boolean {
-  return storagePath.startsWith("external://");
-}
-
 async function createSignedUploadUrl(
   supabase: any,
   options: { storagePath: string; contentType: string }
@@ -689,32 +672,6 @@ function validateExternalUrl(rawUrl: string): void {
   if (!ALLOWED_EXTERNAL_HOSTS.has(parsed.hostname)) {
     throw new HttpError(422, "Leidžiami tik patvirtinti leidėjai (YouTube, Vimeo).", "UNSUPPORTED_PROVIDER");
   }
-}
-
-function mapMediaAssetForResponse(row: MediaAssetRow) {
-  return {
-    id: row.id,
-    conceptId: row.concept_id,
-    assetType: row.asset_type,
-    storagePath: row.storage_path,
-    externalUrl: row.external_url,
-    sourceKind: row.external_url ? "external" : "upload",
-    title: row.title,
-    captionLt: row.caption_lt,
-    captionEn: row.caption_en,
-    createdBy: row.created_by,
-    createdAt: row.created_at,
-  };
-}
-
-function extractAdminIdentifier(req: Request): string | null {
-  if (req.authUser?.id) {
-    return req.authUser.id;
-  }
-  if (req.authUser?.email) {
-    return req.authUser.email;
-  }
-  return req.ip ?? null;
 }
 
 function getPositiveIntFromEnv(name: string, fallback: number): number {

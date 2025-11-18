@@ -104,9 +104,9 @@ export type AdminMediaListMeta = {
 	nextCursor: string | null;
 	fetchedAt: string | null;
 };
-export type AdminMediaUploadInstruction = z.infer<
-	typeof mediaCreateResponseSchema
->['data']['upload'];
+export type AdminMediaUploadInstruction = NonNullable<
+	z.infer<typeof mediaCreateResponseSchema>['data']['upload']
+>;
 export type AdminMediaSignedUrl = z.infer<typeof signedUrlResponseSchema>['data'];
 export type AdminMediaSourceKind = z.infer<typeof adminMediaSourceKindSchema>;
 export type AdminMediaAssetType = z.infer<typeof adminMediaAssetTypeSchema>;

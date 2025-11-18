@@ -328,6 +328,11 @@
 		}
 	}
 
+function handleFormSubmit(event: SubmitEvent): void {
+	event.preventDefault();
+	void handleSubmit();
+}
+
 	function buttonDisabled(): boolean {
 		return uploadPhase !== 'idle';
 	}
@@ -346,8 +351,13 @@
 	$: lockedConceptLabel = lockedConceptId && conceptId ? findConceptLabel(conceptId) : null;
 </script>
 
-<div class="media-create-backdrop" on:click={closeDrawer}></div>
-<aside class="media-create-drawer" role="dialog" aria-modal="true" aria-labelledby="media-create-title">
+<button
+	type="button"
+	class="media-create-backdrop"
+	onclick={closeDrawer}
+	aria-label="Uždaryti medijos kūrimo langą"
+></button>
+<div class="media-create-drawer" role="dialog" aria-modal="true" aria-labelledby="media-create-title">
 	<header class="media-create-drawer__header">
 		<div>
 			<h2 id="media-create-title">Pridėti naują medijos įrašą</h2>
@@ -356,7 +366,7 @@
 				todėl failą įkelkite iš karto.
 			</p>
 		</div>
-		<button type="button" class="plain" on:click={closeDrawer}>Uždaryti</button>
+		<button type="button" class="plain" onclick={closeDrawer}>Uždaryti</button>
 	</header>
 
 	<div class="media-create-drawer__content">
@@ -368,7 +378,7 @@
 			<div class="alert alert--error" role="alert">{formError}</div>
 		{/if}
 
-		<form class="media-create-form" on:submit|preventDefault={handleSubmit}>
+		<form class="media-create-form" onsubmit={handleFormSubmit}>
 			<section class="media-create-section">
 				<h3>Susietas konceptas</h3>
 				{#if lockedConceptLabel}
@@ -439,13 +449,13 @@
 				{#if sourceKind === 'upload'}
 					<label>
 						<span>Failas *</span>
-						<input
-							type="file"
-							accept={fileAccept}
-							required
-							on:change={handleSelectFile}
-							bind:this={fileInput}
-						/>
+							<input
+								type="file"
+								accept={fileAccept}
+								required
+								onchange={handleSelectFile}
+								bind:this={fileInput}
+							/>
 					</label>
 					{#if fieldErrors.file}
 						<p class="field-error">{fieldErrors.file}</p>
@@ -469,24 +479,33 @@
 
 			<section class="media-create-section">
 				<h3>Meta duomenys</h3>
-				<label>
-					<span>Pavadinimas</span>
+				       <label>
+					       <span class="label-heading">
+						       Pavadinimas
+						       <em class="label-optional">Neprivaloma</em>
+					       </span>
 					<input bind:value={title} maxlength="160" />
 				</label>
 				{#if fieldErrors.title}
 					<p class="field-error">{fieldErrors.title}</p>
 				{/if}
 
-				<label>
-					<span>Aprašymas (LT)</span>
+				       <label>
+					       <span class="label-heading">
+						       Aprašymas (LT)
+						       <em class="label-optional">Neprivaloma</em>
+					       </span>
 					<textarea bind:value={captionLt} rows="3" maxlength="300"></textarea>
 				</label>
 				{#if fieldErrors.captionLt}
 					<p class="field-error">{fieldErrors.captionLt}</p>
 				{/if}
 
-				<label>
-					<span>Aprašymas (EN)</span>
+				       <label>
+					       <span class="label-heading">
+						       Aprašymas (EN)
+						       <em class="label-optional">Neprivaloma</em>
+					       </span>
 					<textarea bind:value={captionEn} rows="3" maxlength="300"></textarea>
 				</label>
 				{#if fieldErrors.captionEn}
@@ -495,7 +514,7 @@
 			</section>
 
 			<footer class="media-create-footer">
-				<button type="button" class="secondary" on:click={closeDrawer} disabled={buttonDisabled()}>
+				<button type="button" class="secondary" onclick={closeDrawer} disabled={buttonDisabled()}>
 					Atšaukti
 				</button>
 				<button type="submit" class="primary" disabled={buttonDisabled()}>
@@ -510,10 +529,13 @@
 			</footer>
 		</form>
 	</div>
-</aside>
+</div>
 
 <style>
 	.media-create-backdrop {
+		border: none;
+		padding: 0;
+		margin: 0;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -521,6 +543,7 @@
 		height: 100vh;
 		background: rgba(15, 23, 42, 0.35);
 		z-index: 95;
+		cursor: pointer;
 	}
 
 	.media-create-drawer {
@@ -613,6 +636,19 @@
 		display: grid;
 		gap: 0.35rem;
 	}
+
+	       .label-heading {
+		       display: inline-flex;
+		       gap: 0.4rem;
+		       align-items: baseline;
+	       }
+
+	       .label-optional {
+		       font-style: normal;
+		       font-weight: 500;
+		       font-size: 0.78rem;
+		       color: var(--color-text-soft);
+	       }
 
 	.media-create-section select,
 	.media-create-section input,

@@ -2,6 +2,7 @@ import type { ConceptDetail } from '$lib/api/concepts';
 import { fetchConceptBySlug } from '$lib/api/concepts';
 import type { CurriculumItem } from '$lib/api/curriculum';
 import { fetchNodeItems } from '$lib/api/curriculum';
+import { fetchConceptMedia, type ConceptMediaItem } from '$lib/api/media';
 import { type ConceptAdminEditContext, resolveConceptAdminContext } from '$lib/admin/session';
 
 export type ConceptBreadcrumb = {
@@ -26,6 +27,8 @@ export type ConceptPageData = {
 	peerItems: CurriculumItem[];
 	breadcrumbs: ConceptBreadcrumb[];
 	neighbors: ConceptNeighbors;
+	media: ConceptMediaItem[];
+	mediaError?: string | null;
 	notFound?: boolean;
 	loadError?: string;
 	adminContext: ConceptAdminEditContext;
@@ -34,7 +37,8 @@ export type ConceptPageData = {
 const defaultDeps = {
 	fetchConcept: fetchConceptBySlug,
 	fetchItems: fetchNodeItems,
-	resolveAdminContext: resolveConceptAdminContext
+	resolveAdminContext: resolveConceptAdminContext,
+	fetchConceptMedia: fetchConceptMedia
 };
 
 export type ConceptDetailLoadDeps = typeof defaultDeps;
@@ -42,20 +46,23 @@ export type ConceptDetailLoadDeps = typeof defaultDeps;
 export type ConceptDetailLoadArgs = {
 	slug: string;
 	url: URL;
+	fetcher?: typeof fetch;
 	deps?: Partial<ConceptDetailLoadDeps>;
 };
 
 export async function loadConceptDetailData({
 	slug,
 	url,
+	fetcher,
 	deps
 }: ConceptDetailLoadArgs): Promise<ConceptPageData> {
-	const { fetchConcept, fetchItems, resolveAdminContext } = {
+	const { fetchConcept, fetchItems, resolveAdminContext, fetchConceptMedia: fetchConceptMediaFn } = {
 		...defaultDeps,
 		...deps
 	};
 
 	const adminContextPromise = resolveAdminContext(url);
+	const fetchMedia = fetchConceptMediaFn ?? fetchConceptMedia;
 
 	try {
 		const concept = await fetchConcept(slug);
@@ -67,6 +74,7 @@ export async function loadConceptDetailData({
 				peerItems: [],
 				breadcrumbs: [],
 				neighbors: {},
+				media: [],
 				notFound: true,
 				adminContext
 			};
@@ -132,12 +140,27 @@ export async function loadConceptDetailData({
 		}
 
 		const adminContext = await adminContextPromise;
+		let media: ConceptMediaItem[] = [];
+		let mediaError: string | null = null;
+
+		if (fetcher) {
+			try {
+				media = await fetchMedia(concept.slug, fetcher);
+			} catch (mediaLoadError) {
+				mediaError =
+					mediaLoadError instanceof Error
+						? mediaLoadError.message
+						: 'Nepavyko įkelti medijos.';
+			}
+		}
 
 		return {
 			concept,
 			peerItems,
 			breadcrumbs,
 			neighbors,
+			media,
+			mediaError,
 			adminContext
 		};
 	} catch (error) {
@@ -148,6 +171,7 @@ export async function loadConceptDetailData({
 			peerItems: [],
 			breadcrumbs: [],
 			neighbors: {},
+			media: [],
 			loadError: error instanceof Error ? error.message : 'Nepavyko įkelti temos duomenų.',
 			adminContext
 		};

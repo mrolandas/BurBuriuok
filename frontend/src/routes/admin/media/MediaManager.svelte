@@ -192,7 +192,9 @@
 		if (!concept) {
 			return null;
 		}
-		return resolve(`/admin/concepts?slug=${encodeURIComponent(concept.slug)}`);
+		const baseHref = resolve('/admin/concepts');
+		const search = new URLSearchParams({ slug: concept.slug }).toString();
+		return `${baseHref}?${search}`;
 	}
 
 	async function loadConceptOptions(): Promise<void> {
@@ -456,7 +458,7 @@
 				susieti su bent viena sąvoka.
 			</p>
 		</div>
-		<button class="primary" type="button" on:click={() => openCreate()}>
+		<button class="primary" type="button" onclick={() => openCreate()}>
 			Pridėti failą / išorinį šaltinį
 		</button>
 	</header>
@@ -475,7 +477,7 @@
 		<div class="media-toolbar__filters">
 			<label>
 				<span>Sąvoka</span>
-				<select bind:value={filterConceptId} on:change={handleFilterChange}>
+				<select bind:value={filterConceptId} onchange={handleFilterChange}>
 					<option value="all">Visos sąvokos</option>
 					{#each conceptOptions as option}
 						<option value={option.id}>{option.termLt}</option>
@@ -484,7 +486,7 @@
 			</label>
 			<label>
 				<span>Tipas</span>
-				<select bind:value={filterAssetType} on:change={handleFilterChange}>
+				<select bind:value={filterAssetType} onchange={handleFilterChange}>
 					<option value="all">Visi tipai</option>
 					<option value="image">{assetTypeLabels.image}</option>
 					<option value="video">{assetTypeLabels.video}</option>
@@ -492,7 +494,7 @@
 			</label>
 			<label>
 				<span>Šaltinis</span>
-				<select bind:value={filterSourceKind} on:change={handleFilterChange}>
+				<select bind:value={filterSourceKind} onchange={handleFilterChange}>
 					<option value="all">Visi šaltiniai</option>
 					<option value="upload">{sourceKindLabels.upload}</option>
 					<option value="external">{sourceKindLabels.external}</option>
@@ -506,9 +508,9 @@
 				type="search"
 				placeholder="Ieškoti pagal pavadinimą ar aprašą"
 				value={searchInput}
-				on:input={(event) => scheduleSearch(event.currentTarget.value)}
+				oninput={(event) => scheduleSearch(event.currentTarget.value)}
 			/>
-			<button type="button" class="secondary" on:click={resetFilters}>Atstatyti filtrus</button>
+			<button type="button" class="secondary" onclick={resetFilters}>Atstatyti filtrus</button>
 		</div>
 	</div>
 
@@ -518,7 +520,7 @@
 		<p class="muted">Kraunama medija...</p>
 	{:else if listState.items.length === 0}
 		<p class="muted">Pagal pasirinktus filtrus medijos įrašų nėra.</p>
-		<button class="secondary" type="button" on:click={() => openCreate()}>
+		<button class="secondary" type="button" onclick={() => openCreate()}>
 			Pridėti naują mediją
 		</button>
 	{:else}
@@ -538,8 +540,8 @@
 						<tr
 							tabindex="0"
 							class="media-table__row"
-							on:click={() => void openDetail(item)}
-							on:keydown={(event) => handleRowKeydown(event, item)}
+							onclick={() => void openDetail(item)}
+							onkeydown={(event) => handleRowKeydown(event, item)}
 						>
 							<th scope="row">
 								<div class="media-table__title">{assetTitle(item)}</div>
@@ -553,7 +555,7 @@
 								{#if conceptLink(item.conceptId)}
 									<a
 										href={conceptLink(item.conceptId) ?? '#'}
-										on:click|stopPropagation
+										onclick={(event) => event.stopPropagation()}
 									>
 										{conceptLabel(item.conceptId)}
 									</a>
@@ -574,7 +576,7 @@
 			<button
 				class="secondary media-shell__load-more"
 				type="button"
-				on:click={() => void loadMedia({ append: true })}
+				onclick={() => void loadMedia({ append: true })}
 				disabled={loadMoreLoading}
 			>
 				{#if loadMoreLoading}
@@ -598,11 +600,16 @@
 {/if}
 
 {#if selectedAsset}
-	<div class="drawer-backdrop" on:click={closeDetail}></div>
-	<aside class="drawer" aria-labelledby="media-detail-title">
+	<button
+		type="button"
+		class="drawer-backdrop"
+		onclick={closeDetail}
+		aria-label="Uždaryti medijos detalių langą"
+	></button>
+	<div class="drawer" role="dialog" aria-modal="true" aria-labelledby="media-detail-title">
 		<header class="drawer__header">
 			<h2 id="media-detail-title">Medijos įrašo detalės</h2>
-			<button class="plain" type="button" on:click={closeDetail}>Uždaryti</button>
+			<button class="plain" type="button" onclick={closeDetail}>Uždaryti</button>
 		</header>
 
 		{#if detailLoading}
@@ -664,7 +671,7 @@
 						<button
 							class="secondary"
 							type="button"
-							on:click={handleFetchSignedUrl}
+							onclick={handleFetchSignedUrl}
 							disabled={signedUrlLoading}
 						>
 							{#if signedUrlLoading}
@@ -677,7 +684,7 @@
 							<button
 								class="plain"
 								type="button"
-								on:click={() => void copyToClipboard(detailAsset?.storagePath ?? '')}
+								onclick={() => void copyToClipboard(detailAsset?.storagePath ?? '')}
 							>
 								Kopijuoti kelio reikšmę
 							</button>
@@ -699,7 +706,12 @@
 							<button
 								class="plain"
 								type="button"
-								on:click={() => void copyToClipboard(signedUrl.url)}
+								onclick={() => {
+									if (!signedUrl) {
+										return;
+									}
+									void copyToClipboard(signedUrl.url);
+								}}
 							>
 								Kopijuoti URL
 							</button>
@@ -720,7 +732,7 @@
 				<button
 					class="danger"
 					type="button"
-					on:click={() => void handleDelete()}
+					onclick={() => void handleDelete()}
 					disabled={deleteBusy}
 				>
 					{#if deleteBusy}
@@ -738,7 +750,7 @@
 				{/if}
 			</section>
 		{/if}
-	</aside>
+	</div>
 {/if}
 
 <style>
@@ -846,6 +858,8 @@
 	}
 
 	.drawer-backdrop {
+		border: none;
+		padding: 0;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -853,6 +867,7 @@
 		height: 100vh;
 		background: rgba(15, 23, 42, 0.35);
 		z-index: 80;
+		cursor: pointer;
 	}
 
 	.drawer {

@@ -11,6 +11,6 @@ export type { ConceptBreadcrumb, ConceptNeighbor, ConceptNeighbors, ConceptPageD
 
 export const ssr = false;
 
-export const load = (async ({ params, url }) => {
-	return loadConceptDetailData({ slug: params.slug, url });
+export const load = (async ({ params, url, fetch }) => {
+	return loadConceptDetailData({ slug: params.slug, url, fetcher: fetch });
 }) satisfies PageLoad;

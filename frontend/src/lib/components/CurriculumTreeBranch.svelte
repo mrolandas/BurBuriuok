@@ -362,7 +362,7 @@
 											{#if item.conceptSlug}
 												<a
 													class="tree-node__item-link"
-													href={resolve(`/concepts/${encodeURIComponent(item.conceptSlug)}`)}
+													href={resolve('/concepts/[slug]', { slug: item.conceptSlug })}
 												>
 													<span class="tree-node__item-ordinal">{item.ordinal}.</span>
 													<span class="tree-node__item-label">{displayLabel}</span>
