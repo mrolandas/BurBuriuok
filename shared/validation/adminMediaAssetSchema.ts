@@ -24,6 +24,20 @@ function optionalTrimmed(max?: number) {
     });
 }
 
+function requiredTrimmed(max?: number) {
+  let schema = z.string().trim().min(1, {
+    message: "Šis laukas yra privalomas.",
+  });
+
+  if (typeof max === "number") {
+    schema = schema.max(max, {
+      message: "Tekstas negali būti ilgesnis nei " + String(max) + " simbolių.",
+    });
+  }
+
+  return schema.transform((value) => value.trim());
+}
+
 const adminMediaUploadSourceSchema = z.object({
   kind: z.literal("upload"),
   fileName: z
@@ -56,7 +70,7 @@ export const adminMediaCreateSchema = z
   .object({
     conceptId: z.string().uuid({ message: "Koncepto ID turi būti UUID." }),
     assetType: adminMediaAssetTypeSchema,
-    title: optionalTrimmed(160),
+    title: requiredTrimmed(160),
     captionLt: optionalTrimmed(300),
     captionEn: optionalTrimmed(300),
     source: z.discriminatedUnion("kind", [

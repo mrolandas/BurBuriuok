@@ -4,7 +4,6 @@
 	import type {
 		ConceptEditorMode,
 		ConceptFormState,
-		FieldErrors,
 		HistoryAction,
 		SectionSelectOption
 	} from '../types';
@@ -13,7 +12,6 @@
 	export let editorMode: ConceptEditorMode = 'create';
 	export let activeConcept: AdminConceptResource | null = null;
 	export let formState: ConceptFormState;
-	export let formErrors: FieldErrors = {};
 	export let saveError: string | null = null;
 	export let saveErrorHint: string | null = null;
 	export let draftDisabled = false;

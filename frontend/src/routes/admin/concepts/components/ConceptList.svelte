@@ -11,7 +11,6 @@
 		clearFilters: void;
 	};
 
-	export let concepts: AdminConceptResource[] = [];
 	export let filteredConcepts: AdminConceptResource[] = [];
 	export let isFiltered = false;
 	export let deleteConfirmSlug: string | null = null;

@@ -173,6 +173,11 @@
 			}
 		}
 
+		const trimmedTitle = title.trim();
+		if (!trimmedTitle.length) {
+			next.title = 'Įveskite medijos pavadinimą.';
+		}
+
 		fieldErrors = next;
 		return Object.keys(next).length === 0;
 	}
@@ -234,7 +239,11 @@
 		const payload: AdminMediaCreateInput = {
 			conceptId,
 			assetType,
-			title: trimmedOrNull(title),
+			title: (() => {
+				const trimmed = title.trim();
+				title = trimmed;
+				return trimmed;
+			})(),
 			captionLt: trimmedOrNull(captionLt),
 			captionEn: trimmedOrNull(captionEn),
 			source:
@@ -404,41 +413,43 @@ function handleFormSubmit(event: SubmitEvent): void {
 
 			<section class="media-create-section">
 				<h3>Medijos tipas ir šaltinis</h3>
-				<fieldset class="media-create-fieldset">
-					<legend>Tipas *</legend>
-					<div class="media-create-options">
-						{#each assetTypeOptions as option}
-							<label>
-								<input
-									type="radio"
-									name="asset-type"
-									value={option}
-									bind:group={assetType}
-									disabled={buttonDisabled()}
-								/>
-								<span>{assetTypeLabels[option]}</span>
-							</label>
-						{/each}
-					</div>
-				</fieldset>
+				<div class="media-create-duo">
+					<fieldset class="media-create-fieldset">
+						<legend>Tipas *</legend>
+						<div class="media-create-options">
+							{#each assetTypeOptions as option}
+								<label>
+									<input
+										type="radio"
+										name="asset-type"
+										value={option}
+										bind:group={assetType}
+										disabled={buttonDisabled()}
+									/>
+									<span>{assetTypeLabels[option]}</span>
+								</label>
+							{/each}
+						</div>
+					</fieldset>
 
-				<fieldset class="media-create-fieldset">
-					<legend>Šaltinis *</legend>
-					<div class="media-create-options">
-						{#each sourceKindOptions as option}
-							<label>
-								<input
-									type="radio"
-									name="source-kind"
-									value={option}
-									bind:group={sourceKind}
-									disabled={buttonDisabled()}
-								/>
-								<span>{option === 'upload' ? 'Įkelti failą' : 'Išorinis šaltinis'}</span>
-							</label>
-						{/each}
-					</div>
-				</fieldset>
+					<fieldset class="media-create-fieldset">
+						<legend>Šaltinis *</legend>
+						<div class="media-create-options">
+							{#each sourceKindOptions as option}
+								<label>
+									<input
+										type="radio"
+										name="source-kind"
+										value={option}
+										bind:group={sourceKind}
+										disabled={buttonDisabled()}
+									/>
+									<span>{option === 'upload' ? 'Įkelti failą' : 'Išorinis šaltinis'}</span>
+								</label>
+							{/each}
+						</div>
+					</fieldset>
+				</div>
 				{#if fieldErrors.sourceKind}
 					<p class="field-error">{fieldErrors.sourceKind}</p>
 				{/if}
@@ -479,35 +490,32 @@ function handleFormSubmit(event: SubmitEvent): void {
 
 			<section class="media-create-section">
 				<h3>Meta duomenys</h3>
-				       <label>
-					       <span class="label-heading">
-						       Pavadinimas
-						       <em class="label-optional">Neprivaloma</em>
-					       </span>
-					<input bind:value={title} maxlength="160" />
-				</label>
+				<div class="media-create-meta-grid">
+					<label>
+						<span>Pavadinimas *</span>
+						<input bind:value={title} maxlength="160" required />
+					</label>
+					<label>
+						<span class="label-heading">
+							Aprašymas (LT)
+							<em class="label-optional">Neprivaloma</em>
+						</span>
+						<textarea bind:value={captionLt} rows="2" maxlength="300"></textarea>
+					</label>
+					<label>
+						<span class="label-heading">
+							Aprašymas (EN)
+							<em class="label-optional">Neprivaloma</em>
+						</span>
+						<textarea bind:value={captionEn} rows="2" maxlength="300"></textarea>
+					</label>
+				</div>
 				{#if fieldErrors.title}
 					<p class="field-error">{fieldErrors.title}</p>
 				{/if}
-
-				       <label>
-					       <span class="label-heading">
-						       Aprašymas (LT)
-						       <em class="label-optional">Neprivaloma</em>
-					       </span>
-					<textarea bind:value={captionLt} rows="3" maxlength="300"></textarea>
-				</label>
 				{#if fieldErrors.captionLt}
 					<p class="field-error">{fieldErrors.captionLt}</p>
 				{/if}
-
-				       <label>
-					       <span class="label-heading">
-						       Aprašymas (EN)
-						       <em class="label-optional">Neprivaloma</em>
-					       </span>
-					<textarea bind:value={captionEn} rows="3" maxlength="300"></textarea>
-				</label>
 				{#if fieldErrors.captionEn}
 					<p class="field-error">{fieldErrors.captionEn}</p>
 				{/if}
@@ -564,8 +572,8 @@ function handleFormSubmit(event: SubmitEvent): void {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 1rem;
-		padding: 1.4rem 1.6rem 1rem;
+		gap: 0.9rem;
+		padding: 1.1rem 1.4rem 0.85rem;
 		border-bottom: 1px solid var(--color-border);
 	}
 
@@ -583,19 +591,19 @@ function handleFormSubmit(event: SubmitEvent): void {
 
 	.media-create-drawer__content {
 		overflow-y: auto;
-		padding: 1.2rem 1.6rem 1.6rem;
+		padding: 1rem 1.4rem 1.4rem;
 		display: grid;
-		gap: 1rem;
+		gap: 0.9rem;
 	}
 
 	.media-create-form {
 		display: grid;
-		gap: 1.4rem;
+		gap: 1rem;
 	}
 
 	.media-create-section {
 		display: grid;
-		gap: 0.8rem;
+		gap: 0.6rem;
 	}
 
 	.media-create-section h3 {
@@ -616,10 +624,16 @@ function handleFormSubmit(event: SubmitEvent): void {
 		font-size: 0.9rem;
 	}
 
+	.media-create-duo {
+		display: grid;
+		gap: 0.9rem;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	}
+
 	.media-create-options {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
+		gap: 0.6rem;
 	}
 
 	.media-create-options label {
@@ -634,21 +648,27 @@ function handleFormSubmit(event: SubmitEvent): void {
 
 	.media-create-section label {
 		display: grid;
-		gap: 0.35rem;
+		gap: 0.3rem;
 	}
 
-	       .label-heading {
-		       display: inline-flex;
-		       gap: 0.4rem;
-		       align-items: baseline;
-	       }
+	.media-create-meta-grid {
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
 
-	       .label-optional {
-		       font-style: normal;
-		       font-weight: 500;
-		       font-size: 0.78rem;
-		       color: var(--color-text-soft);
-	       }
+	.label-heading {
+		display: inline-flex;
+		gap: 0.35rem;
+		align-items: baseline;
+	}
+
+	.label-optional {
+		font-style: normal;
+		font-weight: 500;
+		font-size: 0.78rem;
+		color: var(--color-text-soft);
+	}
 
 	.media-create-section select,
 	.media-create-section input,
@@ -661,7 +681,7 @@ function handleFormSubmit(event: SubmitEvent): void {
 	}
 
 	.media-create-section textarea {
-		min-height: 5rem;
+		min-height: 4.1rem;
 	}
 
 	.media-create-section input[type='file'] {
@@ -671,8 +691,8 @@ function handleFormSubmit(event: SubmitEvent): void {
 	.media-create-footer {
 		display: flex;
 		justify-content: flex-end;
-		gap: 0.75rem;
-		padding-top: 0.5rem;
+		gap: 0.65rem;
+		padding-top: 0.4rem;
 	}
 
 	.primary,

@@ -16,18 +16,21 @@
 	let currentCaption = $state('');
 	let currentCaptionTrack = $state<string | null>(null);
 	let currentEmbedUrl = $state<string | null>(null);
+	let currentDisplayTitle = $state('');
 
 	$effect(() => {
 		if (!galleryItems.length) {
 			activeIndex = 0;
 			modalOpen = false;
 			currentItem = null;
+			currentDisplayTitle = '';
 			return;
 		}
 		if (activeIndex >= galleryItems.length) {
 			activeIndex = galleryItems.length - 1;
 		}
 		currentItem = galleryItems[activeIndex] ?? null;
+		currentDisplayTitle = currentItem ? displayTitle(currentItem) : '';
 	});
 
 	$effect(() => {
@@ -98,6 +101,12 @@
 		modalOpen = false;
 	}
 
+	function handleOverlayClick(event: MouseEvent): void {
+		if (event.target === event.currentTarget) {
+			closeModal();
+		}
+	}
+
 	function showPrevious(): void {
 		if (!galleryItems.length) {
 			return;
@@ -128,6 +137,47 @@
 		const normalized = caption.replace(/\s+/g, ' ');
 		const vtt = `WEBVTT\n\n00:00.000 --> 00:10.000\n${normalized}`;
 		return `data:text/vtt,${encodeURIComponent(vtt)}`;
+	}
+
+	function displayTitle(item: ConceptMediaItem): string {
+		const trimmed = item.title?.trim();
+		if (trimmed && trimmed.length) {
+			return trimmed;
+		}
+		return item.assetType === 'video' ? 'Vaizdo įrašas' : 'Papildoma medžiaga';
+	}
+
+	function resolveThumbnailUrl(item: ConceptMediaItem): string | null {
+		if (!item.url) {
+			return null;
+		}
+		if (item.assetType === 'image') {
+			return item.url;
+		}
+		if (item.assetType === 'video') {
+			if (item.sourceKind === 'external') {
+				return resolveExternalVideoThumbnail(item.url);
+			}
+		}
+		return null;
+	}
+
+	function resolveExternalVideoThumbnail(rawUrl: string): string | null {
+		let parsed: URL;
+		try {
+			parsed = new URL(rawUrl);
+		} catch {
+			return null;
+		}
+
+		const host = parsed.hostname.toLowerCase();
+
+		if (host === 'youtu.be' || host.endsWith('youtube.com')) {
+			const videoId = extractYouTubeId(parsed);
+			return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+		}
+
+		return null;
 	}
 
 	function resolveExternalVideoEmbed(rawUrl: string): string | null {
@@ -259,31 +309,52 @@
 <div class="media-gallery" aria-label="Papildoma medžiaga">
 	<div class="media-gallery__grid">
 		{#each galleryItems as item, index (item.id)}
-			{#if item.assetType === 'image'}
+			{@const itemTitle = displayTitle(item)}
+			{@const thumbnail = resolveThumbnailUrl(item)}
+			<div class="media-gallery__item">
 				<button
 					type="button"
 					class="media-gallery__thumb"
+					class:media-gallery__thumb--video={!thumbnail && item.assetType === 'video'}
 					onclick={() => openModal(index)}
-					aria-label={item.title ?? 'Peržiūrėti vaizdą'}
+					aria-label={itemTitle}
+					title={itemTitle}
 				>
-					<img src={item.url} alt={item.title ?? 'Papildoma medžiaga'} loading="lazy" />
+					{#if item.assetType === 'image'}
+						<img
+							src={item.url}
+							alt={itemTitle}
+							loading="lazy"
+							class="media-gallery__thumb-image"
+						/>
+					{:else if thumbnail}
+						<img
+							src={thumbnail}
+							alt={itemTitle}
+							loading="lazy"
+							class="media-gallery__thumb-image"
+						/>
+						<span class="media-gallery__thumb-overlay" aria-hidden="true">▶</span>
+					{:else}
+						<div class="media-gallery__thumb-placeholder">
+							<span class="media-gallery__thumb-icon" aria-hidden="true">▶</span>
+							<span class="media-gallery__thumb-label">Vaizdo įrašas</span>
+						</div>
+					{/if}
 				</button>
-			{:else}
-				<button
-					type="button"
-					class="media-gallery__thumb media-gallery__thumb--video"
-					onclick={() => openModal(index)}
-					aria-label={item.title ?? 'Peržiūrėti vaizdo įrašą'}
-				>
-					<span class="media-gallery__thumb-icon" aria-hidden="true">▶</span>
-					<span class="media-gallery__thumb-label">Vaizdo įrašas</span>
-				</button>
-			{/if}
+				<span class="media-gallery__thumb-title" title={itemTitle}>{itemTitle}</span>
+			</div>
 		{/each}
 	</div>
 
 	{#if modalOpen && currentItem}
-		<div class="media-gallery__overlay" role="dialog" aria-modal="true" aria-label="Peržiūra">
+		<div
+			class="media-gallery__overlay"
+			role="dialog"
+			aria-modal="true"
+			aria-label={`Peržiūra: ${currentDisplayTitle || 'Papildoma medžiaga'}`}
+			onclick={handleOverlayClick}
+		>
 			<div class="media-gallery__modal">
 				<button type="button" class="media-gallery__close" onclick={closeModal} aria-label="Uždaryti">
 					&times;
@@ -292,7 +363,7 @@
 				{#if currentItem.assetType === 'image'}
 					<img
 						src={currentItem.url}
-						alt={currentItem.title ?? 'Papildoma medžiaga'}
+						alt={currentDisplayTitle || 'Papildoma medžiaga'}
 						class="media-gallery__image"
 					/>
 				{:else if currentItem.assetType === 'video'}
@@ -302,7 +373,7 @@
 							controls
 							preload="metadata"
 							src={currentItem.url}
-							aria-label={currentItem.title ?? 'Vaizdo įrašas'}
+							aria-label={currentDisplayTitle || 'Vaizdo įrašas'}
 						>
 							<track
 								kind="captions"
@@ -316,7 +387,7 @@
 						<div class="media-gallery__embed">
 							<iframe
 								src={currentEmbedUrl}
-								title={currentItem.title ?? 'Vaizdo įrašas'}
+								title={currentDisplayTitle || 'Vaizdo įrašas'}
 								loading="lazy"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 								allowfullscreen
@@ -343,8 +414,8 @@
 					</a>
 				{/if}
 
-				{#if currentItem.title}
-					<h4 class="media-gallery__title">{currentItem.title}</h4>
+				{#if currentDisplayTitle}
+					<h4 class="media-gallery__title">{currentDisplayTitle}</h4>
 				{/if}
 
 				{#if currentCaption}
@@ -386,6 +457,12 @@
 		gap: 0.6rem;
 	}
 
+	.media-gallery__item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
 	.media-gallery__thumb {
 		border: none;
 		padding: 0;
@@ -396,17 +473,45 @@
 		box-shadow: 0 6px 20px rgba(15, 23, 42, 0.18);
 		cursor: pointer;
 		transition: transform 0.18s ease;
+		position: relative;
+		display: block;
 	}
 
-	.media-gallery__thumb--video {
+	.media-gallery__thumb:hover,
+	.media-gallery__thumb:focus-visible {
+		transform: translateY(-2px);
+	}
+
+	.media-gallery__thumb-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.media-gallery__thumb-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: grid;
+		place-items: center;
+		background: linear-gradient(145deg, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.35));
+		color: #fff;
+		font-size: 1.8rem;
+		pointer-events: none;
+	}
+
+	.media-gallery__thumb-placeholder {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 1.2rem 0.8rem;
+		height: 100%;
+		gap: 0.4rem;
 		background: linear-gradient(145deg, rgba(37, 99, 235, 0.9), rgba(59, 130, 246, 0.7));
 		color: #fff;
-		gap: 0.4rem;
 	}
 
 	.media-gallery__thumb-icon {
@@ -422,16 +527,16 @@
 		letter-spacing: 0.08em;
 	}
 
-	.media-gallery__thumb:hover,
-	.media-gallery__thumb:focus-visible {
-		transform: translateY(-2px);
+	.media-gallery__thumb-title {
+		font-size: 0.9rem;
+		font-weight: 600;
+		line-height: 1.3;
+		color: var(--color-text);
 	}
 
-	.media-gallery__thumb img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
+	.media-gallery__thumb--video {
+		background: linear-gradient(145deg, rgba(37, 99, 235, 0.9), rgba(59, 130, 246, 0.7));
+		color: #fff;
 	}
 
 	.media-gallery__overlay {
