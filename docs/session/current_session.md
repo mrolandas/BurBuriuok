@@ -51,6 +51,12 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - Reflect plan progress in `docs/references/ISSUE_TRACKER.md` (MEDIA-001→005, AUTH-001→003) so GitHub issue creation is turnkey.
 - Note UX research or design follow-ups in `docs/references/features/ideas/` if new concepts emerge during scoping.
 
+## Next Implementation Tasks
+
+- MEDIA-002A – Ship `/admin/media` list + detail drawer with filters, signed URL controls, and no-orphan enforcement. (Tracked in [#23](https://github.com/mrolandas/BurBuriuok/issues/23))
+- MEDIA-002B – Build creation drawer (upload + external) with concept requirement, signed upload helper, and robust error handling. (Tracked in [#24](https://github.com/mrolandas/BurBuriuok/issues/24))
+- MEDIA-002C – Enhance concept editor with media cards, attach flow, and last-association deletion safeguards plus doc updates. (Tracked in [#25](https://github.com/mrolandas/BurBuriuok/issues/25))
+
 ## Session Log
 
 - 2025-11-17: Archived ADM-002 session and kicked off media roadmap planning focused on storage, API surface, and auth alignment.
