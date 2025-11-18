@@ -32,5 +32,6 @@ Use this guide to find the right document quickly and understand when it needs a
 - Before releases, run through `TESTING_GUIDE.md` to confirm guard rails are current and capture any new manual smoke steps.
 - Keep `references/README.md` in sync when adding or moving reference documents so navigation stays accurate.
 - Update `references/ISSUE_TRACKER.md` whenever issues are opened/closed or acceptance criteria change—treat it as the single source of truth for sprint-ready work.
+- Reflect admin media workflow changes (bulk selection, previews, localisation) in `references/features/implemented/ADMIN_SETUP.md` whenever `/admin/media` or concept attachments evolve so operators can rely on the documented runbook.
 
 > Add a bullet here whenever new documentation appears under `docs/` so contributors understand where it lives and when to maintain it.

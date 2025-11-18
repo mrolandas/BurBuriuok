@@ -79,12 +79,28 @@ _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The conso
 ### 4. Media Library (Admin Uploads)
 
 - **Entry point**: “Pridėti mediją” button in the concept editor drawer opens an upload dialog limited to admin users.
-- **Upload dialog**: Select file (image/video) or paste external URL, choose display title, captions (LT/EN), and optional attribution.
+- **Upload dialog**: Select file (image/video) or paste external URL, choose display title, captions (LT/EN), and optional attribution. Required-field alerts now use Lithuanian copy and render via the shared drawer alert.
   - **Backend handshake**: Calls `POST /api/v1/admin/media` with `source.kind='upload'` (file metadata + size/type) or `source.kind='external'` (curated HTTPS link). Upload responses include `upload.url/token/path` for direct PUT to Supabase; external entries skip the upload step and store `external://` sentinel paths.
-- **Attachment list**: Shows existing media for the concept with thumbnail, type, and quick actions (copy embed link, delete, replace).
+- **Attachment list**: Shows existing media for the concept with thumbnail, type, and quick actions (copy embed link, delete, replace). Drawer shortcut honours the locked concept ID.
 - **Signed URL helper**: Copy button that generates a 1-hour signed URL for manual testing.
   - Implementation detail: hits `GET /api/v1/admin/media/:id/url?expiresIn=3600`, which returns `{ kind: 'supabase-signed-url', url, expiresAt }` for binaries or `{ kind: 'external', url }` for curated links.
+- **Media workspace table**: Checkbox column enables multi-select, a selection toolbar surfaces bulk delete, and row clicks continue to open the detail drawer. Signed URL previews render inline (image, MP4, or embedded YouTube/Vimeo) so admins can verify assets before publishing.
+- **Bulk actions**: After triggering bulk delete, the list reports partial failures, clears removed items from the selection set, and refreshes the table + concept attachment panel automatically.
 - **Deferred items**: Contributor submissions, moderation tabs, and SLA badges move back into scope when MEDIA-003/004 resume.
+
+**Attaching media to a concept**
+
+1. Open a concept in the admin editor and scroll to the “Papildoma medžiaga” panel.
+2. Review the existing attachments; thumbnails open previews in the media workspace if deeper inspection is needed.
+3. Click “Pridėti mediją” to launch the media creation drawer with the current concept locked in the selector.
+4. Choose **Įkelti** for new files or **Išorinis šaltinis** for curated embeds, complete required metadata (including Lithuanian validation copy where prompted), and submit.
+5. Wait for the success toast—on completion the attachment list refreshes automatically and the `/admin/media` workspace reflects the new asset without reloading.
+
+**Managing or removing attachments**
+
+1. From the attachment list, use the action menu to open an item in the media workspace, copy a signed URL, or start deletion.
+2. When deleting, confirm the prompt; successful removal raises a toast, clears the item from the concept panel, and updates the workspace table in the background.
+3. For multiple clean-up tasks, switch to `/admin/media`, select assets via the checkbox column, and use the bulk delete toolbar; partial failures surface inline and surviving selections reset so follow-up actions are clear.
 
 ### 5. Audit Log
 
@@ -99,6 +115,7 @@ _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The conso
 - Optimistic updates where safe; roll back on Supabase error.
 - Unsaved changes guard when navigating between forms.
 - Inline RLS status indicator (if a save fails due to policy).
+- Selection toolbars collapse automatically after multi-select actions so admins get immediate feedback without manual resets.
 
 ## Global Admin Mode Toggle
 

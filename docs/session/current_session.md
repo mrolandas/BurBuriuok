@@ -70,6 +70,8 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-18: Delivered `/admin/media` workspace (filters, search, detail drawer, delete + signed URL actions) and wired admin dashboard link.
 - 2025-11-18: Implemented MEDIA-002 creation drawer with automatic Supabase upload hand-off and external link validation (upload + external happy paths + error surfacing).
 - 2025-11-18: Added Concept Manager media panel with attachment list, creation drawer shortcut, and inline delete to keep concepts free of orphaned assets.
+- 2025-11-18: Cleared lingering Svelte accessibility warnings (`npm run frontend:check` now passes clean), localised required-field toasts, and upsized the learner gallery modal for embedded media.
+- 2025-11-18: Upgraded `/admin/media` table with checkbox multi-select, bulk delete workflow, and inline media preview (signed URLs + external embeds) while keeping concept attachments in sync.
 
 ## Wrap-up Checklist (close when all items are complete)
 
