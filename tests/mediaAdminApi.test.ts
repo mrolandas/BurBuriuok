@@ -267,6 +267,42 @@ async function main(): Promise<void> {
     const items = listJson?.data?.items as Array<Record<string, unknown>> | undefined;
     expect(items && items.length === 2, "List should return two assets for concept");
 
+    const externalOnlyResponse = await fetch(
+      `${baseUrl}?conceptId=${conceptId}&sourceKind=external`,
+      {
+        headers: impersonationHeaders,
+      }
+    );
+    expect(externalOnlyResponse.ok, "External-only list request failed");
+    const externalOnlyJson = await externalOnlyResponse.json();
+    const externalItems = externalOnlyJson?.data?.items as Array<Record<string, unknown>> | undefined;
+    expect(externalItems && externalItems.length === 1, "External filter should return one asset");
+    expect(externalItems?.[0]?.id === externalAssetId, "External filter returned wrong asset");
+
+    const uploadOnlyResponse = await fetch(
+      `${baseUrl}?conceptId=${conceptId}&sourceKind=upload`,
+      {
+        headers: impersonationHeaders,
+      }
+    );
+    expect(uploadOnlyResponse.ok, "Upload-only list request failed");
+    const uploadOnlyJson = await uploadOnlyResponse.json();
+    const uploadItems = uploadOnlyJson?.data?.items as Array<Record<string, unknown>> | undefined;
+    expect(uploadItems && uploadItems.length === 1, "Upload filter should return one asset");
+    expect(uploadItems?.[0]?.id === uploadAssetId, "Upload filter returned wrong asset");
+
+    const searchResponse = await fetch(
+      `${baseUrl}?conceptId=${conceptId}&search=upload`,
+      {
+        headers: impersonationHeaders,
+      }
+    );
+    expect(searchResponse.ok, "Search request failed");
+    const searchJson = await searchResponse.json();
+    const searchItems = searchJson?.data?.items as Array<Record<string, unknown>> | undefined;
+    expect(searchItems && searchItems.length === 1, "Search should narrow down to one asset");
+    expect(searchItems?.[0]?.id === uploadAssetId, "Search returned wrong asset");
+
     const detailResponse = await fetch(`${baseUrl}/${uploadAssetId}`, {
       headers: impersonationHeaders,
     });

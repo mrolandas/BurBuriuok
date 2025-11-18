@@ -15,6 +15,10 @@
 			<h2>Sąvokų administravimas</h2>
 			<p>Kurti, redaguoti ar šalinti sąvokas ir peržiūrėti jų istoriją.</p>
 		</a>
+		<a class="admin-card" href={resolve('/admin/media')}>
+			<h2>Papildomos medžiagos administravimas</h2>
+			<p>Tvarkykite adminų įkeltus failus ir išorinius šaltinius.</p>
+		</a>
 		<div class="admin-card admin-card--disabled">
 			<h2>Kitos sritys</h2>
 			<p>Greitai bus galima valdyti papildomus administravimo modulius.</p>

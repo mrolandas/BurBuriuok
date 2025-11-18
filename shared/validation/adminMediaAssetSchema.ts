@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const adminMediaAssetTypeSchema = z.enum(["image", "video"]);
+export const adminMediaSourceKindSchema = z.enum(["upload", "external"]);
 
 function optionalTrimmed(max?: number) {
   let schema = z.string().trim();
@@ -67,11 +68,19 @@ export const adminMediaCreateSchema = z
 export type AdminMediaCreateInput = z.infer<typeof adminMediaCreateSchema>;
 export type AdminMediaUploadSourceInput = z.infer<typeof adminMediaUploadSourceSchema>;
 export type AdminMediaExternalSourceInput = z.infer<typeof adminMediaExternalSourceSchema>;
+export type AdminMediaSourceKind = z.infer<typeof adminMediaSourceKindSchema>;
 
 export const adminMediaListQuerySchema = z
   .object({
     conceptId: z.string().uuid().optional(),
     assetType: adminMediaAssetTypeSchema.optional(),
+    sourceKind: adminMediaSourceKindSchema.optional(),
+    search: z
+      .string()
+      .trim()
+      .min(2, { message: "Paieškos užklausa turi būti bent 2 simbolių." })
+      .max(80, { message: "Paieškos užklausa negali viršyti 80 simbolių." })
+      .optional(),
     limit: z.coerce.number().int().min(1).max(50).default(20),
     cursor: z.string().optional(),
   })

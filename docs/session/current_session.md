@@ -35,7 +35,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 
 - Storage uses a single Supabase bucket `media-admin` with RLS granting read/write to admins only; assets are published via signed URLs or CDN transforms generated at read time. Standard storage tier stays in place with monthly reviews.
 - Schema for MEDIA-001 trims to `media_assets` (id, concept_id, asset_type enum, storage_path, created_by, created_at) and optional `media_asset_variants` for resized images. No `media_reviews` table required in this phase.
-- Admin UI will surface uploads via a simple drawer in the existing concept editor; no separate `/admin/media` route is needed right now.
+- Admin UI now exposes a dedicated `/admin/media` workspace for asset oversight ahead of concept editor integration work.
 - Upload safeguards MVP: accept only `image/*` and `video/mp4`, cap size at 50 MB per file, throttle by admin account (existing rate limiter). Manual judgment from the uploading admin replaces moderation workflow.
 - Metadata launches English-only; schema keeps optional locale columns but we will populate `en` exclusively until contributor flows return.
 - AUTH scope unchanged: the existing `admin` role covers uploads. Invite workflow remains in AUTH-002 but is low priority while contributors stay out of scope.
@@ -53,7 +53,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 
 ## Next Implementation Tasks
 
-- MEDIA-002A – Ship `/admin/media` list + detail drawer with filters, signed URL controls, and no-orphan enforcement. (Tracked in [#23](https://github.com/mrolandas/BurBuriuok/issues/23))
+- MEDIA-002A – Polish `/admin/media` workspace: list + detail drawer shipped 2025-11-18; follow-up on concept no-orphan guardrails. (Tracked in [#23](https://github.com/mrolandas/BurBuriuok/issues/23))
 - MEDIA-002B – Build creation drawer (upload + external) with concept requirement, signed upload helper, and robust error handling. (Tracked in [#24](https://github.com/mrolandas/BurBuriuok/issues/24))
 - MEDIA-002C – Enhance concept editor with media cards, attach flow, and last-association deletion safeguards plus doc updates. (Tracked in [#25](https://github.com/mrolandas/BurBuriuok/issues/25))
 
@@ -67,6 +67,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-18: Updated migration guards to suppress redundant drop notices and revalidated (`npx supabase db push --yes`, `npm run test:media001`).
 - 2025-11-18: Shipped MEDIA-002 admin media API (`POST/GET/DELETE /admin/media`, signed URL helper), refreshed docs, and added `npm run test:media002` smoke coverage.
 - 2025-11-18: Extended rate limiting for admin media create/delete buckets, documented env knobs, and updated smoke coverage to assert `RATE_LIMITED` responses.
+- 2025-11-18: Delivered `/admin/media` workspace (filters, search, detail drawer, delete + signed URL actions) and wired admin dashboard link.
 
 ## Wrap-up Checklist (close when all items are complete)
 

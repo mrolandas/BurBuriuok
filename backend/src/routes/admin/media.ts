@@ -212,7 +212,7 @@ router.get(
       return;
     }
 
-    const { conceptId, assetType, limit, cursor } = parsed.data;
+    const { conceptId, assetType, sourceKind, search, limit, cursor } = parsed.data;
     const supabase = getSupabaseClient({ service: true, schema: "burburiuok" }) as any;
 
     let query = supabase
@@ -232,9 +232,29 @@ router.get(
       query = query.eq("asset_type", validatedType);
     }
 
+    if (sourceKind === "upload") {
+      query = query.is("external_url", null);
+    } else if (sourceKind === "external") {
+      query = query.not("external_url", "is", null);
+    }
+
     if (cursor) {
       const normalizedCursor = normalizeCursor(cursor);
       query = query.lt("created_at", normalizedCursor);
+    }
+
+    if (search) {
+      const pattern = buildIlikePattern(search);
+      if (pattern) {
+        query = query.or(
+          [
+            `title.ilike.${pattern}`,
+            `caption_lt.ilike.${pattern}`,
+            `caption_en.ilike.${pattern}`,
+            `storage_path.ilike.${pattern}`
+          ].join(",")
+        );
+      }
     }
 
     const { data, error } = await query;
@@ -587,6 +607,31 @@ function normalizeExtension(extension: string): string {
     return ".jpg";
   }
   return extension;
+}
+
+function buildIlikePattern(raw: string): string | null {
+  const sanitized = raw
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[%_,.;:]/g, " ")
+    .replace(/[\'\"`]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!sanitized) {
+    return null;
+  }
+
+  const compact = sanitized
+    .split(" ")
+    .filter((token) => token.length)
+    .join("%");
+
+  if (!compact.length) {
+    return null;
+  }
+
+  return `%${compact}%`;
 }
 
 function buildUploadStoragePath(conceptId: string, assetId: string, extension: string): string {
