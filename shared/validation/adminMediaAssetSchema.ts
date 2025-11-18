@@ -13,6 +13,7 @@ function optionalTrimmed(max?: number) {
   }
 
   return schema
+    .or(z.null())
     .optional()
     .transform((value) => {
       if (typeof value !== "string") {

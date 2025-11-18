@@ -65,6 +65,8 @@
 	let deleteBusy = false;
 	let deleteError: string | null = null;
 	let deleteConfirmVisible = false;
+	let actionError: string | null = null;
+	let rowDeleteBusyId: string | null = null;
 
 	let successMessage: string | null = null;
 	let successTimer: ReturnType<typeof setTimeout> | null = null;
@@ -130,6 +132,7 @@
 	}
 
 	function setSuccess(message: string): void {
+		actionError = null;
 		if (successTimer) {
 			clearTimeout(successTimer);
 		}
@@ -286,6 +289,7 @@
 	}
 
 	function handleFilterChange(): void {
+		actionError = null;
 		void refreshList();
 	}
 
@@ -302,6 +306,7 @@
 	}
 
 	function resetFilters(): void {
+		actionError = null;
 		filterConceptId = 'all';
 		filterAssetType = 'all';
 		filterSourceKind = 'all';
@@ -420,6 +425,36 @@
 		}
 	}
 
+	async function handleListDelete(event: MouseEvent, asset: AdminMediaAsset): Promise<void> {
+		event.stopPropagation();
+		if (rowDeleteBusyId) {
+			return;
+		}
+
+		const confirmed = window.confirm('Ar tikrai norite pašalinti šią mediją?');
+		if (!confirmed) {
+			return;
+		}
+
+		rowDeleteBusyId = asset.id;
+		actionError = null;
+		try {
+			await deleteAdminMediaAsset(asset.id);
+			setSuccess('Medijos įrašas pašalintas.');
+			if (detailAsset?.id === asset.id) {
+				closeDetail();
+			}
+			await refreshList();
+		} catch (error) {
+			actionError =
+				error instanceof Error
+					? error.message
+					: 'Nepavyko pašalinti medijos įrašo.';
+		} finally {
+			rowDeleteBusyId = null;
+		}
+	}
+
 	function sourceSummary(asset: AdminMediaAsset): string {
 		const parts = [sourceKindLabels[asset.sourceKind]];
 		parts.push(assetTypeLabels[asset.assetType]);
@@ -471,6 +506,10 @@
 
 	{#if successMessage}
 		<div class="alert alert--success" role="status" aria-live="polite">{successMessage}</div>
+	{/if}
+
+	{#if actionError}
+		<div class="alert alert--error" role="alert">{actionError}</div>
 	{/if}
 
 	<div class="media-toolbar" role="search">
@@ -533,6 +572,7 @@
 						<th scope="col">Šaltinis</th>
 						<th scope="col">Sukūrė</th>
 						<th scope="col">Sukurta</th>
+						<th scope="col" class="media-table__actions-header">Veiksmai</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -566,6 +606,20 @@
 							<td>{sourceSummary(item)}</td>
 							<td>{item.createdBy ?? '–'}</td>
 							<td>{formatDate(item.createdAt)}</td>
+							<td class="media-table__actions">
+								<button
+									type="button"
+									class="plain plain--danger"
+									onclick={(event) => void handleListDelete(event, item)}
+									disabled={rowDeleteBusyId === item.id}
+								>
+									{#if rowDeleteBusyId === item.id}
+										Šalinama...
+									{:else}
+										Šalinti
+									{/if}
+								</button>
+							</td>
 						</tr>
 					{/each}
 				</tbody>
@@ -612,144 +666,148 @@
 			<button class="plain" type="button" onclick={closeDetail}>Uždaryti</button>
 		</header>
 
-		{#if detailLoading}
-			<p class="muted">Įkeliama...</p>
-		{:else if detailError}
-			<div class="alert alert--error">{detailError}</div>
-		{:else if detailAsset}
-			<section class="drawer__section">
-				<h3>Pagrindinė informacija</h3>
-				<dl class="meta-grid">
-					<div>
-						<dt>Pavadinimas</dt>
-						<dd>{assetTitle(detailAsset)}</dd>
-					</div>
-					<div>
-						<dt>Sąvoka</dt>
-						<dd>{conceptLabel(detailAsset.conceptId)}</dd>
-					</div>
-					<div>
-						<dt>Tipas</dt>
-						<dd>{assetTypeLabels[detailAsset.assetType]}</dd>
-					</div>
-					<div>
-						<dt>Šaltinis</dt>
-						<dd>{sourceKindLabels[detailAsset.sourceKind]}</dd>
-					</div>
-					<div>
-						<dt>Sukūrė</dt>
-						<dd>{detailAsset.createdBy ?? '–'}</dd>
-					</div>
-					<div>
-						<dt>Sukurta</dt>
-						<dd>{formatDate(detailAsset.createdAt)}</dd>
-					</div>
-				</dl>
-
-				{#if detailAsset.captionLt}
-					<h4>Aprašymas (LT)</h4>
-					<p>{detailAsset.captionLt}</p>
-				{/if}
-				{#if detailAsset.captionEn}
-					<h4>Aprašymas (EN)</h4>
-					<p>{detailAsset.captionEn}</p>
-				{/if}
-			</section>
-
-			<section class="drawer__section">
-				<h3>Prieiga</h3>
-				{#if detailAsset.sourceKind === 'external' && detailAsset.externalUrl}
-					<p>
-						Išorinis adresas:
-						<a href={detailAsset.externalUrl} rel="noopener noreferrer" target="_blank">
-							{detailAsset.externalUrl}
-						</a>
-					</p>
-				{:else if detailAsset.sourceKind === 'upload'}
-					<p class="muted">Saugojimo kelias: {detailAsset.storagePath}</p>
-					<div class="drawer__actions">
-						<button
-							class="secondary"
-							type="button"
-							onclick={handleFetchSignedUrl}
-							disabled={signedUrlLoading}
-						>
-							{#if signedUrlLoading}
-								Generuojama...
-							{:else}
-								Gauti pasirašytą URL
-							{/if}
-						</button>
-						{#if detailAsset.storagePath}
-							<button
-								class="plain"
-								type="button"
-								onclick={() => void copyToClipboard(detailAsset?.storagePath ?? '')}
-							>
-								Kopijuoti kelio reikšmę
-							</button>
-						{/if}
-					</div>
-					{#if signedUrlError}
-						<p class="field-error">{signedUrlError}</p>
-					{/if}
-					{#if signedUrl}
-						<div class="drawer__signed-url">
-							<p>
-								<a href={signedUrl.url} rel="noopener noreferrer" target="_blank">
-									Pasirašytas URL
-								</a>
-							</p>
-							{#if signedUrl.expiresAt}
-								<p class="muted">Galioja iki {formatDate(signedUrl.expiresAt)}</p>
-							{/if}
-							<button
-								class="plain"
-								type="button"
-								onclick={() => {
-									if (!signedUrl) {
-										return;
-									}
-									void copyToClipboard(signedUrl.url);
-								}}
-							>
-								Kopijuoti URL
-							</button>
+		<div class="drawer__body">
+			{#if detailLoading}
+				<p class="drawer__placeholder muted">Įkeliama...</p>
+			{:else if detailError}
+				<div class="drawer__placeholder">
+					<div class="alert alert--error">{detailError}</div>
+				</div>
+			{:else if detailAsset}
+				<section class="drawer__section">
+					<h3>Pagrindinė informacija</h3>
+					<dl class="meta-grid">
+						<div>
+							<dt>Pavadinimas</dt>
+							<dd>{assetTitle(detailAsset)}</dd>
 						</div>
-					{/if}
-				{/if}
-			</section>
+						<div>
+							<dt>Sąvoka</dt>
+							<dd>{conceptLabel(detailAsset.conceptId)}</dd>
+						</div>
+						<div>
+							<dt>Tipas</dt>
+							<dd>{assetTypeLabels[detailAsset.assetType]}</dd>
+						</div>
+						<div>
+							<dt>Šaltinis</dt>
+							<dd>{sourceKindLabels[detailAsset.sourceKind]}</dd>
+						</div>
+						<div>
+							<dt>Sukūrė</dt>
+							<dd>{detailAsset.createdBy ?? '–'}</dd>
+						</div>
+						<div>
+							<dt>Sukurta</dt>
+							<dd>{formatDate(detailAsset.createdAt)}</dd>
+						</div>
+					</dl>
 
-			<section class="drawer__section drawer__section--danger">
-				<h3>Šalinimas</h3>
-				<p class="muted">
-					Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas
-					negrįžtamas.
-				</p>
-				{#if deleteError}
-					<div class="alert alert--error">{deleteError}</div>
-				{/if}
-				<button
-					class="danger"
-					type="button"
-					onclick={() => void handleDelete()}
-					disabled={deleteBusy}
-				>
-					{#if deleteBusy}
-						Šalinama...
-					{:else if deleteConfirmVisible}
-						Patvirtinti šalinimą
-					{:else}
-						Pašalinti mediją
+					{#if detailAsset.captionLt}
+						<h4>Aprašymas (LT)</h4>
+						<p>{detailAsset.captionLt}</p>
 					{/if}
-				</button>
-				{#if deleteConfirmVisible}
-					<p class="alert alert--warning">
-						Paspauskite „Patvirtinti šalinimą“, kad užbaigtumėte šį veiksmą.
+					{#if detailAsset.captionEn}
+						<h4>Aprašymas (EN)</h4>
+						<p>{detailAsset.captionEn}</p>
+					{/if}
+				</section>
+
+				<section class="drawer__section">
+					<h3>Prieiga</h3>
+					{#if detailAsset.sourceKind === 'external' && detailAsset.externalUrl}
+						<p>
+							Išorinis adresas:
+							<a href={detailAsset.externalUrl} rel="noopener noreferrer" target="_blank">
+								{detailAsset.externalUrl}
+							</a>
+						</p>
+					{:else if detailAsset.sourceKind === 'upload'}
+						<p class="muted">Saugojimo kelias: {detailAsset.storagePath}</p>
+						<div class="drawer__actions">
+							<button
+								class="secondary"
+								type="button"
+								onclick={handleFetchSignedUrl}
+								disabled={signedUrlLoading}
+							>
+								{#if signedUrlLoading}
+									Generuojama...
+								{:else}
+									Gauti pasirašytą URL
+								{/if}
+							</button>
+							{#if detailAsset.storagePath}
+								<button
+									class="plain"
+									type="button"
+									onclick={() => void copyToClipboard(detailAsset?.storagePath ?? '')}
+								>
+									Kopijuoti kelio reikšmę
+								</button>
+							{/if}
+						</div>
+						{#if signedUrlError}
+							<p class="field-error">{signedUrlError}</p>
+						{/if}
+						{#if signedUrl}
+							<div class="drawer__signed-url">
+								<p>
+									<a href={signedUrl.url} rel="noopener noreferrer" target="_blank">
+										Pasirašytas URL
+									</a>
+								</p>
+								{#if signedUrl.expiresAt}
+									<p class="muted">Galioja iki {formatDate(signedUrl.expiresAt)}</p>
+								{/if}
+								<button
+									class="plain"
+									type="button"
+									onclick={() => {
+										if (!signedUrl) {
+											return;
+										}
+										void copyToClipboard(signedUrl.url);
+									}}
+								>
+									Kopijuoti URL
+								</button>
+							</div>
+						{/if}
+					{/if}
+				</section>
+
+				<section class="drawer__section drawer__section--danger">
+					<h3>Šalinimas</h3>
+					<p class="muted">
+						Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas
+						negrįžtamas.
 					</p>
-				{/if}
-			</section>
-		{/if}
+					{#if deleteError}
+						<div class="alert alert--error">{deleteError}</div>
+					{/if}
+					<button
+						class="danger"
+						type="button"
+						onclick={() => void handleDelete()}
+						disabled={deleteBusy}
+					>
+						{#if deleteBusy}
+							Šalinama...
+						{:else if deleteConfirmVisible}
+							Patvirtinti šalinimą
+						{:else}
+							Pašalinti mediją
+						{/if}
+					</button>
+					{#if deleteConfirmVisible}
+						<p class="alert alert--warning">
+							Paspauskite „Patvirtinti šalinimą“, kad užbaigtumėte šį veiksmą.
+						</p>
+					{/if}
+				</section>
+			{/if}
+		</div>
 	</div>
 {/if}
 
@@ -853,6 +911,16 @@
 		color: var(--color-text-soft);
 	}
 
+	.media-table__actions-header {
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.media-table__actions {
+		text-align: right;
+		vertical-align: middle;
+	}
+
 	.media-shell__load-more {
 		width: fit-content;
 	}
@@ -882,6 +950,17 @@
 		z-index: 90;
 		display: grid;
 		grid-template-rows: auto 1fr;
+	}
+
+	.drawer__body {
+		overflow-y: auto;
+		display: grid;
+		align-content: start;
+		padding-bottom: 1.5rem;
+	}
+
+	.drawer__placeholder {
+		padding: 1.2rem 1.5rem;
 	}
 
 	.drawer__header {
@@ -1025,6 +1104,16 @@
 	.plain:hover,
 	.plain:focus-visible {
 		text-decoration: underline;
+	}
+
+	.plain--danger {
+		color: rgb(185, 28, 28);
+	}
+
+	.plain--danger:disabled {
+		color: rgba(185, 28, 28, 0.6);
+		cursor: not-allowed;
+		opacity: 0.65;
 	}
 
 	.sr-only {

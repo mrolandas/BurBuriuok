@@ -5,32 +5,55 @@
 		items: ConceptMediaItem[];
 	};
 
+	const DEFAULT_VIDEO_TRACK_MESSAGE = 'Šiam vaizdo įrašui nėra aprašymo.';
+
 	let { items }: Props = $props();
 	let modalOpen = $state(false);
 	let activeIndex = $state(0);
 
 	const galleryItems = $derived(items.filter((item) => Boolean(item.url)));
-	const currentItem = $derived(galleryItems[activeIndex] ?? null);
-	const currentCaption = $derived(() => {
-		if (!currentItem) {
-			return '';
-		}
-		const primary = currentItem.captionLt?.trim();
-		if (primary && primary.length) {
-			return primary;
-		}
-		const fallback = currentItem.captionEn?.trim();
-		return fallback && fallback.length ? fallback : '';
-	});
+	let currentItem = $state<ConceptMediaItem | null>(null);
+	let currentCaption = $state('');
+	let currentCaptionTrack = $state<string | null>(null);
+	let currentEmbedUrl = $state<string | null>(null);
 
 	$effect(() => {
 		if (!galleryItems.length) {
 			activeIndex = 0;
 			modalOpen = false;
+			currentItem = null;
 			return;
 		}
 		if (activeIndex >= galleryItems.length) {
 			activeIndex = galleryItems.length - 1;
+		}
+		currentItem = galleryItems[activeIndex] ?? null;
+	});
+
+	$effect(() => {
+		const item = currentItem;
+		if (!item) {
+			currentCaption = '';
+			currentCaptionTrack = null;
+			currentEmbedUrl = null;
+			return;
+		}
+
+		const caption = extractCaption(item);
+		currentCaption = caption;
+
+		if (item.assetType === 'video') {
+			if (item.sourceKind === 'upload') {
+				const trackContent = caption || item.title?.trim() || DEFAULT_VIDEO_TRACK_MESSAGE;
+				currentCaptionTrack = buildCaptionTrack(trackContent);
+				currentEmbedUrl = null;
+			} else {
+				currentCaptionTrack = null;
+				currentEmbedUrl = resolveExternalVideoEmbed(item.url);
+			}
+		} else {
+			currentCaptionTrack = null;
+			currentEmbedUrl = null;
 		}
 	});
 
@@ -63,7 +86,11 @@
 	});
 
 	function openModal(index: number): void {
-		activeIndex = index;
+		if (!galleryItems.length) {
+			return;
+		}
+		const bounded = Math.max(0, Math.min(index, galleryItems.length - 1));
+		activeIndex = bounded;
 		modalOpen = true;
 	}
 
@@ -85,21 +112,148 @@
 		activeIndex = (activeIndex + 1) % galleryItems.length;
 	}
 
-	const currentCaptionTrack = $derived<string | null>(
-		(() => {
-			const item = currentItem;
-			if (!item) {
+	function extractCaption(item: ConceptMediaItem | null): string {
+		if (!item) {
+			return '';
+		}
+		const primary = item.captionLt?.trim();
+		if (primary && primary.length) {
+			return primary;
+		}
+		const fallback = item.captionEn?.trim();
+		return fallback && fallback.length ? fallback : '';
+	}
+
+	function buildCaptionTrack(caption: string): string {
+		const normalized = caption.replace(/\s+/g, ' ');
+		const vtt = `WEBVTT\n\n00:00.000 --> 00:10.000\n${normalized}`;
+		return `data:text/vtt,${encodeURIComponent(vtt)}`;
+	}
+
+	function resolveExternalVideoEmbed(rawUrl: string): string | null {
+		let parsed: URL;
+		try {
+			parsed = new URL(rawUrl);
+		} catch {
+			return null;
+		}
+
+		const host = parsed.hostname.toLowerCase();
+
+		if (host === 'youtu.be' || host.endsWith('youtube.com')) {
+			const videoId = extractYouTubeId(parsed);
+			if (!videoId) {
 				return null;
 			}
-			const caption = item.captionLt?.trim() ?? item.captionEn?.trim();
-			if (!caption) {
+			const startSeconds = parseStartSeconds(parsed.searchParams.get('t') ?? parsed.searchParams.get('start'));
+			const embed = new URL(`https://www.youtube.com/embed/${videoId}`);
+			if (startSeconds !== null && Number.isFinite(startSeconds) && startSeconds >= 0) {
+				embed.searchParams.set('start', String(startSeconds));
+			}
+			return embed.toString();
+		}
+
+		if (host === 'player.vimeo.com') {
+			return rawUrl;
+		}
+
+		if (host.endsWith('vimeo.com')) {
+			const vimeoId = extractVimeoId(parsed);
+			if (!vimeoId) {
 				return null;
 			}
-			const normalized = caption.replace(/\s+/g, ' ');
-			const vtt = `WEBVTT\n\n00:00.000 --> 00:10.000\n${normalized}`;
-			return `data:text/vtt,${encodeURIComponent(vtt)}`;
-		})()
-	);
+			return `https://player.vimeo.com/video/${vimeoId}`;
+		}
+
+		return null;
+	}
+
+	function extractYouTubeId(url: URL): string | null {
+		const host = url.hostname.toLowerCase();
+		if (host === 'youtu.be') {
+			const segment = url.pathname.slice(1).split('/')[0];
+			return segment && segment.length ? segment : null;
+		}
+
+		const path = url.pathname;
+		if (path.startsWith('/watch')) {
+			const id = url.searchParams.get('v');
+			return id && id.trim().length ? id.trim() : null;
+		}
+		if (path.startsWith('/embed/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+		if (path.startsWith('/shorts/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+		if (path.startsWith('/live/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+
+		return null;
+	}
+
+	function parseStartSeconds(value: string | null): number | null {
+		if (!value) {
+			return null;
+		}
+		const trimmed = value.trim();
+		if (!trimmed.length) {
+			return null;
+		}
+		if (/^\d+$/.test(trimmed)) {
+			return Number(trimmed);
+		}
+		if (/^\d+:\d+(?::\d+)?$/.test(trimmed)) {
+			const parts = trimmed.split(':').map((part) => Number(part));
+			if (parts.some((part) => Number.isNaN(part))) {
+				return null;
+			}
+			while (parts.length < 3) {
+				parts.unshift(0);
+			}
+			const [hours, minutes, seconds] = parts.slice(-3);
+			return hours * 3600 + minutes * 60 + seconds;
+		}
+
+		const regex = /(\d+)(h|m|s)/gi;
+		let match: RegExpExecArray | null;
+		let total = 0;
+		let matched = false;
+		while ((match = regex.exec(trimmed)) !== null) {
+			matched = true;
+			const amount = Number(match[1]);
+			if (Number.isNaN(amount)) {
+				continue;
+			}
+			switch (match[2].toLowerCase()) {
+				case 'h':
+					total += amount * 3600;
+					break;
+				case 'm':
+					total += amount * 60;
+					break;
+				case 's':
+					total += amount;
+					break;
+				default:
+					break;
+			}
+		}
+		return matched ? total : null;
+	}
+
+	function extractVimeoId(url: URL): string | null {
+		const segments = url.pathname.split('/').filter(Boolean);
+		if (!segments.length) {
+			return null;
+		}
+		const candidate = segments[segments.length - 1];
+		return /^\d+$/.test(candidate) ? candidate : null;
+	}
 </script>
 
 <div class="media-gallery" aria-label="Papildoma medžiaga">
@@ -142,8 +296,14 @@
 						class="media-gallery__image"
 					/>
 				{:else if currentItem.assetType === 'video'}
-					{#if currentCaptionTrack}
-						<video class="media-gallery__video" controls preload="metadata" src={currentItem.url}>
+					{#if currentItem.sourceKind === 'upload'}
+						<video
+							class="media-gallery__video"
+							controls
+							preload="metadata"
+							src={currentItem.url}
+							aria-label={currentItem.title ?? 'Vaizdo įrašas'}
+						>
 							<track
 								kind="captions"
 								srclang="lt"
@@ -152,6 +312,16 @@
 								default
 							/>
 						</video>
+					{:else if currentEmbedUrl}
+						<div class="media-gallery__embed">
+							<iframe
+								src={currentEmbedUrl}
+								title={currentItem.title ?? 'Vaizdo įrašas'}
+								loading="lazy"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								allowfullscreen
+							></iframe>
+						</div>
 					{:else}
 						<a
 							href={currentItem.url}
@@ -315,6 +485,22 @@
 		max-height: 65vh;
 		border-radius: 0.6rem;
 		background: #000;
+	}
+
+	.media-gallery__embed {
+		max-width: min(860px, 82vw);
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 0.6rem;
+		overflow: hidden;
+		background: #000;
+	}
+
+	.media-gallery__embed iframe {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		display: block;
 	}
 
 	.media-gallery__external {
