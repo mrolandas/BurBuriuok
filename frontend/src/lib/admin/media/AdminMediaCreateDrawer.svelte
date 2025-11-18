@@ -387,7 +387,7 @@ function handleFormSubmit(event: SubmitEvent): void {
 			<div class="alert alert--error" role="alert">{formError}</div>
 		{/if}
 
-		<form class="media-create-form" onsubmit={handleFormSubmit}>
+		<form class="media-create-form" onsubmit={handleFormSubmit} novalidate>
 			<section class="media-create-section">
 				<h3>Susietas konceptas</h3>
 				{#if lockedConceptLabel}

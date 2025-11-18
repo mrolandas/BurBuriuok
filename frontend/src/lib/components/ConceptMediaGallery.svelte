@@ -1,4 +1,5 @@
 <script lang="ts">
+import { tick } from 'svelte';
 	import type { ConceptMediaItem } from '$lib/api/media';
 
 	type Props = {
@@ -17,6 +18,12 @@
 	let currentCaptionTrack = $state<string | null>(null);
 	let currentEmbedUrl = $state<string | null>(null);
 	let currentDisplayTitle = $state('');
+
+	async function focusModal(): Promise<void> {
+		await tick();
+		const modal = document.querySelector<HTMLElement>('.media-gallery__modal');
+		modal?.focus();
+	}
 
 	$effect(() => {
 		if (!galleryItems.length) {
@@ -82,6 +89,7 @@
 		};
 
 		window.addEventListener('keydown', handleKey);
+		void focusModal();
 
 		return () => {
 			window.removeEventListener('keydown', handleKey);
@@ -101,7 +109,7 @@
 		modalOpen = false;
 	}
 
-	function handleOverlayClick(event: MouseEvent): void {
+	function handleOverlayPointerDown(event: PointerEvent): void {
 		if (event.target === event.currentTarget) {
 			closeModal();
 		}
@@ -350,12 +358,16 @@
 	{#if modalOpen && currentItem}
 		<div
 			class="media-gallery__overlay"
-			role="dialog"
-			aria-modal="true"
-			aria-label={`Peržiūra: ${currentDisplayTitle || 'Papildoma medžiaga'}`}
-			onclick={handleOverlayClick}
+			tabindex="-1"
+			onpointerdown={handleOverlayPointerDown}
 		>
-			<div class="media-gallery__modal">
+			<div
+				class="media-gallery__modal"
+				role="dialog"
+				aria-modal="true"
+				aria-label={`Peržiūra: ${currentDisplayTitle || 'Papildoma medžiaga'}`}
+				tabindex="-1"
+			>
 				<button type="button" class="media-gallery__close" onclick={closeModal} aria-label="Uždaryti">
 					&times;
 				</button>
@@ -555,14 +567,18 @@
 
 	.media-gallery__modal {
 		position: relative;
-		max-width: min(960px, 92vw);
-		max-height: 90vh;
+		max-width: min(1100px, 96vw);
+		max-height: 92vh;
 		background: var(--color-panel);
 		padding: 1.4rem 1.8rem 1.6rem;
 		border-radius: 1.1rem;
 		box-shadow: 0 24px 54px rgba(15, 23, 42, 0.35);
 		display: grid;
 		gap: 1rem;
+	}
+
+	.media-gallery__modal:focus {
+		outline: none;
 	}
 
 	.media-gallery__close {
@@ -578,22 +594,22 @@
 	}
 
 	.media-gallery__image {
-		max-width: min(860px, 82vw);
-		max-height: 65vh;
+		max-width: min(1000px, 90vw);
+		max-height: 75vh;
 		border-radius: 0.8rem;
 		margin: 0 auto;
 		object-fit: contain;
 	}
 
 	.media-gallery__video {
-		max-width: min(860px, 82vw);
-		max-height: 65vh;
+		max-width: min(1000px, 90vw);
+		max-height: 75vh;
 		border-radius: 0.6rem;
 		background: #000;
 	}
 
 	.media-gallery__embed {
-		max-width: min(860px, 82vw);
+		max-width: min(1000px, 90vw);
 		width: 100%;
 		aspect-ratio: 16 / 9;
 		border-radius: 0.6rem;

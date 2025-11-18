@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import {
 		listAdminMediaAssets,
 		getAdminMediaAsset,
@@ -21,6 +21,12 @@
 		MediaConceptOption,
 		MediaCreateSuccessDetail
 	} from '$lib/admin/media/types';
+
+	type PreviewKind = 'image' | 'video' | 'externalVideo' | 'link';
+	type PreviewState = {
+		kind: PreviewKind;
+		url: string;
+	};
 
 	type ListState = {
 		items: AdminMediaAsset[];
@@ -68,13 +74,21 @@
 	let actionError: string | null = null;
 	let rowDeleteBusyId: string | null = null;
 
+	let selectedIds: Set<string> = new Set();
+	let bulkDeleteBusy = false;
+	let selectAllCheckbox: HTMLInputElement | null = null;
+
+	let preview: PreviewState | null = null;
+	let previewLoading = false;
+	let previewError: string | null = null;
+	let previewLoadToken = 0;
+
 	let successMessage: string | null = null;
 	let successTimer: ReturnType<typeof setTimeout> | null = null;
 
 	let createDrawerOpen = false;
 	let createDefaultConceptId: string | null = null;
 	let createLockedConcept = false;
-	let creationConceptOptions: MediaConceptOption[] = [];
 
 	const assetTypeLabels: Record<AdminMediaAssetType, string> = {
 		image: 'Paveiksliukas',
@@ -91,15 +105,11 @@
 		timeStyle: 'short'
 	});
 
-	$: creationConceptOptions = conceptOptions.map((concept) => ({
-		id: concept.id,
-		slug: concept.slug,
-		label: concept.termLt?.trim().length ? concept.termLt : concept.slug
-	}));
-
 	onMount(async () => {
 		applyQueryDefaults();
 		await Promise.all([loadConceptOptions(), loadMedia()]);
+		await tick();
+		updateSelectAllIndeterminate();
 	});
 
 	function applyQueryDefaults(): void {
@@ -181,7 +191,7 @@
 	function conceptLabel(conceptId: string): string {
 		const concept = conceptLookup.get(conceptId);
 		if (!concept) {
-			return 'Nežinomas konceptas';
+			return 'Nežinoma sąvoka';
 		}
 		const trimmed = concept.termLt?.trim();
 		if (trimmed && trimmed.length) {
@@ -272,6 +282,7 @@
 				items: append ? [...listState.items, ...result.items] : result.items,
 				meta: result.meta
 			};
+			pruneSelectionFromItems(listState.items);
 		} catch (error) {
 			loadError =
 				error instanceof Error
@@ -319,6 +330,76 @@
 		void refreshList();
 	}
 
+	function toggleSelection(id: string, checked: boolean): void {
+		const next = new Set(selectedIds);
+		if (checked) {
+			next.add(id);
+		} else {
+			next.delete(id);
+		}
+		selectedIds = next;
+		actionError = null;
+		updateSelectAllIndeterminate();
+	}
+
+	function toggleSelectAll(checked: boolean): void {
+		const next = new Set(selectedIds);
+		if (checked) {
+			for (const item of listState.items) {
+				next.add(item.id);
+			}
+		} else {
+			for (const item of listState.items) {
+				next.delete(item.id);
+			}
+		}
+		selectedIds = next;
+		actionError = null;
+		updateSelectAllIndeterminate();
+	}
+
+	function clearSelection(): void {
+		if (!selectedIds.size) {
+			return;
+		}
+		selectedIds = new Set();
+		updateSelectAllIndeterminate();
+	}
+
+	function pruneSelectionFromItems(items: AdminMediaAsset[]): void {
+		if (!selectedIds.size) {
+			updateSelectAllIndeterminate();
+			return;
+		}
+		const allowed = new Set(items.map((item) => item.id));
+		const retained = [...selectedIds].filter((id) => allowed.has(id));
+		if (retained.length !== selectedIds.size) {
+			selectedIds = new Set(retained);
+		}
+		updateSelectAllIndeterminate();
+	}
+
+	function buildCreationConceptOptions(concepts: AdminConceptResource[]): MediaConceptOption[] {
+		return concepts.map((concept) => ({
+			id: concept.id,
+			slug: concept.slug,
+			label: concept.termLt?.trim().length ? concept.termLt : concept.slug
+		}));
+	}
+
+	function updateSelectAllIndeterminate(): void {
+		if (!selectAllCheckbox) {
+			return;
+		}
+		const visibleSelectedCount = listState.items.reduce(
+			(count, item) => (selectedIds.has(item.id) ? count + 1 : count),
+			0
+		);
+		const allVisibleSelected =
+			listState.items.length > 0 && visibleSelectedCount === listState.items.length;
+		selectAllCheckbox.indeterminate = visibleSelectedCount > 0 && !allVisibleSelected;
+	}
+
 	function handleRowKeydown(event: KeyboardEvent, asset: AdminMediaAsset): void {
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
@@ -334,11 +415,13 @@
 		signedUrlError = null;
 		deleteError = null;
 		deleteConfirmVisible = false;
+		clearPreview();
 
 		detailLoading = true;
 		try {
 			const fresh = await getAdminMediaAsset(asset.id);
 			detailAsset = fresh;
+			await loadPreview(fresh);
 		} catch (error) {
 			detailError =
 				error instanceof Error
@@ -356,6 +439,7 @@
 		signedUrlError = null;
 		deleteError = null;
 		deleteConfirmVisible = false;
+		clearPreview();
 	}
 
 	async function handleFetchSignedUrl(): Promise<void> {
@@ -367,6 +451,13 @@
 		try {
 			signedUrl = await fetchAdminMediaSignedUrl(detailAsset.id);
 			setSuccess('Sugeneruotas laikinas pasirašytas URL.');
+			if (detailAsset.sourceKind === 'upload' && signedUrl) {
+				preview =
+					detailAsset.assetType === 'image'
+						? { kind: 'image', url: signedUrl.url }
+						: { kind: 'video', url: signedUrl.url };
+				previewError = null;
+			}
 		} catch (error) {
 			signedUrlError =
 				error instanceof Error
@@ -375,6 +466,192 @@
 		} finally {
 			signedUrlLoading = false;
 		}
+	}
+
+	function clearPreview(): void {
+		previewLoadToken += 1;
+		preview = null;
+		previewError = null;
+		previewLoading = false;
+	}
+
+	async function loadPreview(asset: AdminMediaAsset): Promise<void> {
+		const token = ++previewLoadToken;
+		previewLoading = true;
+		previewError = null;
+		preview = null;
+
+		if (asset.sourceKind === 'external') {
+			const externalUrl = (asset.externalUrl ?? '').trim();
+			if (!externalUrl.length) {
+				if (token === previewLoadToken) {
+					previewError = 'Išorinis URL nerastas.';
+					previewLoading = false;
+				}
+				return;
+			}
+
+			let nextPreview: PreviewState | null = null;
+			if (asset.assetType === 'image') {
+				nextPreview = { kind: 'image', url: externalUrl };
+			} else if (asset.assetType === 'video') {
+				const embed = resolveExternalVideoEmbed(externalUrl);
+				nextPreview = embed ? { kind: 'externalVideo', url: embed } : { kind: 'link', url: externalUrl };
+			} else {
+				nextPreview = { kind: 'link', url: externalUrl };
+			}
+
+			if (token === previewLoadToken) {
+				preview = nextPreview;
+				previewLoading = false;
+			}
+			return;
+		}
+
+		try {
+			const result = await fetchAdminMediaSignedUrl(asset.id);
+			if (token !== previewLoadToken) {
+				return;
+			}
+			signedUrl = result;
+			signedUrlError = null;
+			preview =
+				asset.assetType === 'image'
+					? { kind: 'image', url: result.url }
+					: { kind: 'video', url: result.url };
+		} catch (error) {
+			if (token !== previewLoadToken) {
+				return;
+			}
+			previewError =
+				error instanceof Error
+					? error.message
+					: 'Nepavyko įkelti medijos peržiūros.';
+		} finally {
+			if (token === previewLoadToken) {
+				previewLoading = false;
+			}
+		}
+	}
+
+	function resolveExternalVideoEmbed(rawUrl: string): string | null {
+		let parsed: URL;
+		try {
+			parsed = new URL(rawUrl);
+		} catch {
+			return null;
+		}
+
+		const host = parsed.hostname.toLowerCase();
+
+		if (host === 'youtu.be' || host.endsWith('youtube.com')) {
+			const videoId = extractYouTubeId(parsed);
+			if (!videoId) {
+				return null;
+			}
+			const startSeconds = parseStartSeconds(parsed.searchParams.get('t') ?? parsed.searchParams.get('start'));
+			const embed = new URL(`https://www.youtube.com/embed/${videoId}`);
+			if (startSeconds !== null && Number.isFinite(startSeconds) && startSeconds >= 0) {
+				embed.searchParams.set('start', String(startSeconds));
+			}
+			return embed.toString();
+		}
+
+		if (host === 'player.vimeo.com') {
+			return rawUrl;
+		}
+
+		if (host.endsWith('vimeo.com')) {
+			const vimeoId = extractVimeoId(parsed);
+			return vimeoId ? `https://player.vimeo.com/video/${vimeoId}` : null;
+		}
+
+		return null;
+	}
+
+	function extractYouTubeId(url: URL): string | null {
+		const host = url.hostname.toLowerCase();
+		if (host === 'youtu.be') {
+			const segment = url.pathname.slice(1).split('/')[0];
+			return segment && segment.length ? segment : null;
+		}
+
+		const path = url.pathname;
+		if (path.startsWith('/watch')) {
+			const id = url.searchParams.get('v');
+			return id && id.trim().length ? id.trim() : null;
+		}
+		if (path.startsWith('/embed/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+		if (path.startsWith('/shorts/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+		if (path.startsWith('/live/')) {
+			const segment = path.split('/')[2];
+			return segment && segment.trim().length ? segment.trim() : null;
+		}
+
+		return null;
+	}
+
+	function extractVimeoId(url: URL): string | null {
+		const path = url.pathname.split('/').filter(Boolean);
+		const candidate = path[path.length - 1];
+		return candidate && /^[0-9]+$/.test(candidate) ? candidate : null;
+	}
+
+	function parseStartSeconds(value: string | null): number | null {
+		if (!value) {
+			return null;
+		}
+		const trimmed = value.trim();
+		if (!trimmed.length) {
+			return null;
+		}
+		if (/^\d+$/.test(trimmed)) {
+			return Number(trimmed);
+		}
+		if (/^\d+:\d+(?::\d+)?$/.test(trimmed)) {
+			const parts = trimmed.split(':').map((part) => Number(part));
+			if (parts.some((part) => Number.isNaN(part))) {
+				return null;
+			}
+			while (parts.length < 3) {
+				parts.unshift(0);
+			}
+			const [hours, minutes, seconds] = parts.slice(-3);
+			return hours * 3600 + minutes * 60 + seconds;
+		}
+
+		const regex = /(\d+)(h|m|s)/gi;
+		let match: RegExpExecArray | null;
+		let total = 0;
+		let matched = false;
+		while ((match = regex.exec(trimmed)) !== null) {
+			matched = true;
+			const amount = Number(match[1]);
+			if (Number.isNaN(amount)) {
+				continue;
+			}
+			switch (match[2]) {
+				case 'h':
+					total += amount * 3600;
+					break;
+				case 'm':
+					total += amount * 60;
+					break;
+				case 's':
+					total += amount;
+					break;
+				default:
+					break;
+			}
+		}
+
+		return matched ? total : null;
 	}
 
 	async function copyToClipboard(value: string): Promise<void> {
@@ -410,9 +687,14 @@
 		deleteBusy = true;
 		deleteError = null;
 		try {
-			await deleteAdminMediaAsset(detailAsset.id);
+			const deletedId = detailAsset.id;
+			await deleteAdminMediaAsset(deletedId);
 			setSuccess('Medijos įrašas pašalintas.');
 			closeDetail();
+			const nextSelection = new Set(selectedIds);
+			nextSelection.delete(deletedId);
+			selectedIds = nextSelection;
+			updateSelectAllIndeterminate();
 			await refreshList();
 		} catch (error) {
 			deleteError =
@@ -441,6 +723,10 @@
 		try {
 			await deleteAdminMediaAsset(asset.id);
 			setSuccess('Medijos įrašas pašalintas.');
+			const nextSelection = new Set(selectedIds);
+			nextSelection.delete(asset.id);
+			selectedIds = nextSelection;
+			updateSelectAllIndeterminate();
 			if (detailAsset?.id === asset.id) {
 				closeDetail();
 			}
@@ -452,6 +738,65 @@
 					: 'Nepavyko pašalinti medijos įrašo.';
 		} finally {
 			rowDeleteBusyId = null;
+		}
+	}
+
+	async function handleBulkDelete(): Promise<void> {
+		if (!selectedIds.size || bulkDeleteBusy) {
+			return;
+		}
+
+		const confirmed = window.confirm('Ar tikrai norite pašalinti pasirinktus medijos įrašus?');
+		if (!confirmed) {
+			return;
+		}
+
+		bulkDeleteBusy = true;
+		actionError = null;
+		const ids = Array.from(selectedIds);
+		const failures: { id: string; message: string }[] = [];
+		let deletedCount = 0;
+
+		try {
+			for (const id of ids) {
+				try {
+					await deleteAdminMediaAsset(id);
+					deletedCount += 1;
+					if (detailAsset?.id === id) {
+						closeDetail();
+					}
+				} catch (error) {
+					const message =
+						error instanceof Error
+							? error.message
+							: 'Nepavyko pašalinti medijos įrašo.';
+					failures.push({ id, message });
+				}
+			}
+
+			if (deletedCount > 0) {
+				setSuccess(
+					deletedCount === 1
+						? 'Medijos įrašas pašalintas.'
+						: `Pašalinta ${deletedCount} medijos įrašai (-ų).`
+				);
+			}
+
+			if (failures.length) {
+				actionError =
+					failures.length === ids.length
+						? failures[0].message
+						: `Nepavyko pašalinti ${failures.length} iš ${ids.length} pasirinktų įrašų. Pirmoji klaida: ${failures[0].message}`;
+			}
+
+			if (deletedCount > 0) {
+				await refreshList();
+			}
+		} finally {
+			const remaining = new Set(failures.map((failure) => failure.id));
+			selectedIds = remaining;
+			updateSelectAllIndeterminate();
+			bulkDeleteBusy = false;
 		}
 	}
 
@@ -563,10 +908,51 @@
 			Pridėti naują mediją
 		</button>
 	{:else}
+		{#if selectedIds.size > 0}
+			<div class="media-table__selection-bar" role="status" aria-live="polite">
+				<p>
+					{selectedIds.size === 1
+						? 'Pasirinktas 1 medijos įrašas.'
+						: `Pasirinkta ${selectedIds.size} medijos įrašai (-ų).`}
+				</p>
+				<div class="media-table__selection-actions">
+					<button
+						type="button"
+						class="danger"
+						onclick={() => void handleBulkDelete()}
+						disabled={bulkDeleteBusy}
+					>
+						{#if bulkDeleteBusy}
+							Šalinama...
+						{:else}
+							Pašalinti pasirinktus ({selectedIds.size})
+						{/if}
+					</button>
+					<button
+						type="button"
+						class="plain"
+						onclick={clearSelection}
+						disabled={bulkDeleteBusy}
+					>
+						Atšaukti pasirinkimą
+					</button>
+				</div>
+			</div>
+		{/if}
 		<div class="media-table-wrapper">
 			<table class="media-table">
 				<thead>
 					<tr>
+						<th scope="col" class="media-table__select-header">
+							<input
+								type="checkbox"
+								aria-label="Pasirinkti visus matomus medijos įrašus"
+								checked={listState.items.length > 0 && listState.items.every((item) => selectedIds.has(item.id))}
+								onchange={(event) => toggleSelectAll(event.currentTarget.checked)}
+								bind:this={selectAllCheckbox}
+								disabled={listState.items.length === 0}
+							/>
+						</th>
 						<th scope="col">Medijos įrašas</th>
 						<th scope="col">Sąvoka</th>
 						<th scope="col">Šaltinis</th>
@@ -583,6 +969,15 @@
 							onclick={() => void openDetail(item)}
 							onkeydown={(event) => handleRowKeydown(event, item)}
 						>
+							<td class="media-table__select-cell">
+								<input
+									type="checkbox"
+									aria-label={`Pažymėti įrašą ${assetTitle(item)}`}
+									checked={selectedIds.has(item.id)}
+									onclick={(event) => event.stopPropagation()}
+									onchange={(event) => toggleSelection(item.id, event.currentTarget.checked)}
+								/>
+							</td>
 							<th scope="row">
 								<div class="media-table__title">{assetTitle(item)}</div>
 								{#if item.captionLt}
@@ -645,7 +1040,7 @@
 
 {#if createDrawerOpen}
 	<AdminMediaCreateDrawer
-		conceptOptions={creationConceptOptions}
+		conceptOptions={buildCreationConceptOptions(conceptOptions)}
 		defaultConceptId={createDefaultConceptId}
 		lockedConceptId={createLockedConcept}
 		on:close={closeCreateDrawer}
@@ -710,6 +1105,54 @@
 					{#if detailAsset.captionEn}
 						<h4>Aprašymas (EN)</h4>
 						<p>{detailAsset.captionEn}</p>
+					{/if}
+				</section>
+
+				<section class="drawer__section">
+					<h3>Peržiūra</h3>
+					{#if previewLoading}
+						<p class="muted">Įkeliama peržiūra...</p>
+					{:else if previewError}
+						<div class="alert alert--warning">{previewError}</div>
+					{:else if preview}
+						{#if preview.kind === 'image'}
+							<img
+								src={preview.url}
+								alt={`Peržiūra: ${assetTitle(detailAsset)}`}
+								class="drawer__preview-image"
+								loading="lazy"
+							/>
+						{:else if preview.kind === 'video'}
+							<!-- svelte-ignore a11y_media_has_caption -->
+							<video
+								class="drawer__preview-video"
+								controls
+								preload="metadata"
+								src={preview.url}
+								playsinline
+							></video>
+						{:else if preview.kind === 'externalVideo'}
+							<div class="drawer__preview-embed">
+								<iframe
+									src={preview.url}
+									title={`Peržiūra: ${assetTitle(detailAsset)}`}
+									loading="lazy"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									allowfullscreen
+								></iframe>
+							</div>
+						{:else if preview.kind === 'link'}
+							<a
+								class="drawer__preview-link"
+								href={preview.url}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Atidaryti mediją naujame lange
+							</a>
+						{/if}
+					{:else}
+						<p class="muted">Peržiūra negalima.</p>
 					{/if}
 				</section>
 
@@ -870,6 +1313,30 @@
 		gap: 0.6rem;
 	}
 
+	.media-table__selection-bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.9rem;
+		background: var(--color-panel-soft);
+		margin-bottom: 0.75rem;
+	}
+
+	.media-table__selection-bar p {
+		margin: 0;
+		font-weight: 600;
+	}
+
+	.media-table__selection-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
 	.media-table-wrapper {
 		overflow-x: auto;
 		border-radius: 1rem;
@@ -888,6 +1355,18 @@
 		border-bottom: 1px solid var(--color-border-soft);
 		text-align: left;
 		vertical-align: top;
+	}
+
+	.media-table__select-header,
+	.media-table__select-cell {
+		width: 2.75rem;
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	.media-table__select-cell input,
+	.media-table__select-header input {
+		cursor: pointer;
 	}
 
 	.media-table__row {
@@ -990,6 +1469,45 @@
 
 	.drawer__section--danger {
 		background: rgba(239, 68, 68, 0.06);
+	}
+
+	.drawer__preview-image {
+		width: 100%;
+		max-height: 360px;
+		object-fit: contain;
+		border-radius: 0.9rem;
+		background: var(--color-panel-soft);
+	}
+
+	.drawer__preview-video {
+		width: 100%;
+		max-height: 360px;
+		border-radius: 0.9rem;
+		background: #000;
+	}
+
+	.drawer__preview-embed {
+		position: relative;
+		padding-top: 56.25%;
+		border-radius: 0.9rem;
+		overflow: hidden;
+		background: #000;
+	}
+
+	.drawer__preview-embed iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+
+	.drawer__preview-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-weight: 600;
 	}
 
 	.drawer__actions {
