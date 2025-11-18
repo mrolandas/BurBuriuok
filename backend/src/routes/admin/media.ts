@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 import { extname } from "node:path";
 import { URL } from "node:url";
@@ -13,11 +13,19 @@ import {
 import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { HttpError } from "../../utils/httpError.ts";
+import { createRateLimiter } from "../../middleware/rateLimiter.ts";
 
 const MEDIA_BUCKET = "media-admin";
 const UPLOAD_URL_EXPIRY_SECONDS = 300;
 const SIGNED_URL_DEFAULT_EXPIRY = 3600;
 const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
+
+const DAILY_MS = 24 * 60 * 60 * 1000;
+
+const ADMIN_MEDIA_UPLOADS_PER_DAY = getPositiveIntFromEnv("ADMIN_MEDIA_UPLOADS_PER_DAY", 40);
+const ADMIN_MEDIA_UPLOAD_BURST = getPositiveIntFromEnv("ADMIN_MEDIA_UPLOAD_BURST", 10);
+const ADMIN_MEDIA_DELETES_PER_DAY = getPositiveIntFromEnv("ADMIN_MEDIA_DELETES_PER_DAY", 80);
+const ADMIN_MEDIA_DELETE_BURST = getPositiveIntFromEnv("ADMIN_MEDIA_DELETE_BURST", 20);
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 const VIDEO_EXTENSIONS = new Set([".mp4"]);
@@ -55,8 +63,43 @@ type MediaAssetResponse = ReturnType<typeof mapMediaAssetForResponse>;
 
 const router = Router();
 
+const mediaCreateRateLimiter = createRateLimiter({
+  limit: ADMIN_MEDIA_UPLOADS_PER_DAY,
+  windowMs: DAILY_MS,
+  burst: ADMIN_MEDIA_UPLOAD_BURST,
+  name: "admin-media-create",
+  keyExtractor: extractAdminIdentifier,
+  onLimitExceeded: ({ res, retryAfterSeconds }) => {
+    res.status(429).json({
+      error: {
+        code: "RATE_LIMITED",
+        message: "Viršyta leidžiamų medijos įkėlimų kvota. Bandykite dar kartą vėliau.",
+        retryAfterSeconds,
+      },
+    });
+  },
+});
+
+const mediaDeleteRateLimiter = createRateLimiter({
+  limit: ADMIN_MEDIA_DELETES_PER_DAY,
+  windowMs: DAILY_MS,
+  burst: ADMIN_MEDIA_DELETE_BURST,
+  name: "admin-media-delete",
+  keyExtractor: extractAdminIdentifier,
+  onLimitExceeded: ({ res, retryAfterSeconds }) => {
+    res.status(429).json({
+      error: {
+        code: "RATE_LIMITED",
+        message: "Viršyta leidžiamų medijos trynimų kvota. Bandykite dar kartą vėliau.",
+        retryAfterSeconds,
+      },
+    });
+  },
+});
+
 router.post(
   "/",
+  mediaCreateRateLimiter,
   asyncHandler(async (req, res) => {
     const parsed = adminMediaCreateSchema.safeParse(req.body);
 
@@ -361,6 +404,7 @@ router.get(
 
 router.delete(
   "/:id",
+  mediaDeleteRateLimiter,
   asyncHandler(async (req, res) => {
     const id = req.params.id?.trim();
 
@@ -616,6 +660,29 @@ function mapMediaAssetForResponse(row: MediaAssetRow) {
     createdBy: row.created_by,
     createdAt: row.created_at,
   };
+}
+
+function extractAdminIdentifier(req: Request): string | null {
+  if (req.authUser?.id) {
+    return req.authUser.id;
+  }
+  if (req.authUser?.email) {
+    return req.authUser.email;
+  }
+  return req.ip ?? null;
+}
+
+function getPositiveIntFromEnv(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (!raw) {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(raw, 10);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
 }
 
 export default router;

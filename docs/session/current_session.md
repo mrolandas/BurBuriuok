@@ -60,6 +60,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-18: Applied migration `0011_media_admin_mvp.sql` to Supabase and added automated smoke `npm run test:media001` to validate admin-only RLS.
 - 2025-11-18: Updated migration guards to suppress redundant drop notices and revalidated (`npx supabase db push --yes`, `npm run test:media001`).
 - 2025-11-18: Shipped MEDIA-002 admin media API (`POST/GET/DELETE /admin/media`, signed URL helper), refreshed docs, and added `npm run test:media002` smoke coverage.
+- 2025-11-18: Extended rate limiting for admin media create/delete buckets, documented env knobs, and updated smoke coverage to assert `RATE_LIMITED` responses.
 
 ## Wrap-up Checklist (close when all items are complete)
 

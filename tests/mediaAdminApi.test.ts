@@ -4,9 +4,9 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import express from "express";
+import type { Router } from "express";
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
-import mediaRouter from "../backend/src/routes/admin/media.ts";
 import { getSupabaseClient, resetSupabaseClients } from "../data/supabaseClient.ts";
 
 function loadEnv(): void {
@@ -126,7 +126,7 @@ async function startServer(app: express.Application): Promise<{ server: Server; 
   return { server, baseUrl };
 }
 
-function createMediaApp(): express.Application {
+function createMediaApp(router: Router): express.Application {
   const app = express();
   app.use(express.json());
   app.use((req, _res, next) => {
@@ -137,7 +137,7 @@ function createMediaApp(): express.Application {
     };
     next();
   });
-  app.use("/api/v1/admin/media", mediaRouter);
+  app.use("/api/v1/admin/media", router);
   return app;
 }
 
@@ -164,6 +164,13 @@ async function main(): Promise<void> {
 
   process.env.ADMIN_DEV_IMPERSONATION = process.env.ADMIN_DEV_IMPERSONATION ?? "true";
 
+  process.env.ADMIN_MEDIA_UPLOADS_PER_DAY = process.env.ADMIN_MEDIA_UPLOADS_PER_DAY ?? "2";
+  process.env.ADMIN_MEDIA_UPLOAD_BURST = process.env.ADMIN_MEDIA_UPLOAD_BURST ?? "2";
+  process.env.ADMIN_MEDIA_DELETES_PER_DAY = process.env.ADMIN_MEDIA_DELETES_PER_DAY ?? "6";
+  process.env.ADMIN_MEDIA_DELETE_BURST = process.env.ADMIN_MEDIA_DELETE_BURST ?? "3";
+
+  const { default: mediaRouter } = await import("../backend/src/routes/admin/media.ts");
+
   const supabase = getSupabaseClient({ service: true, schema: "burburiuok" }) as SupabaseAny;
 
   const slug = `media002-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
@@ -171,7 +178,7 @@ async function main(): Promise<void> {
 
   await ensureMediaBucketExists(supabase);
 
-  const { server, baseUrl } = await startServer(createMediaApp());
+  const { server, baseUrl } = await startServer(createMediaApp(mediaRouter));
 
   const impersonationHeaders = {
     "x-admin-impersonate": "true",
@@ -285,6 +292,35 @@ async function main(): Promise<void> {
     const externalUrlJson = await externalUrlResponse.json();
     expect(externalUrlJson?.data?.kind === "external", "External asset should return external kind");
     expect(externalUrlJson?.data?.url === "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "External URL mismatch");
+
+    const rateLimitResponse = await fetch(baseUrl, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        ...impersonationHeaders,
+      },
+      body: JSON.stringify({
+        conceptId,
+        assetType: "image",
+        title: "Rate limited asset",
+        captionLt: "Limit test",
+        captionEn: "Limit test",
+        source: {
+          kind: "upload",
+          fileName: "test-image-2.jpg",
+          fileSize: 1024,
+          contentType: "image/jpeg",
+        },
+      }),
+    });
+
+    expect(rateLimitResponse.status === 429, "Third create should be rate limited");
+    const rateLimitJson = await rateLimitResponse.json();
+    expect(rateLimitJson?.error?.code === "RATE_LIMITED", "Rate limit response should include RATE_LIMITED code");
+    expect(
+      typeof rateLimitJson?.error?.retryAfterSeconds === "number" && rateLimitJson.error.retryAfterSeconds > 0,
+      "Rate limit response should include retryAfterSeconds"
+    );
 
     const deleteUploadResponse = await fetch(`${baseUrl}/${uploadAssetId}`, {
       method: "DELETE",

@@ -139,7 +139,7 @@ Implemented with an in-memory store (Redis later) using token bucket semantics.
 
 - **Public search**: 60 requests/minute per IP. Burst 10.
 - **Progress updates**: 120 writes/hour per learner. Excess attempts return 429 with retry-after.
-- **Media uploads (admin)**: 40 uploads/day per admin with burst of 10; configurable via environment variable.
+- **Media uploads (admin)**: 40 uploads/day per admin with burst of 10; configurable via environment variables (`ADMIN_MEDIA_UPLOADS_PER_DAY`, `ADMIN_MEDIA_UPLOAD_BURST`). Deletes use matching knobs (`ADMIN_MEDIA_DELETES_PER_DAY`, `ADMIN_MEDIA_DELETE_BURST`).
 - **Concept edits**: 30 writes/hour per admin. Additional edits require waiting or manual override.
 - **Dependency changes**: 20 writes/hour per admin; prevents frantic remapping.
 
@@ -157,7 +157,7 @@ Quota breaches respond with `{ error: { code: 'RATE_LIMITED', retryAfterSeconds 
 - [x] **Express Routes** – `backend/src/routes/admin/media.ts` now exposes `POST/GET/DELETE` handlers and is mounted under `/api/v1/admin/media` behind `requireAdminRole`.
 - [x] **Payload Handling** – Shared schema `shared/validation/adminMediaAssetSchema.ts` validates uploads vs external sources (size/type/provider) and normalises metadata before persisting.
 - [x] **Signed URL helper** – Upload-backed assets return short-lived signed upload instructions; `GET /admin/media/:id/url` issues signed read URLs (1 h default, configurable via `expiresIn`).
-- [ ] **Rate Limiting & Quotas** – TODO: extend the in-memory limiter for admin media create/delete buckets and surface `RATE_LIMITED` responses.
+- [x] **Rate Limiting & Quotas** – Admin media create/delete routes now share token-bucket limiters that emit `RATE_LIMITED` JSON payloads with `retryAfterSeconds` and log quota breaches at warning level.
 - [x] **Supabase Interactions** – Service-role client writes `media_assets`, deletes cascade to storage (`external://` sentinel prevents unintended removals) and logs best-effort storage clean-up failures.
 - [x] **Tests** – Added smoke coverage `npm run test:media002` exercising upload/external create, list/filter, signed URL fetch, and delete flow via the Express API.
 - [x] **Documentation & Observability** – API contract updated, admin setup notes follow, and structured console logs (`[media] asset_created/asset_deleted`) annotate actor + storage outcome for ingestion later.
