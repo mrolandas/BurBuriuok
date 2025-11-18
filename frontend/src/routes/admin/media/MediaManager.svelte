@@ -16,6 +16,11 @@
 		listAdminConcepts,
 		type AdminConceptResource
 	} from '$lib/api/admin/concepts';
+	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
+	import type {
+		MediaConceptOption,
+		MediaCreateSuccessDetail
+	} from '$lib/admin/media/types';
 
 	type ListState = {
 		items: AdminMediaAsset[];
@@ -64,6 +69,11 @@
 	let successMessage: string | null = null;
 	let successTimer: ReturnType<typeof setTimeout> | null = null;
 
+	let createDrawerOpen = false;
+	let createDefaultConceptId: string | null = null;
+	let createLockedConcept = false;
+	let creationConceptOptions: MediaConceptOption[] = [];
+
 	const assetTypeLabels: Record<AdminMediaAssetType, string> = {
 		image: 'Paveiksliukas',
 		video: 'Vaizdo įrašas'
@@ -79,9 +89,45 @@
 		timeStyle: 'short'
 	});
 
+	$: creationConceptOptions = conceptOptions.map((concept) => ({
+		id: concept.id,
+		slug: concept.slug,
+		label: concept.termLt?.trim().length ? concept.termLt : concept.slug
+	}));
+
 	onMount(async () => {
+		applyQueryDefaults();
 		await Promise.all([loadConceptOptions(), loadMedia()]);
 	});
+
+	function applyQueryDefaults(): void {
+		if (typeof window === 'undefined') {
+			return;
+		}
+
+		const params = new URLSearchParams(window.location.search);
+		const conceptParam = params.get('conceptId');
+		const assetTypeParam = params.get('assetType');
+		const sourceParam = params.get('sourceKind');
+		const searchParam = params.get('search');
+
+		if (conceptParam) {
+			filterConceptId = conceptParam;
+		}
+
+		if (assetTypeParam === 'image' || assetTypeParam === 'video') {
+			filterAssetType = assetTypeParam;
+		}
+
+		if (sourceParam === 'upload' || sourceParam === 'external') {
+			filterSourceKind = sourceParam;
+		}
+
+		if (searchParam) {
+			searchInput = searchParam;
+			searchTerm = searchParam;
+		}
+	}
 
 	function setSuccess(message: string): void {
 		if (successTimer) {
@@ -92,6 +138,30 @@
 			successMessage = null;
 			successTimer = null;
 		}, 4000);
+	}
+
+	function openCreate(options: { conceptId?: string; lockConcept?: boolean } = {}): void {
+		const fallbackConcept =
+			options.conceptId ?? (filterConceptId !== 'all' ? filterConceptId : null);
+
+		createDefaultConceptId = fallbackConcept;
+		createLockedConcept = Boolean(options.lockConcept && fallbackConcept);
+		createDrawerOpen = true;
+	}
+
+	function closeCreateDrawer(): void {
+		createDrawerOpen = false;
+	}
+
+	function handleCreateSuccess(event: CustomEvent<MediaCreateSuccessDetail>): void {
+		const asset = event.detail.asset;
+		setSuccess('Medijos įrašas sukurtas.');
+		createDrawerOpen = false;
+		void refreshList();
+		if (selectedAsset && selectedAsset.id === asset.id) {
+			selectedAsset = asset;
+			detailAsset = asset;
+		}
 	}
 
 	function formatDate(value: string | null | undefined): string {
@@ -386,8 +456,8 @@
 				susieti su bent viena sąvoka.
 			</p>
 		</div>
-		<button class="primary" type="button" disabled title="Įkėlimo vedlys ruo&scaron;iamas">
-			Pridėti failą / išorinį šaltinį (netrukus)
+		<button class="primary" type="button" on:click={() => openCreate()}>
+			Pridėti failą / išorinį šaltinį
 		</button>
 	</header>
 
@@ -448,6 +518,9 @@
 		<p class="muted">Kraunama medija...</p>
 	{:else if listState.items.length === 0}
 		<p class="muted">Pagal pasirinktus filtrus medijos įrašų nėra.</p>
+		<button class="secondary" type="button" on:click={() => openCreate()}>
+			Pridėti naują mediją
+		</button>
 	{:else}
 		<div class="media-table-wrapper">
 			<table class="media-table">
@@ -513,6 +586,16 @@
 		{/if}
 	{/if}
 </section>
+
+{#if createDrawerOpen}
+	<AdminMediaCreateDrawer
+		conceptOptions={creationConceptOptions}
+		defaultConceptId={createDefaultConceptId}
+		lockedConceptId={createLockedConcept}
+		on:close={closeCreateDrawer}
+		on:created={handleCreateSuccess}
+	/>
+{/if}
 
 {#if selectedAsset}
 	<div class="drawer-backdrop" on:click={closeDetail}></div>

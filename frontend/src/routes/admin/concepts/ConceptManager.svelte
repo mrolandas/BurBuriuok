@@ -16,8 +16,15 @@
 	} from '$lib/api/admin/concepts';
 	import { listCurriculumNodes } from '$lib/api/admin/curriculum';
 	import type { AdminCurriculumNode } from '$lib/api/admin/curriculum';
+	import {
+		listAdminMediaAssets,
+		deleteAdminMediaAsset,
+		type AdminMediaAsset
+	} from '$lib/api/admin/media';
 
 	import SectionSelect from '$lib/admin/SectionSelect.svelte';
+	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
+	import type { MediaConceptOption, MediaCreateSuccessDetail } from '$lib/admin/media/types';
 
 	import type {
 		ConceptEditorMode,
@@ -61,6 +68,13 @@
 	let saving = false;
 	let successMessage: string | null = null;
 	let successTimeout: ReturnType<typeof setTimeout> | null = null;
+	let conceptMedia: AdminMediaAsset[] = [];
+	let conceptMediaLoading = false;
+	let conceptMediaError: string | null = null;
+	let conceptMediaDeleteError: string | null = null;
+	let conceptMediaDeletingId: string | null = null;
+	let conceptMediaDrawerOpen = false;
+	let mediaConceptOptions: MediaConceptOption[] = [];
 	let historyEntries: AdminConceptVersion[] = [];
 
 	let historyActions: HistoryAction[] = [];
@@ -336,6 +350,26 @@
 		lastPrefilledSlug = null;
 	}
 
+	$: {
+		const options = concepts
+			.map((concept) => ({
+				id: concept.id,
+				slug: concept.slug,
+				label: concept.termLt?.trim().length ? concept.termLt : concept.slug
+			}))
+			.sort((a, b) => a.label.localeCompare(b.label, 'lt-LT'));
+
+		if (activeConcept && !options.some((option) => option.id === activeConcept?.id)) {
+			options.push({
+				id: activeConcept.id,
+				slug: activeConcept.slug,
+				label: activeConcept.termLt?.trim().length ? activeConcept.termLt : activeConcept.slug
+			});
+		}
+
+		mediaConceptOptions = options;
+	}
+
 	function getFilterParams(): {
 		sectionCode?: string;
 		status?: AdminConceptStatus;
@@ -532,6 +566,12 @@
 		rollbackError = null;
 		deleteConfirmSlug = null;
 		deleteError = null;
+		conceptMedia = [];
+		conceptMediaError = null;
+		conceptMediaDeleteError = null;
+		conceptMediaDeletingId = null;
+		conceptMediaLoading = false;
+		conceptMediaDrawerOpen = false;
 		editorOpen = true;
 	}
 
@@ -560,7 +600,14 @@
 		historyLoading = false;
 		rollingBackVersionId = null;
 		rollbackError = null;
+		conceptMedia = [];
+		conceptMediaError = null;
+		conceptMediaDeleteError = null;
+		conceptMediaDeletingId = null;
+		conceptMediaDrawerOpen = false;
+		conceptMediaLoading = false;
 		void loadHistory(concept.slug);
+		void loadConceptMedia(concept.id);
 		editorOpen = true;
 	}
 
@@ -579,6 +626,12 @@
 		historyLoading = false;
 		deleteConfirmSlug = null;
 		deleteError = null;
+		conceptMedia = [];
+		conceptMediaError = null;
+		conceptMediaDeleteError = null;
+		conceptMediaDeletingId = null;
+		conceptMediaDrawerOpen = false;
+		conceptMediaLoading = false;
 	}
 
 	function requestCloseEditor(): void {
@@ -743,6 +796,90 @@
 		} finally {
 			historyLoading = false;
 		}
+	}
+
+	async function loadConceptMedia(conceptId: string): Promise<void> {
+		conceptMediaLoading = true;
+		conceptMediaError = null;
+		conceptMediaDeleteError = null;
+		conceptMediaDeletingId = null;
+		try {
+			const result = await listAdminMediaAssets({ conceptId, limit: 50 });
+			conceptMedia = result.items;
+		} catch (error) {
+			conceptMediaError =
+				error instanceof Error ? error.message : 'Nepavyko įkelti susietos medijos.';
+			conceptMedia = [];
+		} finally {
+			conceptMediaLoading = false;
+		}
+	}
+
+	function openConceptMediaCreate(): void {
+		if (!activeConcept) {
+			return;
+		}
+		conceptMediaDrawerOpen = true;
+	}
+
+	function closeConceptMediaDrawer(): void {
+		conceptMediaDrawerOpen = false;
+	}
+
+	function handleConceptMediaCreated(event: CustomEvent<MediaCreateSuccessDetail>): void {
+		const asset = event.detail.asset;
+		const existing = conceptMedia.filter((item) => item.id !== asset.id);
+		conceptMedia = [asset, ...existing].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+		conceptMediaDrawerOpen = false;
+		showSuccess('Medijos įrašas pridėtas prie sąvokos.');
+	}
+
+	async function handleConceptMediaDelete(assetId: string): Promise<void> {
+		conceptMediaDeletingId = assetId;
+		conceptMediaDeleteError = null;
+		try {
+			await deleteAdminMediaAsset(assetId);
+			conceptMedia = conceptMedia.filter((asset) => asset.id !== assetId);
+			showSuccess('Medijos įrašas pašalintas.');
+		} catch (error) {
+			conceptMediaDeleteError =
+				error instanceof Error ? error.message : 'Nepavyko pašalinti medijos įrašo.';
+		} finally {
+			conceptMediaDeletingId = null;
+		}
+	}
+
+	function mediaAssetTitle(asset: AdminMediaAsset): string {
+		const candidate = asset.title?.trim();
+		if (candidate && candidate.length) {
+			return candidate;
+		}
+		if (asset.sourceKind === 'external' && asset.externalUrl) {
+			return asset.externalUrl;
+		}
+		return asset.storagePath ?? asset.id;
+	}
+
+	function mediaAssetSourceSummary(asset: AdminMediaAsset): string {
+		const source = asset.sourceKind === 'external' ? 'Išorinis šaltinis' : 'Įkeltas failas';
+		const type = asset.assetType === 'image' ? 'Paveiksliukas' : 'Vaizdo įrašas';
+		return `${source} · ${type}`;
+	}
+
+	function mediaAssetCaption(asset: AdminMediaAsset): string | null {
+		const raw = asset.captionLt ?? asset.captionEn ?? null;
+		if (!raw) {
+			return null;
+		}
+		const trimmed = raw.trim();
+		if (!trimmed.length) {
+			return null;
+		}
+		return trimmed.length > 160 ? `${trimmed.slice(0, 157)}...` : trimmed;
+	}
+
+	function mediaWorkspaceLink(asset: AdminMediaAsset): string {
+		return resolve(`/admin/media?conceptId=${encodeURIComponent(asset.conceptId)}`);
 	}
 
 	async function handleRollback(version: HistoryAction): Promise<void> {
@@ -1438,6 +1575,69 @@
 				</div>
 			{/if}
 
+			<section class="media-panel" aria-live="polite">
+				<header class="media-panel__header">
+					<h3>Papildoma medžiaga</h3>
+					{#if editorMode === 'edit'}
+						<button
+							type="button"
+							class="primary"
+							on:click={openConceptMediaCreate}
+							disabled={conceptMediaLoading}
+						>
+							Pridėti mediją
+						</button>
+					{/if}
+				</header>
+
+				{#if editorMode !== 'edit'}
+					<p class="muted">Mediją galima pridėti tik jau išsaugotai sąvokai.</p>
+				{:else if conceptMediaError}
+					<div class="alert alert--error">{conceptMediaError}</div>
+				{:else if conceptMediaLoading}
+					<p class="muted">Įkeliama medija...</p>
+				{:else if conceptMedia.length === 0}
+					<p class="muted">Ši sąvoka dar neturi susietos medijos.</p>
+				{:else}
+					<ul class="media-panel__list">
+						{#each conceptMedia as media (media.id)}
+							<li class="media-panel__item">
+								<div class="media-panel__summary">
+									<strong>{mediaAssetTitle(media)}</strong>
+									<p class="media-panel__meta">
+										{mediaAssetSourceSummary(media)} · {formatTimestamp(media.createdAt)}
+									</p>
+									{#if mediaAssetCaption(media)}
+										<p class="media-panel__caption">{mediaAssetCaption(media)}</p>
+									{/if}
+								</div>
+								<div class="media-panel__actions">
+									<a
+										class="media-panel__action"
+										href={mediaWorkspaceLink(media)}
+										target="_blank"
+										rel="noreferrer"
+									>
+										Atidaryti sąraše
+									</a>
+									<button
+										type="button"
+										class="media-panel__action media-panel__action--danger"
+										on:click={() => void handleConceptMediaDelete(media.id)}
+										disabled={conceptMediaDeletingId === media.id}
+									>
+										{conceptMediaDeletingId === media.id ? 'Šalinama…' : 'Pašalinti'}
+									</button>
+								</div>
+							</li>
+						{/each}
+					</ul>
+					{#if conceptMediaDeleteError}
+						<p class="field-error">{conceptMediaDeleteError}</p>
+					{/if}
+				{/if}
+			</section>
+
 			<section class="history-panel" aria-live="polite">
 				<header class="history-panel__header">
 					<h3>Versijų istorija</h3>
@@ -1536,6 +1736,16 @@
 		</footer>
 	</form>
 </aside>
+
+{#if conceptMediaDrawerOpen && activeConcept}
+	<AdminMediaCreateDrawer
+		conceptOptions={mediaConceptOptions}
+		defaultConceptId={activeConcept.id}
+		lockedConceptId={true}
+		on:close={closeConceptMediaDrawer}
+		on:created={handleConceptMediaCreated}
+	/>
+{/if}
 
 <style>
 	.concepts-shell {
@@ -1879,6 +2089,98 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.4rem;
+	}
+
+	.media-panel {
+		display: grid;
+		gap: 0.8rem;
+		border-top: 1px solid var(--color-border-soft);
+		padding-top: 0.8rem;
+	}
+
+	.media-panel__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.media-panel__list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.media-panel__item {
+		display: grid;
+		gap: 0.65rem;
+		padding: 0.85rem;
+		border-radius: 0.85rem;
+		border: 1px solid var(--color-border-soft);
+		background: var(--color-panel-soft);
+	}
+
+	.media-panel__summary strong {
+		display: block;
+		font-size: 1rem;
+	}
+
+	.media-panel__meta {
+		margin: 0;
+		color: var(--color-text-soft);
+		font-size: 0.85rem;
+	}
+
+	.media-panel__caption {
+		margin: 0.35rem 0 0;
+		font-size: 0.9rem;
+	}
+
+	.media-panel__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.media-panel__action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.35rem;
+		padding: 0.45rem 0.9rem;
+		border-radius: 0.65rem;
+		border: 1px solid var(--color-border);
+		background: transparent;
+		color: var(--color-text);
+		font-weight: 600;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background 0.2s ease, border-color 0.2s ease;
+	}
+
+	.media-panel__action:hover,
+	.media-panel__action:focus-visible {
+		background: var(--color-panel);
+		border-color: var(--color-border-light);
+	}
+
+	.media-panel__action:disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+
+	.media-panel__action--danger {
+		background: rgba(220, 38, 38, 0.08);
+		border-color: rgba(220, 38, 38, 0.35);
+		color: rgb(185, 28, 28);
+	}
+
+	.media-panel__action--danger:hover,
+	.media-panel__action--danger:focus-visible {
+		background: rgba(220, 38, 38, 0.16);
+		border-color: rgba(220, 38, 38, 0.5);
 	}
 
 	.form-grid {
