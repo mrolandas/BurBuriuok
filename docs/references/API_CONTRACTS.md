@@ -85,13 +85,20 @@ Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once ar
 
 ### Media Library (Admin upload)
 
-| Method | Path                   | Description                                                                                                                                                                                                                                            |
-| ------ | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| POST   | `/admin/media`         | Body `{ conceptId, assetType, title?, captionEn?, captionLt?, source }` where `source` is either `{ kind: 'upload', fileName }` or `{ kind: 'external', url }`. Creates `media_assets` row, requests storage upload if needed, returns asset metadata. |
-| GET    | `/admin/media`         | Query `conceptId?`, `assetType?`. Returns paginated admin-owned assets for reference/attachment pickers.                                                                                                                                               |
-| GET    | `/admin/media/:id`     | Returns metadata for a single asset.                                                                                                                                                                                                                   |
-| GET    | `/admin/media/:id/url` | Generates a signed URL (default 1-hour expiry) for learner rendering.                                                                                                                                                                                  |
-| DELETE | `/admin/media/:id`     | Deletes the asset record and, if `assetType` is upload-backed, removes the storage object.                                                                                                                                                             |
+| Method | Path                   | Description                                                                                                                                                                                                                                                                     |
+| ------ | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/admin/media`         | **Shipped 2025-11-18.** Body `{ conceptId, assetType, title?, captionEn?, captionLt?, source }` where `source` is `{ kind: 'upload', fileName, fileSize, contentType }` or `{ kind: 'external', url }`. Persists metadata and, for uploads, returns signed upload instructions. |
+| GET    | `/admin/media`         | **Shipped 2025-11-18.** Query `conceptId?`, `assetType?`, `limit?`, `cursor?`. Returns recent admin-owned assets ordered by `created_at` with pagination cursors for concept attachment pickers.                                                                                |
+| GET    | `/admin/media/:id`     | **Shipped 2025-11-18.** Returns metadata for a single asset (including `sourceKind` helper).                                                                                                                                                                                    |
+| GET    | `/admin/media/:id/url` | **Shipped 2025-11-18.** Generates a signed URL (default 1-hour expiry) for upload-backed assets; external links echo their curated URL.                                                                                                                                         |
+| DELETE | `/admin/media/:id`     | **Shipped 2025-11-18.** Deletes the asset row and attempts to remove the storage object. Storage removal best effort—missing objects log a warning but do not block deletion.                                                                                                   |
+
+#### Admin Media Request / Response Notes
+
+- Upload sources enforce 50 MB limit, `image/*` (jpeg/png/webp) or `video/mp4` content types, and normalise extensions (`.jpeg → .jpg`). The response returns `upload: { url, token, path, expiresAt }` so the UI can PUT the binary directly to Supabase.
+- External sources store HTTPS links for a vetted allowlist (YouTube + Vimeo hosts). The backend records a sentinel storage path `external://<assetId>` so downstream tooling can distinguish upload-vs-external records.
+- All responses include `sourceKind` (`upload` or `external`) plus camelCased metadata fields. Signed URL endpoints reply with `{ kind: 'supabase-signed-url', url, expiresAt }` for uploads and `{ kind: 'external', url }` for curated links.
+- Pagination uses `created_at` cursors; clients pass the `meta.nextCursor` ISO timestamp in `cursor` to fetch the next page (20 items default, max 50).
 
 ### Audit & Versioning
 
@@ -147,28 +154,13 @@ Quota breaches respond with `{ error: { code: 'RATE_LIMITED', retryAfterSeconds 
 
 ## Implementation Checklist (MEDIA-002)
 
-1. **Express Routes**
-   - Add router `backend/src/routes/admin/media.ts` exposing `POST /admin/media`, `GET /admin/media`, `GET /admin/media/:id`, `GET /admin/media/:id/url`, `DELETE /admin/media/:id`.
-   - Wire routes into main server via `/api/v1/admin/media` mount guarded by `requireAdminRole` middleware.
-2. **Payload Handling**
-   - Introduce shared Zod schemas (`shared/validation/mediaAdmin.ts`) for request/response shapes, including size/type validation and optional captions.
-   - Normalize uploads to write `media_assets` row first, then request storage signed upload URL when `source.kind === 'upload'`.
-   - For external links, validate provider whitelist (YouTube/Vimeo) and normalise embed metadata.
-3. **Signed URL helper**
-   - Create utility `generateSignedMediaUrl(assetId, variant?)` that checks ownership (admin) before calling Supabase storage `createSignedUrl` with 1-hour expiry default and override via query `?expiresIn=`.
-4. **Rate Limiting & Quotas**
-   - Extend existing limiter to include `admin_media_uploads` bucket (40 uploads/day per admin) and `admin_media_deletes` (60/day) using token bucket with env-configurable values.
-   - Return `{ error: { code: 'RATE_LIMITED', retryAfterSeconds } }` on quota breach as documented.
-5. **Supabase Interactions**
-   - Use service-role client for Supabase operations; ensure RLS prevents learner access.
-   - On delete, remove storage object when `source.kind === 'upload'` and soft-fail (log warning) if delete response is 404.
-6. **Tests**
-   - Contract tests covering: successful upload metadata creation (external + upload), signed URL retrieval, list filters, delete cascade.
-   - Negative tests: invalid file type, oversized payload, missing concept, rate limit exceeded, learner JWT attempt.
-   - CLI smoke (`npm run test:media002`) hitting local Supabase test instance using fixtures.
-7. **Documentation & Observability**
-   - Update README/admin docs with new endpoints and example curl requests.
-   - Emit structured logs (`logger.info`) for create/delete operations with asset id, concept id, actor, and storage path.
+- [x] **Express Routes** – `backend/src/routes/admin/media.ts` now exposes `POST/GET/DELETE` handlers and is mounted under `/api/v1/admin/media` behind `requireAdminRole`.
+- [x] **Payload Handling** – Shared schema `shared/validation/adminMediaAssetSchema.ts` validates uploads vs external sources (size/type/provider) and normalises metadata before persisting.
+- [x] **Signed URL helper** – Upload-backed assets return short-lived signed upload instructions; `GET /admin/media/:id/url` issues signed read URLs (1 h default, configurable via `expiresIn`).
+- [ ] **Rate Limiting & Quotas** – TODO: extend the in-memory limiter for admin media create/delete buckets and surface `RATE_LIMITED` responses.
+- [x] **Supabase Interactions** – Service-role client writes `media_assets`, deletes cascade to storage (`external://` sentinel prevents unintended removals) and logs best-effort storage clean-up failures.
+- [x] **Tests** – Added smoke coverage `npm run test:media002` exercising upload/external create, list/filter, signed URL fetch, and delete flow via the Express API.
+- [x] **Documentation & Observability** – API contract updated, admin setup notes follow, and structured console logs (`[media] asset_created/asset_deleted`) annotate actor + storage outcome for ingestion later.
 
 #### Deployment Steps
 

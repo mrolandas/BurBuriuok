@@ -80,8 +80,10 @@ _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The conso
 
 - **Entry point**: “Pridėti mediją” button in the concept editor drawer opens an upload dialog limited to admin users.
 - **Upload dialog**: Select file (image/video) or paste external URL, choose display title, captions (LT/EN), and optional attribution.
+  - **Backend handshake**: Calls `POST /api/v1/admin/media` with `source.kind='upload'` (file metadata + size/type) or `source.kind='external'` (curated HTTPS link). Upload responses include `upload.url/token/path` for direct PUT to Supabase; external entries skip the upload step and store `external://` sentinel paths.
 - **Attachment list**: Shows existing media for the concept with thumbnail, type, and quick actions (copy embed link, delete, replace).
 - **Signed URL helper**: Copy button that generates a 1-hour signed URL for manual testing.
+  - Implementation detail: hits `GET /api/v1/admin/media/:id/url?expiresIn=3600`, which returns `{ kind: 'supabase-signed-url', url, expiresAt }` for binaries or `{ kind: 'external', url }` for curated links.
 - **Deferred items**: Contributor submissions, moderation tabs, and SLA badges move back into scope when MEDIA-003/004 resume.
 
 ### 5. Audit Log

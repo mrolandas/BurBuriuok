@@ -59,11 +59,12 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-17: Captured MEDIA-001 rollout/rollback procedures and MEDIA-002 implementation checklist to unblock upcoming migrations and backend work.
 - 2025-11-18: Applied migration `0011_media_admin_mvp.sql` to Supabase and added automated smoke `npm run test:media001` to validate admin-only RLS.
 - 2025-11-18: Updated migration guards to suppress redundant drop notices and revalidated (`npx supabase db push --yes`, `npm run test:media001`).
+- 2025-11-18: Shipped MEDIA-002 admin media API (`POST/GET/DELETE /admin/media`, signed URL helper), refreshed docs, and added `npm run test:media002` smoke coverage.
 
 ## Wrap-up Checklist (close when all items are complete)
 
-- [ ] MEDIA-001 migration + bucket plan documented and reviewed.
-- [ ] MEDIA-002 admin endpoint contracts captured with validation + signed URL notes.
-- [ ] Media attachment UX documented in `ADMIN_SETUP.md` for admin-only flow.
-- [ ] Deferred contributor scope noted in `docs/references/ISSUE_TRACKER.md` with clear next-step markers.
-- [ ] Follow-up tasks noted in `docs/references/ISSUE_TRACKER.md` and ready for issue creation.
+- [x] MEDIA-001 migration + bucket plan documented and reviewed.
+- [x] MEDIA-002 admin endpoint contracts captured with validation + signed URL notes.
+- [x] Media attachment UX documented in `ADMIN_SETUP.md` for admin-only flow.
+- [x] Deferred contributor scope noted in `docs/references/ISSUE_TRACKER.md` with clear next-step markers.
+- [x] Follow-up tasks noted in `docs/references/ISSUE_TRACKER.md` and ready for issue creation.

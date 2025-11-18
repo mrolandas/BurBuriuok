@@ -144,6 +144,7 @@ This log captures authoritative decisions about the evolving Supabase schema so 
 
 - 2025-11-18: Migration `0011_media_admin_mvp.sql` applied to hosted project; admin-only tables/policies live.
 - 2025-11-18: Smoke test `npm run test:media001` added to guard RLS and Supabase REST behaviour.
+- 2025-11-18: Admin API stores external links with `external://<assetId>` sentinel `storage_path`, returning signed upload URLs for binaries and echoing curated HTTPS providers (YouTube/Vimeo) for external records.
 
 ## 2025-11-03 – Media Moderation _(deferred until contributor uploads return)_
 

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { asyncHandler } from "../utils/asyncHandler.ts";
 import conceptsRouter from "./admin/concepts.ts";
 import curriculumRouter from "./admin/curriculum.ts";
+import mediaRouter from "./admin/media.ts";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.get(
 
 router.use("/concepts", conceptsRouter);
 router.use("/curriculum", curriculumRouter);
+router.use("/media", mediaRouter);
 
 export default router;

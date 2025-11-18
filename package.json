@@ -31,7 +31,8 @@
     "test:supabase": "node tests/checkSupabaseConnection.mjs",
     "test:concepts": "ts-node --transpile-only tests/conceptsRepository.mapRow.test.ts",
     "test:db002": "ts-node --transpile-only tests/db002ContentVersioning.test.ts",
-    "test:media001": "ts-node --transpile-only tests/mediaAssetsAdmin.test.ts"
+    "test:media001": "ts-node --transpile-only tests/mediaAssetsAdmin.test.ts",
+    "test:media002": "ADMIN_DEV_IMPERSONATION=true ts-node --transpile-only tests/mediaAdminApi.test.ts"
   },
   "repository": {
     "type": "git",
