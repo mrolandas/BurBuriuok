@@ -159,7 +159,7 @@ router.post(
         created_by: actor,
       })
       .select(
-        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at"
+        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at, concepts:concept_id (slug, term_lt, term_en)"
       )
       .maybeSingle();
 
@@ -209,7 +209,7 @@ router.get(
     let query = supabase
       .from("media_assets")
       .select(
-        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at"
+        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at, concepts:concept_id (slug, term_lt, term_en)"
       )
       .order("created_at", { ascending: false })
       .limit(limit + 1);

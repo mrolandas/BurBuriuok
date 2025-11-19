@@ -20,7 +20,10 @@ const adminMediaAssetSchema = z
 		captionLt: nullableString,
 		captionEn: nullableString,
 		createdBy: nullableString,
-		createdAt: z.string()
+		createdAt: z.string(),
+		conceptSlug: nullableString,
+		conceptTermLt: nullableString,
+		conceptTermEn: nullableString
 	})
 	.transform((value) => ({
 		...value,
@@ -29,7 +32,10 @@ const adminMediaAssetSchema = z
 		title: typeof value.title === 'string' ? value.title : null,
 		captionLt: typeof value.captionLt === 'string' ? value.captionLt : null,
 		captionEn: typeof value.captionEn === 'string' ? value.captionEn : null,
-		createdBy: typeof value.createdBy === 'string' ? value.createdBy : null
+		createdBy: typeof value.createdBy === 'string' ? value.createdBy : null,
+		conceptSlug: typeof value.conceptSlug === 'string' ? value.conceptSlug : null,
+		conceptTermLt: typeof value.conceptTermLt === 'string' ? value.conceptTermLt : null,
+		conceptTermEn: typeof value.conceptTermEn === 'string' ? value.conceptTermEn : null
 	}));
 
 const mediaListResponseSchema = z.object({
