@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { appConfig } from '$lib/config/appConfig';
 
 export type ConceptMediaItem = {
 	id: string;
@@ -17,11 +17,30 @@ export type ConceptMediaResponse = {
 	items: ConceptMediaItem[];
 };
 
+function resolvePublicApiBase(): string {
+	const runtimeBase = (appConfig.public?.apiBase ?? '').trim();
+	const envBase = (import.meta.env.VITE_PUBLIC_API_BASE ?? '').trim();
+	const fallbackBase = '/api/v1';
+	const baseCandidate = runtimeBase.length ? runtimeBase : envBase.length ? envBase : fallbackBase;
+	return baseCandidate.endsWith('/') ? baseCandidate.slice(0, -1) : baseCandidate;
+}
+
+const PUBLIC_API_BASE = resolvePublicApiBase();
+
+if (typeof window !== 'undefined') {
+	const host = window.location.hostname.toLowerCase();
+	if (host.endsWith('github.io') && PUBLIC_API_BASE.startsWith('/')) {
+		console.warn(
+			'[MediaAPI] Relative public API base detected on GitHub Pages. Configure VITE_PUBLIC_API_BASE or set publicApiBase in env.js so requests reach the hosted backend.'
+		);
+	}
+}
+
 export async function fetchConceptMedia(
 	slug: string,
 	fetcher: typeof fetch = fetch
 ): Promise<ConceptMediaItem[]> {
-	const target = `${base}/api/v1/concepts/${encodeURIComponent(slug)}/media`;
+	const target = `${PUBLIC_API_BASE}/concepts/${encodeURIComponent(slug)}/media`;
 	const response = await fetcher(target, {
 		headers: {
 			Accept: 'application/json'

@@ -2,6 +2,7 @@ type RuntimeConfig = {
 	supabaseUrl?: string;
 	supabaseAnonKey?: string;
 	adminApiBase?: string;
+	publicApiBase?: string;
 };
 
 const globalWithRuntimeConfig = globalThis as typeof globalThis & {
@@ -18,6 +19,7 @@ const supabaseUrl = runtimeConfig.supabaseUrl ?? import.meta.env.VITE_SUPABASE_U
 const supabaseAnonKey =
 	runtimeConfig.supabaseAnonKey ?? import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 const adminApiBase = runtimeConfig.adminApiBase ?? import.meta.env.VITE_ADMIN_API_BASE ?? '';
+const publicApiBase = runtimeConfig.publicApiBase ?? import.meta.env.VITE_PUBLIC_API_BASE ?? '';
 
 export const appConfig = {
 	appName: 'BurKursas',
@@ -27,6 +29,9 @@ export const appConfig = {
 	},
 	admin: {
 		apiBase: adminApiBase
+	},
+	public: {
+		apiBase: publicApiBase
 	}
 };
 
