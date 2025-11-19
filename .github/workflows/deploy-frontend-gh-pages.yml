@@ -82,6 +82,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ENABLE_ADMIN_IMPERSONATION: enabled
           VITE_ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
+          VITE_PUBLIC_API_BASE: ${{ secrets.VITE_PUBLIC_API_BASE }}
         run: npm run build
 
       - name: Prepare static assets
@@ -90,6 +91,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
+          PUBLIC_API_BASE: ${{ secrets.VITE_PUBLIC_API_BASE }}
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
             echo "Supabase environment variables are missing"
@@ -100,16 +102,25 @@ jobs:
           const fs = require('fs');
 
           const defaultAdminApiBase = 'https://burburiuok.onrender.com/api/v1/admin';
+          const defaultPublicApiBase = 'https://burburiuok.onrender.com/api/v1';
 
           const config = {
             supabaseUrl: process.env.SUPABASE_URL,
             supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
-            adminApiBase: defaultAdminApiBase
+            adminApiBase: defaultAdminApiBase,
+            publicApiBase: defaultPublicApiBase
           };
 
           const adminBaseFromEnv = process.env.ADMIN_API_BASE?.trim();
           if (adminBaseFromEnv) {
             config.adminApiBase = adminBaseFromEnv;
+          }
+
+          const publicBaseFromEnv = process.env.PUBLIC_API_BASE?.trim();
+          if (publicBaseFromEnv) {
+            config.publicApiBase = publicBaseFromEnv;
+          } else if (adminBaseFromEnv && adminBaseFromEnv.endsWith('/admin')) {
+            config.publicApiBase = adminBaseFromEnv.replace(/\/admin$/, '');
           }
 
           const content = `window.__BURKURSAS_CONFIG__ = Object.assign(window.__BURKURSAS_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
