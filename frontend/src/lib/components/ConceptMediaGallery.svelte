@@ -1,5 +1,5 @@
 <script lang="ts">
-	 import { base } from '$app/paths';
+	import { base } from '$app/paths';
 	import { tick } from 'svelte';
 	import type { ConceptMediaItem } from '$lib/api/media';
 
@@ -13,17 +13,17 @@
 	let activeIndex = $state(0);
 
 	const displayItems = $derived(items.filter((item) => Boolean(item.url)));
-		const toExternalHref = (target: string | null | undefined): string => {
-			if (!target) {
-				return '#';
-			}
-			if (/^[a-z][a-z0-9+.-]*:/i.test(target)) {
-				return target;
-			}
-			const normalized = target.startsWith('/') ? target : `/${target}`;
-			const parsed = new URL(normalized, 'http://localhost');
-			return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
-		};
+	const toExternalHref = (target: string | null | undefined): string => {
+		if (!target) {
+			return '#';
+		}
+		if (/^[a-z][a-z0-9+.-]*:/i.test(target)) {
+			return target;
+		}
+		const normalized = target.startsWith('/') ? target : `/${target}`;
+		const parsed = new URL(normalized, 'http://localhost');
+		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
+	};
 	const previewableItems = $derived(displayItems.filter((item) => item.assetType !== 'document'));
 	let currentItem = $state<ConceptMediaItem | null>(null);
 	let currentCaption = $state('');

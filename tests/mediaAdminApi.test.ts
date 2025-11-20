@@ -195,7 +195,6 @@ async function main(): Promise<void> {
       },
       body: JSON.stringify({
         conceptId,
-        assetType: "image",
         title: "Test upload asset",
         captionLt: "LT caption",
         captionEn: "EN caption",
@@ -240,7 +239,6 @@ async function main(): Promise<void> {
       },
       body: JSON.stringify({
         conceptId,
-        assetType: "video",
         title: "External video",
         captionLt: "Išorinis video",
         source: {
@@ -337,7 +335,6 @@ async function main(): Promise<void> {
       },
       body: JSON.stringify({
         conceptId,
-        assetType: "image",
         title: "Rate limited asset",
         captionLt: "Limit test",
         captionEn: "Limit test",

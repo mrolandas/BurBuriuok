@@ -1,5 +1,5 @@
 <script lang="ts">
-	 import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import ConceptDisplay from '$lib/components/ConceptDisplay.svelte';
 	import ConceptMediaGallery from '$lib/components/ConceptMediaGallery.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';

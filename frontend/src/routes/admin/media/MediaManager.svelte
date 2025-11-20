@@ -1,5 +1,5 @@
 <script lang="ts">
-	 import { base, resolve } from '$app/paths';
+	import { base, resolve } from '$app/paths';
 	import { onMount, onDestroy, tick } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { AdminApiError } from '$lib/api/admin/client';
@@ -60,13 +60,13 @@
 	let searchTerm = '';
 	let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
-	 const toAppHref = (path: string): string => {
+	const toAppHref = (path: string): string => {
 		const normalized = path.startsWith('/') ? path : `/${path}`;
 		const parsed = new URL(normalized, 'http://localhost');
 		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
 	};
 
-	 const toExternalHref = (target: string | null | undefined): string => {
+	const toExternalHref = (target: string | null | undefined): string => {
 		if (!target) {
 			return '#';
 		}

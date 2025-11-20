@@ -1,5 +1,5 @@
 <script lang="ts">
-	 import { base, resolve } from '$app/paths';
+	import { base, resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
