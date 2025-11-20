@@ -8,7 +8,9 @@ import {
   adminMediaCreateSchema,
   adminMediaListQuerySchema,
   adminMediaSignedUrlQuerySchema,
+  adminMediaUpdateSchema,
   type AdminMediaCreateInput,
+  type AdminMediaUpdateInput,
 } from "../../../../shared/validation/adminMediaAssetSchema.ts";
 import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
@@ -99,7 +101,7 @@ router.post(
       return;
     }
 
-    const payload = parsed.data;
+    const payload: AdminMediaUpdateInput = parsed.data;
 
     if (payload.source.kind === "upload" && payload.source.fileSize > MAX_UPLOAD_BYTES) {
       res.status(422).json({
@@ -318,6 +320,158 @@ router.get(
       },
       meta: {
         fetchedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.patch(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const id = req.params.id?.trim();
+
+    if (!id) {
+      res.status(400).json({
+        error: {
+          code: "MEDIA_ID_REQUIRED",
+          message: "Medijos ID privalomas.",
+        },
+      });
+      return;
+    }
+
+    const parsed = adminMediaUpdateSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+      sendValidationError(res, parsed.error.flatten().fieldErrors);
+      return;
+    }
+
+    const payload = parsed.data;
+
+    const supabase = getSupabaseClient({ service: true, schema: "burburiuok" }) as any;
+
+    const { data: existing, error: fetchError } = await supabase
+      .from("media_assets")
+      .select(
+        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at"
+      )
+      .eq("id", id)
+      .maybeSingle();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    if (!existing) {
+      res.status(404).json({
+        error: {
+          code: "MEDIA_NOT_FOUND",
+          message: "Medijos įrašas nerastas.",
+        },
+      });
+      return;
+    }
+
+    if (typeof payload.conceptId !== "undefined") {
+      const conceptExists = await ensureConceptExists(supabase, payload.conceptId);
+      if (!conceptExists) {
+        res.status(404).json({
+          error: {
+            code: "CONCEPT_NOT_FOUND",
+            message: "Nurodytas konceptas nerastas.",
+          },
+        });
+        return;
+      }
+    }
+
+    const updates: Record<string, unknown> = {};
+    const row = existing as MediaAssetRow;
+
+    if (typeof payload.conceptId !== "undefined" && payload.conceptId !== row.concept_id) {
+      updates.concept_id = payload.conceptId;
+    }
+
+    if (typeof payload.title !== "undefined") {
+      const trimmedTitle = payload.title.trim();
+      const currentTitle = (row.title ?? "").trim();
+      const rawTitle = row.title ?? "";
+      if (trimmedTitle !== currentTitle || rawTitle !== trimmedTitle) {
+        updates.title = trimmedTitle;
+      }
+    }
+
+    if (typeof payload.captionLt !== "undefined") {
+      const nextCaptionLt = normalizeOptionalText(payload.captionLt);
+      const currentCaptionLt = normalizeOptionalText(row.caption_lt ?? null);
+      const rawCaptionLt = typeof row.caption_lt === "string" ? row.caption_lt : null;
+      const shouldUpdateLt =
+        nextCaptionLt !== currentCaptionLt ||
+        (typeof rawCaptionLt === "string" && rawCaptionLt !== nextCaptionLt);
+      if (shouldUpdateLt) {
+        updates.caption_lt = nextCaptionLt;
+      }
+    }
+
+    if (typeof payload.captionEn !== "undefined") {
+      const nextCaptionEn = normalizeOptionalText(payload.captionEn);
+      const currentCaptionEn = normalizeOptionalText(row.caption_en ?? null);
+      const rawCaptionEn = typeof row.caption_en === "string" ? row.caption_en : null;
+      const shouldUpdateEn =
+        nextCaptionEn !== currentCaptionEn ||
+        (typeof rawCaptionEn === "string" && rawCaptionEn !== nextCaptionEn);
+      if (shouldUpdateEn) {
+        updates.caption_en = nextCaptionEn;
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      res.json({
+        data: {
+          asset: mapMediaAssetForResponse(row),
+        },
+        meta: {
+          updatedAt: new Date().toISOString(),
+          unchanged: true,
+        },
+      });
+      return;
+    }
+
+    const { data: updated, error: updateError } = await supabase
+      .from("media_assets")
+      .update(updates)
+      .eq("id", id)
+      .select(
+        "id, concept_id, asset_type, storage_path, external_url, title, caption_lt, caption_en, created_by, created_at"
+      )
+      .maybeSingle();
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    if (!updated) {
+      throw new HttpError(500, "Nepavyko atnaujinti medijos įrašo.", "MEDIA_UPDATE_FAILED");
+    }
+
+    const responseAsset = mapMediaAssetForResponse(updated as MediaAssetRow);
+
+    // eslint-disable-next-line no-console
+    console.info("[media] asset_updated", {
+      assetId: id,
+      conceptId: responseAsset.conceptId,
+      actor: req.authUser?.email ?? req.authUser?.id ?? "system",
+      fields: Object.keys(updates),
+    });
+
+    res.json({
+      data: {
+        asset: responseAsset,
+      },
+      meta: {
+        updatedAt: new Date().toISOString(),
       },
     });
   })
@@ -598,6 +752,14 @@ function normalizeExtension(extension: string): string {
     return ".jpg";
   }
   return extension;
+}
+
+function normalizeOptionalText(value: string | null): string | null {
+  if (value === null) {
+    return null;
+  }
+  const trimmed = value.trim();
+  return trimmed.length ? trimmed : null;
 }
 
 function buildIlikePattern(raw: string): string | null {

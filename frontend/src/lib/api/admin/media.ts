@@ -3,7 +3,8 @@ import { adminFetch } from './client';
 import {
 	adminMediaAssetTypeSchema,
 	adminMediaSourceKindSchema,
-	type AdminMediaCreateInput
+	type AdminMediaCreateInput,
+	type AdminMediaUpdateInput
 } from '../../../../../shared/validation/adminMediaAssetSchema';
 
 const nullableString = z.union([z.string(), z.null()]).optional();
@@ -47,6 +48,12 @@ const mediaListResponseSchema = z.object({
 });
 
 const mediaDetailResponseSchema = z.object({
+	data: z.object({
+		asset: adminMediaAssetSchema
+	})
+});
+
+const mediaUpdateResponseSchema = z.object({
 	data: z.object({
 		asset: adminMediaAssetSchema
 	})
@@ -197,6 +204,19 @@ export async function deleteAdminMediaAsset(
 
 	const parsed = mediaDeleteResponseSchema.parse(response);
 	return parsed.data;
+}
+
+export async function updateAdminMediaAsset(
+	id: string,
+	payload: AdminMediaUpdateInput
+): Promise<AdminMediaAsset> {
+	const response = await adminFetch<unknown>(`/media/${id}`, {
+		method: 'PATCH',
+		body: JSON.stringify(payload)
+	});
+
+	const parsed = mediaUpdateResponseSchema.parse(response);
+	return parsed.data.asset;
 }
 
 export async function fetchAdminMediaSignedUrl(

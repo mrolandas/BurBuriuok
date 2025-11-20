@@ -111,3 +111,39 @@ export const adminMediaSignedUrlQuerySchema = z
   .strict();
 
 export type AdminMediaSignedUrlQuery = z.infer<typeof adminMediaSignedUrlQuerySchema>;
+
+const captionUpdateSchema = z
+  .union([
+    z
+      .string()
+      .trim()
+      .max(300, { message: "Aprašymas negali būti ilgesnis nei 300 simbolių." }),
+    z.null(),
+  ])
+  .optional();
+
+export const adminMediaUpdateSchema = z
+  .object({
+    conceptId: z.string().uuid({ message: "Koncepto ID turi būti UUID." }).optional(),
+    title: z
+      .string()
+      .trim()
+      .min(1, { message: "Įveskite medijos pavadinimą." })
+      .max(160, { message: "Pavadinimas negali būti ilgesnis nei 160 simbolių." })
+      .optional(),
+    captionLt: captionUpdateSchema,
+    captionEn: captionUpdateSchema,
+  })
+  .strict()
+  .refine(
+    (value) =>
+      typeof value.conceptId !== "undefined" ||
+      typeof value.title !== "undefined" ||
+      typeof value.captionLt !== "undefined" ||
+      typeof value.captionEn !== "undefined",
+    {
+      message: "Pateikite bent vieną lauką atnaujinimui.",
+    }
+  );
+
+export type AdminMediaUpdateInput = z.infer<typeof adminMediaUpdateSchema>;

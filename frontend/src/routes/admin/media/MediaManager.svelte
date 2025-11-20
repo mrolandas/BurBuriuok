@@ -1,22 +1,23 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import { onMount, tick } from 'svelte';
-	import {
-		listAdminMediaAssets,
-		getAdminMediaAsset,
-		deleteAdminMediaAsset,
-		fetchAdminMediaSignedUrl,
-		type AdminMediaAsset,
-		type AdminMediaAssetType,
-		type AdminMediaListMeta,
-		type AdminMediaSignedUrl,
-		type AdminMediaSourceKind
-	} from '$lib/api/admin/media';
-	import {
-		listAdminConcepts,
-		type AdminConceptResource
-	} from '$lib/api/admin/concepts';
-	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
+import { resolve } from '$app/paths';
+import { onMount, onDestroy, tick } from 'svelte';
+import { AdminApiError } from '$lib/api/admin/client';
+import {
+	listAdminMediaAssets,
+	getAdminMediaAsset,
+	deleteAdminMediaAsset,
+	fetchAdminMediaSignedUrl,
+	updateAdminMediaAsset,
+	type AdminMediaAsset,
+	type AdminMediaAssetType,
+	type AdminMediaListMeta,
+	type AdminMediaSourceKind
+} from '$lib/api/admin/media';
+import {
+	listAdminConcepts,
+	type AdminConceptResource
+} from '$lib/api/admin/concepts';
+import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
 	import type {
 		MediaConceptOption,
 		MediaCreateSuccessDetail
@@ -27,6 +28,9 @@
 		kind: PreviewKind;
 		url: string;
 	};
+
+	type EditFieldName = 'title' | 'conceptId' | 'captionLt' | 'captionEn';
+	type EditFieldErrors = Partial<Record<EditFieldName, string>>;
 
 	type ListState = {
 		items: AdminMediaAsset[];
@@ -65,12 +69,20 @@
 	let detailAsset: AdminMediaAsset | null = null;
 	let detailLoading = false;
 	let detailError: string | null = null;
-	let signedUrl: AdminMediaSignedUrl | null = null;
-	let signedUrlLoading = false;
-	let signedUrlError: string | null = null;
+
+	let editMode = false;
+	let editBusy = false;
+	let editError: string | null = null;
+	let editFieldErrors: EditFieldErrors = {};
+	let editTitle = '';
+	let editCaptionLt = '';
+	let editCaptionEn = '';
+	let editConceptId = '';
+
 	let deleteBusy = false;
 	let deleteError: string | null = null;
 	let deleteConfirmVisible = false;
+	let deleteConfirmTimer: ReturnType<typeof setTimeout> | null = null;
 	let actionError: string | null = null;
 	let rowDeleteBusyId: string | null = null;
 
@@ -82,6 +94,9 @@
 	let previewLoading = false;
 	let previewError: string | null = null;
 	let previewLoadToken = 0;
+	let previewModalOpen = false;
+	let previewModal: HTMLDialogElement | null = null;
+	let previewTrigger: HTMLElement | null = null;
 
 	let successMessage: string | null = null;
 	let successTimer: ReturnType<typeof setTimeout> | null = null;
@@ -110,6 +125,25 @@
 		await Promise.all([loadConceptOptions(), loadMedia()]);
 		await tick();
 		updateSelectAllIndeterminate();
+	});
+
+	onDestroy(() => {
+		if (searchTimer) {
+			clearTimeout(searchTimer);
+			searchTimer = null;
+		}
+
+		if (successTimer) {
+			clearTimeout(successTimer);
+			successTimer = null;
+		}
+
+		if (deleteConfirmTimer) {
+			clearTimeout(deleteConfirmTimer);
+			deleteConfirmTimer = null;
+		}
+
+		closePreviewModal();
 	});
 
 	function applyQueryDefaults(): void {
@@ -174,7 +208,176 @@
 		if (selectedAsset && selectedAsset.id === asset.id) {
 			selectedAsset = asset;
 			detailAsset = asset;
+			resetEditState(asset);
+			clearPreview();
+			void loadPreview(asset);
 		}
+	}
+
+	function populateEditForm(asset: AdminMediaAsset | null): void {
+		if (asset) {
+			editTitle = asset.title?.trim() ?? '';
+			editCaptionLt = asset.captionLt ?? '';
+			editCaptionEn = asset.captionEn ?? '';
+			editConceptId = asset.conceptId ?? '';
+		} else {
+			editTitle = '';
+			editCaptionLt = '';
+			editCaptionEn = '';
+			editConceptId = '';
+		}
+	}
+
+	function resetEditState(asset: AdminMediaAsset | null = detailAsset): void {
+		editMode = false;
+		editBusy = false;
+		editError = null;
+		editFieldErrors = {};
+		populateEditForm(asset ?? null);
+	}
+
+	function beginEdit(): void {
+		if (!detailAsset) {
+			return;
+		}
+		populateEditForm(detailAsset);
+		editMode = true;
+		editError = null;
+		editFieldErrors = {};
+	}
+
+	function cancelEdit(): void {
+		resetEditState(detailAsset);
+	}
+
+	function normalizeEditableText(value: string): string | null {
+		const trimmed = value.trim();
+		return trimmed.length ? trimmed : null;
+	}
+
+	function buildEditPayload(asset: AdminMediaAsset): Parameters<typeof updateAdminMediaAsset>[1] {
+		const payload: Parameters<typeof updateAdminMediaAsset>[1] = {};
+		const trimmedTitle = editTitle.trim();
+		const currentTitle = asset.title?.trim() ?? '';
+		if (trimmedTitle !== currentTitle) {
+			payload.title = trimmedTitle;
+		}
+
+		if (editConceptId && editConceptId !== asset.conceptId) {
+			payload.conceptId = editConceptId;
+		}
+
+		const nextCaptionLt = normalizeEditableText(editCaptionLt);
+		const currentCaptionLt = asset.captionLt ?? null;
+		if (nextCaptionLt !== currentCaptionLt) {
+			payload.captionLt = nextCaptionLt;
+		}
+
+		const nextCaptionEn = normalizeEditableText(editCaptionEn);
+		const currentCaptionEn = asset.captionEn ?? null;
+		if (nextCaptionEn !== currentCaptionEn) {
+			payload.captionEn = nextCaptionEn;
+		}
+
+		return payload;
+	}
+
+	function mapEditFieldErrors(error: AdminApiError): EditFieldErrors {
+		const fieldErrors: EditFieldErrors = {};
+		const body = error.body as
+			| { error?: { fieldErrors?: Record<string, string[] | undefined> } }
+			| undefined;
+		const rawFieldErrors = body?.error?.fieldErrors ?? {};
+		for (const [key, messages] of Object.entries(rawFieldErrors)) {
+			if (!messages || messages.length === 0) {
+				continue;
+			}
+			if (key === 'title' || key === 'conceptId' || key === 'captionLt' || key === 'captionEn') {
+				fieldErrors[key] = messages[0];
+			}
+		}
+		return fieldErrors;
+	}
+
+	function applyUpdatedAsset(asset: AdminMediaAsset): void {
+		detailAsset = asset;
+		selectedAsset = asset;
+		listState = {
+			...listState,
+			items: listState.items.map((item) => (item.id === asset.id ? asset : item))
+		};
+		resetEditState(asset);
+	}
+
+	async function handleMetadataSubmit(event: Event): Promise<void> {
+		event.preventDefault();
+		if (!detailAsset || editBusy) {
+			return;
+		}
+
+		const errors: EditFieldErrors = {};
+		const trimmedTitle = editTitle.trim();
+		if (!trimmedTitle.length) {
+			errors.title = 'Įveskite medijos pavadinimą.';
+		}
+
+		if (!editConceptId) {
+			errors.conceptId = 'Pasirinkite susietą sąvoką.';
+		}
+
+		if (Object.keys(errors).length) {
+			editFieldErrors = errors;
+			editError = 'Patikrinkite nurodytas klaidas.';
+			return;
+		}
+
+		const payload = buildEditPayload(detailAsset);
+		if (Object.keys(payload).length === 0) {
+			editError = 'Pakeitimų nerasta.';
+			return;
+		}
+
+		editBusy = true;
+		editError = null;
+		editFieldErrors = {};
+		try {
+			const updated = await updateAdminMediaAsset(detailAsset.id, payload);
+			applyUpdatedAsset(updated);
+			setSuccess('Medijos įrašo informacija atnaujinta.');
+		} catch (error) {
+			if (error instanceof AdminApiError && error.status === 422) {
+				const fieldErrors = mapEditFieldErrors(error);
+				if (Object.keys(fieldErrors).length) {
+					editFieldErrors = fieldErrors;
+					editError = 'Kai kurie laukeliai neatitinka reikalavimų.';
+				} else {
+					editError = error.message;
+				}
+			} else if (error instanceof Error) {
+				editError = error.message;
+			} else {
+				editError = 'Nepavyko atnaujinti medijos įrašo.';
+			}
+		} finally {
+			editBusy = false;
+		}
+	}
+
+	function beginDeleteConfirmation(): void {
+		cancelDeleteConfirmation();
+		deleteConfirmVisible = true;
+		deleteConfirmTimer = setTimeout(() => {
+			deleteConfirmVisible = false;
+			deleteConfirmTimer = null;
+		}, 10000);
+	}
+
+	function cancelDeleteConfirmation(): void {
+		if (deleteConfirmTimer) {
+			clearTimeout(deleteConfirmTimer);
+			deleteConfirmTimer = null;
+		}
+		deleteConfirmVisible = false;
 	}
 
 	function formatDate(value: string | null | undefined): string {
@@ -411,17 +614,17 @@
 		selectedAsset = asset;
 		detailAsset = asset;
 		detailError = null;
-		signedUrl = null;
-		signedUrlError = null;
 		deleteError = null;
-		deleteConfirmVisible = false;
+		cancelDeleteConfirmation();
+		resetEditState(asset);
 		clearPreview();
 
 		detailLoading = true;
 		try {
 			const fresh = await getAdminMediaAsset(asset.id);
 			detailAsset = fresh;
-			await loadPreview(fresh);
+			selectedAsset = fresh;
+			resetEditState(fresh);
 		} catch (error) {
 			detailError =
 				error instanceof Error
@@ -430,49 +633,26 @@
 		} finally {
 			detailLoading = false;
 		}
+
+		if (detailAsset) {
+			void loadPreview(detailAsset);
+		}
 	}
 
 	function closeDetail(): void {
 		selectedAsset = null;
 		detailAsset = null;
-		signedUrl = null;
-		signedUrlError = null;
 		deleteError = null;
-		deleteConfirmVisible = false;
+		cancelDeleteConfirmation();
+		resetEditState(null);
 		clearPreview();
 	}
-
-	async function handleFetchSignedUrl(): Promise<void> {
-		if (!detailAsset) {
-			return;
-		}
-		signedUrlLoading = true;
-		signedUrlError = null;
-		try {
-			signedUrl = await fetchAdminMediaSignedUrl(detailAsset.id);
-			setSuccess('Sugeneruotas laikinas pasirašytas URL.');
-			if (detailAsset.sourceKind === 'upload' && signedUrl) {
-				preview =
-					detailAsset.assetType === 'image'
-						? { kind: 'image', url: signedUrl.url }
-						: { kind: 'video', url: signedUrl.url };
-				previewError = null;
-			}
-		} catch (error) {
-			signedUrlError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko sugeneruoti pasirašyto URL.';
-		} finally {
-			signedUrlLoading = false;
-		}
-	}
-
 	function clearPreview(): void {
 		previewLoadToken += 1;
 		preview = null;
 		previewError = null;
 		previewLoading = false;
+		closePreviewModal();
 	}
 
 	async function loadPreview(asset: AdminMediaAsset): Promise<void> {
@@ -513,8 +693,6 @@
 			if (token !== previewLoadToken) {
 				return;
 			}
-			signedUrl = result;
-			signedUrlError = null;
 			preview =
 				asset.assetType === 'image'
 					? { kind: 'image', url: result.url }
@@ -532,6 +710,55 @@
 				previewLoading = false;
 			}
 		}
+	}
+
+	function previewSupportsModal(state: PreviewState | null): boolean {
+		return Boolean(state && (state.kind === 'image' || state.kind === 'video' || state.kind === 'externalVideo'));
+	}
+
+	function handlePreviewExpand(event: MouseEvent): void {
+		if (!preview || !previewSupportsModal(preview)) {
+			return;
+		}
+		previewTrigger = event.currentTarget as HTMLElement;
+		if (previewModal && typeof previewModal.showModal === 'function') {
+			if (!previewModal.open) {
+				previewModal.showModal();
+			}
+			previewModalOpen = true;
+		}
+	}
+
+	function closePreviewModal(): void {
+		if (!previewModalOpen) {
+			return;
+		}
+		previewModalOpen = false;
+		const videoEl = previewModal?.querySelector('video');
+		if (videoEl && typeof (videoEl as HTMLVideoElement).pause === 'function') {
+			(videoEl as HTMLVideoElement).pause();
+		}
+		if (previewModal?.open) {
+			previewModal.close();
+		}
+		if (previewTrigger && typeof previewTrigger.focus === 'function') {
+			previewTrigger.focus();
+		}
+		previewTrigger = null;
+	}
+
+	function handlePreviewBackdropPointerDown(event: PointerEvent): void {
+		if (!previewModal) {
+			return;
+		}
+		if (event.target === previewModal) {
+			closePreviewModal();
+		}
+	}
+
+	function handlePreviewModalCancel(event: Event): void {
+		event.preventDefault();
+		closePreviewModal();
 	}
 
 	function resolveExternalVideoEmbed(rawUrl: string): string | null {
@@ -654,38 +881,21 @@
 		return matched ? total : null;
 	}
 
-	async function copyToClipboard(value: string): Promise<void> {
-		try {
-			if (navigator?.clipboard?.writeText) {
-				await navigator.clipboard.writeText(value);
-			} else {
-				const temp = document.createElement('textarea');
-				temp.value = value;
-				temp.setAttribute('readonly', '');
-				temp.style.position = 'absolute';
-				temp.style.opacity = '0';
-				document.body.appendChild(temp);
-				temp.select();
-				document.execCommand('copy');
-				document.body.removeChild(temp);
-			}
-			setSuccess('Reikšmė nukopijuota į iškarpinę.');
-		} catch (error) {
-			setSuccess('Nepavyko nukopijuoti. Nukopijuokite rankiniu būdu.');
-		}
-	}
-
 	async function handleDelete(): Promise<void> {
 		if (!detailAsset) {
 			return;
 		}
+		if (deleteBusy) {
+			return;
+		}
 		if (!deleteConfirmVisible) {
-			deleteConfirmVisible = true;
+			beginDeleteConfirmation();
 			return;
 		}
 
 		deleteBusy = true;
 		deleteError = null;
+		cancelDeleteConfirmation();
 		try {
 			const deletedId = detailAsset.id;
 			await deleteAdminMediaAsset(deletedId);
@@ -703,7 +913,6 @@
 					: 'Nepavyko pašalinti medijos įrašo.';
 		} finally {
 			deleteBusy = false;
-			deleteConfirmVisible = false;
 		}
 	}
 
@@ -838,7 +1047,7 @@
 				susieti su bent viena sąvoka.
 			</p>
 		</div>
-		<button class="primary" type="button" onclick={() => openCreate()}>
+		<button class="primary" type="button" on:click={() => openCreate()}>
 			Pridėti failą / išorinį šaltinį
 		</button>
 	</header>
@@ -861,7 +1070,7 @@
 		<div class="media-toolbar__filters">
 			<label>
 				<span>Sąvoka</span>
-				<select bind:value={filterConceptId} onchange={handleFilterChange}>
+				<select bind:value={filterConceptId} on:change={handleFilterChange}>
 					<option value="all">Visos sąvokos</option>
 					{#each conceptOptions as option}
 						<option value={option.id}>{option.termLt}</option>
@@ -870,7 +1079,7 @@
 			</label>
 			<label>
 				<span>Tipas</span>
-				<select bind:value={filterAssetType} onchange={handleFilterChange}>
+				<select bind:value={filterAssetType} on:change={handleFilterChange}>
 					<option value="all">Visi tipai</option>
 					<option value="image">{assetTypeLabels.image}</option>
 					<option value="video">{assetTypeLabels.video}</option>
@@ -878,7 +1087,7 @@
 			</label>
 			<label>
 				<span>Šaltinis</span>
-				<select bind:value={filterSourceKind} onchange={handleFilterChange}>
+				<select bind:value={filterSourceKind} on:change={handleFilterChange}>
 					<option value="all">Visi šaltiniai</option>
 					<option value="upload">{sourceKindLabels.upload}</option>
 					<option value="external">{sourceKindLabels.external}</option>
@@ -892,9 +1101,9 @@
 				type="search"
 				placeholder="Ieškoti pagal pavadinimą ar aprašą"
 				value={searchInput}
-				oninput={(event) => scheduleSearch(event.currentTarget.value)}
+				on:input={(event) => scheduleSearch(event.currentTarget.value)}
 			/>
-			<button type="button" class="secondary" onclick={resetFilters}>Atstatyti filtrus</button>
+			<button type="button" class="secondary" on:click={resetFilters}>Atstatyti filtrus</button>
 		</div>
 	</div>
 
@@ -904,7 +1113,7 @@
 		<p class="muted">Kraunama medija...</p>
 	{:else if listState.items.length === 0}
 		<p class="muted">Pagal pasirinktus filtrus medijos įrašų nėra.</p>
-		<button class="secondary" type="button" onclick={() => openCreate()}>
+		<button class="secondary" type="button" on:click={() => openCreate()}>
 			Pridėti naują mediją
 		</button>
 	{:else}
@@ -919,7 +1128,7 @@
 					<button
 						type="button"
 						class="danger"
-						onclick={() => void handleBulkDelete()}
+						on:click={() => void handleBulkDelete()}
 						disabled={bulkDeleteBusy}
 					>
 						{#if bulkDeleteBusy}
@@ -931,7 +1140,7 @@
 					<button
 						type="button"
 						class="plain"
-						onclick={clearSelection}
+						on:click={clearSelection}
 						disabled={bulkDeleteBusy}
 					>
 						Atšaukti pasirinkimą
@@ -948,7 +1157,7 @@
 								type="checkbox"
 								aria-label="Pasirinkti visus matomus medijos įrašus"
 								checked={listState.items.length > 0 && listState.items.every((item) => selectedIds.has(item.id))}
-								onchange={(event) => toggleSelectAll(event.currentTarget.checked)}
+								on:change={(event) => toggleSelectAll(event.currentTarget.checked)}
 								bind:this={selectAllCheckbox}
 								disabled={listState.items.length === 0}
 							/>
@@ -966,16 +1175,16 @@
 						<tr
 							tabindex="0"
 							class="media-table__row"
-							onclick={() => void openDetail(item)}
-							onkeydown={(event) => handleRowKeydown(event, item)}
+							on:click={() => void openDetail(item)}
+							on:keydown={(event) => handleRowKeydown(event, item)}
 						>
 							<td class="media-table__select-cell">
 								<input
 									type="checkbox"
 									aria-label={`Pažymėti įrašą ${assetTitle(item)}`}
 									checked={selectedIds.has(item.id)}
-									onclick={(event) => event.stopPropagation()}
-									onchange={(event) => toggleSelection(item.id, event.currentTarget.checked)}
+									on:click={(event) => event.stopPropagation()}
+									on:change={(event) => toggleSelection(item.id, event.currentTarget.checked)}
 								/>
 							</td>
 							<th scope="row">
@@ -990,7 +1199,7 @@
 								{#if conceptLink(item.conceptId)}
 									<a
 										href={conceptLink(item.conceptId) ?? '#'}
-										onclick={(event) => event.stopPropagation()}
+										on:click={(event) => event.stopPropagation()}
 									>
 										{conceptLabel(item.conceptId)}
 									</a>
@@ -1005,7 +1214,7 @@
 								<button
 									type="button"
 									class="plain plain--danger"
-									onclick={(event) => void handleListDelete(event, item)}
+									on:click={(event) => void handleListDelete(event, item)}
 									disabled={rowDeleteBusyId === item.id}
 								>
 									{#if rowDeleteBusyId === item.id}
@@ -1025,7 +1234,7 @@
 			<button
 				class="secondary media-shell__load-more"
 				type="button"
-				onclick={() => void loadMedia({ append: true })}
+				on:click={() => void loadMedia({ append: true })}
 				disabled={loadMoreLoading}
 			>
 				{#if loadMoreLoading}
@@ -1052,13 +1261,13 @@
 	<button
 		type="button"
 		class="drawer-backdrop"
-		onclick={closeDetail}
+		on:click={closeDetail}
 		aria-label="Uždaryti medijos detalių langą"
 	></button>
 	<div class="drawer" role="dialog" aria-modal="true" aria-labelledby="media-detail-title">
 		<header class="drawer__header">
 			<h2 id="media-detail-title">Medijos įrašo detalės</h2>
-			<button class="plain" type="button" onclick={closeDetail}>Uždaryti</button>
+			<button class="plain" type="button" on:click={closeDetail}>Uždaryti</button>
 		</header>
 
 		<div class="drawer__body">
@@ -1069,70 +1278,57 @@
 					<div class="alert alert--error">{detailError}</div>
 				</div>
 			{:else if detailAsset}
-				<section class="drawer__section">
-					<h3>Pagrindinė informacija</h3>
-					<dl class="meta-grid">
-						<div>
-							<dt>Pavadinimas</dt>
-							<dd>{assetTitle(detailAsset)}</dd>
-						</div>
-						<div>
-							<dt>Sąvoka</dt>
-							<dd>{conceptLabel(detailAsset.conceptId)}</dd>
-						</div>
-						<div>
-							<dt>Tipas</dt>
-							<dd>{assetTypeLabels[detailAsset.assetType]}</dd>
-						</div>
-						<div>
-							<dt>Šaltinis</dt>
-							<dd>{sourceKindLabels[detailAsset.sourceKind]}</dd>
-						</div>
-						<div>
-							<dt>Sukūrė</dt>
-							<dd>{detailAsset.createdBy ?? '–'}</dd>
-						</div>
-						<div>
-							<dt>Sukurta</dt>
-							<dd>{formatDate(detailAsset.createdAt)}</dd>
-						</div>
-					</dl>
+				<section class="drawer__section drawer__section--preview">
+					<header class="drawer__section-header">
+						<h3>Peržiūra</h3>
+						{#if previewSupportsModal(preview)}
+							<button
+								type="button"
+								class="secondary"
+								on:click={handlePreviewExpand}
+								disabled={previewLoading}
+							>
+								{#if previewLoading}
+									Įkeliama...
+								{:else}
+									Atverti visame lange
+								{/if}
+							</button>
+						{/if}
+					</header>
 
-					{#if detailAsset.captionLt}
-						<h4>Aprašymas (LT)</h4>
-						<p>{detailAsset.captionLt}</p>
-					{/if}
-					{#if detailAsset.captionEn}
-						<h4>Aprašymas (EN)</h4>
-						<p>{detailAsset.captionEn}</p>
-					{/if}
-				</section>
-
-				<section class="drawer__section">
-					<h3>Peržiūra</h3>
 					{#if previewLoading}
 						<p class="muted">Įkeliama peržiūra...</p>
 					{:else if previewError}
 						<div class="alert alert--warning">{previewError}</div>
 					{:else if preview}
 						{#if preview.kind === 'image'}
-							<img
-								src={preview.url}
-								alt={`Peržiūra: ${assetTitle(detailAsset)}`}
-								class="drawer__preview-image"
-								loading="lazy"
-							/>
+							<button
+								type="button"
+								class="preview-card preview-card--image"
+								on:click={handlePreviewExpand}
+								aria-label="Peržiūrėti visame lange"
+							>
+								<img
+									src={preview.url}
+									alt={`Peržiūra: ${assetTitle(detailAsset)}`}
+									loading="lazy"
+								/>
+							</button>
 						{:else if preview.kind === 'video'}
-							<!-- svelte-ignore a11y_media_has_caption -->
-							<video
-								class="drawer__preview-video"
-								controls
-								preload="metadata"
-								src={preview.url}
-								playsinline
-							></video>
+							<div class="preview-card preview-card--video">
+								<!-- svelte-ignore a11y_media_has_caption -->
+								<video controls preload="metadata" src={preview.url} playsinline></video>
+								<button
+									type="button"
+									class="secondary preview-card__trigger"
+									on:click={handlePreviewExpand}
+								>
+									Peržiūrėti visame lange
+								</button>
+							</div>
 						{:else if preview.kind === 'externalVideo'}
-							<div class="drawer__preview-embed">
+							<div class="preview-card preview-card--embed">
 								<iframe
 									src={preview.url}
 									title={`Peržiūra: ${assetTitle(detailAsset)}`}
@@ -1140,10 +1336,17 @@
 									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 									allowfullscreen
 								></iframe>
+								<button
+									type="button"
+									class="secondary preview-card__trigger"
+									on:click={handlePreviewExpand}
+								>
+									Peržiūrėti visame lange
+								</button>
 							</div>
 						{:else if preview.kind === 'link'}
 							<a
-								class="drawer__preview-link"
+								class="preview-card preview-card--link"
 								href={preview.url}
 								target="_blank"
 								rel="noopener noreferrer"
@@ -1157,65 +1360,149 @@
 				</section>
 
 				<section class="drawer__section">
-					<h3>Prieiga</h3>
-					{#if detailAsset.sourceKind === 'external' && detailAsset.externalUrl}
-						<p>
-							Išorinis adresas:
-							<a href={detailAsset.externalUrl} rel="noopener noreferrer" target="_blank">
-								{detailAsset.externalUrl}
-							</a>
-						</p>
-					{:else if detailAsset.sourceKind === 'upload'}
-						<p class="muted">Saugojimo kelias: {detailAsset.storagePath}</p>
-						<div class="drawer__actions">
-							<button
-								class="secondary"
-								type="button"
-								onclick={handleFetchSignedUrl}
-								disabled={signedUrlLoading}
-							>
-								{#if signedUrlLoading}
-									Generuojama...
-								{:else}
-									Gauti pasirašytą URL
-								{/if}
-							</button>
-							{#if detailAsset.storagePath}
-								<button
-									class="plain"
-									type="button"
-									onclick={() => void copyToClipboard(detailAsset?.storagePath ?? '')}
-								>
-									Kopijuoti kelio reikšmę
-								</button>
-							{/if}
-						</div>
-						{#if signedUrlError}
-							<p class="field-error">{signedUrlError}</p>
+					<header class="drawer__section-header">
+						<h3>Metaduomenys</h3>
+						{#if !editMode}
+							<div class="drawer__section-actions">
+								<button class="secondary" type="button" on:click={beginEdit}>Redaguoti</button>
+							</div>
 						{/if}
-						{#if signedUrl}
-							<div class="drawer__signed-url">
-								<p>
-									<a href={signedUrl.url} rel="noopener noreferrer" target="_blank">
-										Pasirašytas URL
-									</a>
-								</p>
-								{#if signedUrl.expiresAt}
-									<p class="muted">Galioja iki {formatDate(signedUrl.expiresAt)}</p>
-								{/if}
-								<button
-									class="plain"
-									type="button"
-									onclick={() => {
-										if (!signedUrl) {
-											return;
-										}
-										void copyToClipboard(signedUrl.url);
-									}}
-								>
-									Kopijuoti URL
+					</header>
+
+					{#if editMode}
+						{#if editError}
+							<div class="alert alert--error">{editError}</div>
+						{/if}
+						<form class="metadata-form" on:submit|preventDefault={handleMetadataSubmit}>
+							<label>
+								<span>Sąvoka</span>
+								<select bind:value={editConceptId} disabled={editBusy}>
+									<option value="" disabled>Pasirinkite sąvoką</option>
+									{#each conceptOptions as option}
+										<option value={option.id}>{conceptLabel(option.id)}</option>
+									{/each}
+								</select>
+							</label>
+							{#if editFieldErrors.conceptId}
+								<p class="field-error">{editFieldErrors.conceptId}</p>
+							{/if}
+
+							<label>
+								<span>Pavadinimas</span>
+								<input
+									type="text"
+									bind:value={editTitle}
+									maxlength="160"
+									placeholder="Medijos pavadinimas"
+									disabled={editBusy}
+								/>
+							</label>
+							{#if editFieldErrors.title}
+								<p class="field-error">{editFieldErrors.title}</p>
+							{/if}
+
+							<label>
+								<span>Aprašymas (LT)</span>
+								<textarea
+									rows="3"
+									bind:value={editCaptionLt}
+									maxlength="300"
+									placeholder="Trumpas aprašymas lietuvių kalba"
+									disabled={editBusy}
+								></textarea>
+							</label>
+							{#if editFieldErrors.captionLt}
+								<p class="field-error">{editFieldErrors.captionLt}</p>
+							{/if}
+
+							<label>
+								<span>Aprašymas (EN)</span>
+								<textarea
+									rows="3"
+									bind:value={editCaptionEn}
+									maxlength="300"
+									placeholder="Trumpas aprašymas anglų kalba"
+									disabled={editBusy}
+								></textarea>
+							</label>
+							{#if editFieldErrors.captionEn}
+								<p class="field-error">{editFieldErrors.captionEn}</p>
+							{/if}
+
+							<div class="drawer__form-actions">
+								<button class="primary" type="submit" disabled={editBusy}>
+									{#if editBusy}
+										Išsaugoma...
+									{:else}
+										Išsaugoti pakeitimus
+									{/if}
+								</button>
+								<button class="plain" type="button" on:click={cancelEdit} disabled={editBusy}>
+									Atšaukti
 								</button>
 							</div>
+						</form>
+					{:else}
+						<dl class="meta-grid">
+							<div>
+								<dt>Pavadinimas</dt>
+								<dd>{assetTitle(detailAsset)}</dd>
+							</div>
+							<div>
+								<dt>Sąvoka</dt>
+								<dd>
+									{#if conceptLink(detailAsset.conceptId)}
+										<a
+											href={conceptLink(detailAsset.conceptId)}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{conceptLabel(detailAsset.conceptId)}
+										</a>
+									{:else}
+										{conceptLabel(detailAsset.conceptId)}
+									{/if}
+								</dd>
+							</div>
+							<div>
+								<dt>Tipas</dt>
+								<dd>{assetTypeLabels[detailAsset.assetType]}</dd>
+							</div>
+							<div>
+								<dt>Šaltinis</dt>
+								<dd>{sourceKindLabels[detailAsset.sourceKind]}</dd>
+							</div>
+							<div>
+								<dt>Sukūrė</dt>
+								<dd>{detailAsset.createdBy ?? '–'}</dd>
+							</div>
+							<div>
+								<dt>Sukurta</dt>
+								<dd>{formatDate(detailAsset.createdAt)}</dd>
+							</div>
+							{#if detailAsset.sourceKind === 'external' && detailAsset.externalUrl}
+								<div class="meta-grid__full">
+									<dt>Išorinis adresas</dt>
+									<dd>
+										<a
+											href={detailAsset.externalUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{detailAsset.externalUrl}
+										</a>
+									</dd>
+								</div>
+							{/if}
+						</dl>
+
+						{#if detailAsset.captionLt}
+							<h4>Aprašymas (LT)</h4>
+							<p>{detailAsset.captionLt}</p>
+						{/if}
+						{#if detailAsset.captionEn}
+							<h4>Aprašymas (EN)</h4>
+							<p>{detailAsset.captionEn}</p>
 						{/if}
 					{/if}
 				</section>
@@ -1223,29 +1510,35 @@
 				<section class="drawer__section drawer__section--danger">
 					<h3>Šalinimas</h3>
 					<p class="muted">
-						Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas
-						negrįžtamas.
+						Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas negrįžtamas.
 					</p>
 					{#if deleteError}
 						<div class="alert alert--error">{deleteError}</div>
 					{/if}
-					<button
-						class="danger"
-						type="button"
-						onclick={() => void handleDelete()}
-						disabled={deleteBusy}
-					>
-						{#if deleteBusy}
-							Šalinama...
-						{:else if deleteConfirmVisible}
-							Patvirtinti šalinimą
-						{:else}
-							Pašalinti mediją
+					<div class="drawer__danger-actions">
+						<button
+							class="danger"
+							type="button"
+							on:click={() => void handleDelete()}
+							disabled={deleteBusy}
+						>
+							{#if deleteBusy}
+								Šalinama...
+							{:else if deleteConfirmVisible}
+								Patvirtinti šalinimą
+							{:else}
+								Pašalinti mediją
+							{/if}
+						</button>
+						{#if deleteConfirmVisible}
+							<button class="plain" type="button" on:click={cancelDeleteConfirmation} disabled={deleteBusy}>
+								Atšaukti
+							</button>
 						{/if}
-					</button>
+					</div>
 					{#if deleteConfirmVisible}
 						<p class="alert alert--warning">
-							Paspauskite „Patvirtinti šalinimą“, kad užbaigtumėte šį veiksmą.
+							Patvirtinkite per 10 sekundžių, kad būtų pašalinta ši medija.
 						</p>
 					{/if}
 				</section>
@@ -1253,6 +1546,48 @@
 		</div>
 	</div>
 {/if}
+
+<dialog
+	class="preview-modal"
+	bind:this={previewModal}
+	class:preview-modal--open={previewModalOpen}
+	on:cancel={handlePreviewModalCancel}
+	on:pointerdown={handlePreviewBackdropPointerDown}
+>
+	<div class="preview-modal__content">
+		{#if preview && previewSupportsModal(preview)}
+			{#if preview.kind === 'image'}
+				<img
+					src={preview.url}
+					alt={`Peržiūra: ${detailAsset ? assetTitle(detailAsset) : 'Medija'}`}
+					class="preview-modal__media preview-modal__media--image"
+				/>
+			{:else if preview.kind === 'video'}
+				<!-- svelte-ignore a11y_media_has_caption -->
+				<video
+					class="preview-modal__media preview-modal__media--video"
+					controls
+					preload="metadata"
+					src={preview.url}
+					autoplay
+					playsinline
+				></video>
+			{:else if preview.kind === 'externalVideo'}
+				<iframe
+					src={preview.url}
+					title={`Peržiūra: ${detailAsset ? assetTitle(detailAsset) : 'Medija'}`}
+					class="preview-modal__media preview-modal__media--embed"
+					loading="lazy"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen
+				></iframe>
+			{/if}
+		{:else}
+			<p class="muted">Peržiūra negalima.</p>
+		{/if}
+	</div>
+	<button class="plain preview-modal__close" type="button" on:click={closePreviewModal}>Uždaryti</button>
+</dialog>
 
 <style>
 	.media-shell {
@@ -1462,6 +1797,23 @@
 		border-bottom: 1px solid var(--color-border-soft);
 	}
 
+	.drawer__section-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.drawer__section-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.drawer__section--preview {
+		gap: 1rem;
+	}
+
 	.drawer__section h3 {
 		margin: 0;
 		font-size: 1rem;
@@ -1471,68 +1823,169 @@
 		background: rgba(239, 68, 68, 0.06);
 	}
 
-	.drawer__preview-image {
-		width: 100%;
-		max-height: 360px;
-		object-fit: contain;
-		border-radius: 0.9rem;
-		background: var(--color-panel-soft);
-	}
-
-	.drawer__preview-video {
-		width: 100%;
-		max-height: 360px;
-		border-radius: 0.9rem;
-		background: #000;
-	}
-
-	.drawer__preview-embed {
-		position: relative;
-		padding-top: 56.25%;
-		border-radius: 0.9rem;
-		overflow: hidden;
-		background: #000;
-	}
-
-	.drawer__preview-embed iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		border: 0;
-	}
-
-	.drawer__preview-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		font-weight: 600;
-	}
-
-	.drawer__actions {
+	.drawer__danger-actions {
 		display: flex;
+		gap: 0.75rem;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		align-items: center;
 	}
 
-	.drawer__signed-url {
-		display: grid;
-		gap: 0.4rem;
-		padding: 0.8rem;
-		border-radius: 0.8rem;
-		border: 1px solid var(--color-border);
-		background: var(--color-panel-soft);
-	}
-
-	.meta-grid {
+	.metadata-form {
 		display: grid;
 		gap: 0.75rem;
 	}
 
-	.meta-grid > div {
+	.metadata-form label {
+		display: grid;
+		gap: 0.4rem;
+		font-size: 0.9rem;
+	}
+
+	.metadata-form input,
+	.metadata-form select,
+	.metadata-form textarea {
+		padding: 0.5rem 0.65rem;
+		border-radius: 0.65rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-soft);
+		color: var(--color-text);
+	}
+
+	.metadata-form textarea {
+		resize: vertical;
+		min-height: 4rem;
+	}
+
+	.metadata-form input:disabled,
+	.metadata-form select:disabled,
+	.metadata-form textarea:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+	}
+
+	.drawer__form-actions {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.preview-card {
+		border-radius: 0.95rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-soft);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.preview-card.preview-card--image {
+		border: none;
+		background: var(--color-panel-soft);
+		cursor: pointer;
+	}
+
+	.preview-card.preview-card--image:focus-visible {
+		outline: 3px solid var(--color-link);
+		outline-offset: 2px;
+	}
+
+	.preview-card--image img {
+		display: block;
+		width: 100%;
+		max-height: 360px;
+		object-fit: contain;
+	}
+
+	.preview-card--video,
+	.preview-card--embed {
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 0.75rem;
+		background: var(--color-panel-soft);
+	}
+
+	.preview-card--video video,
+	.preview-card--embed iframe {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 0.9rem;
+		border: none;
+		background: #000;
+	}
+
+	.preview-card--link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-weight: 600;
+		padding: 0.75rem 1rem;
+	}
+
+	.preview-card__trigger {
+		align-self: flex-start;
+	}
+
+	.preview-modal {
+		border: none;
+		border-radius: 1rem;
+		padding: 1.5rem;
+		background: var(--color-panel);
+		color: var(--color-text);
+		max-width: min(62rem, 92vw);
+		width: min(62rem, 92vw);
+		box-shadow: 0 24px 60px rgba(15, 23, 42, 0.45);
+		z-index: 120;
+	}
+
+	.preview-modal::backdrop {
+		background: rgba(15, 23, 42, 0.45);
+	}
+
+	.preview-modal__content {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.preview-modal__media {
+		width: 100%;
+		border-radius: 1rem;
+		background: #000;
+	}
+
+	.preview-modal__media--image {
+		max-height: 80vh;
+		object-fit: contain;
+	}
+
+	.preview-modal__media--video,
+	.preview-modal__media--embed {
+		aspect-ratio: 16 / 9;
+	}
+
+	.preview-modal__close {
+		margin-top: 1rem;
+		justify-self: flex-end;
+	}
+
+
+	.meta-grid {
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	}
+
+	.meta-grid > div,
+	.meta-grid__full {
 		display: grid;
 		gap: 0.25rem;
+	}
+
+	.meta-grid__full {
+		grid-column: 1 / -1;
 	}
 
 	.meta-grid dt {
