@@ -51,6 +51,8 @@ _Update 2025-11-16_: Concept manager extracted its toolbar/list/drawer into `com
 
 _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The console will surface a lightweight “Pridėti mediją” action inside the concept editor, with moderation queue + SLA tooling deferred until contributor submissions return.
 
+_Update 2025-11-20_: Admin media workspace now supports metadata edits (concept reassignment, title, LT/EN captions) inside the detail drawer with Lithuanian validation copy, introduces a modal preview for images/videos with ESC/backdrop handling, and adds a timed delete confirmation bar to prevent accidental removals.
+
 ## Screen Details
 
 ### 1. Overview
@@ -85,6 +87,8 @@ _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The conso
 - **Signed URL helper**: Copy button that generates a 1-hour signed URL for manual testing.
   - Implementation detail: hits `GET /api/v1/admin/media/:id/url?expiresIn=3600`, which returns `{ kind: 'supabase-signed-url', url, expiresAt }` for binaries or `{ kind: 'external', url }` for curated links.
 - **Media workspace table**: Checkbox column enables multi-select, a selection toolbar surfaces bulk delete, and row clicks continue to open the detail drawer. Signed URL previews render inline (image, MP4, or embedded YouTube/Vimeo) so admins can verify assets before publishing.
+- **Detail drawer**: Editing form mirrors backend validation, trims metadata, and prevents empty submissions. Concept selector honours locked state when launched from a concept, Lithuanian error copy matches shared Zod messages, successful saves emit `[media] asset_updated` toasts while keeping the list entry in sync, and delete actions require a timed (10s) confirmation before the asset is removed.
+- **Preview modal**: Clicking the image thumbnail or the video “Peržiūrėti visame lange” button opens a dialog that traps focus, pauses active videos on close, supports ESC/backdrop dismiss, and re-focuses the triggering element for accessibility.
 - **Bulk actions**: After triggering bulk delete, the list reports partial failures, clears removed items from the selection set, and refreshes the table + concept attachment panel automatically.
 - **Deferred items**: Contributor submissions, moderation tabs, and SLA badges move back into scope when MEDIA-003/004 resume.
 
@@ -99,7 +103,7 @@ _Update 2025-11-17_: Media roadmap MVP rescoped to admin-only uploads. The conso
 **Managing or removing attachments**
 
 1. From the attachment list, use the action menu to open an item in the media workspace, copy a signed URL, or start deletion.
-2. When deleting, confirm the prompt; successful removal raises a toast, clears the item from the concept panel, and updates the workspace table in the background.
+2. When deleting, confirm the prompt; the detail drawer displays a 10-second confirmation banner, successful removal raises a toast, clears the item from the concept panel, and updates the workspace table in the background.
 3. For multiple clean-up tasks, switch to `/admin/media`, select assets via the checkbox column, and use the bulk delete toolbar; partial failures surface inline and surviving selections reset so follow-up actions are clear.
 
 ### 5. Audit Log

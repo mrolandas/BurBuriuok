@@ -90,6 +90,7 @@ Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once ar
 | POST   | `/admin/media`         | **Shipped 2025-11-18.** Body `{ conceptId, assetType, title?, captionEn?, captionLt?, source }` where `source` is `{ kind: 'upload', fileName, fileSize, contentType }` or `{ kind: 'external', url }`. Persists metadata and, for uploads, returns signed upload instructions. |
 | GET    | `/admin/media`         | **Shipped 2025-11-18.** Query `conceptId?`, `assetType?`, `limit?`, `cursor?`. Returns recent admin-owned assets ordered by `created_at` with pagination cursors for concept attachment pickers.                                                                                |
 | GET    | `/admin/media/:id`     | **Shipped 2025-11-18.** Returns metadata for a single asset (including `sourceKind` helper).                                                                                                                                                                                    |
+| PATCH  | `/admin/media/:id`     | **Shipped 2025-11-20.** Accepts partial metadata payload (`conceptId`, `title`, `captionLt`, `captionEn`), validates at least one field, rechecks concept existence, normalises empty captions to `null`, and returns the updated asset with unchanged metadata echoed back.    |
 | GET    | `/admin/media/:id/url` | **Shipped 2025-11-18.** Generates a signed URL (default 1-hour expiry) for upload-backed assets; external links echo their curated URL.                                                                                                                                         |
 | DELETE | `/admin/media/:id`     | **Shipped 2025-11-18.** Deletes the asset row and attempts to remove the storage object. Storage removal best effort—missing objects log a warning but do not block deletion.                                                                                                   |
 
@@ -99,6 +100,7 @@ Planned follow-ups for ADM-002 include dedicated `PATCH`/`DELETE` routes once ar
 - External sources store HTTPS links for a vetted allowlist (YouTube + Vimeo hosts). The backend records a sentinel storage path `external://<assetId>` so downstream tooling can distinguish upload-vs-external records.
 - All responses include `sourceKind` (`upload` or `external`) plus camelCased metadata fields. Signed URL endpoints reply with `{ kind: 'supabase-signed-url', url, expiresAt }` for uploads and `{ kind: 'external', url }` for curated links.
 - Pagination uses `created_at` cursors; clients pass the `meta.nextCursor` ISO timestamp in `cursor` to fetch the next page (20 items default, max 50).
+- Metadata updates trim titles, collapse whitespace-only captions to `null`, prevent no-op saves, emit `[media] asset_updated` structured logs with actor + changed fields, and refuse concept reassignments when the target concept is missing.
 
 ### Audit & Versioning
 
@@ -161,6 +163,7 @@ Quota breaches respond with `{ error: { code: 'RATE_LIMITED', retryAfterSeconds 
 - [x] **Supabase Interactions** – Service-role client writes `media_assets`, deletes cascade to storage (`external://` sentinel prevents unintended removals) and logs best-effort storage clean-up failures.
 - [x] **Tests** – Added smoke coverage `npm run test:media002` exercising upload/external create, list/filter, signed URL fetch, and delete flow via the Express API.
 - [x] **Documentation & Observability** – API contract updated, admin setup notes follow, and structured console logs (`[media] asset_created/asset_deleted`) annotate actor + storage outcome for ingestion later.
+- [x] **Metadata update flow** – Detail drawer issues `PATCH /admin/media/:id`, backend normalises strings, revalidates concept IDs, avoids redundant writes, and emits `[media] asset_updated` logs mirrored in the admin UI success toast.
 
 #### Deployment Steps
 

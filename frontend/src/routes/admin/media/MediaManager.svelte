@@ -1281,20 +1281,6 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				<section class="drawer__section drawer__section--preview">
 					<header class="drawer__section-header">
 						<h3>Peržiūra</h3>
-						{#if previewSupportsModal(preview)}
-							<button
-								type="button"
-								class="secondary"
-								on:click={handlePreviewExpand}
-								disabled={previewLoading}
-							>
-								{#if previewLoading}
-									Įkeliama...
-								{:else}
-									Atverti visame lange
-								{/if}
-							</button>
-						{/if}
 					</header>
 
 					{#if previewLoading}
