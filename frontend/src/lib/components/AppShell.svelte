@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	 import { base, resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
@@ -190,7 +190,7 @@
 		}
 	};
 
-	const syncAdminModeToUrl = async (enabled: boolean) => {
+	 const syncAdminModeToUrl = async (enabled: boolean) => {
 		if (typeof window === 'undefined') {
 			return;
 		}
@@ -200,7 +200,10 @@
 			return;
 		}
 
-		const nextRelative = `${url.pathname}${url.search}${url.hash}` as `/${string}`;
+		const normalizedPath = base && url.pathname.startsWith(base)
+			? (url.pathname.slice(base.length) || '/')
+			: url.pathname;
+		const nextRelative = `${normalizedPath}${url.search}${url.hash}` as `/${string}`;
 		await goto(resolve(nextRelative), {
 			replaceState: true,
 			noScroll: true,
