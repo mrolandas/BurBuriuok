@@ -9,6 +9,7 @@ import {
   adminMediaListQuerySchema,
   adminMediaSignedUrlQuerySchema,
   adminMediaUpdateSchema,
+  type AdminMediaAssetType,
   type AdminMediaCreateInput,
   type AdminMediaUpdateInput,
 } from "../../../../shared/validation/adminMediaAssetSchema.ts";
@@ -26,7 +27,7 @@ import {
   buildExternalStoragePath,
   extractAdminIdentifier,
 } from "../media/shared.ts";
-const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 const DAILY_MS = 24 * 60 * 60 * 1000;
 
@@ -37,12 +38,23 @@ const ADMIN_MEDIA_DELETE_BURST = getPositiveIntFromEnv("ADMIN_MEDIA_DELETE_BURST
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 const VIDEO_EXTENSIONS = new Set([".mp4"]);
+const DOCUMENT_EXTENSIONS = new Set([".pdf"]);
 
 const CONTENT_TYPE_EXTENSION_MAP = new Map<string, string>([
   ["image/jpeg", ".jpg"],
   ["image/png", ".png"],
   ["image/webp", ".webp"],
   ["video/mp4", ".mp4"],
+  ["application/pdf", ".pdf"],
+]);
+
+const EXTENSION_CONTENT_TYPE_MAP = new Map<string, string>([
+  [".jpg", "image/jpeg"],
+  [".jpeg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+  [".mp4", "video/mp4"],
+  [".pdf", "application/pdf"],
 ]);
 
 const ALLOWED_EXTERNAL_HOSTS = new Set([
@@ -101,13 +113,13 @@ router.post(
       return;
     }
 
-    const payload: AdminMediaUpdateInput = parsed.data;
+    const payload: AdminMediaCreateInput = parsed.data;
 
     if (payload.source.kind === "upload" && payload.source.fileSize > MAX_UPLOAD_BYTES) {
       res.status(422).json({
         error: {
           code: "FILE_TOO_LARGE",
-          message: "Failas negali būti didesnis nei 50 MB.",
+          message: "Failas negali būti didesnis nei 10 MB.",
         },
       });
       return;
@@ -132,19 +144,23 @@ router.post(
     let storagePath: string;
     let externalUrl: string | null = null;
     let uploadInstructions: UploadInstruction | null = null;
+    let assetType: AdminMediaAssetType;
+    let uploadContentType: string | null = null;
 
     if (payload.source.kind === "upload") {
-      validateUploadPayload(payload);
-      const extension = resolveUploadExtension(payload);
-      storagePath = buildUploadStoragePath(payload.conceptId, assetId, extension);
+      const uploadDetails = resolveUploadAssetDetails(payload);
+      assetType = uploadDetails.assetType;
+      uploadContentType = uploadDetails.contentType;
+      storagePath = buildUploadStoragePath(payload.conceptId, assetId, uploadDetails.extension);
       uploadInstructions = await createSignedUploadUrl(supabase, {
         storagePath,
-        contentType: payload.source.contentType,
+        contentType: uploadContentType,
       });
     } else {
       validateExternalUrl(payload.source.url);
       externalUrl = payload.source.url;
       storagePath = buildExternalStoragePath(assetId);
+      assetType = "video";
     }
 
     const { data: inserted, error: insertError } = await supabase
@@ -152,7 +168,7 @@ router.post(
       .insert({
         id: assetId,
         concept_id: payload.conceptId,
-        asset_type: payload.assetType,
+        asset_type: assetType,
         storage_path: storagePath,
         external_url: externalUrl,
         title: payload.title,
@@ -699,52 +715,108 @@ async function ensureConceptExists(supabase: any, conceptId: string): Promise<bo
   return Boolean(data);
 }
 
-function validateUploadPayload(payload: AdminMediaCreateInput): void {
-  if (payload.source.kind !== "upload") {
-    return;
+function detectAssetTypeFromContentType(contentType: string): AdminMediaAssetType | null {
+  if (!contentType) {
+    return null;
   }
 
-  const contentType = payload.source.contentType.toLowerCase();
-  if (payload.assetType === "image") {
-    if (!contentType.startsWith("image/")) {
-      throw new HttpError(422, "Vaizdo įkelimui reikalingas image/* turinio tipas.", "UNSUPPORTED_MEDIA_TYPE");
-    }
-  } else if (payload.assetType === "video") {
-    if (contentType !== "video/mp4") {
-      throw new HttpError(422, "Vaizdo įrašams palaikomas tik video/mp4 formatas.", "UNSUPPORTED_MEDIA_TYPE");
-    }
+  const normalized = contentType.toLowerCase();
+  if (normalized.startsWith("image/")) {
+    return "image";
   }
+  if (normalized === "video/mp4") {
+    return "video";
+  }
+  if (normalized === "application/pdf") {
+    return "document";
+  }
+  return null;
 }
 
-function resolveUploadExtension(payload: AdminMediaCreateInput): string {
+function detectAssetTypeFromExtension(extension: string): AdminMediaAssetType | null {
+  if (!extension) {
+    return null;
+  }
+
+  if (IMAGE_EXTENSIONS.has(extension)) {
+    return "image";
+  }
+  if (VIDEO_EXTENSIONS.has(extension)) {
+    return "video";
+  }
+  if (DOCUMENT_EXTENSIONS.has(extension)) {
+    return "document";
+  }
+  return null;
+}
+
+function matchesAssetTypeExtension(extension: string, assetType: AdminMediaAssetType): boolean {
+  if (!extension) {
+    return false;
+  }
+  if (assetType === "image") {
+    return IMAGE_EXTENSIONS.has(extension);
+  }
+  if (assetType === "video") {
+    return VIDEO_EXTENSIONS.has(extension);
+  }
+  return DOCUMENT_EXTENSIONS.has(extension);
+}
+
+function resolveUploadAssetDetails(payload: AdminMediaCreateInput): {
+  assetType: AdminMediaAssetType;
+  extension: string;
+  contentType: string;
+} {
   if (payload.source.kind !== "upload") {
-    return "";
+    throw new HttpError(400, "Šis metodas palaiko tik failų įkėlimą.", "INVALID_SOURCE_KIND");
   }
 
-  const fileNameExtension = extname(payload.source.fileName).toLowerCase();
-  const contentType = payload.source.contentType.toLowerCase();
+  const rawContentType = payload.source.contentType.trim().toLowerCase();
+  const originalExtension = normalizeExtension(extname(payload.source.fileName).toLowerCase());
 
-  if (payload.assetType === "image") {
-    if (IMAGE_EXTENSIONS.has(fileNameExtension)) {
-      return normalizeExtension(fileNameExtension);
+  const typeFromContent = detectAssetTypeFromContentType(rawContentType);
+  const typeFromExtension = detectAssetTypeFromExtension(originalExtension);
+  const assetType = typeFromContent ?? typeFromExtension;
+
+  if (!assetType) {
+    throw new HttpError(
+      422,
+      "Nepalaikomas failo formatas. Įkelkite JPG, PNG, WEBP, MP4 arba PDF.",
+      "UNSUPPORTED_MEDIA_TYPE"
+    );
+  }
+
+  let contentType = rawContentType;
+  if (assetType === "image") {
+    if (!contentType.startsWith("image/")) {
+      contentType = EXTENSION_CONTENT_TYPE_MAP.get(originalExtension) ?? "image/jpeg";
     }
-    const mapped = CONTENT_TYPE_EXTENSION_MAP.get(contentType);
-    if (mapped && IMAGE_EXTENSIONS.has(mapped)) {
-      return normalizeExtension(mapped);
+  } else if (assetType === "video") {
+    contentType = "video/mp4";
+  } else {
+    contentType = "application/pdf";
+  }
+
+  let chosenExtension = originalExtension;
+  if (!matchesAssetTypeExtension(chosenExtension, assetType)) {
+    const mapped = CONTENT_TYPE_EXTENSION_MAP.get(contentType) ?? "";
+    if (matchesAssetTypeExtension(mapped, assetType)) {
+      chosenExtension = mapped;
+    } else {
+      throw new HttpError(
+        422,
+        "Nepavyko nustatyti failo galūnės. Įkelkite JPG, PNG, WEBP, MP4 arba PDF.",
+        "UNSUPPORTED_MEDIA_TYPE"
+      );
     }
   }
 
-  if (payload.assetType === "video") {
-    if (VIDEO_EXTENSIONS.has(fileNameExtension)) {
-      return normalizeExtension(fileNameExtension);
-    }
-    const mapped = CONTENT_TYPE_EXTENSION_MAP.get(contentType);
-    if (mapped && VIDEO_EXTENSIONS.has(mapped)) {
-      return normalizeExtension(mapped);
-    }
-  }
-
-  throw new HttpError(422, "Nepalaikomas failo formatas.", "UNSUPPORTED_MEDIA_TYPE");
+  return {
+    assetType,
+    extension: normalizeExtension(chosenExtension),
+    contentType,
+  };
 }
 
 function normalizeExtension(extension: string): string {

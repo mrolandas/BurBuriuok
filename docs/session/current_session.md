@@ -79,6 +79,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-19: Updated GitHub Pages deploy pipeline to inject both admin and public API bases (`deploy-frontend-gh-pages.yml`) ensuring runtime config stays aligned after future key rotations.
 - 2025-11-19: Media renders correctly in production; next session will tackle the “Nežinoma sąvoka” placeholder in the `/admin/media` concept column.
 - 2025-11-20: Resolved admin media filter desync after reassignment (`applyUpdatedAsset` now prunes items + refreshes list), refreshed documentation (API contracts, testing guide, admin setup, infra index), and noted new QA coverage for modal preview + delete confirmation.
+- 2025-11-21: Extended admin media uploads with automatic asset type detection (image/video/document), enforced a 10 MB cap, refreshed PDF preview fallbacks across admin/public views, and applied Supabase migration `0012_media_document_support.sql` via `supabase db push` followed by stack restart.
 
 ## Wrap-up Checklist (close when all items are complete)
 
@@ -87,3 +88,4 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - [x] Media attachment UX documented in `ADMIN_SETUP.md` for admin-only flow.
 - [x] Deferred contributor scope noted in `docs/references/ISSUE_TRACKER.md` with clear next-step markers.
 - [x] Follow-up tasks noted in `docs/references/ISSUE_TRACKER.md` and ready for issue creation.
+- [x] MEDIA-002 patch (PDF support + 10 MB limit + document asset type) captured in session log and issue tracker status notes.

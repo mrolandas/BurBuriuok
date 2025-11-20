@@ -56,7 +56,12 @@ export async function loadConceptDetailData({
 	fetcher,
 	deps
 }: ConceptDetailLoadArgs): Promise<ConceptPageData> {
-	const { fetchConcept, fetchItems, resolveAdminContext, fetchConceptMedia: fetchConceptMediaFn } = {
+	const {
+		fetchConcept,
+		fetchItems,
+		resolveAdminContext,
+		fetchConceptMedia: fetchConceptMediaFn
+	} = {
 		...defaultDeps,
 		...deps
 	};
@@ -148,9 +153,7 @@ export async function loadConceptDetailData({
 				media = await fetchMedia(concept.slug, fetcher);
 			} catch (mediaLoadError) {
 				mediaError =
-					mediaLoadError instanceof Error
-						? mediaLoadError.message
-						: 'Nepavyko įkelti medijos.';
+					mediaLoadError instanceof Error ? mediaLoadError.message : 'Nepavyko įkelti medijos.';
 			}
 		}
 

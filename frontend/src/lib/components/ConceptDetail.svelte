@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import ConceptDisplay from '$lib/components/ConceptDisplay.svelte';
 	import ConceptMediaGallery from '$lib/components/ConceptMediaGallery.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
@@ -22,7 +23,7 @@
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
-	import type { MediaConceptOption, MediaCreateSuccessDetail } from '$lib/admin/media/types';
+	import type { MediaConceptOption } from '$lib/admin/media/types';
 
 	type Breadcrumb = {
 		label: string;
@@ -96,12 +97,12 @@
 	const mediaConceptOptions = $derived(
 		concept
 			? ([
-				{
-					id: concept.id,
-					slug: concept.slug,
-					label: concept.termLt?.trim()?.length ? concept.termLt : concept.slug
-				}
-			] satisfies MediaConceptOption[])
+					{
+						id: concept.id,
+						slug: concept.slug,
+						label: concept.termLt?.trim()?.length ? concept.termLt : concept.slug
+					}
+				] satisfies MediaConceptOption[])
 			: ([] as MediaConceptOption[])
 	);
 
@@ -256,7 +257,8 @@
 			url.searchParams.delete('admin');
 		}
 
-		await goto(url, {
+		const nextRelative = `${url.pathname}${url.search}${url.hash}` as `/${string}`;
+		await goto(resolve(nextRelative), {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -289,7 +291,7 @@
 		mediaDrawerOpen = false;
 	}
 
-	function handleMediaCreated(_event: CustomEvent<MediaCreateSuccessDetail>): void {
+	function handleMediaCreated(): void {
 		mediaDrawerOpen = false;
 		void reloadMedia();
 	}
@@ -541,9 +543,13 @@
 				{#if mediaLoading}
 					<p class="concept-detail__media-status">Kraunama medija...</p>
 				{:else if mediaLoadError}
-					<div class="concept-detail__media-alert concept-detail__media-alert--error">{mediaLoadError}</div>
+					<div class="concept-detail__media-alert concept-detail__media-alert--error">
+						{mediaLoadError}
+					</div>
 				{:else if mediaItems.length === 0}
-					<p class="concept-detail__media-status">Šiai temai dar nepriskirta vizualinės medžiagos.</p>
+					<p class="concept-detail__media-status">
+						Šiai temai dar nepriskirta vizualinės medžiagos.
+					</p>
 				{:else}
 					<ConceptMediaGallery items={mediaItems} />
 				{/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
-import { tick } from 'svelte';
+	import { resolve } from '$app/paths';
+	import { tick } from 'svelte';
 	import type { ConceptMediaItem } from '$lib/api/media';
 
 	type Props = {
@@ -7,12 +8,12 @@ import { tick } from 'svelte';
 	};
 
 	const DEFAULT_VIDEO_TRACK_MESSAGE = 'Šiam vaizdo įrašui nėra aprašymo.';
-
 	let { items }: Props = $props();
 	let modalOpen = $state(false);
 	let activeIndex = $state(0);
 
-	const galleryItems = $derived(items.filter((item) => Boolean(item.url)));
+	const displayItems = $derived(items.filter((item) => Boolean(item.url)));
+	const previewableItems = $derived(displayItems.filter((item) => item.assetType !== 'document'));
 	let currentItem = $state<ConceptMediaItem | null>(null);
 	let currentCaption = $state('');
 	let currentCaptionTrack = $state<string | null>(null);
@@ -26,17 +27,17 @@ import { tick } from 'svelte';
 	}
 
 	$effect(() => {
-		if (!galleryItems.length) {
+		if (!previewableItems.length) {
 			activeIndex = 0;
 			modalOpen = false;
 			currentItem = null;
 			currentDisplayTitle = '';
 			return;
 		}
-		if (activeIndex >= galleryItems.length) {
-			activeIndex = galleryItems.length - 1;
+		if (activeIndex >= previewableItems.length) {
+			activeIndex = previewableItems.length - 1;
 		}
-		currentItem = galleryItems[activeIndex] ?? null;
+		currentItem = previewableItems[activeIndex] ?? null;
 		currentDisplayTitle = currentItem ? displayTitle(currentItem) : '';
 	});
 
@@ -97,12 +98,24 @@ import { tick } from 'svelte';
 	});
 
 	function openModal(index: number): void {
-		if (!galleryItems.length) {
+		if (!previewableItems.length) {
 			return;
 		}
-		const bounded = Math.max(0, Math.min(index, galleryItems.length - 1));
+		const bounded = Math.max(0, Math.min(index, previewableItems.length - 1));
 		activeIndex = bounded;
 		modalOpen = true;
+	}
+
+	function handleItemActivate(item: ConceptMediaItem): void {
+		const previewIndex = previewableItems.findIndex((entry) => entry.id === item.id);
+		if (previewIndex >= 0) {
+			openModal(previewIndex);
+			return;
+		}
+
+		if (item.url && typeof window !== 'undefined') {
+			window.open(item.url, '_blank', 'noopener,noreferrer');
+		}
 	}
 
 	function closeModal(): void {
@@ -116,17 +129,17 @@ import { tick } from 'svelte';
 	}
 
 	function showPrevious(): void {
-		if (!galleryItems.length) {
+		if (!previewableItems.length) {
 			return;
 		}
-		activeIndex = (activeIndex - 1 + galleryItems.length) % galleryItems.length;
+		activeIndex = (activeIndex - 1 + previewableItems.length) % previewableItems.length;
 	}
 
 	function showNext(): void {
-		if (!galleryItems.length) {
+		if (!previewableItems.length) {
 			return;
 		}
-		activeIndex = (activeIndex + 1) % galleryItems.length;
+		activeIndex = (activeIndex + 1) % previewableItems.length;
 	}
 
 	function extractCaption(item: ConceptMediaItem | null): string {
@@ -152,7 +165,13 @@ import { tick } from 'svelte';
 		if (trimmed && trimmed.length) {
 			return trimmed;
 		}
-		return item.assetType === 'video' ? 'Vaizdo įrašas' : 'Papildoma medžiaga';
+		if (item.assetType === 'video') {
+			return 'Vaizdo įrašas';
+		}
+		if (item.assetType === 'document') {
+			return 'Dokumentas';
+		}
+		return 'Papildoma medžiaga';
 	}
 
 	function resolveThumbnailUrl(item: ConceptMediaItem): string | null {
@@ -203,7 +222,9 @@ import { tick } from 'svelte';
 			if (!videoId) {
 				return null;
 			}
-			const startSeconds = parseStartSeconds(parsed.searchParams.get('t') ?? parsed.searchParams.get('start'));
+			const startSeconds = parseStartSeconds(
+				parsed.searchParams.get('t') ?? parsed.searchParams.get('start')
+			);
 			const embed = new URL(`https://www.youtube.com/embed/${videoId}`);
 			if (startSeconds !== null && Number.isFinite(startSeconds) && startSeconds >= 0) {
 				embed.searchParams.set('start', String(startSeconds));
@@ -316,37 +337,46 @@ import { tick } from 'svelte';
 
 <div class="media-gallery" aria-label="Papildoma medžiaga">
 	<div class="media-gallery__grid">
-		{#each galleryItems as item, index (item.id)}
+		{#each displayItems as item (item.id)}
 			{@const itemTitle = displayTitle(item)}
 			{@const thumbnail = resolveThumbnailUrl(item)}
+			{@const isDocument = item.assetType === 'document'}
+			{@const buttonLabel = isDocument
+				? `Atidaryti dokumentą naujame lange: ${itemTitle}`
+				: itemTitle}
 			<div class="media-gallery__item">
 				<button
 					type="button"
 					class="media-gallery__thumb"
 					class:media-gallery__thumb--video={!thumbnail && item.assetType === 'video'}
-					onclick={() => openModal(index)}
-					aria-label={itemTitle}
-					title={itemTitle}
+					class:media-gallery__thumb--document={isDocument}
+					onclick={() => handleItemActivate(item)}
+					aria-label={buttonLabel}
+					title={buttonLabel}
 				>
 					{#if item.assetType === 'image'}
-						<img
-							src={item.url}
-							alt={itemTitle}
-							loading="lazy"
-							class="media-gallery__thumb-image"
-						/>
-					{:else if thumbnail}
-						<img
-							src={thumbnail}
-							alt={itemTitle}
-							loading="lazy"
-							class="media-gallery__thumb-image"
-						/>
-						<span class="media-gallery__thumb-overlay" aria-hidden="true">▶</span>
+						<img src={item.url} alt={itemTitle} loading="lazy" class="media-gallery__thumb-image" />
+					{:else if item.assetType === 'video'}
+						{#if thumbnail}
+							<img
+								src={thumbnail}
+								alt={itemTitle}
+								loading="lazy"
+								class="media-gallery__thumb-image"
+							/>
+							<span class="media-gallery__thumb-overlay" aria-hidden="true">▶</span>
+						{:else}
+							<div class="media-gallery__thumb-placeholder">
+								<span class="media-gallery__thumb-icon" aria-hidden="true">▶</span>
+								<span class="media-gallery__thumb-label">Vaizdo įrašas</span>
+							</div>
+						{/if}
 					{:else}
-						<div class="media-gallery__thumb-placeholder">
-							<span class="media-gallery__thumb-icon" aria-hidden="true">▶</span>
-							<span class="media-gallery__thumb-label">Vaizdo įrašas</span>
+						<div
+							class="media-gallery__thumb-placeholder media-gallery__thumb-placeholder--document"
+						>
+							<span class="media-gallery__thumb-icon" aria-hidden="true">PDF</span>
+							<span class="media-gallery__thumb-label">Dokumentas</span>
 						</div>
 					{/if}
 				</button>
@@ -356,11 +386,7 @@ import { tick } from 'svelte';
 	</div>
 
 	{#if modalOpen && currentItem}
-		<div
-			class="media-gallery__overlay"
-			tabindex="-1"
-			onpointerdown={handleOverlayPointerDown}
-		>
+		<div class="media-gallery__overlay" tabindex="-1" onpointerdown={handleOverlayPointerDown}>
 			<div
 				class="media-gallery__modal"
 				role="dialog"
@@ -368,7 +394,12 @@ import { tick } from 'svelte';
 				aria-label={`Peržiūra: ${currentDisplayTitle || 'Papildoma medžiaga'}`}
 				tabindex="-1"
 			>
-				<button type="button" class="media-gallery__close" onclick={closeModal} aria-label="Uždaryti">
+				<button
+					type="button"
+					class="media-gallery__close"
+					onclick={closeModal}
+					aria-label="Uždaryti"
+				>
 					&times;
 				</button>
 
@@ -407,9 +438,9 @@ import { tick } from 'svelte';
 						</div>
 					{:else}
 						<a
-							href={currentItem.url}
+							href={resolve(currentItem.url ?? '')}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 							class="media-gallery__external"
 						>
 							Atidaryti vaizdo įrašą naujame lange
@@ -417,9 +448,9 @@ import { tick } from 'svelte';
 					{/if}
 				{:else}
 					<a
-						href={currentItem.url}
+						href={resolve(currentItem.url ?? '')}
 						target="_blank"
-						rel="noreferrer"
+						rel="noopener noreferrer"
 						class="media-gallery__external"
 					>
 						Atidaryti šaltinį
@@ -434,7 +465,7 @@ import { tick } from 'svelte';
 					<p class="media-gallery__caption">{currentCaption}</p>
 				{/if}
 
-				{#if galleryItems.length > 1}
+				{#if previewableItems.length > 1}
 					<button
 						type="button"
 						class="media-gallery__nav media-gallery__nav--prev"
@@ -549,6 +580,15 @@ import { tick } from 'svelte';
 	.media-gallery__thumb--video {
 		background: linear-gradient(145deg, rgba(37, 99, 235, 0.9), rgba(59, 130, 246, 0.7));
 		color: #fff;
+	}
+
+	.media-gallery__thumb--document {
+		background: linear-gradient(145deg, rgba(71, 85, 105, 0.85), rgba(30, 41, 59, 0.9));
+		color: #fff;
+	}
+
+	.media-gallery__thumb-placeholder--document {
+		background: linear-gradient(145deg, rgba(71, 85, 105, 0.85), rgba(30, 41, 59, 0.9));
 	}
 
 	.media-gallery__overlay {

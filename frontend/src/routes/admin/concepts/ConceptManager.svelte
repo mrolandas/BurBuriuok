@@ -862,7 +862,12 @@
 
 	function mediaAssetSourceSummary(asset: AdminMediaAsset): string {
 		const source = asset.sourceKind === 'external' ? 'Išorinis šaltinis' : 'Įkeltas failas';
-		const type = asset.assetType === 'image' ? 'Paveiksliukas' : 'Vaizdo įrašas';
+		const type =
+			asset.assetType === 'image'
+				? 'Paveiksliukas'
+				: asset.assetType === 'video'
+					? 'Vaizdo įrašas'
+					: 'Dokumentas';
 		return `${source} · ${type}`;
 	}
 
@@ -876,12 +881,6 @@
 			return null;
 		}
 		return trimmed.length > 160 ? `${trimmed.slice(0, 157)}...` : trimmed;
-	}
-
-	function mediaWorkspaceLink(asset: AdminMediaAsset): string {
-		const baseHref = resolve('/admin/media');
-		const search = new URLSearchParams({ conceptId: asset.conceptId }).toString();
-		return `${baseHref}?${search}`;
 	}
 
 	async function handleRollback(version: HistoryAction): Promise<void> {
@@ -1345,9 +1344,9 @@
 								<td>
 									<div class="concept-name">
 										<a
-											href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
+											href={resolve(`/concepts/${concept.slug}?admin=1`)}
 											target="_blank"
-											rel="noreferrer"
+											rel="noopener noreferrer"
 											class="concept-name__primary"
 										>
 											{concept.termLt}
@@ -1616,9 +1615,9 @@
 								<div class="media-panel__actions">
 									<a
 										class="media-panel__action"
-										href={mediaWorkspaceLink(media)}
+										href={resolve(`/admin/media?conceptId=${media.conceptId}`)}
 										target="_blank"
-										rel="noreferrer"
+										rel="noopener noreferrer"
 									>
 										Atidaryti sąraše
 									</a>
@@ -2159,7 +2158,9 @@
 		font-weight: 600;
 		cursor: pointer;
 		text-decoration: none;
-		transition: background 0.2s ease, border-color 0.2s ease;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.media-panel__action:hover,

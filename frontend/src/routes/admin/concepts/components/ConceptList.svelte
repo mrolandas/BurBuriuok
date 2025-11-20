@@ -76,9 +76,9 @@
 						<td>
 							<div class="concept-name">
 								<a
-									href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
+									href={resolve(`/concepts/${concept.slug}?admin=1`)}
 									target="_blank"
-									rel="noreferrer"
+									rel="noopener noreferrer"
 									class="concept-name__primary"
 								>
 									{concept.termLt}

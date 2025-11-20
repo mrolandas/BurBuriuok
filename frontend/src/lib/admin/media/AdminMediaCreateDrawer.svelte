@@ -5,7 +5,6 @@
 		createAdminMediaAsset,
 		deleteAdminMediaAsset,
 		type AdminMediaAsset,
-		type AdminMediaAssetType,
 		type AdminMediaUploadInstruction
 	} from '$lib/api/admin/media';
 	import type { AdminMediaCreateInput } from '../../../../../shared/validation/adminMediaAssetSchema';
@@ -13,16 +12,11 @@
 
 	type FieldErrors = Record<string, string>;
 
-	const assetTypeLabels: Record<AdminMediaAssetType, string> = {
-		image: 'Paveiksliukas',
-		video: 'Vaizdo įrašas'
-	};
-
 	type SourceKind = 'upload' | 'external';
 
 	type UploadPhase = 'idle' | 'creating' | 'uploading';
-
-	const MAX_FILE_SIZE = 50 * 1024 * 1024;
+	const MAX_FILE_SIZE = 10 * 1024 * 1024;
+	const ACCEPTED_FILE_TYPES = 'image/*,video/mp4,application/pdf';
 
 	export let conceptOptions: MediaConceptOption[] = [];
 	export let defaultConceptId: string | null = null;
@@ -34,7 +28,6 @@
 	}>();
 
 	let conceptId = '';
-	let assetType: AdminMediaAssetType = 'image';
 	let sourceKind: SourceKind = 'upload';
 	let title = '';
 	let captionLt = '';
@@ -48,7 +41,6 @@
 	let successMessage: string | null = null;
 	let fileInput: HTMLInputElement | null = null;
 
-	const assetTypeOptions: AdminMediaAssetType[] = ['image', 'video'];
 	const sourceKindOptions: SourceKind[] = ['upload', 'external'];
 
 	const successTimeoutMs = 4000;
@@ -82,8 +74,6 @@
 		selectedFile = null;
 	}
 
-	$: fileAccept = assetType === 'image' ? 'image/*' : 'video/mp4';
-
 	function resetErrors(): void {
 		fieldErrors = {};
 		formError = null;
@@ -107,8 +97,11 @@
 		const files = target.files;
 		selectedFile = files && files.length ? files.item(0) : null;
 		if (selectedFile) {
-			const { file: _removed, ...rest } = fieldErrors;
-			fieldErrors = { ...rest };
+			if (fieldErrors.file) {
+				const nextErrors = { ...fieldErrors };
+				delete nextErrors.file;
+				fieldErrors = nextErrors;
+			}
 		}
 	}
 
@@ -143,6 +136,85 @@
 		return trimmed.length ? trimmed : null;
 	}
 
+	function extractFileExtension(fileName: string): string {
+		const trimmed = fileName.trim().toLowerCase();
+		const dotIndex = trimmed.lastIndexOf('.');
+		if (dotIndex === -1) {
+			return '';
+		}
+		return trimmed.slice(dotIndex);
+	}
+
+	function detectFileAssetType(file: File | null): 'image' | 'video' | 'document' | null {
+		if (!file) {
+			return null;
+		}
+
+		const mime = file.type?.toLowerCase() ?? '';
+		if (mime.startsWith('image/')) {
+			return 'image';
+		}
+		if (mime === 'video/mp4') {
+			return 'video';
+		}
+		if (mime === 'application/pdf') {
+			return 'document';
+		}
+
+		const extension = extractFileExtension(file.name);
+		if (!extension) {
+			return null;
+		}
+		if (['.jpg', '.jpeg', '.png', '.webp'].includes(extension)) {
+			return 'image';
+		}
+		if (extension === '.mp4') {
+			return 'video';
+		}
+		if (extension === '.pdf') {
+			return 'document';
+		}
+		return null;
+	}
+
+	function resolveFileContentType(file: File | null): string {
+		if (!file) {
+			return 'application/octet-stream';
+		}
+
+		const mime = file.type?.trim();
+		if (mime && mime.length) {
+			const normalized = mime.toLowerCase();
+			if (normalized.startsWith('image/')) {
+				return mime;
+			}
+			if (normalized === 'video/mp4') {
+				return 'video/mp4';
+			}
+			if (normalized === 'application/pdf') {
+				return 'application/pdf';
+			}
+		}
+
+		const extension = extractFileExtension(file.name);
+		if (['.jpg', '.jpeg'].includes(extension)) {
+			return 'image/jpeg';
+		}
+		if (extension === '.png') {
+			return 'image/png';
+		}
+		if (extension === '.webp') {
+			return 'image/webp';
+		}
+		if (extension === '.mp4') {
+			return 'video/mp4';
+		}
+		if (extension === '.pdf') {
+			return 'application/pdf';
+		}
+		return 'application/octet-stream';
+	}
+
 	function validateLocal(): boolean {
 		const next: FieldErrors = {};
 
@@ -157,14 +229,14 @@
 				if (selectedFile.size <= 0) {
 					next.file = 'Failas yra tuščias.';
 				}
-				if (selectedFile.size > MAX_FILE_SIZE) {
-					next.file = 'Failas negali būti didesnis nei 50 MB.';
+				if (!next.file && selectedFile.size > MAX_FILE_SIZE) {
+					next.file = 'Failas negali būti didesnis nei 10 MB.';
 				}
-				if (assetType === 'image' && !selectedFile.type.startsWith('image/')) {
-					next.file = 'Pasirinkite vaizdo formato failą (JPEG, PNG ar WEBP).';
-				}
-				if (assetType === 'video' && selectedFile.type !== 'video/mp4') {
-					next.file = 'Vaizdo įrašams leidžiamas tik MP4 formatas.';
+				if (!next.file) {
+					const detectedType = detectFileAssetType(selectedFile);
+					if (!detectedType) {
+						next.file = 'Nepalaikomas failo formatas. Įkelkite JPG, PNG, WEBP, MP4 arba PDF.';
+					}
 				}
 			}
 		} else if (sourceKind === 'external') {
@@ -238,7 +310,6 @@
 	function buildPayload(): AdminMediaCreateInput {
 		const payload: AdminMediaCreateInput = {
 			conceptId,
-			assetType,
 			title: (() => {
 				const trimmed = title.trim();
 				title = trimmed;
@@ -248,19 +319,13 @@
 			captionEn: trimmedOrNull(captionEn),
 			source:
 				sourceKind === 'upload'
-					?
-						{
+					? {
 							kind: 'upload',
 							fileName: selectedFile?.name ?? '',
 							fileSize: selectedFile?.size ?? 0,
-							contentType: selectedFile?.type
-								? selectedFile.type
-								: assetType === 'image'
-									? 'image/jpeg'
-									: 'video/mp4'
+							contentType: resolveFileContentType(selectedFile)
 						}
-					:
-						{
+					: {
 							kind: 'external',
 							url: externalUrl.trim()
 						}
@@ -317,7 +382,10 @@
 			resetFormAfterSuccess();
 		} catch (error) {
 			if (error instanceof AdminApiError) {
-				mapApiFieldErrors((error.body as { error?: { fieldErrors?: Record<string, string[] | undefined> } })?.error?.fieldErrors);
+				mapApiFieldErrors(
+					(error.body as { error?: { fieldErrors?: Record<string, string[] | undefined> } })?.error
+						?.fieldErrors
+				);
 				formError = error.message;
 			} else if (error instanceof Error) {
 				formError = error.message;
@@ -337,10 +405,10 @@
 		}
 	}
 
-function handleFormSubmit(event: SubmitEvent): void {
-	event.preventDefault();
-	void handleSubmit();
-}
+	function handleFormSubmit(event: SubmitEvent): void {
+		event.preventDefault();
+		void handleSubmit();
+	}
 
 	function buttonDisabled(): boolean {
 		return uploadPhase !== 'idle';
@@ -366,7 +434,12 @@ function handleFormSubmit(event: SubmitEvent): void {
 	onclick={closeDrawer}
 	aria-label="Uždaryti medijos kūrimo langą"
 ></button>
-<div class="media-create-drawer" role="dialog" aria-modal="true" aria-labelledby="media-create-title">
+<div
+	class="media-create-drawer"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="media-create-title"
+>
 	<header class="media-create-drawer__header">
 		<div>
 			<h2 id="media-create-title">Pridėti naują medijos įrašą</h2>
@@ -392,15 +465,15 @@ function handleFormSubmit(event: SubmitEvent): void {
 				<h3>Susietas konceptas</h3>
 				{#if lockedConceptLabel}
 					<p class="muted">Medija bus susieta su: <strong>{lockedConceptLabel}</strong></p>
-				{#if fieldErrors.conceptId}
-					<p class="field-error">{fieldErrors.conceptId}</p>
-				{/if}
+					{#if fieldErrors.conceptId}
+						<p class="field-error">{fieldErrors.conceptId}</p>
+					{/if}
 				{:else}
 					<label>
 						<span>Sąvoka *</span>
 						<select bind:value={conceptId} required>
 							<option value="">Pasirinkite sąvoką</option>
-							{#each conceptOptions as option}
+							{#each conceptOptions as option (option.id)}
 								<option value={option.id}>{option.label}</option>
 							{/each}
 						</select>
@@ -412,44 +485,25 @@ function handleFormSubmit(event: SubmitEvent): void {
 			</section>
 
 			<section class="media-create-section">
-				<h3>Medijos tipas ir šaltinis</h3>
-				<div class="media-create-duo">
-					<fieldset class="media-create-fieldset">
-						<legend>Tipas *</legend>
-						<div class="media-create-options">
-							{#each assetTypeOptions as option}
-								<label>
-									<input
-										type="radio"
-										name="asset-type"
-										value={option}
-										bind:group={assetType}
-										disabled={buttonDisabled()}
-									/>
-									<span>{assetTypeLabels[option]}</span>
-								</label>
-							{/each}
-						</div>
-					</fieldset>
-
-					<fieldset class="media-create-fieldset">
-						<legend>Šaltinis *</legend>
-						<div class="media-create-options">
-							{#each sourceKindOptions as option}
-								<label>
-									<input
-										type="radio"
-										name="source-kind"
-										value={option}
-										bind:group={sourceKind}
-										disabled={buttonDisabled()}
-									/>
-									<span>{option === 'upload' ? 'Įkelti failą' : 'Išorinis šaltinis'}</span>
-								</label>
-							{/each}
-						</div>
-					</fieldset>
-				</div>
+				<h3>Medijos šaltinis</h3>
+				<p class="muted">Medijos tipas nustatomas automatiškai pagal pasirinkto failo turinį.</p>
+				<fieldset class="media-create-fieldset">
+					<legend>Šaltinis *</legend>
+					<div class="media-create-options">
+						{#each sourceKindOptions as option (option)}
+							<label>
+								<input
+									type="radio"
+									name="source-kind"
+									value={option}
+									bind:group={sourceKind}
+									disabled={buttonDisabled()}
+								/>
+								<span>{option === 'upload' ? 'Įkelti failą' : 'Išorinis šaltinis'}</span>
+							</label>
+						{/each}
+					</div>
+				</fieldset>
 				{#if fieldErrors.sourceKind}
 					<p class="field-error">{fieldErrors.sourceKind}</p>
 				{/if}
@@ -460,19 +514,20 @@ function handleFormSubmit(event: SubmitEvent): void {
 				{#if sourceKind === 'upload'}
 					<label>
 						<span>Failas *</span>
-							<input
-								type="file"
-								accept={fileAccept}
-								required
-								onchange={handleSelectFile}
-								bind:this={fileInput}
-							/>
+						<input
+							type="file"
+							accept={ACCEPTED_FILE_TYPES}
+							required
+							onchange={handleSelectFile}
+							bind:this={fileInput}
+						/>
 					</label>
 					{#if fieldErrors.file}
 						<p class="field-error">{fieldErrors.file}</p>
 					{/if}
 					<p class="field-hint">
-						Leidžiami paveikslėliai (JPEG, PNG, WEBP) ir MP4 vaizdo įrašai iki 50 MB.
+						Leidžiami paveikslėliai (JPEG, PNG, WEBP), MP4 vaizdo įrašai ir PDF dokumentai iki 10
+						MB.
 					</p>
 				{:else}
 					<label>
@@ -622,12 +677,6 @@ function handleFormSubmit(event: SubmitEvent): void {
 	.media-create-fieldset legend {
 		font-weight: 600;
 		font-size: 0.9rem;
-	}
-
-	.media-create-duo {
-		display: grid;
-		gap: 0.9rem;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	}
 
 	.media-create-options {

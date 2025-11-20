@@ -1,27 +1,22 @@
 <script lang="ts">
-import { resolve } from '$app/paths';
-import { onMount, onDestroy, tick } from 'svelte';
-import { AdminApiError } from '$lib/api/admin/client';
-import {
-	listAdminMediaAssets,
-	getAdminMediaAsset,
-	deleteAdminMediaAsset,
-	fetchAdminMediaSignedUrl,
-	updateAdminMediaAsset,
-	type AdminMediaAsset,
-	type AdminMediaAssetType,
-	type AdminMediaListMeta,
-	type AdminMediaSourceKind
-} from '$lib/api/admin/media';
-import {
-	listAdminConcepts,
-	type AdminConceptResource
-} from '$lib/api/admin/concepts';
-import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
-	import type {
-		MediaConceptOption,
-		MediaCreateSuccessDetail
-	} from '$lib/admin/media/types';
+	import { resolve } from '$app/paths';
+	import { onMount, onDestroy, tick } from 'svelte';
+	import { SvelteSet } from 'svelte/reactivity';
+	import { AdminApiError } from '$lib/api/admin/client';
+	import {
+		listAdminMediaAssets,
+		getAdminMediaAsset,
+		deleteAdminMediaAsset,
+		fetchAdminMediaSignedUrl,
+		updateAdminMediaAsset,
+		type AdminMediaAsset,
+		type AdminMediaAssetType,
+		type AdminMediaListMeta,
+		type AdminMediaSourceKind
+	} from '$lib/api/admin/media';
+	import { listAdminConcepts, type AdminConceptResource } from '$lib/api/admin/concepts';
+	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
+	import type { MediaConceptOption, MediaCreateSuccessDetail } from '$lib/admin/media/types';
 
 	type PreviewKind = 'image' | 'video' | 'externalVideo' | 'link';
 	type PreviewState = {
@@ -86,7 +81,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 	let actionError: string | null = null;
 	let rowDeleteBusyId: string | null = null;
 
-	let selectedIds: Set<string> = new Set();
+	const selectedIds = new SvelteSet<string>();
 	let bulkDeleteBusy = false;
 	let selectAllCheckbox: HTMLInputElement | null = null;
 
@@ -107,7 +102,8 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 
 	const assetTypeLabels: Record<AdminMediaAssetType, string> = {
 		image: 'Paveiksliukas',
-		video: 'Vaizdo įrašas'
+		video: 'Vaizdo įrašas',
+		document: 'Dokumentas'
 	};
 
 	const sourceKindLabels: Record<AdminMediaSourceKind, string> = {
@@ -161,7 +157,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			filterConceptId = conceptParam;
 		}
 
-		if (assetTypeParam === 'image' || assetTypeParam === 'video') {
+		if (assetTypeParam === 'image' || assetTypeParam === 'video' || assetTypeParam === 'document') {
 			filterAssetType = assetTypeParam;
 		}
 
@@ -420,7 +416,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		}
 		try {
 			return dateFormatter.format(new Date(value));
-		} catch (error) {
+		} catch {
 			return value;
 		}
 	}
@@ -437,14 +433,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		return concept.slug ?? concept.id;
 	}
 
-	function conceptLink(conceptId: string): string | null {
+	function conceptSlug(conceptId: string): string | null {
 		const concept = conceptLookup.get(conceptId);
-		if (!concept) {
-			return null;
-		}
-		const baseHref = resolve('/admin/concepts');
-		const search = new URLSearchParams({ slug: concept.slug }).toString();
-		return `${baseHref}?${search}`;
+		return concept?.slug ?? null;
 	}
 
 	async function loadConceptOptions(): Promise<void> {
@@ -456,10 +447,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			conceptOptions = sorted;
 			conceptLookup = new Map(sorted.map((concept) => [concept.id, concept]));
 		} catch (error) {
-			conceptError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko įkelti sąvokų sąrašo.';
+			conceptError = error instanceof Error ? error.message : 'Nepavyko įkelti sąvokų sąrašo.';
 		} finally {
 			conceptLoading = false;
 		}
@@ -521,10 +509,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			};
 			pruneSelectionFromItems(listState.items);
 		} catch (error) {
-			loadError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko įkelti medijos įrašų.';
+			loadError = error instanceof Error ? error.message : 'Nepavyko įkelti medijos įrašų.';
 		} finally {
 			loading = false;
 			loadMoreLoading = false;
@@ -568,29 +553,25 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 	}
 
 	function toggleSelection(id: string, checked: boolean): void {
-		const next = new Set(selectedIds);
 		if (checked) {
-			next.add(id);
+			selectedIds.add(id);
 		} else {
-			next.delete(id);
+			selectedIds.delete(id);
 		}
-		selectedIds = next;
 		actionError = null;
 		updateSelectAllIndeterminate();
 	}
 
 	function toggleSelectAll(checked: boolean): void {
-		const next = new Set(selectedIds);
 		if (checked) {
 			for (const item of listState.items) {
-				next.add(item.id);
+				selectedIds.add(item.id);
 			}
 		} else {
 			for (const item of listState.items) {
-				next.delete(item.id);
+				selectedIds.delete(item.id);
 			}
 		}
-		selectedIds = next;
 		actionError = null;
 		updateSelectAllIndeterminate();
 	}
@@ -599,7 +580,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		if (!selectedIds.size) {
 			return;
 		}
-		selectedIds = new Set();
+		selectedIds.clear();
 		updateSelectAllIndeterminate();
 	}
 
@@ -609,9 +590,10 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			return;
 		}
 		const allowed = new Set(items.map((item) => item.id));
-		const retained = [...selectedIds].filter((id) => allowed.has(id));
-		if (retained.length !== selectedIds.size) {
-			selectedIds = new Set(retained);
+		for (const id of Array.from(selectedIds)) {
+			if (!allowed.has(id)) {
+				selectedIds.delete(id);
+			}
 		}
 		updateSelectAllIndeterminate();
 	}
@@ -661,9 +643,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			resetEditState(fresh);
 		} catch (error) {
 			detailError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko įkelti medijos įrašo detalių.';
+				error instanceof Error ? error.message : 'Nepavyko įkelti medijos įrašo detalių.';
 		} finally {
 			detailLoading = false;
 		}
@@ -710,7 +690,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				nextPreview = { kind: 'image', url: externalUrl };
 			} else if (asset.assetType === 'video') {
 				const embed = resolveExternalVideoEmbed(externalUrl);
-				nextPreview = embed ? { kind: 'externalVideo', url: embed } : { kind: 'link', url: externalUrl };
+				nextPreview = embed
+					? { kind: 'externalVideo', url: embed }
+					: { kind: 'link', url: externalUrl };
 			} else {
 				nextPreview = { kind: 'link', url: externalUrl };
 			}
@@ -727,18 +709,18 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			if (token !== previewLoadToken) {
 				return;
 			}
-			preview =
-				asset.assetType === 'image'
-					? { kind: 'image', url: result.url }
-					: { kind: 'video', url: result.url };
+			if (asset.assetType === 'image') {
+				preview = { kind: 'image', url: result.url };
+			} else if (asset.assetType === 'video') {
+				preview = { kind: 'video', url: result.url };
+			} else {
+				preview = { kind: 'link', url: result.url };
+			}
 		} catch (error) {
 			if (token !== previewLoadToken) {
 				return;
 			}
-			previewError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko įkelti medijos peržiūros.';
+			previewError = error instanceof Error ? error.message : 'Nepavyko įkelti medijos peržiūros.';
 		} finally {
 			if (token === previewLoadToken) {
 				previewLoading = false;
@@ -747,7 +729,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 	}
 
 	function previewSupportsModal(state: PreviewState | null): boolean {
-		return Boolean(state && (state.kind === 'image' || state.kind === 'video' || state.kind === 'externalVideo'));
+		return Boolean(
+			state && (state.kind === 'image' || state.kind === 'video' || state.kind === 'externalVideo')
+		);
 	}
 
 	function handlePreviewExpand(event: MouseEvent): void {
@@ -810,7 +794,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			if (!videoId) {
 				return null;
 			}
-			const startSeconds = parseStartSeconds(parsed.searchParams.get('t') ?? parsed.searchParams.get('start'));
+			const startSeconds = parseStartSeconds(
+				parsed.searchParams.get('t') ?? parsed.searchParams.get('start')
+			);
 			const embed = new URL(`https://www.youtube.com/embed/${videoId}`);
 			if (startSeconds !== null && Number.isFinite(startSeconds) && startSeconds >= 0) {
 				embed.searchParams.set('start', String(startSeconds));
@@ -935,16 +921,11 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			await deleteAdminMediaAsset(deletedId);
 			setSuccess('Medijos įrašas pašalintas.');
 			closeDetail();
-			const nextSelection = new Set(selectedIds);
-			nextSelection.delete(deletedId);
-			selectedIds = nextSelection;
+			selectedIds.delete(deletedId);
 			updateSelectAllIndeterminate();
 			await refreshList();
 		} catch (error) {
-			deleteError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko pašalinti medijos įrašo.';
+			deleteError = error instanceof Error ? error.message : 'Nepavyko pašalinti medijos įrašo.';
 		} finally {
 			deleteBusy = false;
 		}
@@ -966,19 +947,14 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		try {
 			await deleteAdminMediaAsset(asset.id);
 			setSuccess('Medijos įrašas pašalintas.');
-			const nextSelection = new Set(selectedIds);
-			nextSelection.delete(asset.id);
-			selectedIds = nextSelection;
+			selectedIds.delete(asset.id);
 			updateSelectAllIndeterminate();
 			if (detailAsset?.id === asset.id) {
 				closeDetail();
 			}
 			await refreshList();
 		} catch (error) {
-			actionError =
-				error instanceof Error
-					? error.message
-					: 'Nepavyko pašalinti medijos įrašo.';
+			actionError = error instanceof Error ? error.message : 'Nepavyko pašalinti medijos įrašo.';
 		} finally {
 			rowDeleteBusyId = null;
 		}
@@ -1010,9 +986,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 					}
 				} catch (error) {
 					const message =
-						error instanceof Error
-							? error.message
-							: 'Nepavyko pašalinti medijos įrašo.';
+						error instanceof Error ? error.message : 'Nepavyko pašalinti medijos įrašo.';
 					failures.push({ id, message });
 				}
 			}
@@ -1036,8 +1010,10 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				await refreshList();
 			}
 		} finally {
-			const remaining = new Set(failures.map((failure) => failure.id));
-			selectedIds = remaining;
+			selectedIds.clear();
+			for (const failure of failures) {
+				selectedIds.add(failure.id);
+			}
 			updateSelectAllIndeterminate();
 			bulkDeleteBusy = false;
 		}
@@ -1077,8 +1053,8 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		<div>
 			<h1>Papildomos medžiagos administravimas</h1>
 			<p>
-				Peržiūrėkite ir tvarkykite administratoriaus įkeltus medijos įrašus. Visi įrašai privalo būti
-				susieti su bent viena sąvoka.
+				Peržiūrėkite ir tvarkykite administratoriaus įkeltus medijos įrašus. Visi įrašai privalo
+				būti susieti su bent viena sąvoka.
 			</p>
 		</div>
 		<button class="primary" type="button" on:click={() => openCreate()}>
@@ -1106,7 +1082,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				<span>Sąvoka</span>
 				<select bind:value={filterConceptId} on:change={handleFilterChange}>
 					<option value="all">Visos sąvokos</option>
-					{#each conceptOptions as option}
+					{#each conceptOptions as option (option.id)}
 						<option value={option.id}>{option.termLt}</option>
 					{/each}
 				</select>
@@ -1117,6 +1093,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 					<option value="all">Visi tipai</option>
 					<option value="image">{assetTypeLabels.image}</option>
 					<option value="video">{assetTypeLabels.video}</option>
+					<option value="document">{assetTypeLabels.document}</option>
 				</select>
 			</label>
 			<label>
@@ -1171,12 +1148,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 							Pašalinti pasirinktus ({selectedIds.size})
 						{/if}
 					</button>
-					<button
-						type="button"
-						class="plain"
-						on:click={clearSelection}
-						disabled={bulkDeleteBusy}
-					>
+					<button type="button" class="plain" on:click={clearSelection} disabled={bulkDeleteBusy}>
 						Atšaukti pasirinkimą
 					</button>
 				</div>
@@ -1190,7 +1162,8 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 							<input
 								type="checkbox"
 								aria-label="Pasirinkti visus matomus medijos įrašus"
-								checked={listState.items.length > 0 && listState.items.every((item) => selectedIds.has(item.id))}
+								checked={listState.items.length > 0 &&
+									listState.items.every((item) => selectedIds.has(item.id))}
 								on:change={(event) => toggleSelectAll(event.currentTarget.checked)}
 								bind:this={selectAllCheckbox}
 								disabled={listState.items.length === 0}
@@ -1206,6 +1179,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				</thead>
 				<tbody>
 					{#each listState.items as item (item.id)}
+						{@const conceptSlugValue = conceptSlug(item.conceptId)}
 						<tr
 							tabindex="0"
 							class="media-table__row"
@@ -1230,9 +1204,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 								{/if}
 							</th>
 							<td>
-								{#if conceptLink(item.conceptId)}
+								{#if conceptSlugValue}
 									<a
-										href={conceptLink(item.conceptId) ?? '#'}
+										href={resolve(`/admin/concepts?slug=${conceptSlugValue}`)}
 										on:click={(event) => event.stopPropagation()}
 									>
 										{conceptLabel(item.conceptId)}
@@ -1367,7 +1341,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 						{:else if preview.kind === 'link'}
 							<a
 								class="preview-card preview-card--link"
-								href={preview.url}
+								href={resolve(preview.url)}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
@@ -1398,7 +1372,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 								<span>Sąvoka</span>
 								<select bind:value={editConceptId} disabled={editBusy}>
 									<option value="" disabled>Pasirinkite sąvoką</option>
-									{#each conceptOptions as option}
+									{#each conceptOptions as option (option.id)}
 										<option value={option.id}>{conceptLabel(option.id)}</option>
 									{/each}
 								</select>
@@ -1463,6 +1437,7 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 							</div>
 						</form>
 					{:else}
+						{@const detailConceptSlug = conceptSlug(detailAsset.conceptId)}
 						<dl class="meta-grid">
 							<div>
 								<dt>Pavadinimas</dt>
@@ -1471,9 +1446,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 							<div>
 								<dt>Sąvoka</dt>
 								<dd>
-									{#if conceptLink(detailAsset.conceptId)}
+									{#if detailConceptSlug}
 										<a
-											href={conceptLink(detailAsset.conceptId)}
+											href={resolve(`/admin/concepts?slug=${detailConceptSlug}`)}
 											target="_blank"
 											rel="noopener noreferrer"
 										>
@@ -1483,8 +1458,6 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 										{conceptLabel(detailAsset.conceptId)}
 									{/if}
 								</dd>
-							</div>
-							<div>
 								<dt>Tipas</dt>
 								<dd>{assetTypeLabels[detailAsset.assetType]}</dd>
 							</div>
@@ -1504,11 +1477,8 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 								<div class="meta-grid__full">
 									<dt>Išorinis adresas</dt>
 									<dd>
-										<a
-											href={detailAsset.externalUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
+										<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+										<a href={detailAsset.externalUrl} target="_blank" rel="noopener noreferrer">
 											{detailAsset.externalUrl}
 										</a>
 									</dd>
@@ -1530,7 +1500,8 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 				<section class="drawer__section drawer__section--danger">
 					<h3>Šalinimas</h3>
 					<p class="muted">
-						Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas negrįžtamas.
+						Pašalinus paskutinę sąvoką, medija ištrinamas iš bazės ir saugyklos. Šis veiksmas
+						negrįžtamas.
 					</p>
 					{#if deleteError}
 						<div class="alert alert--error">{deleteError}</div>
@@ -1551,7 +1522,12 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 							{/if}
 						</button>
 						{#if deleteConfirmVisible}
-							<button class="plain" type="button" on:click={cancelDeleteConfirmation} disabled={deleteBusy}>
+							<button
+								class="plain"
+								type="button"
+								on:click={cancelDeleteConfirmation}
+								disabled={deleteBusy}
+							>
 								Atšaukti
 							</button>
 						{/if}
@@ -1606,7 +1582,9 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 			<p class="muted">Peržiūra negalima.</p>
 		{/if}
 	</div>
-	<button class="plain preview-modal__close" type="button" on:click={closePreviewModal}>Uždaryti</button>
+	<button class="plain preview-modal__close" type="button" on:click={closePreviewModal}
+		>Uždaryti</button
+	>
 </dialog>
 
 <style>
@@ -1990,7 +1968,6 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		margin-top: 1rem;
 		justify-self: flex-end;
 	}
-
 
 	.meta-grid {
 		display: grid;

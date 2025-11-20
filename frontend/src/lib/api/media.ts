@@ -2,7 +2,7 @@ import { appConfig } from '$lib/config/appConfig';
 
 export type ConceptMediaItem = {
 	id: string;
-	assetType: 'image' | 'video';
+	assetType: 'image' | 'video' | 'document';
 	sourceKind: 'upload' | 'external';
 	title: string | null;
 	captionLt: string | null;

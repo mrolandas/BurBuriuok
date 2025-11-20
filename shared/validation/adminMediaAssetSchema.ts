@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const adminMediaAssetTypeSchema = z.enum(["image", "video"]);
+export const adminMediaAssetTypeSchema = z.enum(["image", "video", "document"]);
 export const adminMediaSourceKindSchema = z.enum(["upload", "external"]);
 
 function optionalTrimmed(max?: number) {
@@ -49,7 +49,7 @@ const adminMediaUploadSourceSchema = z.object({
     .number()
     .int({ message: "Failo dydis turi būti sveikas skaičius." })
     .positive({ message: "Failo dydis turi būti teigiamas." })
-    .max(50 * 1024 * 1024, { message: "Failas negali būti didesnis nei 50 MB." }),
+    .max(10 * 1024 * 1024, { message: "Failas negali būti didesnis nei 10 MB." }),
   contentType: z
     .string()
     .trim()
@@ -69,7 +69,6 @@ const adminMediaExternalSourceSchema = z.object({
 export const adminMediaCreateSchema = z
   .object({
     conceptId: z.string().uuid({ message: "Koncepto ID turi būti UUID." }),
-    assetType: adminMediaAssetTypeSchema,
     title: requiredTrimmed(160),
     captionLt: optionalTrimmed(300),
     captionEn: optionalTrimmed(300),
@@ -81,6 +80,7 @@ export const adminMediaCreateSchema = z
   .strict();
 
 export type AdminMediaCreateInput = z.infer<typeof adminMediaCreateSchema>;
+export type AdminMediaAssetType = z.infer<typeof adminMediaAssetTypeSchema>;
 export type AdminMediaUploadSourceInput = z.infer<typeof adminMediaUploadSourceSchema>;
 export type AdminMediaExternalSourceInput = z.infer<typeof adminMediaExternalSourceSchema>;
 export type AdminMediaSourceKind = z.infer<typeof adminMediaSourceKindSchema>;

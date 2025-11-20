@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base, resolve } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Snippet } from 'svelte';
@@ -43,13 +43,6 @@
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
-
-	const withBase = (path: string): string => {
-		if (!base || base === '/') {
-			return path;
-		}
-		return `${base}${path}`;
-	};
 
 	const themeOptions = [
 		{
@@ -207,7 +200,8 @@
 			return;
 		}
 
-		await goto(url, {
+		const nextRelative = `${url.pathname}${url.search}${url.hash}` as `/${string}`;
+		await goto(resolve(nextRelative), {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -309,7 +303,7 @@
 						aria-label="Naudotojo parinktys"
 					>
 						<a
-							href={withBase('/login')}
+							href={resolve('/login')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -317,7 +311,7 @@
 							Prisijungti
 						</a>
 						<a
-							href={withBase('/register')}
+							href={resolve('/register')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -387,11 +381,9 @@
 
 				<li class="app-shell__menu-admin">
 					<a
-						href={
-							withBase(
-								adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
-							)
-						}
+						href={resolve(
+							adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
+						)}
 						target="_blank"
 						rel="noopener noreferrer"
 						onclick={closeMenus}
