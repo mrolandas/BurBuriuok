@@ -20,7 +20,7 @@
 - Introduce a backend event dispatcher stub that centralises admin save/publish actions and logs payloads, paving the way for Slack/email transports.
 - Lock in learner progression shape by documenting current enums, adding history table if required, and exposing read/write guards in the API.
 - Wrap frontend analytics hooks behind a shared `emitEvent` helper and ensure emitting points map to trimmed-scope interactions.
-- Define media storage seam: bucket naming, metadata table, signed URL helper, and interim policy for external links.
+- Monitor media storage usage and document lifecycle policy options now that the admin bucket is live.
 - Automate backend deploy (e.g., Railway/Fly) or document manual steps so hierarchy updates can go live with the frontend release.
 - Keep Supabase schema + seeds aligned by running `npm run content:seed:check` and `npx supabase db push --include-seed` before deploying hierarchy changes.
 - Continue evolving API contract docs as endpoints expand (hierarchy endpoints, event dispatcher surface) and note seams for deferred features.

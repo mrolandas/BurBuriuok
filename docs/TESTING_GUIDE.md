@@ -19,6 +19,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
   - In the Concept Manager view, exercise the toolbar filters (`ConceptFilters` component) by switching section, status, and search terms, confirm `ConceptList` updates totals/empty copy accordingly, then open the drawer (“Nauja sąvoka”) to ensure the section selector populates within a second, validation hints appear for missing required fields, and the status-aware toast still calls out when filters hide the saved concept.
   - Visit `/admin/media` to confirm concept/type/source filters, cursor pagination, and search behave correctly; create both an upload and external media item, ensure the upload succeeds without manual token handling, fetch a signed URL, open the detail drawer to edit metadata (concept reassignment, title, LT/EN captions) and verify trims/null normalisation plus success toasts, launch the modal preview via thumbnail/button and confirm ESC/backdrop close returns focus, exercise checkbox multi-select plus bulk delete (verifying concept attachments stay in sync), and remove the asset while observing the timed confirmation banner and updated counts.
   - While editing an existing concept, use the “Papildoma medžiaga” panel to confirm the attachment list loads, create a new media entry via the drawer (concept locked), and delete an attachment—verifying the Concept Manager refreshes immediately, Lithuanian validation copy appears for missing required fields, and the global media workspace reflects the change after reload.
+  - Run `npm run test:media001` and `npm run test:media002` to smoke-test Supabase rate limits, signed upload instructions, and the admin media CRUD flow after backend or storage changes.
   - Run `npm run frontend:check` to ensure Svelte diagnostics (including accessibility lint) pass with zero warnings after UI updates.
 
 ### Automated Connectivity Check
@@ -90,6 +91,7 @@ Testing ensures BurBuriuok delivers accurate terminology, maintains user trust, 
 - `npm run content:seed:generate` – rebuild seed SQL from the canonical markdown (treat failures as blockers before applying migrations/seeds).
 - `npm run test` – run the full suite locally.
 - `npm run test:db002` – DB-002 content versioning smoke test (requires service-role credentials).
+- `npm run test:media001` / `npm run test:media002` – admin media bucket + API smoke tests (service-role credentials required; ensure rate-limited quotas reset before re-running repeatedly).
 - `npm run backend:typecheck` / `npm run frontend:check` / `npm run content:markdown:validate` / `npm run content:seed:check` – combined “complete test” set exercised before releases to cover backend types, Svelte diagnostics, markdown integrity, and seed drift.
 - `npm run test:unit` – unit tests only.
 - `npm run test:e2e` – end-to-end tests (requires local backend once available).

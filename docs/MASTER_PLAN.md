@@ -138,6 +138,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Supabase Storage plan now centres on a single admin-only bucket with signed URLs; contributor buckets return with MEDIA-003.
 - Moderation status tables (`media_reviews`, extended enums) remain deferred until contributor submissions come back online.
 - Automated scanning pipeline (e.g., via edge function or scheduled job) to flag suspicious uploads before admin review.
+- 2025-11-20: Admin media MVP (uploads, workspace, concept attachments, PDF support) is stable; documentation sweep + authentication groundwork form the next milestone before tackling learner queue (LX-004).
 
 ## Implementation Roadmap
 

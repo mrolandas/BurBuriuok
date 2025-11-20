@@ -6,7 +6,7 @@ Use this guide to find the right document quickly and understand when it needs a
 
 - `MASTER_PLAN.md` – vision, personas, trimmed launch scope, and deferred roadmap items. Update when scope changes or major bets shift.
 - `INFRASTRUCTURE.md` – near-term vs future-state platform plans plus operational checklist. Refresh after infrastructure decisions or tooling upgrades.
-- `session/current_session.md` – active working session plan and checklist. As of 2025-11-13 it tracks ADM-002 concept editor polish; revise at the start/end of each session and archive completed plans under `archive/` with a datestamped filename.
+- `session/current_session.md` – active working session plan and checklist. As of 2025-11-20 it covers MVP polish after the media rollout; revise at the start/end of each session and archive completed plans under `archive/` with a datestamped filename.
 - `archive/` – historical session notes and superseded plans. Drop finished session docs here whenever a new plan replaces them (latest: `docs/archive/2025_11_13_current_session.md`).
 
 ## Setup & Delivery

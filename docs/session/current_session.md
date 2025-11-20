@@ -1,63 +1,62 @@
-# Current Session Plan – Media Roadmap Kickoff (2025-11-17)
+# Current Session Plan – MVP Polish & Auth Kickoff (2025-11-20)
 
-This block pivots from ADM-002 polish to preparing an admin-only media upload pipeline and lining up minimal auth changes for the next implementation cycle.
+Media MVP is live (admin uploads, external embeds, PDF support). This session focuses on stabilising the release candidate, capturing documentation debt, and preparing authentication and learner engagement work.
 
 ## Orientation Checklist
 
-- Review `docs/references/ISSUE_TRACKER.md` for MEDIA-001→005 and AUTH-001→003 scope notes.
-- Revisit `docs/references/features/implemented/ADMIN_SETUP.md` to confirm current admin affordances before layering media workflows.
-- Skim `docs/references/API_CONTRACTS.md`, `docs/references/SCHEMA_DECISIONS.md`, and `docs/references/infrastructure/SUPABASE.md` so storage, API, and policy changes stay consistent.
-- Check `docs/references/PHASE_BACKLOG.md` for roadmap sequencing when proposing schedule shifts.
+- Review `docs/references/ISSUE_TRACKER.md` for the remaining MVP items (AUTH-001→003, LX-004→006, ADM-005, MEDIA-005).
+- Skim `docs/references/API_CONTRACTS.md`, `docs/references/SCHEMA_DECISIONS.md`, and `docs/references/infrastructure/SUPABASE.md` to confirm media updates are reflected and note gaps for auth/storage follow-ups.
+- Re-run the full `npm run test:*` suite (concepts, db002, media001/002) when touching backend logic; update `docs/TESTING_GUIDE.md` if the cadence or coverage changes.
+- Align near-term priorities with `docs/references/PHASE_BACKLOG.md`, marking media tasks as shipped and confirming the next learner/auth milestones.
 
 ## Objectives for This Block
 
-- Finalise the MEDIA-001 storage + migration blueprint for a single admin-managed upload path.
-- Define MEDIA-002 REST contracts for admin uploads and retrieval, keeping learner endpoints out of scope.
-- Document lightweight admin UI affordances for attaching media to concepts (no moderation queue needed).
-- Align AUTH-001→003 scope with current admin role usage so no extra reviewer onboarding is required yet.
+- Lock down media MVP documentation (admin workflows, API contracts, infra notes, testing playbook) so future contributors have a stable reference.
+- Stage authentication groundwork: tighten personas/permissions, confirm Supabase auth flow requirements, and scope UI entry points.
+- Prioritise learner queue + quiz planning so LX-004/LX-005 implementation can start once auth scaffolding is underway.
+- Capture project status for stakeholders (README + docs index) with clear next steps and release blockers.
 
-## Immediate Focus (week of 2025-11-17)
+## Immediate Focus (week of 2025-11-20)
 
-- Draft Supabase bucket configuration, table layout, and migration order for `media_assets`; record outcomes in `docs/references/infrastructure/SUPABASE.md` and `docs/references/SCHEMA_DECISIONS.md`.
-- Outline admin-only endpoints (`POST /api/v1/admin/media`, `GET /api/v1/admin/media/:id`, listing helpers) in `docs/references/API_CONTRACTS.md`, including validation, rate limits, and signed URL policy.
-- Sketch the minimal admin UI flow (upload button + attachment picker) in `docs/references/features/implemented/ADMIN_SETUP.md` so ADM contributors can follow it after implementation.
-- Review AUTH briefs to confirm the existing `admin` role suffices; capture any residual notes in `docs/references/PERSONAS_PERMISSIONS.md`.
-- Verify admin media metadata edits behave correctly when filters are active (concept reassignment, modal preview, delete confirmation) and document the workflow in `TESTING_GUIDE.md`, `ADMIN_SETUP.md`, and `API_CONTRACTS.md`.
+- Audit `docs/` for stale references to “media pending” and refresh README, references, and session notes with the shipped functionality.
+- Identify auth prerequisites (env secrets, role claims, UI scaffolding) and document the proposed rollout order in `PERSONAS_PERMISSIONS.md` + `MASTER_PLAN.md` if changes surface.
+- Outline the learner queue MVP (API needs, UI flows, telemetry) so LX-004 scope can be broken into actionable issues.
+- Catalogue remaining QA gaps (signed URL expiry, storage cleanup, rate limit regressions) and add any missing manual checks to `TESTING_GUIDE.md`.
 
 ## Planning Deliverables
 
-- **MEDIA-001** – Lock storage bucket choice, table schema, seed data expectations, and rollback checklist (see `docs/references/SCHEMA_DECISIONS.md` + `docs/references/infrastructure/SUPABASE.md`). Migration `0011_media_admin_mvp.sql` + smoke test `npm run test:media001` now cover implementation.
-- **MEDIA-002** – Document admin upload/read endpoints, payload schemas, and signed URL strategy; learner submission path explicitly deferred (see `docs/references/API_CONTRACTS.md` Implementation Checklist).
-- **MEDIA-005 (Slice)** – Record provider whitelist and sanitised embed rules for admin-curated media that will surface on the learner side.
-- **Deferred Notes** – Capture future scope for MEDIA-003/004 (contributor uploads & moderation) in `docs/references/ISSUE_TRACKER.md` with a clear “post-admin launch” tag.
-- **AUTH alignment** – Note that current `admin` role covers uploads; additional reviewer onboarding is shelved until contributor flows revive.
+- **Documentation sweep** – README, docs index, infra notes, and admin runbook updated to reflect the current media feature set and list upcoming milestones.
+- **Auth prep memo** – Summary of required migrations, secrets, and UI hooks for AUTH-001/002 captured in `docs/references/ISSUE_TRACKER.md` + relevant references.
+- **Learner queue outline** – Refined LX-004 acceptance criteria + dependencies noted in backlog/reference docs.
+- **Risk register** – Updated `Remaining Risks` and session log with any new concerns around storage, auth, or learner UX.
 
-## Decisions Locked (2025-11-17)
+## Decisions Locked (2025-11-20)
 
-- Storage uses a single Supabase bucket `media-admin` with RLS granting read/write to admins only; assets are published via signed URLs or CDN transforms generated at read time. Standard storage tier stays in place with monthly reviews.
-- Schema for MEDIA-001 trims to `media_assets` (id, concept_id, asset_type enum, storage_path, created_by, created_at) and optional `media_asset_variants` for resized images. No `media_reviews` table required in this phase.
-- Admin UI now exposes a dedicated `/admin/media` workspace and concept editor attachment panel for end-to-end admin media management.
-- Upload safeguards MVP: accept only `image/*` and `video/mp4`, cap size at 50 MB per file, throttle by admin account (existing rate limiter). Manual judgment from the uploading admin replaces moderation workflow.
-- Metadata launches English-only; schema keeps optional locale columns but we will populate `en` exclusively until contributor flows return.
-- AUTH scope unchanged: the existing `admin` role covers uploads. Invite workflow remains in AUTH-002 but is low priority while contributors stay out of scope.
+- Admin media uploads ship with automatic asset type detection (image/video/document), 10 MB cap, and PDF preview fallbacks; anything beyond admin-managed assets remains deferred.
+- Rate limiting for admin media create/delete stays at `2 per day / burst 2` for uploads and `6 per day / burst 3` for deletes; future adjustments will happen alongside auth rollout.
+- Admin documentation must reflect the full media workflow (creation drawer, workspace, concept attachments) before handing work into backlog grooming.
+- Next engineering slice after documentation is AUTH-001; MEDIA-005 (external embeds on learner views) follows once auth stubs are in flight and time allows.
 
 ## Remaining Risks
 
-- Storage costs remain low but we still need an infra reminder to revisit lifecycle policies once uploads exceed admin-produced assets.
-- Relying on manual judgment increases the chance of an admin uploading the wrong asset; mitigate by adding an upload checklist in `ADMIN_SETUP.md`.
-- Filter-synchronised metadata edits now refresh the list immediately when an asset leaves scope, but bulk operations could still surface brief flash-of-removed-item states until further virtualisation work lands.
+- Learner experience still lacks study queue functionality; without interim guidance, the MVP may feel static. Mitigate by drafting LX-004 implementation notes early.
+- Authentication introduces new secrets + session handling; without a prep checklist we risk churn during setup. Address via the auth memo deliverable.
+- Supabase storage growth is unmonitored; capture a follow-up task to instrument usage metrics and retention policy reminders.
+- Signed upload tokens currently log minimal telemetry; analytics requirements should piggyback on ADM-005 to avoid blind spots.
 
 ## Documentation & Tracking
 
-- Update `docs/references/infrastructure/SUPABASE.md`, `docs/references/SCHEMA_DECISIONS.md`, and `docs/references/API_CONTRACTS.md` as decisions land.
-- Reflect plan progress in `docs/references/ISSUE_TRACKER.md` (MEDIA-001→005, AUTH-001→003) so GitHub issue creation is turnkey.
-- Note UX research or design follow-ups in `docs/references/features/ideas/` if new concepts emerge during scoping.
+- Keep `docs/references/ISSUE_TRACKER.md` statuses aligned with GitHub (MEDIA-001/002 closed, MEDIA-003/004 deferred, MEDIA-005 open).
+- Update `docs/references/PHASE_BACKLOG.md` to mark media ingestion as delivered for admin MVP and note contributor scope deferral.
+- Note auth prerequisites and learner queue sequencing in `MASTER_PLAN.md` + session log once planning wraps.
+- Ensure `TESTING_GUIDE.md` references `npm run test:media002` and highlights rate-limit assertions.
 
 ## Next Implementation Tasks
 
-- MEDIA-002 hardening – Document the admin upload runbook (`ADMIN_SETUP.md`), surface rate-limit guidance in UI copy, and add a QA checklist covering upload failures and signed URL expiry. (Follow-up on [#23](https://github.com/mrolandas/BurBuriuok/issues/23))
-- MEDIA-005 planning – Finalise whitelist and embed sanitisation approach so external media can surface on learner views without blocking deployment. (Tracked in [#19](https://github.com/mrolandas/BurBuriuok/issues/19))
-- MEDIA telemetry – Scope lightweight logging for admin media create/delete + signed URL fetch events to feed future analytics (ties into [#14](https://github.com/mrolandas/BurBuriuok/issues/14)).
+1. AUTH-001 groundwork – seeds for Supabase magic-link auth, environment wiring, and basic login UI scaffolding.
+2. LX-004 scoping – break down learner queue MVP into frontend/backend subtasks and confirm API/data requirements.
+3. ADM-005 analytics mapping – document media-related events (`asset_created`, `asset_deleted`, signed URL fetch) so instrumentation can follow code updates.
+4. MEDIA-005 design notes – capture learner-side embed rendering strategy without blocking auth/queue deliverables.
 
 ## Session Log
 
@@ -79,13 +78,12 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-19: Updated GitHub Pages deploy pipeline to inject both admin and public API bases (`deploy-frontend-gh-pages.yml`) ensuring runtime config stays aligned after future key rotations.
 - 2025-11-19: Media renders correctly in production; next session will tackle the “Nežinoma sąvoka” placeholder in the `/admin/media` concept column.
 - 2025-11-20: Resolved admin media filter desync after reassignment (`applyUpdatedAsset` now prunes items + refreshes list), refreshed documentation (API contracts, testing guide, admin setup, infra index), and noted new QA coverage for modal preview + delete confirmation.
+- 2025-11-20: Captured media MVP wrap-up across README/docs, refreshed session goals toward auth + learner queue planning, and re-ran media smoke tests after dropping deprecated payload fields.
 - 2025-11-21: Extended admin media uploads with automatic asset type detection (image/video/document), enforced a 10 MB cap, refreshed PDF preview fallbacks across admin/public views, and applied Supabase migration `0012_media_document_support.sql` via `supabase db push` followed by stack restart.
 
 ## Wrap-up Checklist (close when all items are complete)
 
-- [x] MEDIA-001 migration + bucket plan documented and reviewed.
-- [x] MEDIA-002 admin endpoint contracts captured with validation + signed URL notes.
-- [x] Media attachment UX documented in `ADMIN_SETUP.md` for admin-only flow.
-- [x] Deferred contributor scope noted in `docs/references/ISSUE_TRACKER.md` with clear next-step markers.
-- [x] Follow-up tasks noted in `docs/references/ISSUE_TRACKER.md` and ready for issue creation.
-- [x] MEDIA-002 patch (PDF support + 10 MB limit + document asset type) captured in session log and issue tracker status notes.
+- [ ] Documentation sweep finished (`README.md`, docs index, infra notes, admin runbook).
+- [ ] AUTH-001 prep memo drafted (requirements, env wiring, rollout plan).
+- [ ] LX-004 learner queue outline added to backlog with refined acceptance criteria.
+- [ ] Testing guide updated with media rate-limit + signed URL QA steps.

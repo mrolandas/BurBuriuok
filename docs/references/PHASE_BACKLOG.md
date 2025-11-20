@@ -14,7 +14,7 @@ Use this backlog to spin issues or PR scopes. Keep items focused on thin slices 
 
 - [ ] **Admin CRUD UI** – build editable grids/forms for nodes, items, concepts, and dependencies with validation feedback.
 - [ ] **Content versioning UX** – implement draft → review → publish flow, surfaced in admin dashboard with change history.
-- [ ] **Media ingestion pipeline** – allow uploads with metadata capture, pending-state gating, and storage bucket policies (ref: `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`).
+- [x] **Media ingestion pipeline** – admin-only uploads shipped (bucket, metadata, rate limits, UI workflows); contributor moderation stays deferred (ref: `docs/references/SCHEMA_DECISIONS.md`, `docs/references/MODERATION_SLA.md`).
 - [ ] **Moderation queue** – queue view with approve/reject actions, audit trail, and notification hooks (ref: `docs/references/MODERATION_SLA.md`).
 - [ ] **Automated validation suite** – server-side checks for duplicate ordinals, missing translations, orphan dependencies, and content diffs.
 - [ ] **Role-based controls** – enforce permissions per persona (`PERSONAS_PERMISSIONS.md`) within UI and API.

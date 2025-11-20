@@ -15,9 +15,9 @@ BurKursas guides learners through the "Lietuvos Buriavimo Asociacijos vidaus van
 
 ## Release Roadmap
 
-- **Version 1:** Supabase stores core content and learner progress. No authentication or media uploads. The static build continues to deploy via GitHub Pages.
-- **Version 2:** Add Supabase authentication and wire the assistant workflow to either Ollama or other publicly accessible models for concept Q&A.
-- **Post-V2:** Introduce concept media uploads (up to four illustrations per concept), community sharing, and curator workflows for highlighting the best visuals.
+- **Version 1 (in progress):** Supabase stores core content, learner progress, and admin-managed media assets. The static build continues to deploy via GitHub Pages, and admin uploads ride through the new media bucket + Express API. Learner authentication and study queues remain TODO.
+- **Version 2:** Add Supabase authentication and wire the assistant workflow to either Ollama or other publicly accessible models for concept Q&A. Expand learner tooling with queue management and quiz loops.
+- **Post-V2:** Broaden media intake to contributors, add moderation workflows, and layer on community sharing plus curator highlights.
 
 ## Language Policy
 
@@ -29,7 +29,7 @@ BurKursas guides learners through the "Lietuvos Buriavimo Asociacijos vidaus van
 - SvelteKit frontend with component-driven, accessible UI tailored for small screens first.
 - Modular Express backend that keeps boundaries clean and prepares for REST/JSON integrations with future clients.
 - Supabase data layer: Version 1 stores concept catalog and progress metrics; the schema already accounts for future feature growth.
-- Media management: No uploads in V1; V2 plans to rely on Supabase Storage with reusable governance controls (per-user quotas, moderation review).
+- Media management: Admin-only uploads land in the MVP via Supabase Storage (single bucket, signed URLs, rate limits). Contributor submissions and moderation review remain on the post-V1 roadmap.
 - Shared styles live in `styles/` with a preference toward modular CSS organization.
 - All non-README documentation belongs in `docs/` for fast discovery of product, infrastructure, and process materials.
 

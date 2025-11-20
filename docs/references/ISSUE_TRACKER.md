@@ -13,10 +13,10 @@ Use this list to open GitHub issues (or Jira tickets) quickly. Each entry has a 
 
 1. DB-002 – Content versioning workflow hardening (#7).
 2. ADM-002 – Concept editor polish + history (#11).
-3. MEDIA-001 – Supabase media storage & migrations (#15).
-4. MEDIA-002 – Media submission REST surface (#16).
-5. MEDIA-003 – Contributor upload UX (#17).
-6. MEDIA-004 – Admin moderation queue upgrade (#18).
+3. MEDIA-001 – Supabase media storage & migrations (#15) – **Done**.
+4. MEDIA-002 – Media submission REST surface (#16) – **Done**.
+5. MEDIA-003 – Contributor upload UX (#17) – **Deferred**.
+6. MEDIA-004 – Admin moderation queue upgrade (#18) – **Deferred**.
 7. MEDIA-005 – YouTube & external embeds (#19).
 8. DB-003 – Media moderation flow integration (#8).
 9. ADM-003 – Moderation queue UX (#12).
