@@ -40,6 +40,11 @@ This document captures how BurKursas uses Supabase during early development (sta
 - Shipped MEDIA-002 admin media API routes (`POST/GET/DELETE /admin/media` plus signed URL helper). Upload flows now issue signed Supabase upload URLs, while external assets rely on a curated HTTPS allowlist (YouTube/Vimeo).
 - Added `npm run test:media002` smoke test covering upload/external creation, listing, signed URL retrieval, and deletion. Run after backend changes or Supabase policy updates.
 
+### Recent Updates (2025-11-19)
+
+- GitHub Pages deploy now injects both admin and public API bases into `window.__BURKURSAS_CONFIG__`, ensuring static builds call the hosted Express backend (`https://burburiuok.onrender.com/api/v1`). The workflow respects optional `PUBLIC_API_BASE` secrets and derives a fallback from `ADMIN_API_BASE` when provided.
+- Frontend runtime (`appConfig`, media API helper, and `static/env.js`) supports `publicApiBase`, routing concept media requests away from relative `/api/v1` paths so production concept views load attachments correctly.
+
 ## Database Layout (Current + Planned)
 
 - **Database name/schema** – create a dedicated schema `burburiuok` in the shared instance to avoid collisions with other projects.

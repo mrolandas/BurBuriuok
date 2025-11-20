@@ -188,32 +188,25 @@
 		}
 	}
 
-	function conceptLabelForAsset(asset: AdminMediaAsset): string {
-		const inlineTerm = asset.conceptTermLt?.trim();
-		if (inlineTerm) {
-			return inlineTerm;
+	function conceptLabel(conceptId: string): string {
+		const concept = conceptLookup.get(conceptId);
+		if (!concept) {
+			return 'Nežinoma sąvoka';
 		}
-
-		const concept = conceptLookup.get(asset.conceptId);
-		const conceptTerm = concept?.termLt?.trim();
-		if (conceptTerm) {
-			return conceptTerm;
+		const trimmed = concept.termLt?.trim();
+		if (trimmed && trimmed.length) {
+			return trimmed;
 		}
-
-		if (asset.conceptSlug) {
-			return asset.conceptSlug;
-		}
-
-		return concept?.slug ?? concept?.id ?? 'Nežinoma sąvoka';
+		return concept.slug ?? concept.id;
 	}
 
-	function conceptLinkForAsset(asset: AdminMediaAsset): string | null {
-		const slug = asset.conceptSlug ?? conceptLookup.get(asset.conceptId)?.slug ?? null;
-		if (!slug) {
+	function conceptLink(conceptId: string): string | null {
+		const concept = conceptLookup.get(conceptId);
+		if (!concept) {
 			return null;
 		}
 		const baseHref = resolve('/admin/concepts');
-		const search = new URLSearchParams({ slug }).toString();
+		const search = new URLSearchParams({ slug: concept.slug }).toString();
 		return `${baseHref}?${search}`;
 	}
 
@@ -994,15 +987,15 @@
 								{/if}
 							</th>
 							<td>
-								{#if conceptLinkForAsset(item)}
+								{#if conceptLink(item.conceptId)}
 									<a
-										href={conceptLinkForAsset(item) ?? '#'}
+										href={conceptLink(item.conceptId) ?? '#'}
 										onclick={(event) => event.stopPropagation()}
 									>
-										{conceptLabelForAsset(item)}
+										{conceptLabel(item.conceptId)}
 									</a>
 								{:else}
-									{conceptLabelForAsset(item)}
+									{conceptLabel(item.conceptId)}
 								{/if}
 							</td>
 							<td>{sourceSummary(item)}</td>
@@ -1085,7 +1078,7 @@
 						</div>
 						<div>
 							<dt>Sąvoka</dt>
-							<dd>{conceptLabelForAsset(detailAsset)}</dd>
+							<dd>{conceptLabel(detailAsset.conceptId)}</dd>
 						</div>
 						<div>
 							<dt>Tipas</dt>

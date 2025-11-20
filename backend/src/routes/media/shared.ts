@@ -2,27 +2,13 @@ import type { Request } from "express";
 import type { MediaAssetRow } from "../../../../data/types.ts";
 export type { MediaAssetRow };
 
-type MediaAssetJoinedRow = MediaAssetRow & {
-  concepts?: {
-    slug?: string | null;
-    term_lt?: string | null;
-    term_en?: string | null;
-  } | null;
-  concept?: {
-    slug?: string | null;
-    term_lt?: string | null;
-    term_en?: string | null;
-  } | null;
-};
-
 export const MEDIA_BUCKET = "media-admin";
 export const SIGNED_URL_DEFAULT_EXPIRY = 3600;
 export const UPLOAD_URL_EXPIRY_SECONDS = 300;
 
 export type MediaAssetResponse = ReturnType<typeof mapMediaAssetForResponse>;
 
-export function mapMediaAssetForResponse(row: MediaAssetRow | MediaAssetJoinedRow) {
-  const conceptData = (row as MediaAssetJoinedRow).concepts ?? (row as MediaAssetJoinedRow).concept ?? null;
+export function mapMediaAssetForResponse(row: MediaAssetRow) {
   return {
     id: row.id,
     conceptId: row.concept_id,
@@ -35,9 +21,6 @@ export function mapMediaAssetForResponse(row: MediaAssetRow | MediaAssetJoinedRo
     captionEn: row.caption_en,
     createdBy: row.created_by ?? null,
     createdAt: row.created_at,
-    conceptSlug: conceptData?.slug ?? null,
-    conceptTermLt: conceptData?.term_lt ?? null,
-    conceptTermEn: conceptData?.term_en ?? null,
   };
 }
 

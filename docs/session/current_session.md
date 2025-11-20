@@ -72,6 +72,10 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-18: Added Concept Manager media panel with attachment list, creation drawer shortcut, and inline delete to keep concepts free of orphaned assets.
 - 2025-11-18: Cleared lingering Svelte accessibility warnings (`npm run frontend:check` now passes clean), localised required-field toasts, and upsized the learner gallery modal for embedded media.
 - 2025-11-18: Upgraded `/admin/media` table with checkbox multi-select, bulk delete workflow, and inline media preview (signed URLs + external embeds) while keeping concept attachments in sync.
+- 2025-11-18: Upgraded `/admin/media` table with checkbox multi-select, bulk delete workflow, and inline media preview (signed URLs + external embeds) while keeping concept attachments in sync.
+- 2025-11-19: Routed concept media fetches through a configurable public API base so GitHub Pages hits the hosted Express app (updates in `frontend/src/lib/api/media.ts`, runtime config, and deploy workflow). Documented the change in infra notes.
+- 2025-11-19: Updated GitHub Pages deploy pipeline to inject both admin and public API bases (`deploy-frontend-gh-pages.yml`) ensuring runtime config stays aligned after future key rotations.
+- 2025-11-19: Media renders correctly in production; next session will tackle the “Nežinoma sąvoka” placeholder in the `/admin/media` concept column.
 
 ## Wrap-up Checklist (close when all items are complete)
 

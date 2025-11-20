@@ -50,18 +50,7 @@ router.get(
       options.sectionCode = sectionCode;
     }
 
-    let adminClient: SupabaseClient | null = null;
-
-    try {
-      adminClient = getSupabaseClient({ service: true, schema: "burburiuok" });
-    } catch (error) {
-      console.warn(
-        "[AdminConcepts] Falling back to public schema client – service key missing or invalid.",
-        error instanceof Error ? error.message : error
-      );
-    }
-
-    const concepts = await listConcepts(adminClient ?? null, options);
+    const concepts = await listConcepts(null, options);
 
     const statusFilter = statusQuery
       ? adminConceptStatusSchema.safeParse(statusQuery)
