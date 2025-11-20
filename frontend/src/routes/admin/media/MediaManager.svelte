@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	 import { base, resolve } from '$app/paths';
 	import { onMount, onDestroy, tick } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { AdminApiError } from '$lib/api/admin/client';
@@ -59,6 +59,22 @@
 	let searchInput = '';
 	let searchTerm = '';
 	let searchTimer: ReturnType<typeof setTimeout> | null = null;
+
+	 const toAppHref = (path: string): string => {
+		const normalized = path.startsWith('/') ? path : `/${path}`;
+		const parsed = new URL(normalized, 'http://localhost');
+		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
+	};
+
+	 const toExternalHref = (target: string | null | undefined): string => {
+		if (!target) {
+			return '#';
+		}
+		if (/^[a-z][a-z0-9+.-]*:/i.test(target)) {
+			return target;
+		}
+		return toAppHref(target);
+	};
 
 	let selectedAsset: AdminMediaAsset | null = null;
 	let detailAsset: AdminMediaAsset | null = null;
@@ -1206,7 +1222,7 @@
 							<td>
 								{#if conceptSlugValue}
 									<a
-										href={resolve(`/admin/concepts?slug=${conceptSlugValue}`)}
+										href={`${resolve('/admin/concepts')}?slug=${conceptSlugValue}`}
 										on:click={(event) => event.stopPropagation()}
 									>
 										{conceptLabel(item.conceptId)}
@@ -1341,7 +1357,7 @@
 						{:else if preview.kind === 'link'}
 							<a
 								class="preview-card preview-card--link"
-								href={resolve(preview.url)}
+								href={toExternalHref(preview.url)}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
@@ -1448,7 +1464,7 @@
 								<dd>
 									{#if detailConceptSlug}
 										<a
-											href={resolve(`/admin/concepts?slug=${detailConceptSlug}`)}
+											href={`${resolve('/admin/concepts')}?slug=${detailConceptSlug}`}
 											target="_blank"
 											rel="noopener noreferrer"
 										>

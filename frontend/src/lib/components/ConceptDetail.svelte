@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
+	 import { goto } from '$app/navigation';
 	import ConceptDisplay from '$lib/components/ConceptDisplay.svelte';
 	import ConceptMediaGallery from '$lib/components/ConceptMediaGallery.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
@@ -257,8 +256,7 @@
 			url.searchParams.delete('admin');
 		}
 
-		const nextRelative = `${url.pathname}${url.search}${url.hash}` as `/${string}`;
-		await goto(resolve(nextRelative), {
+		await goto(url, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true

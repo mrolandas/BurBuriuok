@@ -1344,7 +1344,7 @@
 								<td>
 									<div class="concept-name">
 										<a
-											href={resolve(`/concepts/${concept.slug}?admin=1`)}
+											href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
 											target="_blank"
 											rel="noopener noreferrer"
 											class="concept-name__primary"
@@ -1615,7 +1615,7 @@
 								<div class="media-panel__actions">
 									<a
 										class="media-panel__action"
-										href={resolve(`/admin/media?conceptId=${media.conceptId}`)}
+										href={`${resolve('/admin/media')}?conceptId=${media.conceptId}`}
 										target="_blank"
 										rel="noopener noreferrer"
 									>

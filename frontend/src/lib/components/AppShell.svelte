@@ -44,6 +44,12 @@
 	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
 
+	const withBase = (path: string): string => {
+		const normalized = path.startsWith('/') ? path : `/${path}`;
+		const parsed = new URL(normalized, 'http://localhost');
+		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
+	};
+
 	const themeOptions = [
 		{
 			id: 'dawn',
@@ -190,7 +196,7 @@
 		}
 	};
 
-	 const syncAdminModeToUrl = async (enabled: boolean) => {
+	const syncAdminModeToUrl = async (enabled: boolean) => {
 		if (typeof window === 'undefined') {
 			return;
 		}
@@ -200,11 +206,7 @@
 			return;
 		}
 
-		const normalizedPath = base && url.pathname.startsWith(base)
-			? (url.pathname.slice(base.length) || '/')
-			: url.pathname;
-		const nextRelative = `${normalizedPath}${url.search}${url.hash}` as `/${string}`;
-		await goto(resolve(nextRelative), {
+		await goto(url, {
 			replaceState: true,
 			noScroll: true,
 			keepFocus: true
@@ -306,7 +308,7 @@
 						aria-label="Naudotojo parinktys"
 					>
 						<a
-							href={resolve('/login')}
+							href={withBase('/login')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -314,7 +316,7 @@
 							Prisijungti
 						</a>
 						<a
-							href={resolve('/register')}
+							href={withBase('/register')}
 							class="app-shell__user-item"
 							role="menuitem"
 							onclick={closeMenus}
@@ -384,7 +386,7 @@
 
 				<li class="app-shell__menu-admin">
 					<a
-						href={resolve(
+						href={withBase(
 							adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
 						)}
 						target="_blank"
