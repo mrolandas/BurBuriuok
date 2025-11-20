@@ -299,14 +299,42 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		return fieldErrors;
 	}
 
-	function applyUpdatedAsset(asset: AdminMediaAsset): void {
-		detailAsset = asset;
-		selectedAsset = asset;
+	function assetMatchesActiveFilters(asset: AdminMediaAsset): boolean {
+		if (filterConceptId !== 'all' && asset.conceptId !== filterConceptId) {
+			return false;
+		}
+		if (filterAssetType !== 'all' && asset.assetType !== filterAssetType) {
+			return false;
+		}
+		if (filterSourceKind !== 'all' && asset.sourceKind !== filterSourceKind) {
+			return false;
+		}
+		return true;
+	}
+
+	function applyUpdatedAsset(asset: AdminMediaAsset): boolean {
+		const matchesFilters = assetMatchesActiveFilters(asset);
+		if (matchesFilters) {
+			detailAsset = asset;
+			selectedAsset = asset;
+			listState = {
+				...listState,
+				items: listState.items.map((item) => (item.id === asset.id ? asset : item))
+			};
+			resetEditState(asset);
+			return true;
+		}
+
+		const nextItems = listState.items.filter((item) => item.id !== asset.id);
 		listState = {
 			...listState,
-			items: listState.items.map((item) => (item.id === asset.id ? asset : item))
+			items: nextItems
 		};
+		pruneSelectionFromItems(nextItems);
+		detailAsset = asset;
+		selectedAsset = asset;
 		resetEditState(asset);
+		return false;
 	}
 
 	async function handleMetadataSubmit(event: Event): Promise<void> {
@@ -342,8 +370,14 @@ import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svel
 		editFieldErrors = {};
 		try {
 			const updated = await updateAdminMediaAsset(detailAsset.id, payload);
-			applyUpdatedAsset(updated);
-			setSuccess('Medijos įrašo informacija atnaujinta.');
+			const stillVisible = applyUpdatedAsset(updated);
+			if (stillVisible) {
+				setSuccess('Medijos įrašo informacija atnaujinta.');
+			} else {
+				setSuccess('Medijos įrašas atnaujintas ir pašalintas iš dabartinio filtro.');
+				closeDetail();
+				await refreshList();
+			}
 		} catch (error) {
 			if (error instanceof AdminApiError && error.status === 422) {
 				const fieldErrors = mapEditFieldErrors(error);

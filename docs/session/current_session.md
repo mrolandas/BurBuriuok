@@ -22,6 +22,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - Outline admin-only endpoints (`POST /api/v1/admin/media`, `GET /api/v1/admin/media/:id`, listing helpers) in `docs/references/API_CONTRACTS.md`, including validation, rate limits, and signed URL policy.
 - Sketch the minimal admin UI flow (upload button + attachment picker) in `docs/references/features/implemented/ADMIN_SETUP.md` so ADM contributors can follow it after implementation.
 - Review AUTH briefs to confirm the existing `admin` role suffices; capture any residual notes in `docs/references/PERSONAS_PERMISSIONS.md`.
+- Verify admin media metadata edits behave correctly when filters are active (concept reassignment, modal preview, delete confirmation) and document the workflow in `TESTING_GUIDE.md`, `ADMIN_SETUP.md`, and `API_CONTRACTS.md`.
 
 ## Planning Deliverables
 
@@ -44,6 +45,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 
 - Storage costs remain low but we still need an infra reminder to revisit lifecycle policies once uploads exceed admin-produced assets.
 - Relying on manual judgment increases the chance of an admin uploading the wrong asset; mitigate by adding an upload checklist in `ADMIN_SETUP.md`.
+- Filter-synchronised metadata edits now refresh the list immediately when an asset leaves scope, but bulk operations could still surface brief flash-of-removed-item states until further virtualisation work lands.
 
 ## Documentation & Tracking
 
@@ -76,6 +78,7 @@ This block pivots from ADM-002 polish to preparing an admin-only media upload pi
 - 2025-11-19: Routed concept media fetches through a configurable public API base so GitHub Pages hits the hosted Express app (updates in `frontend/src/lib/api/media.ts`, runtime config, and deploy workflow). Documented the change in infra notes.
 - 2025-11-19: Updated GitHub Pages deploy pipeline to inject both admin and public API bases (`deploy-frontend-gh-pages.yml`) ensuring runtime config stays aligned after future key rotations.
 - 2025-11-19: Media renders correctly in production; next session will tackle the “Nežinoma sąvoka” placeholder in the `/admin/media` concept column.
+- 2025-11-20: Resolved admin media filter desync after reassignment (`applyUpdatedAsset` now prunes items + refreshes list), refreshed documentation (API contracts, testing guide, admin setup, infra index), and noted new QA coverage for modal preview + delete confirmation.
 
 ## Wrap-up Checklist (close when all items are complete)
 
