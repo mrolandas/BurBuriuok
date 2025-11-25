@@ -27,16 +27,14 @@ With media MVP complete, this session pivots to authentication, admin user manag
 
 ### Step 0 – Pre-flight Alignment (0.5 day)
 
-- **Env + tooling audit**: confirm `.env` already exposes `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for both `frontend/src/lib/supabase/client.ts` and `data/supabaseClient.ts`. Document CLI login requirements inside `docs/DEVELOPMENT_SETUP.md` and `docs/references/infrastructure/SUPABASE.md`.
-- **Session guard baseline**: capture screenshots / notes of current admin guard behaviour driven by `frontend/src/lib/admin/session.ts` and `backend/src/middleware/requireAdminRole.ts`; this will be used to prove no regressions after auth wiring.
-- **Device-key inventory**: dump a sample of `concept_progress` rows via `supabase db remote commit` (or SQL editor) so we have realistic data for AUTH-003 coexistence testing.
-- **Status (2025-11-25):** Branch `feature/auth-implementation` created off `main`; Step 0 pre-flight tasks queued next (env audit + guard baseline capture).
+ **Findings (2025-11-25):**
+  - `.env` already carries `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; Supabase CLI v2.62.5 is installed and authenticated (`npx supabase projects list` shows the linked `zvlziltltbalebqpmuqs` project). `npx supabase status` currently expects a local Docker stack (`supabase start`) which is intentionally offline—documented in `docs/DEVELOPMENT_SETUP.md` as optional.
+  - Admin guard snapshot: frontend `frontend/src/lib/admin/session.ts` still returns the canonical `AdminSessionState` reasons (`missing-session`, `insufficient-role`, etc.) and backend `backend/src/middleware/requireAdminRole.ts` verifies `app_role` via the service client, falling back to the impersonation header when `ADMIN_DEV_IMPERSONATION` is set. This baseline will be referenced after the auth refactor.
+  - Device-key audit: hosted `burburiuok.concept_progress` currently has 0 rows (queried via service-role client). We will seed representative device-key progress once the learner UI resumes writes so AUTH-003 migration tooling has sample data.
 
 ### Step 1 – AUTH-001 Magic-Link Foundation (2–3 days)
 
-1. **Supabase project setup**
-   - Enable passwordless email in Supabase Dashboard (Auth → Providers) and configure the redirect URLs that match `frontend/src/routes/+layout.svelte` base path plus `/auth/callback` placeholder.
-   - Generate service email templates (Lithuanian) and paste them into Supabase; capture guidance in `docs/DEVELOPMENT_SETUP.md`.
+ 2025-11-25: Step 0 pre-flight complete – verified Supabase env/CLI state, captured admin guard baseline, and confirmed `concept_progress` has zero device-key rows ahead of AUTH-003 planning.
 2. **Infrastructure & config**
    - Extend `frontend/static/env.js` (written during deploy) to include `supabaseUrl`/`supabaseAnonKey` sanity validation so `appConfig.supabase` never boots with blanks.
    - Add `AUTH_REDIRECT_URL` + `AUTH_EMAIL_FROM` to `.env`, reference them inside `backend/src/routes/auth.ts` (new) for callback verification.
