@@ -30,6 +30,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 - **Env + tooling audit**: confirm `.env` already exposes `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for both `frontend/src/lib/supabase/client.ts` and `data/supabaseClient.ts`. Document CLI login requirements inside `docs/DEVELOPMENT_SETUP.md` and `docs/references/infrastructure/SUPABASE.md`.
 - **Session guard baseline**: capture screenshots / notes of current admin guard behaviour driven by `frontend/src/lib/admin/session.ts` and `backend/src/middleware/requireAdminRole.ts`; this will be used to prove no regressions after auth wiring.
 - **Device-key inventory**: dump a sample of `concept_progress` rows via `supabase db remote commit` (or SQL editor) so we have realistic data for AUTH-003 coexistence testing.
+- **Status (2025-11-25):** Branch `feature/auth-implementation` created off `main`; Step 0 pre-flight tasks queued next (env audit + guard baseline capture).
 
 ### Step 1 – AUTH-001 Magic-Link Foundation (2–3 days)
 
@@ -167,6 +168,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 - 2025-11-20: Resolved admin media filter desync after reassignment (`applyUpdatedAsset` now prunes items + refreshes list), refreshed documentation (API contracts, testing guide, admin setup, infra index), and noted new QA coverage for modal preview + delete confirmation.
 - 2025-11-20: Captured media MVP wrap-up across README/docs, refreshed session goals toward auth planning, and re-ran media smoke tests after dropping deprecated payload fields.
 - 2025-11-25: Cleared legacy branches, recorded scope removals, and pivoted session goals to authentication, admin user management, and progress tracking.
+- 2025-11-25: Cut branch `feature/auth-implementation` after committing the auth execution plan; beginning Step 0 pre-flight (env audit, guard baseline, device-key sampling).
 - 2025-11-21: Extended admin media uploads with automatic asset type detection (image/video/document), enforced a 10 MB cap, refreshed PDF preview fallbacks across admin/public views, and applied Supabase migration `0012_media_document_support.sql` via `supabase db push` followed by stack restart.
 
 ## Wrap-up Checklist (close when all items are complete)
