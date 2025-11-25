@@ -23,6 +23,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - UI is designed mobile-first (sub-6" screens) with responsive enhancements for tablet/desktop.
 - Media uploads are limited to admins for the MVP; contributor submissions and moderation queues return in a later phase.
 - Learner authentication launches with Supabase magic-link sign-in while device-key progress syncing remains available until the dedicated retirement task (AUTH-003) ships.
+- Post-media MVP scope now centres on authentication, admin user management, and learner progress tracking. Queue, quiz, embed, and gamification experiments are removed from the active roadmap (see `docs/REMOVED_FROM_SCOPE.md`).
 
 ## Experience Blueprint
 
@@ -31,7 +32,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 - Landing screen highlights curriculum sections as “boards” with progress meters and estimated study time.
 - Expanding a section reveals a collapsible tree; each node advertises prerequisites and next steps so learners can navigate depth without losing context. Prerequisite badges currently show zero counts until the public dependency view is exposed.
 - Concept detail pages act as the learner “workspace,” keeping definition, media, and progression controls in one stay-put view.
-- Guided study sessions advance learners through Ready/Needs Review/Completed queues without hopping back to the tree.
+- Guided study sessions and quiz loops have been removed from the near-term scope; revisit once authenticated progress tracking is stable (tracked in `docs/REMOVED_FROM_SCOPE.md`).
 - Quick search lives in a persistent bottom navigation item, clustering results by concept/module/media.
 
 ### Concept View
@@ -44,10 +45,7 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Guided Study & Practice
 
-- Curated “study paths” bundle concepts into manageable runs with embedded quizzes and reflections.
-- Adaptive review targets concepts marked as unclear or missed in quizzes, scheduling flashcards automatically.
-- Ready/Needs Review/Completed queues power continuous study sessions with minimal navigation friction.
-- Gentle nudges (push/email later) celebrate streaks and remind learners when progress stalls.
+Removed from active roadmap; see `docs/REMOVED_FROM_SCOPE.md` for historical planning notes. Future iterations will revisit queues, quizzes, and adaptive review after progress tracking launches.
 
 ### Admin Workspace
 
@@ -60,18 +58,11 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Media Moderation Flow
 
-> Deferred until contributor uploads resume; the admin-only MVP relies on manual judgement during upload.
+Deferred indefinitely. Contributor uploads, moderation queue workflows, and automation hooks are logged in `docs/REMOVED_FROM_SCOPE.md` and will be reassessed after authentication and progress tracking stabilize production operations.
 
-- When reopened, authenticated contributors will submit media with metadata (type, language, captions, credit).
-- Submissions will queue for admin approval; automated checks will enforce quota, MIME type, file size, and malicious content scanning.
-- Approved media will inherit contributor attribution and can be revoked or edited at any time.
+### Engagement & Gamification
 
-## Engagement & Gamification
-
-- Lightweight XP system tracks completed concepts, streaks, and milestones per module.
-- Badges celebrate key achievements (“Rigging Ready”, “Safety Champion”).
-- “Study later” queue and spaced repetition reminders keep learners returning.
-- Analytics drive personalised recommendations (e.g., “You struggled with terminology on navigation—review these before moving on”).
+Removed from current roadmap. Existing explorations live in `docs/references/features/ideas/` and are catalogued in `docs/REMOVED_FROM_SCOPE.md` for future review.
 
 ## Technical Direction
 
@@ -152,10 +143,11 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 ### Phase 1 – Admin Content Management & Moderation Foundations
 
-- [ ] Complete admin CRUD + hierarchy management (drag/drop, promote/demote) for nodes, items, and concepts, sharing validation between frontend and backend.
-- [ ] Ship the content versioning workflow (draft → review → publish) with audit logging, rollback notes, and documentation updates.
-- [ ] Stand up the admin media upload pipeline (upload surface, metadata capture) and record storage decisions; moderation queue deferred.
-- [ ] Build the initial moderation queue with approve/reject actions, SLA signalling, and Slack/email notification stubs wired to the dispatcher seam. _(Deferred until contributor uploads return.)_
+- [x] Complete admin CRUD + hierarchy management (drag/drop, promote/demote) for nodes, items, and concepts, sharing validation between frontend and backend.
+- [x] Ship the content versioning workflow (draft → review → publish) with audit logging, rollback notes, and documentation updates.
+- [x] Stand up the admin media upload pipeline (upload surface, metadata capture) and record storage decisions.
+- [ ] Deliver authentication foundation (AUTH-001) for magic-link login and role claims.
+- [ ] Build the admin user management console (`/admin/users`) covering invite flow, role toggles, and audit logging.
 - [ ] Harden validation, Supabase policies, and persona-based UI controls per `docs/references/PERSONAS_PERMISSIONS.md`.
 - [ ] Document every schema change in `SCHEMA_DECISIONS.md` and update reference guides as features land.
 
@@ -163,18 +155,13 @@ Deliver a Lithuanian-first, mobile-native learning companion that guides aspirin
 
 - [x] Ship curriculum navigation (section boards, collapsible tree, prerequisite indicators – counts currently placeholder until public dependency view).
 - [ ] Finish concept detail view (prerequisite/next drawers, media carousel, inline admin hooks) and polish UX copy.
-- [ ] Create the study session runner with progress HUD, confidence capture, and queue transitions.
-- [ ] Persist Ready/Needs Review/Completed queues to Supabase and sync with local state.
 - [ ] Deliver global search with grouped results, filters, and deep links into concept/admin views.
-- [ ] Kick off personalised recommendations leveraging progression and queue data.
+- [ ] Integrate authenticated progress tracking into learner UI (PROG-002).
+- Removed items: study session runner, queue persistence, and personalised recommendations; see `docs/REMOVED_FROM_SCOPE.md`.
 
 ### Phase 3 – Engagement & Analytics Layer
 
-- [ ] Implement gamification tables and UI (streaks, XP, badges) per `references/features/ideas/GAMIFICATION_MODEL.md`.
-- [ ] Launch adaptive review/spaced repetition scheduler with learner-facing flashcard UI.
-- [ ] Add nudges/notifications for streak breaks, study gaps, and path completion milestones.
-- [ ] Instrument analytics events (curriculum traversal, practice outcomes) and surface admin dashboards.
-- [ ] Strengthen telemetry pipelines, logging, and monitoring before scaling engagement.
+Removed from active roadmap; future analytics and engagement work is catalogued in `docs/REMOVED_FROM_SCOPE.md`.
 
 ### Phase 4 – Social & Community Features
 
