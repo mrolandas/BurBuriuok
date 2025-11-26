@@ -6,6 +6,8 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { quizModal } from '$lib/stores/quizModal';
 	import { adminMode, ensureAdminImpersonation } from '$lib/stores/adminMode';
+	import type { AuthSession, AuthStatus } from '$lib/stores/authStore';
+	import { authSession, authStatus, initializeAuth, signOut } from '$lib/stores/authStore';
 
 	type NavHref = '/' | `/sections/${string}`;
 
@@ -35,6 +37,15 @@
 	let adminModeUnsubscribe: (() => void) | null = null;
 	let allowAdminSync = false;
 	let userMenuOpen = $state(false);
+	let currentSession = $state<AuthSession | null>(null);
+	let authState = $state<AuthStatus>('idle');
+	let authSessionUnsubscribe: (() => void) | null = null;
+	let authStatusUnsubscribe: (() => void) | null = null;
+	const withBase = (path: string): string => {
+		const normalized = path.startsWith('/') ? path : `/${path}`;
+		const parsed = new URL(normalized, 'http://localhost');
+		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
+	};
 	const visibleNavLinks = $derived(
 		navLinks.length <= 1
 			? navLinks
@@ -43,12 +54,16 @@
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
-
-	const withBase = (path: string): string => {
-		const normalized = path.startsWith('/') ? path : `/${path}`;
-		const parsed = new URL(normalized, 'http://localhost');
-		return `${base}${parsed.pathname}${parsed.search}${parsed.hash}`;
-	};
+	const isAuthenticated = $derived(Boolean(currentSession));
+	const loginRedirectTarget = $derived(
+		`${$page.url.pathname}${$page.url.search}${$page.url.hash}`
+	);
+	const loginLink = $derived(
+		withBase(`/auth/login?redirectTo=${encodeURIComponent(loginRedirectTarget)}`)
+	);
+	const userToggleTitle = $derived(
+		currentSession?.email ?? (adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys')
+	);
 
 	const themeOptions = [
 		{
@@ -106,6 +121,17 @@
 		persistTheme(theme);
 	};
 
+
+	const handleSignOut = async () => {
+		try {
+			await signOut();
+		} catch (error) {
+			console.error('[AppShell] Sign-out failed', error);
+		} finally {
+			closeMenus();
+		}
+	};
+
 	onMount(() => {
 		adminMode.initialize();
 		adminModeUnsubscribe = adminMode.subscribe((value) => {
@@ -113,6 +139,13 @@
 			if (allowAdminSync) {
 				void syncAdminModeToUrl(value);
 			}
+		});
+		initializeAuth();
+		authSessionUnsubscribe = authSession.subscribe((value) => {
+			currentSession = value;
+		});
+		authStatusUnsubscribe = authStatus.subscribe((value) => {
+			authState = value;
 		});
 
 		if (typeof window === 'undefined') {
@@ -258,6 +291,10 @@
 		unsubscribePage();
 		adminModeUnsubscribe?.();
 		adminModeUnsubscribe = null;
+		authSessionUnsubscribe?.();
+		authStatusUnsubscribe?.();
+		authSessionUnsubscribe = null;
+		authStatusUnsubscribe = null;
 	});
 </script>
 
@@ -272,7 +309,11 @@
 			</a>
 		</div>
 		<div class="app-shell__controls">
-			<div class="app-shell__user" data-admin-active={adminModeEnabled ? 'true' : 'false'}>
+			<div
+				class="app-shell__user"
+				data-admin-active={adminModeEnabled ? 'true' : 'false'}
+				data-auth-state={isAuthenticated ? 'authenticated' : 'guest'}
+			>
 				<button
 					type="button"
 					class="app-shell__user-toggle"
@@ -281,7 +322,7 @@
 					aria-expanded={userMenuOpen}
 					aria-controls="app-shell-user-menu"
 					onclick={toggleUserMenu}
-					title={adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys'}
+					title={userToggleTitle}
 				>
 					<span class="app-shell__user-icon" aria-hidden="true">
 						<svg viewBox="0 0 24 24" role="presentation" focusable="false">
@@ -295,9 +336,7 @@
 							></path>
 						</svg>
 					</span>
-					<span class="app-shell__sr-only">
-						{adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys'}
-					</span>
+					<span class="app-shell__sr-only">{userToggleTitle}</span>
 				</button>
 
 				{#if userMenuOpen}
@@ -307,22 +346,38 @@
 						role="menu"
 						aria-label="Naudotojo parinktys"
 					>
-						<a
-							href={withBase('/login')}
-							class="app-shell__user-item"
-							role="menuitem"
-							onclick={closeMenus}
-						>
-							Prisijungti
-						</a>
-						<a
-							href={withBase('/register')}
-							class="app-shell__user-item"
-							role="menuitem"
-							onclick={closeMenus}
-						>
-							Registruotis
-						</a>
+						{#if currentSession}
+							<div class="app-shell__user-summary">
+								<p class="app-shell__user-email">
+									{currentSession.email ?? 'Prisijungęs naudotojas'}
+								</p>
+								{#if currentSession.appRole === 'admin'}
+									<span class="app-shell__badge">Administratorius</span>
+								{/if}
+							</div>
+							<button
+								type="button"
+								class="app-shell__user-item"
+								role="menuitem"
+								onclick={handleSignOut}
+							>
+								Atsijungti
+							</button>
+						{:else}
+							<a
+								href={loginLink}
+								class="app-shell__user-item"
+								role="menuitem"
+								onclick={closeMenus}
+							>
+								Prisijungti
+							</a>
+							<p class="app-shell__user-hint">
+								{authState === 'checking' || authState === 'idle'
+									? 'Tikriname prisijungimo būseną...'
+									: 'Naudokite vienkartinę el. pašto nuorodą.'}
+							</p>
+						{/if}
 						<button
 							type="button"
 							class="app-shell__user-item app-shell__user-item--admin"
@@ -749,6 +804,27 @@
 		z-index: 95;
 	}
 
+	.app-shell__user-summary {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.25rem 0.5rem 0.5rem;
+	}
+
+	.app-shell__user-email {
+		font-weight: 600;
+		word-break: break-all;
+	}
+
+	.app-shell__badge {
+		align-self: flex-start;
+		font-size: 0.75rem;
+		padding: 0.15rem 0.5rem;
+		border-radius: 999px;
+		background: var(--color-accent-faint);
+		color: var(--color-accent-strong);
+	}
+
 	.app-shell__user-item {
 		display: flex;
 		align-items: center;
@@ -785,6 +861,13 @@
 	.app-shell__user-item--admin:focus-visible {
 		border-color: transparent;
 		background: var(--color-accent-faint);
+	}
+
+	.app-shell__user-hint {
+		margin: 0.15rem 0 0;
+		padding: 0 0.5rem 0.4rem;
+		font-size: 0.85rem;
+		color: var(--color-text-muted);
 	}
 
 	.app-shell__menu-toggle {

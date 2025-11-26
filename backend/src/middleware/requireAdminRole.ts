@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { getSupabaseClient } from "../../../data/supabaseClient.ts";
+import { extractBearerToken } from "../utils/authHeaders.ts";
 import { forbidden, unauthorized } from "../utils/httpError.ts";
 import { logAdminSessionEvent } from "../utils/telemetry.ts";
 
@@ -19,22 +20,6 @@ type MinimalSupabaseAuth = {
 type MinimalSupabaseClient = {
   auth: MinimalSupabaseAuth;
 };
-
-function extractBearerToken(req: Request): string | null {
-  const header = req.headers["authorization"];
-
-  if (!header || Array.isArray(header)) {
-    return null;
-  }
-
-  const trimmed = header.trim();
-
-  if (!trimmed.toLowerCase().startsWith("bearer ")) {
-    return null;
-  }
-
-  return trimmed.slice(7).trim() || null;
-}
 
 const impersonationEnv = process.env.ADMIN_DEV_IMPERSONATION;
 const impersonationEnabled =

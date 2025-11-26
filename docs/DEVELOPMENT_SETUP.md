@@ -35,7 +35,9 @@ This document keeps the development environment expectations in one place. Updat
 
 1. Clone the repository: `git clone https://github.com/mrolandas/BurBuriuok.git`.
 2. Switch into the project directory: `cd BurBuriuok`.
-3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. The repo root `.env` continues to store Supabase URL/keys for backend scripts; the frontend dev server now mirrors those values automatically, so you do not need to maintain a separate `frontend/.env` unless you want overrides.
+3. Copy `.env.example` (when available) to `.env` and update Supabase credentials if needed. The repo root `.env` continues to store Supabase URL/keys for backend scripts; the frontend dev server now mirrors those values automatically, so you do not need to maintain a separate `frontend/.env` unless you want overrides. Add the magic-link auth settings while editing `.env`:
+   - `AUTH_REDIRECT_URL` – absolute URL to `/auth/callback` (e.g., `http://localhost:5173/auth/callback` in dev, `https://mrolandas.github.io/BurBuriuok/auth/callback` in production).
+   - `AUTH_EMAIL_FROM` – friendly From header surfaced in auth emails (e.g., `BurKursas <noreply@burkursas.lt>`).
 4. Install dependencies: `npm install`.
 5. Update the canonical concept source `docs/static_info/LBS_concepts_master.md` only when content changes are required, then regenerate Supabase seeds with `npm run content:seed:generate` and `npm run content:seed:dependencies`; run `npm run content:seed:check` before pushing.
 6. Start local services when needed:

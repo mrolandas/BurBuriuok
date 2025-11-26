@@ -27,17 +27,22 @@ With media MVP complete, this session pivots to authentication, admin user manag
 
 ### Step 0 – Pre-flight Alignment (0.5 day)
 
- **Findings (2025-11-25):**
-  - `.env` already carries `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; Supabase CLI v2.62.5 is installed and authenticated (`npx supabase projects list` shows the linked `zvlziltltbalebqpmuqs` project). `npx supabase status` currently expects a local Docker stack (`supabase start`) which is intentionally offline—documented in `docs/DEVELOPMENT_SETUP.md` as optional.
-  - Admin guard snapshot: frontend `frontend/src/lib/admin/session.ts` still returns the canonical `AdminSessionState` reasons (`missing-session`, `insufficient-role`, etc.) and backend `backend/src/middleware/requireAdminRole.ts` verifies `app_role` via the service client, falling back to the impersonation header when `ADMIN_DEV_IMPERSONATION` is set. This baseline will be referenced after the auth refactor.
-  - Device-key audit: hosted `burburiuok.concept_progress` currently has 0 rows (queried via service-role client). We will seed representative device-key progress once the learner UI resumes writes so AUTH-003 migration tooling has sample data.
+**Findings (2025-11-25):**
+
+- `.env` already carries `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; Supabase CLI v2.62.5 is installed and authenticated (`npx supabase projects list` shows the linked `zvlziltltbalebqpmuqs` project). `npx supabase status` currently expects a local Docker stack (`supabase start`) which is intentionally offline—documented in `docs/DEVELOPMENT_SETUP.md` as optional.
+- Admin guard snapshot: frontend `frontend/src/lib/admin/session.ts` still returns the canonical `AdminSessionState` reasons (`missing-session`, `insufficient-role`, etc.) and backend `backend/src/middleware/requireAdminRole.ts` verifies `app_role` via the service client, falling back to the impersonation header when `ADMIN_DEV_IMPERSONATION` is set. This baseline will be referenced after the auth refactor.
+- Device-key audit: hosted `burburiuok.concept_progress` currently has 0 rows (queried via service-role client). We will seed representative device-key progress once the learner UI resumes writes so AUTH-003 migration tooling has sample data.
 
 ### Step 1 – AUTH-001 Magic-Link Foundation (2–3 days)
 
- 2025-11-25: Step 0 pre-flight complete – verified Supabase env/CLI state, captured admin guard baseline, and confirmed `concept_progress` has zero device-key rows ahead of AUTH-003 planning.
+2025-11-25: Step 0 pre-flight complete – verified Supabase env/CLI state, captured admin guard baseline, and confirmed `concept_progress` has zero device-key rows ahead of AUTH-003 planning.
+2025-11-26: Backend `/api/v1/auth/magic-link` + `/session` routes landed with redirect sanitisation + rate limits, AppShell now reflects Supabase sessions (login/callback flows + logout) and docs gained the new auth env instructions.
+
 2. **Infrastructure & config**
-   - Extend `frontend/static/env.js` (written during deploy) to include `supabaseUrl`/`supabaseAnonKey` sanity validation so `appConfig.supabase` never boots with blanks.
-   - Add `AUTH_REDIRECT_URL` + `AUTH_EMAIL_FROM` to `.env`, reference them inside `backend/src/routes/auth.ts` (new) for callback verification.
+
+- Extend `frontend/static/env.js` (written during deploy) to include `supabaseUrl`/`supabaseAnonKey` sanity validation so `appConfig.supabase` never boots with blanks.
+- Add `AUTH_REDIRECT_URL` + `AUTH_EMAIL_FROM` to `.env`, reference them inside `backend/src/routes/auth.ts` (new) for callback verification.
+
 3. **Backend surface**
    - Create `backend/src/routes/auth.ts` with endpoints:
      - `POST /api/v1/auth/magic-link` – proxies Supabase `auth.signInWithOtp` using service client (`getSupabaseClient({ service: true })`).
@@ -167,6 +172,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 - 2025-11-20: Captured media MVP wrap-up across README/docs, refreshed session goals toward auth planning, and re-ran media smoke tests after dropping deprecated payload fields.
 - 2025-11-25: Cleared legacy branches, recorded scope removals, and pivoted session goals to authentication, admin user management, and progress tracking.
 - 2025-11-25: Cut branch `feature/auth-implementation` after committing the auth execution plan; beginning Step 0 pre-flight (env audit, guard baseline, device-key sampling).
+- 2025-11-26: Delivered `/api/v1/auth/magic-link` + `/session`, wired the Svelte auth store + AppShell login/logout surfaces, and refreshed docs/tests with the new Supabase env + smoke coverage guidance.
 - 2025-11-21: Extended admin media uploads with automatic asset type detection (image/video/document), enforced a 10 MB cap, refreshed PDF preview fallbacks across admin/public views, and applied Supabase migration `0012_media_document_support.sql` via `supabase db push` followed by stack restart.
 
 ## Wrap-up Checklist (close when all items are complete)

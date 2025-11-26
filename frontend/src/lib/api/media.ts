@@ -1,4 +1,4 @@
-import { appConfig } from '$lib/config/appConfig';
+import { resolvePublicApiBase } from '$lib/api/base';
 
 export type ConceptMediaItem = {
 	id: string;
@@ -16,14 +16,6 @@ export type ConceptMediaResponse = {
 	conceptId: string;
 	items: ConceptMediaItem[];
 };
-
-function resolvePublicApiBase(): string {
-	const runtimeBase = (appConfig.public?.apiBase ?? '').trim();
-	const envBase = (import.meta.env.VITE_PUBLIC_API_BASE ?? '').trim();
-	const fallbackBase = '/api/v1';
-	const baseCandidate = runtimeBase.length ? runtimeBase : envBase.length ? envBase : fallbackBase;
-	return baseCandidate.endsWith('/') ? baseCandidate.slice(0, -1) : baseCandidate;
-}
 
 const PUBLIC_API_BASE = resolvePublicApiBase();
 

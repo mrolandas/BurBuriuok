@@ -10,6 +10,17 @@ Defines the service surface area that sits in front of Supabase for BurBuriuok. 
 
 JWTs are verified with Supabase public keys. Requests without a valid token are treated as public. Admin-only endpoints must assert role claims server-side before executing.
 
+### Authentication Surface
+
+| Method | Path               | Auth   | Description                                                                                                                         |
+| ------ | ------------------ | ------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/auth/magic-link` | Public | Rate-limited (10/hr/IP) endpoint that proxies `supabase.auth.signInWithOtp`. Body requires `email` plus optional `redirectTo` path. |
+| GET    | `/auth/session`    | Bearer | Reads the Supabase access token from `Authorization: Bearer <jwt>` and returns `{ session: { id, email, appRole } }` or `null`.     |
+
+Magic-link requests accept an optional `redirectTo` string (relative path beginning with `/`). When present, the backend appends it to `AUTH_REDIRECT_URL` as `?redirectTo=<encoded>` so the callback page can route the learner back to their originating location. Invalid or absolute redirects are discarded server-side. Responses follow the `{ data: { ok, email, emailFrom, redirectTo? }, meta: { requestedAt } }` shape; failures emit `AUTH_MAGIC_LINK_FAILED` (502) or `RATE_LIMITED` (429).
+
+`/auth/session` is a lightweight wrapper around `supabase.auth.getUser`. Missing or expired Bearer tokens respond with `401 INVALID_SESSION`. Successful lookups hydrate `req.authUser` so downstream middleware can reuse the decoded `app_role` claim without re-fetching.
+
 ## Public Read Endpoints
 
 | Method | Path                | Query Params                                                                       | Description                                                                                                                                         |

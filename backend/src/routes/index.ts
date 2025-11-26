@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireAdminRole } from "../middleware/requireAdminRole.ts";
+import authRouter from "./auth.ts";
 import curriculumRouter from "./curriculum.ts";
 import conceptsRouter from "./concepts.ts";
 import dependenciesRouter from "./dependencies.ts";
@@ -12,6 +13,7 @@ router.use("/curriculum", curriculumRouter);
 router.use("/concepts", conceptsRouter);
 router.use("/dependencies", dependenciesRouter);
 router.use("/progress", progressRouter);
+router.use("/auth", authRouter);
 router.use("/admin", requireAdminRole, adminRouter);
 
 export default router;
