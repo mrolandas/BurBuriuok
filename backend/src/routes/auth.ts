@@ -5,6 +5,11 @@ import { HttpError } from "../utils/httpError.ts";
 import { createRateLimiter } from "../middleware/rateLimiter.ts";
 import { extractBearerToken } from "../utils/authHeaders.ts";
 import { magicLinkRequestSchema } from "../validation/authSchemas.ts";
+import {
+  buildRedirectUrl,
+  getRequiredAuthEnv,
+  sanitizeRedirectTarget,
+} from "../utils/authRedirect.ts";
 
 const router = Router();
 
@@ -132,45 +137,6 @@ function serializeSupabaseUser(user: MinimalSupabaseAuthUser): SerializedSession
     email: user.email ?? null,
     appRole: (user.app_metadata?.app_role as string | undefined) ?? null,
   };
-}
-
-type RequiredAuthEnv = "AUTH_REDIRECT_URL" | "AUTH_EMAIL_FROM";
-
-function getRequiredAuthEnv(name: RequiredAuthEnv): string {
-  const value = process.env[name];
-  if (!value || !value.trim()) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value.trim();
-}
-
-function sanitizeRedirectTarget(value?: string | null): string | null {
-  if (!value) {
-    return null;
-  }
-
-  const trimmed = value.trim();
-  if (!trimmed.startsWith("/") || trimmed.startsWith("//")) {
-    return null;
-  }
-
-  try {
-    const parsed = new URL(trimmed, "https://burkursas.local");
-    const normalized = `${parsed.pathname}${parsed.search}${parsed.hash}`;
-    return normalized || "/";
-  } catch {
-    return null;
-  }
-}
-
-function buildRedirectUrl(base: string, redirectTarget: string | null): string {
-  if (!redirectTarget) {
-    return base;
-  }
-
-  const url = new URL(base);
-  url.searchParams.set("redirectTo", redirectTarget);
-  return url.toString();
 }
 
 export default router;

@@ -227,3 +227,64 @@ export interface ContentDraftInput {
   versionId?: string | null;
   actor?: string | null;
 }
+
+export type ProfileRole = "learner" | "admin" | "contributor";
+export type PreferredLanguage = "lt" | "en";
+
+export interface ProfileRow {
+  id: string;
+  email: string;
+  role: ProfileRole;
+  preferred_language: PreferredLanguage;
+  callsign: string | null;
+  device_key_hash: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Profile {
+  id: string;
+  email: string;
+  role: ProfileRole;
+  preferredLanguage: PreferredLanguage;
+  callsign: string | null;
+  deviceKeyHash: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertProfileInput {
+  id: string;
+  email: string;
+  role?: ProfileRole;
+  preferredLanguage?: PreferredLanguage;
+  callsign?: string | null;
+  deviceKeyHash?: string | null;
+}
+
+export interface AdminInviteRow {
+  id: string;
+  email: string;
+  role: ProfileRole;
+  token_hash: string;
+  expires_at: string;
+  invited_by: string | null;
+  accepted_profile_id: string | null;
+  accepted_at: string | null;
+  revoked_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminInvite {
+  id: string;
+  email: string;
+  role: ProfileRole;
+  expiresAt: string;
+  invitedBy: string | null;
+  acceptedProfileId: string | null;
+  acceptedAt: string | null;
+  revokedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}

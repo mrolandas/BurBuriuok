@@ -2,6 +2,7 @@ import { derived, writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { buildPublicApiUrl } from '$lib/api/base';
 import { getSupabaseClient } from '$lib/supabase/client';
+import { bootstrapUserProfile, resetUserProfile } from '$lib/stores/profileStore';
 
 export type AuthStatus = 'idle' | 'checking' | 'authenticated' | 'unauthenticated';
 
@@ -38,6 +39,7 @@ function createAuthStore() {
 			if (!active) {
 				session.set(null);
 				status.set('unauthenticated');
+				resetUserProfile();
 				return;
 			}
 
@@ -47,11 +49,13 @@ function createAuthStore() {
 				appRole: (active.app_metadata?.app_role as string | undefined) ?? null
 			});
 			status.set('authenticated');
+			void bootstrapUserProfile();
 		} catch (refreshError) {
 			session.set(null);
 			status.set('unauthenticated');
 			error.set('Nepavyko patvirtinti prisijungimo.');
 			console.error('[authStore] refreshSession failed', refreshError);
+			resetUserProfile();
 		}
 	}
 
@@ -132,6 +136,7 @@ export async function requestMagicLink(email: string, redirectTo?: string | null
 export async function signOut(): Promise<void> {
 	const supabase = getSupabaseClient();
 	await supabase.auth.signOut();
+	resetUserProfile();
 }
 
 function sanitizeRedirectTarget(value?: string | null): string | undefined {
