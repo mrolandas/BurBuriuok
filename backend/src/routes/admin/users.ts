@@ -11,7 +11,7 @@ import { sanitizeRedirectTarget } from "../../utils/authRedirect.ts";
 import {
   countProfilesByRole,
   getProfileById,
-  listProfilesByRole,
+  listProfiles,
   updateProfileRole,
   upsertProfile,
 } from "../../../../data/repositories/profileRepository.ts";
@@ -25,6 +25,7 @@ import type { AdminInvite } from "../../../../data/types.ts";
 import { updateSupabaseAppRole } from "../../services/supabaseUserService.ts";
 import { getSupabaseClient } from "../../../../data/supabaseClient.ts";
 import { generateInviteToken, hashInviteToken } from "../../utils/inviteTokens.ts";
+import { maybeRespondMissingAuthTables } from "../../utils/migrationGuards.ts";
 
 const router = Router();
 const DEFAULT_INVITE_EXPIRY_HOURS = 72;
@@ -41,22 +42,33 @@ const supabaseAuthClient = getSupabaseClient({ service: true }) as {
 router.get(
   "/",
   asyncHandler(async (_req, res) => {
-    const [admins, invites] = await Promise.all([
-      listProfilesByRole("admin"),
-      listInvites(),
-    ]);
+    try {
+      const [profiles, invites] = await Promise.all([
+        listProfiles(),
+        listInvites(),
+      ]);
 
-    res.json({
-      data: {
-        admins: admins.map(serializeProfile),
-        invites: invites.filter(isPendingInvite).map(serializeInvite),
-      },
-      meta: {
-        fetchedAt: new Date().toISOString(),
-        adminCount: admins.length,
-        pendingInviteCount: invites.filter(isPendingInvite).length,
-      },
-    });
+      const pendingInvites = invites.filter(isPendingInvite);
+      const serializedProfiles = profiles.map(serializeProfile);
+
+      res.json({
+        data: {
+          users: serializedProfiles,
+          invites: pendingInvites.map(serializeInvite),
+        },
+        meta: {
+          fetchedAt: new Date().toISOString(),
+          adminCount: serializedProfiles.filter((profile) => profile.role === "admin").length,
+          userCount: serializedProfiles.length,
+          pendingInviteCount: pendingInvites.length,
+        },
+      });
+    } catch (error) {
+      if (maybeRespondMissingAuthTables(res, error)) {
+        return;
+      }
+      throw error;
+    }
   })
 );
 
@@ -109,6 +121,10 @@ router.post(
         return;
       }
 
+      if (maybeRespondMissingAuthTables(res, error)) {
+        return;
+      }
+
       throw error;
     }
   })
@@ -136,62 +152,69 @@ router.patch(
       return;
     }
 
-    const targetRole = parsed.data.role as ProfileRole;
-    const profile = await getProfileById(id);
+    try {
+      const targetRole = parsed.data.role as ProfileRole;
+      const profile = await getProfileById(id);
 
-    if (!profile) {
-      res.status(404).json({
-        error: {
-          code: "PROFILE_NOT_FOUND",
-          message: "Naudotojas nerastas.",
-        },
-      });
-      return;
-    }
-
-    if (profile.role === targetRole) {
-      res.json({
-        data: {
-          profile: serializeProfile(profile),
-        },
-        meta: {
-          changed: false,
-        },
-      });
-      return;
-    }
-
-    if (profile.role === "admin" && targetRole !== "admin") {
-      const adminCount = await countProfilesByRole("admin");
-      if (adminCount <= 1) {
-        res.status(409).json({
+      if (!profile) {
+        res.status(404).json({
           error: {
-            code: "LAST_ADMIN",
-            message: "Negalima nuimti paskutinio administratoriaus teisių.",
+            code: "PROFILE_NOT_FOUND",
+            message: "Naudotojas nerastas.",
           },
         });
         return;
       }
+
+      if (profile.role === targetRole) {
+        res.json({
+          data: {
+            profile: serializeProfile(profile),
+          },
+          meta: {
+            changed: false,
+          },
+        });
+        return;
+      }
+
+      if (profile.role === "admin" && targetRole !== "admin") {
+        const adminCount = await countProfilesByRole("admin");
+        if (adminCount <= 1) {
+          res.status(409).json({
+            error: {
+              code: "LAST_ADMIN",
+              message: "Negalima nuimti paskutinio administratoriaus teisių.",
+            },
+          });
+          return;
+        }
+      }
+
+      const previousRole = profile.role;
+      const updatedProfile = await updateProfileRole(profile.id, targetRole);
+
+      try {
+        await updateSupabaseAppRole(profile.id, targetRole);
+      } catch (syncError) {
+        await updateProfileRole(profile.id, previousRole);
+        throw syncError;
+      }
+
+      res.json({
+        data: {
+          profile: serializeProfile(updatedProfile),
+        },
+        meta: {
+          changed: true,
+        },
+      });
+    } catch (error) {
+      if (maybeRespondMissingAuthTables(res, error)) {
+        return;
+      }
+      throw error;
     }
-
-    const previousRole = profile.role;
-    const updatedProfile = await updateProfileRole(profile.id, targetRole);
-
-    try {
-      await updateSupabaseAppRole(profile.id, targetRole);
-    } catch (syncError) {
-      await updateProfileRole(profile.id, previousRole);
-      throw syncError;
-    }
-
-    res.json({
-      data: {
-        profile: serializeProfile(updatedProfile),
-      },
-      meta: {
-        changed: true,
-      },
-    });
   })
 );
 
@@ -210,16 +233,23 @@ router.delete(
       return;
     }
 
-    const invite = await revokeInvite(idParam.data);
+    try {
+      const invite = await revokeInvite(idParam.data);
 
-    res.json({
-      data: {
-        invite: serializeInvite(invite),
-      },
-      meta: {
-        revokedAt: invite.revokedAt,
-      },
-    });
+      res.json({
+        data: {
+          invite: serializeInvite(invite),
+        },
+        meta: {
+          revokedAt: invite.revokedAt,
+        },
+      });
+    } catch (error) {
+      if (maybeRespondMissingAuthTables(res, error)) {
+        return;
+      }
+      throw error;
+    }
   })
 );
 
@@ -289,7 +319,7 @@ async function sendMagicLink(email: string, redirectTarget: string): Promise<voi
 }
 
 function buildInviteRedirect(inviteToken: string): string {
-  return `/profilis?invite=${encodeURIComponent(inviteToken)}`;
+  return `/profile?invite=${encodeURIComponent(inviteToken)}`;
 }
 
 async function resolveInviterProfileId(

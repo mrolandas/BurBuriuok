@@ -4,7 +4,13 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
-	import { initializeAuth, authSession, authStatus, type AuthSession } from '$lib/stores/authStore';
+	import {
+		initializeAuth,
+		authSession,
+		authStatus,
+		refreshAuthSession,
+		type AuthSession
+	} from '$lib/stores/authStore';
 	import {
 		userProfile,
 		userProfileStatus,
@@ -16,7 +22,11 @@
 	import type { PreferredLanguage } from '../../../../shared/validation/profileSchema';
 
 	type FormState = 'idle' | 'saving' | 'success' | 'error';
-	type InviteState = 'idle' | 'checking' | 'accepted' | 'error';
+	type InviteNoticeKind = 'info' | 'success' | 'error';
+	type InviteNotice = {
+		kind: InviteNoticeKind;
+		text: string;
+	};
 
 	let currentProfile: UserProfile | null = null;
 	let profileStatus = 'idle';
@@ -33,9 +43,8 @@
 	let callsign = '';
 	let formState: FormState = 'idle';
 	let formMessage: string | null = null;
-	let inviteInput = '';
-	let inviteState: InviteState = 'idle';
-	let inviteMessage: string | null = null;
+	let inviteNotice: InviteNotice | null = null;
+	let pendingInviteToken: string | null = null;
 
 	const languageOptions: { value: PreferredLanguage; label: string; description: string }[] = [
 		{ value: 'lt', label: 'Lietuvių', description: 'Pirminė mokymosi kalba' },
@@ -62,13 +71,14 @@
 		});
 		unsubscribeSession = authSession.subscribe((value) => {
 			session = value;
+			maybeAcceptPendingInvite();
 		});
 
 		void primeProfile();
 		const inviteToken = get(page).url.searchParams.get('invite');
 		if (inviteToken) {
-			inviteInput = inviteToken;
-			void acceptInvite(inviteToken, true);
+			pendingInviteToken = inviteToken;
+			maybeAcceptPendingInvite();
 		}
 
 		return () => {
@@ -88,7 +98,7 @@
 		try {
 			await loadUserProfile();
 		} catch (error) {
-			console.warn('[profilis] Failed to load profile', error);
+			console.warn('[profile] Failed to load profile', error);
 		}
 	}
 
@@ -120,28 +130,43 @@
 		}
 	}
 
-	async function acceptInvite(token: string | null, silent = false): Promise<void> {
-		const normalized = token?.trim();
-		if (!normalized) {
-			inviteState = 'error';
-			inviteMessage = 'Įrašykite galiojantį kvietimo kodą.';
+	function maybeAcceptPendingInvite(): void {
+		if (!pendingInviteToken || !session) {
 			return;
 		}
-		inviteState = 'checking';
-		inviteMessage = silent ? 'Tikriname kvietimą...' : null;
+		const token = pendingInviteToken;
+		pendingInviteToken = null;
+		void acceptInvite(token);
+	}
+
+	async function acceptInvite(token: string | null): Promise<void> {
+		const normalized = token?.trim();
+		if (!normalized) {
+			inviteNotice = { kind: 'error', text: 'Kvietimo nuoroda neteisinga.' };
+			return;
+		}
+
+		inviteNotice = { kind: 'info', text: 'Tikriname kvietimą…' };
+
 		try {
 			const updated = await saveUserProfile({ inviteToken: normalized });
-			inviteState = 'accepted';
-			inviteMessage = 'Kvietimas pritaikytas! Jūsų teisės atnaujintos.';
+			inviteNotice = {
+				kind: 'success',
+				text: 'Kvietimas pritaikytas! Jūsų teisės atnaujintos.'
+			};
 			currentProfile = updated;
 			preferredLanguage = updated.preferredLanguage;
 			callsign = updated.callsign ?? '';
+			await refreshAuthSession();
 			await removeInviteParam();
-			inviteInput = '';
 		} catch (error) {
-			inviteState = 'error';
-			inviteMessage =
-				error instanceof Error ? error.message : 'Kvietimo nepavyko pritaikyti. Patikrinkite nuorodą.';
+			inviteNotice = {
+				kind: 'error',
+				text:
+					error instanceof Error
+						? error.message
+						: 'Kvietimo nepavyko pritaikyti. Patikrinkite nuorodą.'
+			};
 		}
 	}
 
@@ -153,7 +178,7 @@
 	}
 
 	function navigateToLogin(): void {
-		const redirect = encodeURIComponent('/profilis');
+		const redirect = encodeURIComponent('/profile');
 		const loginBase = resolve('/auth/login');
 		void goto(`${loginBase}?redirectTo=${redirect}`);
 	}
@@ -184,8 +209,18 @@
 <section class="profile">
 	<header class="profile__header">
 		<h1>Mano profilis</h1>
-		<p>Tvarkykite savo mokymosi kalbą, kviesinį ir peržiūrėkite priskirtas roles.</p>
+		<p>Tvarkykite savo mokymosi kalbą, slapyvardį ir peržiūrėkite priskirtas roles.</p>
 	</header>
+
+	{#if inviteNotice}
+		<p
+			class="profile__state"
+			class:success={inviteNotice.kind === 'success'}
+			class:error={inviteNotice.kind === 'error'}
+		>
+			{inviteNotice.text}
+		</p>
+	{/if}
 
 	{#if authState === 'checking'}
 		<p class="profile__state">Tikriname prisijungimo būseną...</p>
@@ -234,7 +269,7 @@
 							{/each}
 						</select>
 
-						<label for="callsign">Kviesinys (nebūtinas)</label>
+						<label for="callsign">Slapyvardis (nebūtinas)</label>
 						<input
 							id="callsign"
 							type="text"
@@ -255,27 +290,6 @@
 					</form>
 				</article>
 
-				<article class="profile__card">
-					<h2>Kvietimo kodas</h2>
-					<p>
-						Gavote administratoriaus kvietimą? Įklijuokite gautą kodą arba naudokite kvietimo nuorodą.
-					</p>
-					<form class="invite-form" on:submit|preventDefault={() => acceptInvite(inviteInput.trim())}>
-						<label for="invite-token">Kvietimo kodas</label>
-						<input
-							id="invite-token"
-							type="text"
-							bind:value={inviteInput}
-							placeholder="įklijuokite kodą"
-						/>
-						<button type="submit" class="secondary" disabled={!inviteInput.trim() || inviteState === 'checking'}>
-							{inviteState === 'checking' ? 'Tikriname…' : 'Aktyvuoti kvietimą'}
-						</button>
-					</form>
-					{#if inviteMessage}
-						<p class:success={inviteState === 'accepted'} class:error={inviteState === 'error'}>{inviteMessage}</p>
-					{/if}
-				</article>
 			</section>
 		{/if}
 	{/if}
@@ -314,8 +328,7 @@
 		gap: 1rem;
 	}
 
-	.profile-form,
-	.invite-form {
+	.profile-form {
 		display: grid;
 		gap: 0.75rem;
 	}
@@ -327,8 +340,7 @@
 		border: 1px solid var(--color-border, #d0d5dd);
 	}
 
-	button.primary,
-	button.secondary {
+	button.primary {
 		border: none;
 		border-radius: 0.75rem;
 		padding: 0.85rem 1rem;
@@ -339,10 +351,6 @@
 	button.primary {
 		background: var(--brand-primary, #0f62fe);
 		color: #fff;
-	}
-
-	button.secondary {
-		background: var(--color-panel-hover, #f4f6fb);
 	}
 
 	.badge {

@@ -19,6 +19,10 @@
 			<h2>Papildomos medžiagos administravimas</h2>
 			<p>Tvarkykite adminų įkeltus failus ir išorinius šaltinius.</p>
 		</a>
+		<a class="admin-card" href={resolve('/admin/users')}>
+			<h2>Naudotojų valdymas</h2>
+			<p>Stebėkite administratorių sąrašą, siųskite kvietimus ir tvarkykite roles.</p>
+		</a>
 		<div class="admin-card admin-card--disabled">
 			<h2>Kitos sritys</h2>
 			<p>Greitai bus galima valdyti papildomus administravimo modulius.</p>

@@ -18,6 +18,7 @@
 	const guard = data.guard;
 	const impersonationEnabled = data.impersonationEnabled;
 	const homeHref = resolve('/');
+	const profileHref = resolve('/profile');
 
 	const statusCopy: Record<string, string> = {
 		'missing-session':
@@ -42,7 +43,9 @@
 		<div class="admin-shell__status" role="status">
 			<span class="admin-shell__persona">{personaLabel}</span>
 			{#if guard.email}
-				<span class="admin-shell__email">{guard.email}</span>
+				<a class="admin-shell__email" href={profileHref}>
+					{guard.email}
+				</a>
 			{/if}
 		</div>
 		<div class="admin-shell__content">
@@ -90,7 +93,14 @@
 	}
 
 	.admin-shell__email {
-		color: var(--color-text-soft);
+		color: var(--color-link, var(--color-text-soft));
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	.admin-shell__email:hover,
+	.admin-shell__email:focus-visible {
+		text-decoration: underline;
 	}
 
 	.admin-shell__content {

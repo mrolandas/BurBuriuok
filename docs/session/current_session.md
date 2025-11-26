@@ -37,6 +37,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 
 2025-11-25: Step 0 pre-flight complete – verified Supabase env/CLI state, captured admin guard baseline, and confirmed `concept_progress` has zero device-key rows ahead of AUTH-003 planning.
 2025-11-26: Backend `/api/v1/auth/magic-link` + `/session` routes landed with redirect sanitisation + rate limits, AppShell now reflects Supabase sessions (login/callback flows + logout) and docs gained the new auth env instructions.
+2025-11-26: AppShell polish complete – duplicate email row removed from the dropdown, non-admin accounts no longer see "Admin pultas", sign-out sits at the bottom with accent styling, and Render env + include-path expectations captured for deploy readiness.
 
 2. **Infrastructure & config**
 
@@ -173,6 +174,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 - 2025-11-25: Cleared legacy branches, recorded scope removals, and pivoted session goals to authentication, admin user management, and progress tracking.
 - 2025-11-25: Cut branch `feature/auth-implementation` after committing the auth execution plan; beginning Step 0 pre-flight (env audit, guard baseline, device-key sampling).
 - 2025-11-26: Delivered `/api/v1/auth/magic-link` + `/session`, wired the Svelte auth store + AppShell login/logout surfaces, and refreshed docs/tests with the new Supabase env + smoke coverage guidance.
+- 2025-11-26: Refined AppShell user menu (single email surface, admin-only link visibility, anchored sign-out action) and documented Render include-path + env requirements ahead of the next deploy.
 - 2025-11-21: Extended admin media uploads with automatic asset type detection (image/video/document), enforced a 10 MB cap, refreshed PDF preview fallbacks across admin/public views, and applied Supabase migration `0012_media_document_support.sql` via `supabase db push` followed by stack restart.
 
 ## Wrap-up Checklist (close when all items are complete)

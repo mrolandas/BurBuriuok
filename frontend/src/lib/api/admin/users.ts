@@ -26,11 +26,12 @@ export type AdminInviteSummary = {
 };
 
 export type AdminUsersResponse = {
-	admins: AdminProfileSummary[];
+	users: AdminProfileSummary[];
 	invites: AdminInviteSummary[];
 	meta: {
 		fetchedAt: string;
 		adminCount: number;
+		userCount: number;
 		pendingInviteCount: number;
 	};
 };
@@ -48,9 +49,9 @@ export type CreateInviteResponse = {
 };
 
 export async function fetchAdminUsers(): Promise<AdminUsersResponse> {
-	const response = await adminFetch<{ data: { admins: AdminProfileSummary[]; invites: AdminInviteSummary[] }; meta: AdminUsersResponse['meta'] }>('/users');
+	const response = await adminFetch<{ data: { users: AdminProfileSummary[]; invites: AdminInviteSummary[] }; meta: AdminUsersResponse['meta'] }>('/users');
 	return {
-		admins: response.data.admins,
+		users: response.data.users,
 		invites: response.data.invites,
 		meta: response.meta
 	};

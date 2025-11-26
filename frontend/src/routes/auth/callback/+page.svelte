@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
+	import { browser } from '$app/environment';
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { getSupabaseClient } from '$lib/supabase/client';
@@ -20,16 +21,35 @@
 
 	async function completeExchange(): Promise<void> {
 		const current = get(page);
-		const code = current.url.searchParams.get('code');
-		const type = current.url.searchParams.get('type');
 		redirectTarget = sanitizeRedirect(current.url.searchParams.get('redirectTo'));
+		const code = current.url.searchParams.get('code');
+		const hash = parseHashParams(current.url);
+		const hashError = hash.get('error');
+		const hashErrorDescription = hash.get('error_description');
+		const hashAccessToken = hash.get('access_token');
+		const hashRefreshToken = hash.get('refresh_token');
 
-		if (!code || !type) {
+		if (hashError) {
 			state = 'error';
-			message = 'Trūksta prisijungimo parametrų. Bandykite išsiųsti nuorodą dar kartą.';
+			message = hashErrorDescription || 'Prisijungimo nuoroda negalioja arba pasibaigė.';
 			return;
 		}
 
+		if (code) {
+			await exchangeCodeFlow(code);
+			return;
+		}
+
+		if (hashAccessToken && hashRefreshToken) {
+			await setSessionFromHash(hashAccessToken, hashRefreshToken);
+			return;
+		}
+
+		state = 'error';
+		message = 'Trūksta prisijungimo parametrų. Bandykite išsiųsti nuorodą dar kartą.';
+	}
+
+	async function exchangeCodeFlow(code: string): Promise<void> {
 		state = 'exchanging';
 		message = 'Tikriname prisijungimo nuorodą...';
 
@@ -41,16 +61,44 @@
 				throw error;
 			}
 
-			state = 'success';
-			message = 'Prisijungimas patvirtintas. Nukreipiame...';
-			setTimeout(() => {
-				void gotoResolved(redirectTarget, { replaceState: true });
-			}, 1200);
+			await finalizeSuccess();
 		} catch (exchangeError) {
 			console.error('[auth/callback] exchange failed', exchangeError);
 			state = 'error';
 			message = 'Nepavyko patvirtinti prisijungimo. Paprašykite naujos nuorodos.';
 		}
+	}
+
+	async function setSessionFromHash(accessToken: string, refreshToken: string): Promise<void> {
+		state = 'exchanging';
+		message = 'Tikriname prisijungimo nuorodą...';
+
+		try {
+			const supabase = getSupabaseClient();
+			const { data, error } = await supabase.auth.setSession({
+				access_token: accessToken,
+				refresh_token: refreshToken
+			});
+
+			if (error || !data.session) {
+				throw error ?? new Error('Sesijos duomenys negauti.');
+			}
+
+			clearHashFromLocation();
+			await finalizeSuccess();
+		} catch (sessionError) {
+			console.error('[auth/callback] setSession failed', sessionError);
+			state = 'error';
+			message = 'Nepavyko patvirtinti prisijungimo. Paprašykite naujos nuorodos.';
+		}
+	}
+
+	async function finalizeSuccess(): Promise<void> {
+		state = 'success';
+		message = 'Prisijungimas patvirtintas. Nukreipiame...';
+		setTimeout(() => {
+			void gotoResolved(redirectTarget, { replaceState: true });
+		}, 800);
 	}
 
 	function sanitizeRedirect(candidate: string | null): string {
@@ -73,6 +121,23 @@
 	function requestAnotherLink(): void {
 		const target = `/auth/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
 		void gotoResolved(target);
+	}
+
+	function parseHashParams(url: URL): URLSearchParams {
+		const hash = url.hash?.startsWith('#') ? url.hash.slice(1) : '';
+		return new URLSearchParams(hash);
+	}
+
+	function clearHashFromLocation(): void {
+		if (!browser) {
+			return;
+		}
+		const currentUrl = new URL(window.location.href);
+		if (!currentUrl.hash) {
+			return;
+		}
+		currentUrl.hash = '';
+		window.history.replaceState({}, '', currentUrl.toString());
 	}
 
 	function gotoResolved(path: string, options?: Parameters<typeof goto>[1]) {

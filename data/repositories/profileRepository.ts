@@ -134,6 +134,25 @@ export async function listProfilesByRole(
   return (data ?? []).map((row: ProfileRow) => mapRow(row));
 }
 
+export async function listProfiles(
+  client: SupabaseClient | null = null
+): Promise<Profile[]> {
+  const supabase = resolveClient(client) as any;
+
+  const { data, error } = await supabase
+    .from(TABLE)
+    .select(
+      "id, email, role, preferred_language, callsign, device_key_hash, created_at, updated_at"
+    )
+    .order("updated_at", { ascending: false });
+
+  if (error) {
+    throw new Error(`Failed to list profiles: ${error.message}`);
+  }
+
+  return (data ?? []).map((row: ProfileRow) => mapRow(row));
+}
+
 export async function countProfilesByRole(
   role: ProfileRole,
   client: SupabaseClient | null = null

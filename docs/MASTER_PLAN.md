@@ -88,6 +88,7 @@ Removed from current roadmap. Existing explorations live in `docs/references/fea
 - Supabase Auth backs the learner experience with magic-link sessions; admin invites live inside AUTH-002 so privileged accounts stay curated.
 - Device-key progress tracking continues as a fallback until AUTH-003 introduces migration tools and observability around session adoption.
 - The backend enforces persona roles via `app_role` claims and continues to treat unauthenticated learners as `guest` users with read-only access.
+- AppShell now surfaces a single signed-in email chip beside the user toggle, hides the “Admin pultas” link for non-admin accounts, and anchors the sign-out action to the bottom of the dropdown for clarity.
 
 ## Trimmed Launch Scope (2025-11-07)
 
@@ -146,7 +147,7 @@ Removed from current roadmap. Existing explorations live in `docs/references/fea
 - [x] Complete admin CRUD + hierarchy management (drag/drop, promote/demote) for nodes, items, and concepts, sharing validation between frontend and backend.
 - [x] Ship the content versioning workflow (draft → review → publish) with audit logging, rollback notes, and documentation updates.
 - [x] Stand up the admin media upload pipeline (upload surface, metadata capture) and record storage decisions.
-- [ ] Deliver authentication foundation (AUTH-001) for magic-link login and role claims.
+- [x] Deliver authentication foundation (AUTH-001) for magic-link login and role claims (shipped 2025-11-26).
 - [ ] Build the admin user management console (`/admin/users`) covering invite flow, role toggles, and audit logging.
 - [ ] Harden validation, Supabase policies, and persona-based UI controls per `docs/references/PERSONAS_PERMISSIONS.md`.
 - [ ] Document every schema change in `SCHEMA_DECISIONS.md` and update reference guides as features land.

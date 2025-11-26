@@ -6,8 +6,8 @@ export const preferredLanguageSchema = z.enum(["lt", "en"]);
 const callsignSchema = z
   .string()
   .trim()
-  .min(2, { message: "Kviesinys turi būti bent 2 simbolių." })
-  .max(60, { message: "Kviesinys negali viršyti 60 simbolių." });
+  .min(2, { message: "Slapyvardis turi būti bent 2 simbolių." })
+  .max(60, { message: "Slapyvardis negali viršyti 60 simbolių." });
 
 export const inviteTokenSchema = z
   .string()

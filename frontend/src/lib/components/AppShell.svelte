@@ -56,14 +56,16 @@
 	const showSearch = $derived(!isAdminRoute);
 	const isAuthenticated = $derived(Boolean(currentSession));
 	const loginRedirectTarget = $derived(
-		`${$page.url.pathname}${$page.url.search}${$page.url.hash}`
+		isAdminRoute ? '/' : `${$page.url.pathname}${$page.url.search}${$page.url.hash}`
 	);
 	const loginLink = $derived(
 		withBase(`/auth/login?redirectTo=${encodeURIComponent(loginRedirectTarget)}`)
 	);
+	const profileLink = $derived(withBase('/profile'));
 	const userToggleTitle = $derived(
 		currentSession?.email ?? (adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys')
 	);
+	const showAdminMenu = $derived(Boolean(currentSession?.appRole === 'admin' || impersonatingAdmin));
 
 	const themeOptions = [
 		{
@@ -152,14 +154,6 @@
 			return;
 		}
 
-		const currentUrl = new URL(window.location.href);
-		const impersonating = currentUrl.searchParams.get('impersonate') === 'admin';
-		impersonatingAdmin = impersonating;
-		if (adminMode.value && !impersonating) {
-			void syncAdminModeToUrl(true);
-		} else if (!adminMode.value && impersonating) {
-			adminMode.enable();
-		}
 		const stored = window.localStorage.getItem('burkursas-theme');
 		const initial: ThemeId = isKnownTheme(stored) ? stored : themeOptions[0].id;
 		activeTheme = initial;
@@ -314,10 +308,16 @@
 				data-admin-active={adminModeEnabled ? 'true' : 'false'}
 				data-auth-state={isAuthenticated ? 'authenticated' : 'guest'}
 			>
+				{#if isAuthenticated && currentSession?.email}
+					<span class="app-shell__user-chip">
+						{currentSession.email}
+					</span>
+				{/if}
 				<button
 					type="button"
 					class="app-shell__user-toggle"
 					class:app-shell__user-toggle--active={adminModeEnabled}
+					class:app-shell__user-toggle--signed-in={isAuthenticated}
 					aria-haspopup="true"
 					aria-expanded={userMenuOpen}
 					aria-controls="app-shell-user-menu"
@@ -347,14 +347,11 @@
 						aria-label="Naudotojo parinktys"
 					>
 						{#if currentSession}
-							<div class="app-shell__user-summary">
-								<p class="app-shell__user-email">
-									{currentSession.email ?? 'Prisijungęs naudotojas'}
-								</p>
-								{#if currentSession.appRole === 'admin'}
+							{#if currentSession.appRole === 'admin'}
+								<div class="app-shell__user-summary">
 									<span class="app-shell__badge">Administratorius</span>
-								{/if}
-							</div>
+								</div>
+							{/if}
 							<button
 								type="button"
 								class="app-shell__user-item"
@@ -386,6 +383,16 @@
 						>
 							{adminModeEnabled ? 'Deaktyvuoti Admin' : 'Aktyvuoti Admin'}
 						</button>
+						{#if currentSession}
+							<button
+								type="button"
+								class="app-shell__user-item app-shell__user-item--admin app-shell__user-item--signout"
+								role="menuitem"
+								onclick={handleSignOut}
+							>
+								Atsijungti
+							</button>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -437,33 +444,31 @@
 					</button>
 				</li>
 
-				<li class="app-shell__menu-divider" aria-hidden="true"></li>
+				{#if showAdminMenu}
+					<li class="app-shell__menu-divider" aria-hidden="true"></li>
 
-				<li class="app-shell__menu-admin">
-					<a
-						href={withBase(
-							adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
-						)}
-						target="_blank"
-						rel="noopener noreferrer"
-						onclick={closeMenus}
-						class="app-shell__menu-action app-shell__menu-admin-link"
-					>
-						Admin pultas
-						<span aria-hidden="true" class="app-shell__menu-admin-icon">&nearr;</span>
-					</a>
-					{#if impersonatingAdmin}
-						<p class="app-shell__menu-admin-hint">Imituojate administratoriaus paskyrą.</p>
-					{:else if adminModeEnabled}
-						<p class="app-shell__menu-admin-hint">Administratoriaus režimas aktyvus šiame lange.</p>
-					{:else}
-						<p class="app-shell__menu-admin-hint">
-							Naudotojo meniu galite įjungti administratoriaus režimą.
-						</p>
-					{/if}
-				</li>
+					<li class="app-shell__menu-admin">
+						<a
+							href={withBase(
+								adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
+							)}
+							target="_blank"
+							rel="noopener noreferrer"
+							onclick={closeMenus}
+							class="app-shell__menu-action app-shell__menu-admin-link"
+						>
+							Admin pultas
+							<span aria-hidden="true" class="app-shell__menu-admin-icon">&nearr;</span>
+						</a>
+						{#if impersonatingAdmin}
+							<p class="app-shell__menu-admin-hint">Imituojate administratoriaus paskyrą.</p>
+						{:else if adminModeEnabled}
+							<p class="app-shell__menu-admin-hint">Administratoriaus režimas aktyvus šiame lange.</p>
+						{/if}
+					</li>
 
-				<li class="app-shell__menu-divider" aria-hidden="true"></li>
+					<li class="app-shell__menu-divider" aria-hidden="true"></li>
+				{/if}
 
 				<li class="app-shell__menu-theme">
 					<button
@@ -715,6 +720,31 @@
 
 	.app-shell__user {
 		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.app-shell__user-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.2rem 0.55rem;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		background: var(--color-panel);
+		border: 1px solid var(--color-border);
+		color: var(--color-text);
+		max-width: 12rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	@media (max-width: 640px) {
+		.app-shell__user-chip {
+			display: none;
+		}
 	}
 
 	.app-shell__user-toggle {
@@ -751,6 +781,11 @@
 		border-color: var(--color-accent-border-strong);
 		color: var(--color-accent-strong);
 		box-shadow: 0 0 0 3px var(--color-accent-faint-strong);
+	}
+
+	.app-shell__user-toggle--signed-in {
+		border-color: rgba(56, 189, 248, 0.35);
+		background: rgba(56, 189, 248, 0.08);
 	}
 
 	.app-shell__user-icon svg {
@@ -811,11 +846,6 @@
 		padding: 0.25rem 0.5rem 0.5rem;
 	}
 
-	.app-shell__user-email {
-		font-weight: 600;
-		word-break: break-all;
-	}
-
 	.app-shell__badge {
 		align-self: flex-start;
 		font-size: 0.75rem;
@@ -861,6 +891,11 @@
 	.app-shell__user-item--admin:focus-visible {
 		border-color: transparent;
 		background: var(--color-accent-faint);
+	}
+
+	.app-shell__user-item--signout {
+		margin-top: 0.15rem;
+		font-weight: 600;
 	}
 
 	.app-shell__user-hint {

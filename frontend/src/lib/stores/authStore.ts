@@ -104,6 +104,10 @@ export function initializeAuth(): void {
 	authStore.init();
 }
 
+export function refreshAuthSession(): Promise<void> {
+	return authStore.refreshSession();
+}
+
 export async function requestMagicLink(email: string, redirectTo?: string | null): Promise<void> {
 	const trimmedEmail = email.trim().toLowerCase();
 

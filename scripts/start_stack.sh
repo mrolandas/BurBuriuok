@@ -7,6 +7,7 @@ PID_DIR="$SCRIPT_DIR"
 FRONTEND_PID_FILE="$PID_DIR/frontend-dev.pid"
 BACKEND_PID_FILE="$PID_DIR/backend-dev.pid"
 SUPABASE_CHECK="$REPO_ROOT/tests/checkSupabaseConnection.mjs"
+AUTH_TABLE_CHECK="$REPO_ROOT/tests/checkAuthProfilesReady.mjs"
 FRONTEND_DIR="$REPO_ROOT/frontend"
 BACKEND_CMD=(npm run backend:dev)
 FRONTEND_CMD=(npm run dev -- --host)
@@ -68,6 +69,9 @@ ensure_port_free 5173 "Frontend"
 
 echo "Checking Supabase connectivity..."
 node "$SUPABASE_CHECK"
+
+echo "Verifying auth/profile tables..."
+node "$AUTH_TABLE_CHECK"
 
 echo "Starting backend (logs: $BACKEND_LOG)..."
 cd "$REPO_ROOT"
