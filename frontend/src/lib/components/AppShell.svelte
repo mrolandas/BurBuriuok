@@ -29,7 +29,24 @@
 	}: Props = $props();
 
 	let menuOpen = $state(false);
-	let activePath = $state($page.url.pathname);
+	const normalizePathname = (pathname: string): string => {
+		if (!base || base === '/') {
+			return pathname || '/';
+		}
+
+		if (pathname === base || pathname === `${base}/`) {
+			return '/';
+		}
+
+		if (pathname.startsWith(base)) {
+			const trimmed = pathname.slice(base.length) || '/';
+			return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+		}
+
+		return pathname || '/';
+	};
+
+	let activePath = $state(normalizePathname($page.url.pathname));
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
 	let searchInput = $state<HTMLInputElement | null>(null);
 	let adminModeEnabled = $state(adminMode.value);
@@ -52,11 +69,11 @@
 			: navLinks.filter((item) => !(item.href === '/' && activePath === '/'))
 	);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
-	const isAdminRoute = $derived($page.url.pathname.startsWith('/admin'));
+	const isAdminRoute = $derived(activePath.startsWith('/admin'));
 	const showSearch = $derived(!isAdminRoute);
 	const isAuthenticated = $derived(Boolean(currentSession));
 	const loginRedirectTarget = $derived(
-		isAdminRoute ? '/' : `${$page.url.pathname}${$page.url.search}${$page.url.hash}`
+		isAdminRoute ? '/' : `${activePath}${$page.url.search}${$page.url.hash}`
 	);
 	const loginLink = $derived(
 		withBase(`/auth/login?redirectTo=${encodeURIComponent(loginRedirectTarget)}`)
@@ -210,7 +227,7 @@
 	};
 
 	const isActive = (href: NavHref) => {
-		const path = $page.url.pathname;
+		const path = activePath;
 		if (href === '/') {
 			return path === '/';
 		}
@@ -241,7 +258,7 @@
 	};
 
 	const unsubscribePage = page.subscribe(({ url }) => {
-		const nextPath = url.pathname;
+		const nextPath = normalizePathname(url.pathname);
 		if (nextPath !== activePath) {
 			activePath = nextPath;
 			closeMenus();
