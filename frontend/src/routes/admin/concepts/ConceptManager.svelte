@@ -95,6 +95,9 @@
 	let deletingSlug: string | null = null;
 	let deleteError: string | null = null;
 	const sectionLabelId = 'concept-section-select';
+	const filterSectionId = 'concept-filter-section';
+	const filterStatusId = 'concept-filter-status';
+	const filterSearchId = 'concept-filter-search';
 
 	const MAX_SLUG_LENGTH = 90;
 	const SLUG_RANDOM_SEGMENT_LENGTH = 6;
@@ -1256,8 +1259,8 @@
 	});
 </script>
 
-<section class="concepts-shell">
-	<header class="concepts-shell__header">
+<section class="admin-section concepts">
+	<header class="concepts__header">
 		<div>
 			<h1>Sąvokų administravimas</h1>
 			<p>
@@ -1265,162 +1268,204 @@
 				juodraščiai arba publikuoti įrašai.
 			</p>
 		</div>
-		<button class="primary" type="button" on:click={openCreate}>Nauja sąvoka</button>
+		<button class="admin-button admin-button--primary" type="button" on:click={openCreate}>
+			Nauja sąvoka
+		</button>
 	</header>
 
 	{#if successMessage}
-		<div class="alert alert--success">{successMessage}</div>
+		<p class="admin-alert admin-alert--success" role="status">{successMessage}</p>
 	{/if}
 
 	{#if loadError}
-		<div class="alert alert--error">{loadError}</div>
+		<p class="admin-alert admin-alert--error" role="alert">{loadError}</p>
 	{:else if loading}
-		<p class="muted">Įkeliama...</p>
+		<p class="admin-alert">Įkeliama...</p>
 	{:else if !concepts.length && !isFiltered}
-		<p class="muted">Dar nėra sukurtų sąvokų.</p>
+		<p class="admin-alert concepts__empty-state">Dar nėra sukurtų sąvokų.</p>
 	{:else}
-		<div class="concepts-toolbar">
-			<div class="concept-filters">
-				<label class="concept-filters__field">
-					<span>Skyrius</span>
-					<select value={filterSectionCode} on:change={onSectionFilterChange}>
-						<option value="all">Visi skyriai</option>
-						{#each sectionFilterOptions as option (option.code)}
-							<option value={option.code}>{option.label}</option>
-						{/each}
-					</select>
-				</label>
-				<label class="concept-filters__field">
-					<span>Būsena</span>
-					<select value={filterStatus} on:change={onStatusFilterChange}>
-						<option value="all">Visos būsenos</option>
-						<option value="draft">Juodraštis</option>
-						<option value="published">Publikuota</option>
-					</select>
-				</label>
-				<label class="concept-filters__field concept-filters__field--search">
-					<span>Paieška</span>
-					<input type="search" placeholder="Ieškoti sąvokų" bind:value={searchTerm} />
-				</label>
-				{#if isFiltered}
-					<button type="button" class="concept-filters__clear" on:click={() => void clearFilters()}>
-						Išvalyti filtrus
-					</button>
-				{/if}
-			</div>
-			<p class="concepts-toolbar__count muted">
-				Rodoma {totalMatches} iš {concepts.length} sąvokų.
-			</p>
-		</div>
-
-		{#if !filteredConcepts.length}
-			<div class="concepts-empty">
-				<p class="muted">
+		<article class="admin-card admin-card--hoverable concepts__card">
+			<div class="concepts__toolbar">
+				<div class="concepts__filters">
+					<div class="admin-field concepts__field">
+						<label class="admin-field__label" for={filterSectionId}>Skyrius</label>
+						<select
+							id={filterSectionId}
+							class="admin-field__control"
+							value={filterSectionCode}
+							on:change={onSectionFilterChange}
+						>
+							<option value="all">Visi skyriai</option>
+							{#each sectionFilterOptions as option (option.code)}
+								<option value={option.code}>{option.label}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="admin-field concepts__field">
+						<label class="admin-field__label" for={filterStatusId}>Būsena</label>
+						<select
+							id={filterStatusId}
+							class="admin-field__control"
+							value={filterStatus}
+							on:change={onStatusFilterChange}
+						>
+							<option value="all">Visos būsenos</option>
+							<option value="draft">Juodraštis</option>
+							<option value="published">Publikuota</option>
+						</select>
+					</div>
+					<div class="admin-field concepts__field concepts__field--search">
+						<label class="admin-field__label" for={filterSearchId}>Paieška</label>
+						<input
+							id={filterSearchId}
+							type="search"
+							class="admin-field__control"
+							placeholder="Ieškoti sąvokų"
+							bind:value={searchTerm}
+						/>
+					</div>
 					{#if isFiltered}
-						Pagal pasirinktus filtrus rezultatų nėra.
-					{:else}
-						Dar nėra sukurtų sąvokų.
+						<button
+							type="button"
+							class="admin-button admin-button--secondary concepts__clear"
+							on:click={() => void clearFilters()}
+						>
+							Išvalyti filtrus
+						</button>
 					{/if}
+				</div>
+				<p class="concepts__count muted">
+					Rodoma {totalMatches} iš {concepts.length} sąvokų.
 				</p>
-				{#if isFiltered}
-					<button type="button" on:click={() => void clearFilters()}> Išvalyti filtrus </button>
-				{/if}
 			</div>
-		{:else}
-			<div class="table-wrapper">
-				<table class="concept-table">
-					<thead>
-						<tr>
-							<th scope="col">Sąvoka</th>
-							<th scope="col">Skyrius</th>
-							<th scope="col">Būsena</th>
-							<th scope="col">Atnaujinta</th>
-							<th scope="col">Veiksmai</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each filteredConcepts as concept (concept.id)}
+
+			{#if !filteredConcepts.length}
+				<div class="admin-alert concepts__empty" role="status">
+					<p class="muted">
+						{#if isFiltered}
+							Pagal pasirinktus filtrus rezultatų nėra.
+						{:else}
+							Dar nėra sukurtų sąvokų.
+						{/if}
+					</p>
+					{#if isFiltered}
+						<button
+							type="button"
+							class="admin-button admin-button--secondary"
+							on:click={() => void clearFilters()}
+						>
+							Išvalyti filtrus
+						</button>
+					{/if}
+				</div>
+			{:else}
+				<div class="concepts__table-wrapper">
+					<table class="admin-table concepts__table">
+						<thead>
 							<tr>
-								<td>
-									<div class="concept-name">
-										<a
-											href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="concept-name__primary"
-										>
-											{concept.termLt}
-										</a>
-										{#if concept.termEn}
-											<span class="concept-name__secondary">{concept.termEn}</span>
-										{/if}
-									</div>
-								</td>
-								<td>
-									<div class="concept-section">
-										<span>{concept.subsectionCode ?? concept.sectionCode}</span>
-										{#if concept.subsectionTitle ?? concept.sectionTitle}
-											<span class="concept-section__title">
-												{concept.subsectionTitle ?? concept.sectionTitle}
-											</span>
-										{/if}
-									</div>
-								</td>
-								<td>
-									<span
-										class="status-badge"
-										class:status-badge--published={concept.status === 'published'}
-										class:status-badge--draft={concept.status === 'draft'}
-									>
-										{STATUS_LABELS[concept.status]}
-									</span>
-								</td>
-								<td>{formatTimestamp(concept.updatedAt)}</td>
-								<td>
-									<div class="concept-table__actions">
-										<button type="button" on:click={() => openEdit(concept)}>Redaguoti</button>
-										<button
-											type="button"
-											class="danger"
-											on:click={() => requestDeleteConcept(concept)}
-										>
-											Šalinti
-										</button>
-									</div>
-									{#if deleteConfirmSlug === concept.slug}
-										<div class="concept-table__delete-confirm">
-											<p>
-												Ar tikrai norite pašalinti "{concept.termLt}" sąvoką?
-											</p>
-											{#if deleteError}
-												<p class="concept-table__delete-error">{deleteError}</p>
-											{/if}
-											<div class="concept-table__delete-actions">
-												<button
-													type="button"
-													class="danger"
-													on:click={confirmDeleteConcept}
-													disabled={deletingSlug === concept.slug}
-												>
-													{deletingSlug === concept.slug ? 'Šalinama...' : 'Patvirtinti'}
-												</button>
-												<button
-													type="button"
-													on:click={cancelDeleteRequest}
-													disabled={deletingSlug === concept.slug}
-												>
-													Atšaukti
-												</button>
-											</div>
-										</div>
-									{/if}
-								</td>
+								<th scope="col">Sąvoka</th>
+								<th scope="col">Skyrius</th>
+								<th scope="col">Būsena</th>
+								<th scope="col">Atnaujinta</th>
+								<th scope="col">Veiksmai</th>
 							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		{/if}
+						</thead>
+						<tbody>
+							{#each filteredConcepts as concept (concept.id)}
+								<tr>
+									<td>
+										<div class="concept-name">
+											<a
+												href={`${resolve('/concepts/[slug]', { slug: concept.slug })}?admin=1`}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="concept-name__primary"
+											>
+												{concept.termLt}
+											</a>
+											{#if concept.termEn}
+												<span class="concept-name__secondary">{concept.termEn}</span>
+											{/if}
+										</div>
+									</td>
+									<td>
+										<div class="concept-section">
+											<span>{concept.subsectionCode ?? concept.sectionCode}</span>
+											{#if concept.subsectionTitle ?? concept.sectionTitle}
+												<span class="concept-section__title">
+													{concept.subsectionTitle ?? concept.sectionTitle}
+												</span>
+											{/if}
+										</div>
+									</td>
+									<td>
+										<span
+											class={`status-chip ${
+												concept.status === 'published'
+													? 'status-chip--concept-published'
+													: 'status-chip--concept-draft'
+											}`}
+										>
+											{STATUS_LABELS[concept.status]}
+										</span>
+									</td>
+									<td>{formatTimestamp(concept.updatedAt)}</td>
+									<td>
+										<div class="concepts__actions">
+											<button
+												type="button"
+												class="admin-button admin-button--secondary"
+												on:click={() => openEdit(concept)}
+											>
+												Redaguoti
+											</button>
+											<button
+												type="button"
+												class="admin-button admin-button--danger"
+												on:click={() => requestDeleteConcept(concept)}
+											>
+												Šalinti
+											</button>
+										</div>
+										{#if deleteConfirmSlug === concept.slug}
+											<div
+												class="concepts__delete-confirm admin-alert admin-alert--error"
+												role="alert"
+											>
+												<p>
+													Ar tikrai norite pašalinti "{concept.termLt}" sąvoką?
+												</p>
+												{#if deleteError}
+													<p class="concepts__delete-error">{deleteError}</p>
+												{/if}
+												<div class="concepts__delete-actions">
+													<button
+														type="button"
+														class="admin-button admin-button--danger"
+														on:click={confirmDeleteConcept}
+														disabled={deletingSlug === concept.slug}
+													>
+														{deletingSlug === concept.slug ? 'Šalinama...' : 'Patvirtinti'}
+													</button>
+													<button
+														type="button"
+														class="admin-button admin-button--secondary"
+														on:click={cancelDeleteRequest}
+														disabled={deletingSlug === concept.slug}
+													>
+														Atšaukti
+													</button>
+												</div>
+											</div>
+										{/if}
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			{/if}
+		</article>
 	{/if}
 </section>
 
@@ -1449,10 +1494,10 @@
 
 		<div class="drawer__content">
 			{#if saveError}
-				<div class="alert alert--error" role="alert">
+				<div class="admin-alert admin-alert--error" role="alert">
 					<strong>{saveError}</strong>
 					{#if saveErrorHint}
-						<p class="alert__hint">{saveErrorHint}</p>
+						<p class="admin-alert__hint">{saveErrorHint}</p>
 					{/if}
 				</div>
 			{/if}
@@ -1594,7 +1639,7 @@
 				{#if editorMode !== 'edit'}
 					<p class="muted">Mediją galima pridėti tik jau išsaugotai sąvokai.</p>
 				{:else if conceptMediaError}
-					<div class="alert alert--error">{conceptMediaError}</div>
+					<div class="admin-alert admin-alert--error">{conceptMediaError}</div>
 				{:else if conceptMediaLoading}
 					<p class="muted">Įkeliama medija...</p>
 				{:else if conceptMedia.length === 0}
@@ -1645,7 +1690,7 @@
 					<p class="muted">Atkūrimas apima sekciją, poskyrius ir susietą sąvoką.</p>
 				</header>
 				{#if rollbackError}
-					<div class="alert alert--error">{rollbackError}</div>
+					<div class="admin-alert admin-alert--error">{rollbackError}</div>
 				{/if}
 				{#if historyLoading}
 					<p class="muted">Įkeliama versijų istorija…</p>
@@ -1749,235 +1794,86 @@
 {/if}
 
 <style>
-	.concepts-shell {
-		display: grid;
-		gap: 1.5rem;
-	}
-
-	.concepts-shell__header {
+	.concepts__header {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: 1rem;
+		flex-wrap: wrap;
 	}
 
-	.concepts-shell__header h1 {
+	.concepts__header h1 {
 		margin: 0;
 		font-size: clamp(1.6rem, 3vw, 2.2rem);
 	}
 
-	.concepts-shell__header p {
+	.concepts__header p {
 		margin: 0.25rem 0 0;
 		max-width: 40rem;
 		color: var(--color-text-soft);
-	}
-
-	.primary {
-		background: var(--color-pill-bg);
-		color: var(--color-pill-text);
-		border: 1px solid var(--color-pill-border);
-		border-radius: 0.6rem;
-		padding: 0.6rem 1.2rem;
-		font-weight: 600;
-		cursor: pointer;
-	}
-
-	.primary:hover,
-	.primary:focus-visible {
-		background: var(--color-pill-hover-bg);
-		border-color: var(--color-pill-hover-border);
-	}
-
-	.danger {
-		background: rgba(220, 38, 38, 0.08);
-		color: rgb(185, 28, 28);
-		border: 1px solid rgba(220, 38, 38, 0.35);
-		border-radius: 0.55rem;
-		padding: 0.45rem 0.9rem;
-		font-weight: 600;
-		cursor: pointer;
-	}
-
-	.danger:hover,
-	.danger:focus-visible {
-		background: rgba(220, 38, 38, 0.16);
-		border-color: rgba(220, 38, 38, 0.5);
-	}
-
-	.text {
-		background: none;
-		border: none;
-		color: var(--color-link);
-		cursor: pointer;
-		padding: 0.4rem 0.6rem;
-	}
-
-	.alert {
-		padding: 0.9rem 1.1rem;
-		border-radius: 0.75rem;
-	}
-
-	.alert--error {
-		background: rgba(220, 38, 38, 0.1);
-		border: 1px solid rgba(220, 38, 38, 0.4);
-		color: rgb(185, 28, 28);
-	}
-
-	.alert__hint {
-		margin: 0.4rem 0 0;
-		font-size: 0.88rem;
-		color: rgb(120, 53, 15);
-	}
-
-	.alert--success {
-		background: rgba(22, 163, 74, 0.12);
-		border: 1px solid rgba(22, 163, 74, 0.35);
-		color: rgb(22, 101, 52);
 	}
 
 	.muted {
 		color: var(--color-text-soft);
 	}
 
-	.concepts-toolbar {
+	.concepts__card {
+		gap: 1.5rem;
+	}
+
+	.concepts__toolbar {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-end;
 		justify-content: space-between;
 		gap: 1rem;
-		margin-bottom: 1rem;
 	}
 
-	.concept-filters {
+	.concepts__filters {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
 		align-items: flex-end;
 	}
 
-	.concept-filters__field {
+	.concepts__field {
+		min-width: 12rem;
+	}
+
+	.concepts__field--search {
+		min-width: 16rem;
+		flex: 1 0 220px;
+	}
+
+	.concepts__clear {
+		padding-left: 1rem;
+	}
+
+	.concepts__count {
+		margin: 0;
+		font-size: 0.9rem;
+	}
+
+	.concepts__empty-state {
+		text-align: center;
+	}
+
+	.concepts__empty {
 		display: flex;
 		flex-direction: column;
-		gap: 0.35rem;
-		font-size: 0.9rem;
-		color: var(--color-text-soft);
+		gap: 0.5rem;
 	}
 
-	.concept-filters__field select,
-	.concept-filters__field input {
-		min-width: 12rem;
-		padding: 0.5rem 0.75rem;
-		border-radius: 0.6rem;
-		border: 1px solid var(--color-border);
-		background: var(--color-panel-soft);
-		color: var(--color-text);
-	}
-
-	.concept-filters__field--search input {
-		min-width: 16rem;
-	}
-
-	.concept-filters__clear {
-		border: none;
-		background: none;
-		color: var(--color-link);
-		font-weight: 600;
-		cursor: pointer;
-		padding: 0.2rem 0.4rem;
-	}
-
-	.concepts-toolbar__count {
-		margin: 0;
-		font-size: 0.9rem;
-	}
-
-	.concepts-empty {
-		border: 1px dashed var(--color-border-light);
-		border-radius: 0.9rem;
-		padding: 1.2rem 1.4rem;
-		display: grid;
-		gap: 0.6rem;
-		background: var(--color-panel-soft);
-	}
-
-	.concepts-empty button {
-		justify-self: start;
-		border: 1px solid var(--color-border);
-		background: var(--color-panel);
-		border-radius: 0.55rem;
-		padding: 0.45rem 0.9rem;
-		font-weight: 600;
-		cursor: pointer;
-	}
-
-	.table-wrapper {
+	.concepts__table-wrapper {
 		overflow-x: auto;
-		border-radius: 1rem;
+		border-radius: 0.9rem;
 		border: 1px solid var(--color-border);
 		background: var(--color-panel);
 	}
 
-	.concept-table {
+	.concepts__table {
 		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.concept-table th,
-	.concept-table td {
-		padding: 0.75rem 1rem;
-		text-align: left;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.concept-table__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-	}
-	.concept-table__delete-confirm {
-		margin-top: 0.6rem;
-		padding: 0.75rem 0.9rem;
-		border-radius: 0.6rem;
-		background: rgba(220, 38, 38, 0.08);
-		display: grid;
-		gap: 0.5rem;
-	}
-
-	.concept-table__delete-confirm p {
-		margin: 0;
-	}
-
-	.concept-table__delete-actions {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
-
-	.concept-table__delete-error {
-		margin: 0;
-		color: rgb(185, 28, 28);
-		font-size: 0.9rem;
-	}
-
-	.concept-table__actions button {
-		border: 1px solid var(--color-border-light);
-		background: var(--color-panel);
-		border-radius: 0.45rem;
-		padding: 0.35rem 0.75rem;
-		cursor: pointer;
-		transition:
-			background 0.2s ease,
-			border-color 0.2s ease;
-	}
-
-	.concept-table__actions button:hover,
-	.concept-table__actions button:focus-visible {
-		border-color: var(--color-border);
-		background: var(--color-panel-hover);
-	}
-
-	.concept-table th {
-		font-weight: 600;
+		min-width: 720px;
 	}
 
 	.concept-name {
@@ -2013,26 +1909,50 @@
 		font-size: 0.9rem;
 	}
 
-	.status-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.2rem 0.6rem;
-		border-radius: 999px;
-		background: rgba(107, 114, 128, 0.15);
-		color: rgb(31, 41, 55);
-		font-size: 0.85rem;
-		font-weight: 600;
-	}
-
-	.status-badge--draft {
+	.status-chip--concept-draft {
 		background: rgba(37, 99, 235, 0.12);
 		color: rgb(29, 78, 216);
 	}
 
-	.status-badge--published {
+	.status-chip--concept-published {
 		background: rgba(22, 163, 74, 0.15);
 		color: rgb(22, 101, 52);
+	}
+
+	.concepts__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.concepts__delete-confirm {
+		margin-top: 0.75rem;
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.concepts__delete-confirm p {
+		margin: 0;
+	}
+
+	.concepts__delete-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.concepts__delete-error {
+		margin: 0;
+		color: rgb(185, 28, 28);
+		font-size: 0.9rem;
+	}
+
+	.text {
+		background: none;
+		border: none;
+		color: var(--color-link);
+		cursor: pointer;
+		padding: 0.4rem 0.6rem;
 	}
 
 	.drawer-backdrop {
@@ -2433,28 +2353,29 @@
 	}
 
 	@media (max-width: 720px) {
-		.concepts-shell__header {
+		.concepts__header {
 			flex-direction: column;
 			align-items: stretch;
 		}
 
-		.concepts-toolbar {
+		.concepts__toolbar {
 			flex-direction: column;
 			align-items: stretch;
 			gap: 0.75rem;
 		}
 
-		.concept-filters {
+		.concepts__filters {
 			flex-direction: column;
 			align-items: stretch;
 		}
 
-		.concept-filters__field select,
-		.concept-filters__field input {
+		.concepts__field,
+		.concepts__field--search {
 			min-width: 0;
+			width: 100%;
 		}
 
-		.concept-filters__clear {
+		.concepts__clear {
 			align-self: flex-start;
 			padding-left: 0;
 		}
