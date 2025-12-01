@@ -162,6 +162,7 @@
 		initializeAuth();
 		authSessionUnsubscribe = authSession.subscribe((value) => {
 			currentSession = value;
+			autoEnableAdminMode(value);
 		});
 		authStatusUnsubscribe = authStatus.subscribe((value) => {
 			authState = value;
@@ -182,6 +183,12 @@
 		allowAdminSync = true;
 		void syncAdminModeToUrl(adminModeEnabled);
 	});
+
+	const autoEnableAdminMode = (session: AuthSession | null) => {
+		if (session?.appRole === 'admin' && !adminMode.value) {
+			adminMode.enable();
+		}
+	};
 
 	const toggleMenu = () => {
 		const next = !menuOpen;

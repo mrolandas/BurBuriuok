@@ -115,6 +115,7 @@ This document captures how BurKursas uses Supabase during early development (sta
 - Start with email magic links using Supabase Auth once V2 work begins.
 - Link `profiles` table with row-level security (RLS) policies granting access only to the logged-in user.
 - Enforce RLS on `concept_notes` and `concept_progress` for learner scope. `media_assets` remains admin-only during the media MVP; expand policies to learners/contributors once uploads reopen beyond admins.
+- Magic-link redirects: Supabase only honours the `emailRedirectTo` we supply if the exact callback appears under **Authentication → URL Configuration → Additional Redirect URLs**. Add both production and local callbacks and toggle “Allow HTTP redirect URLs” so `http://localhost:5173/auth/callback` passes validation. The backend now always sends Supabase the literal `AUTH_REDIRECT_URL`, while the frontend persists any `redirectTo` hints in `sessionStorage` before requesting a link. Remind QA that opening the email on a different device will load `/auth/callback` without the stored hint (the callback still lands on the dashboard).
 
 ## Local Development Workflow
 

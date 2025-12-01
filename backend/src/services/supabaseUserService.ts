@@ -1,8 +1,22 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../../../data/supabaseClient.ts";
 import type { ProfileRole } from "../../../data/types.ts";
 
-const serviceClient = getSupabaseClient({ service: true }) as SupabaseClient;
+type AdminSupabaseClient = {
+  auth: {
+    admin: {
+      updateUserById: (
+        userId: string,
+        params: {
+          app_metadata: {
+            app_role: ProfileRole;
+          };
+        }
+      ) => Promise<{ error: Error | null }>;
+    };
+  };
+};
+
+const serviceClient = getSupabaseClient({ service: true }) as AdminSupabaseClient;
 
 export async function updateSupabaseAppRole(
   userId: string,

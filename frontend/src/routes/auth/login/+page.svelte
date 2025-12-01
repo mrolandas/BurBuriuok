@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { derived, get } from 'svelte/store';
+	import { persistRedirectTarget } from '$lib/utils/authRedirect';
 
 	onMount(() => {
 		initializeAuth();
@@ -29,6 +30,7 @@
 
 		isSubmitting = true;
 		try {
+			persistRedirectTarget(get(redirectParam));
 			await requestMagicLink(email, get(redirectParam));
 			successMessage = 'Nuoroda išsiųsta! Patikrinkite el. pašto dėžutę.';
 		} catch (error) {

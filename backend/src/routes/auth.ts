@@ -53,8 +53,14 @@ router.post(
     const normalizedEmail = payload.email.trim().toLowerCase();
     const redirectTarget = sanitizeRedirectTarget(payload.redirectTo);
     const baseRedirectUrl = getRequiredAuthEnv("AUTH_REDIRECT_URL");
-    const emailRedirectTo = buildRedirectUrl(baseRedirectUrl, redirectTarget);
+    const emailRedirectTo = buildRedirectUrl(baseRedirectUrl);
     const emailFrom = getRequiredAuthEnv("AUTH_EMAIL_FROM");
+
+    console.info('[magic-link] request', {
+      email: normalizedEmail,
+      redirectTarget,
+      emailRedirectTo,
+    });
 
     const { error } = await supabaseServiceClient.auth.signInWithOtp({
       email: normalizedEmail,

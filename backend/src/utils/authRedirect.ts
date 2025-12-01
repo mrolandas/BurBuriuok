@@ -27,12 +27,6 @@ export function sanitizeRedirectTarget(value?: string | null): string | null {
   }
 }
 
-export function buildRedirectUrl(base: string, redirectTarget: string | null): string {
-  if (!redirectTarget) {
-    return base;
-  }
-
-  const url = new URL(base);
-  url.searchParams.set("redirectTo", redirectTarget);
-  return url.toString();
+export function buildRedirectUrl(base: string): string {
+  return base;
 }

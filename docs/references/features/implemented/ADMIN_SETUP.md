@@ -126,6 +126,7 @@ _Update 2025-11-20_: Admin media workspace now supports metadata edits (concept 
 - `AppShell` exposes a menu button labelled “Aktyvuoti Admin” that flips to “Deaktyvuoti Admin” when active. The control is gated behind the same impersonation feature flags used by local development.
 - The toggle writes to `src/lib/stores/adminMode.ts`, a persisted Svelte store that ensures admin affordances survive navigation and reloads.
 - Toggling the control updates the `impersonate=admin` query parameter via SvelteKit’s `goto`, allowing inline concept and section editing to reuse the existing admin APIs without a page refresh.
+- When a Supabase session reports `app_role='admin'`, AppShell now auto-enables the toggle so authenticated admins land directly in edit mode without manually flipping the switch (they can still deactivate it for safe browsing).
 - Future authentication work will swap the toggle for a real login dialog while preserving the shared store so the UI remains reactive.
 
 ## Access Control & Routing

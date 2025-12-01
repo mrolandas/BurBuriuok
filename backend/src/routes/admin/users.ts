@@ -301,10 +301,9 @@ function isPendingInvite(invite: AdminInvite): boolean {
   return getInviteStatus(invite) === "pending";
 }
 
-async function sendMagicLink(email: string, redirectTarget: string): Promise<void> {
-  const sanitized = sanitizeRedirectTarget(redirectTarget) ?? "/";
+async function sendMagicLink(email: string, _redirectTarget: string): Promise<void> {
   const baseRedirectUrl = getRequiredAuthEnv("AUTH_REDIRECT_URL");
-  const emailRedirectTo = buildRedirectUrl(baseRedirectUrl, sanitized);
+  const emailRedirectTo = buildRedirectUrl(baseRedirectUrl);
   const { error } = await supabaseAuthClient.auth.signInWithOtp({
     email,
     options: {

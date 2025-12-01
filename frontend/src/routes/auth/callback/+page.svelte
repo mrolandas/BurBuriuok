@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { getSupabaseClient } from '$lib/supabase/client';
 	import { initializeAuth } from '$lib/stores/authStore';
+	import { readRedirectTarget, clearRedirectTarget } from '$lib/utils/authRedirect';
 
 	type CallbackState = 'idle' | 'exchanging' | 'success' | 'error';
 
@@ -21,7 +22,7 @@
 
 	async function completeExchange(): Promise<void> {
 		const current = get(page);
-		redirectTarget = sanitizeRedirect(current.url.searchParams.get('redirectTo'));
+		redirectTarget = resolveRedirectTarget(current.url);
 		const code = current.url.searchParams.get('code');
 		const hash = parseHashParams(current.url);
 		const hashError = hash.get('error');
@@ -97,25 +98,35 @@
 		state = 'success';
 		message = 'Prisijungimas patvirtintas. Nukreipiame...';
 		setTimeout(() => {
+			clearRedirectTarget();
 			void gotoResolved(redirectTarget, { replaceState: true });
 		}, 800);
 	}
 
-	function sanitizeRedirect(candidate: string | null): string {
+	function sanitizeRedirect(candidate: string | null): string | null {
 		if (!candidate || !candidate.startsWith('/')) {
-			return '/';
+			return null;
 		}
 
 		if (candidate.startsWith('//')) {
-			return '/';
+			return null;
 		}
 
 		try {
 			const url = new URL(candidate, 'https://burkursas.local');
 			return `${url.pathname}${url.search}${url.hash}` || '/';
 		} catch {
-			return '/';
+			return null;
 		}
+	}
+
+	function resolveRedirectTarget(url: URL): string {
+		const queryTarget = sanitizeRedirect(url.searchParams.get('redirectTo'));
+		if (queryTarget) {
+			return queryTarget;
+		}
+
+		return readRedirectTarget() ?? '/';
 	}
 
 	function requestAnotherLink(): void {
