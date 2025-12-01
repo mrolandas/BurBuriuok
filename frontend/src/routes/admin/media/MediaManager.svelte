@@ -132,6 +132,11 @@
 		timeStyle: 'short'
 	});
 
+	const conceptFilterId = 'media-filter-concept';
+	const assetTypeFilterId = 'media-filter-type';
+	const sourceFilterId = 'media-filter-source';
+	const searchFieldId = 'media-filter-search';
+
 	onMount(async () => {
 		applyQueryDefaults();
 		await Promise.all([loadConceptOptions(), loadMedia()]);
@@ -1064,8 +1069,9 @@
 	}
 </script>
 
-<section class="media-shell">
-	<header class="media-shell__header">
+
+<section class="admin-section media-admin">
+	<header class="media-admin__header">
 		<div>
 			<h1>Papildomos medžiagos administravimas</h1>
 			<p>
@@ -1073,201 +1079,238 @@
 				būti susieti su bent viena sąvoka.
 			</p>
 		</div>
-		<button class="primary" type="button" on:click={() => openCreate()}>
+		<button class="admin-button admin-button--primary" type="button" on:click={() => openCreate()}>
 			Pridėti failą / išorinį šaltinį
 		</button>
 	</header>
 
 	{#if conceptError}
-		<div class="alert alert--warning">{conceptError}</div>
+		<p class="admin-alert admin-alert--warning">{conceptError}</p>
 	{:else if conceptLoading}
-		<p class="muted">Įkeliamos sąvokos filtrui...</p>
+		<p class="admin-alert">Įkeliamos sąvokos filtrui...</p>
 	{/if}
 
 	{#if successMessage}
-		<div class="alert alert--success" role="status" aria-live="polite">{successMessage}</div>
+		<p class="admin-alert admin-alert--success" role="status" aria-live="polite">{successMessage}</p>
 	{/if}
 
 	{#if actionError}
-		<div class="alert alert--error" role="alert">{actionError}</div>
+		<p class="admin-alert admin-alert--error" role="alert">{actionError}</p>
 	{/if}
 
-	<div class="media-toolbar" role="search">
-		<div class="media-toolbar__filters">
-			<label>
-				<span>Sąvoka</span>
-				<select bind:value={filterConceptId} on:change={handleFilterChange}>
-					<option value="all">Visos sąvokos</option>
-					{#each conceptOptions as option (option.id)}
-						<option value={option.id}>{option.termLt}</option>
-					{/each}
-				</select>
-			</label>
-			<label>
-				<span>Tipas</span>
-				<select bind:value={filterAssetType} on:change={handleFilterChange}>
-					<option value="all">Visi tipai</option>
-					<option value="image">{assetTypeLabels.image}</option>
-					<option value="video">{assetTypeLabels.video}</option>
-					<option value="document">{assetTypeLabels.document}</option>
-				</select>
-			</label>
-			<label>
-				<span>Šaltinis</span>
-				<select bind:value={filterSourceKind} on:change={handleFilterChange}>
-					<option value="all">Visi šaltiniai</option>
-					<option value="upload">{sourceKindLabels.upload}</option>
-					<option value="external">{sourceKindLabels.external}</option>
-				</select>
-			</label>
-		</div>
-		<div class="media-toolbar__search">
-			<label for="media-search" class="sr-only">Paieška</label>
-			<input
-				id="media-search"
-				type="search"
-				placeholder="Ieškoti pagal pavadinimą ar aprašą"
-				value={searchInput}
-				on:input={(event) => scheduleSearch(event.currentTarget.value)}
-			/>
-			<button type="button" class="secondary" on:click={resetFilters}>Atstatyti filtrus</button>
-		</div>
-	</div>
-
 	{#if loadError}
-		<div class="alert alert--error">{loadError}</div>
-	{:else if loading}
-		<p class="muted">Kraunama medija...</p>
-	{:else if listState.items.length === 0}
-		<p class="muted">Pagal pasirinktus filtrus medijos įrašų nėra.</p>
-		<button class="secondary" type="button" on:click={() => openCreate()}>
-			Pridėti naują mediją
-		</button>
+		<p class="admin-alert admin-alert--error">{loadError}</p>
 	{:else}
-		{#if selectedIds.size > 0}
-			<div class="media-table__selection-bar" role="status" aria-live="polite">
-				<p>
-					{selectedIds.size === 1
-						? 'Pasirinktas 1 medijos įrašas.'
-						: `Pasirinkta ${selectedIds.size} medijos įrašai (-ų).`}
-				</p>
-				<div class="media-table__selection-actions">
+		<article class="admin-card admin-card--hoverable media-admin__card">
+			<div class="media-admin__toolbar" role="search">
+				<div class="media-admin__filters">
+					<div class="admin-field media-admin__field">
+						<label class="admin-field__label" for={conceptFilterId}>Sąvoka</label>
+						<select
+							id={conceptFilterId}
+							class="admin-field__control"
+							bind:value={filterConceptId}
+							on:change={handleFilterChange}
+						>
+							<option value="all">Visos sąvokos</option>
+							{#each conceptOptions as option (option.id)}
+								<option value={option.id}>{option.termLt}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="admin-field media-admin__field">
+						<label class="admin-field__label" for={assetTypeFilterId}>Tipas</label>
+						<select
+							id={assetTypeFilterId}
+							class="admin-field__control"
+							bind:value={filterAssetType}
+							on:change={handleFilterChange}
+						>
+							<option value="all">Visi tipai</option>
+							<option value="image">{assetTypeLabels.image}</option>
+							<option value="video">{assetTypeLabels.video}</option>
+							<option value="document">{assetTypeLabels.document}</option>
+						</select>
+					</div>
+					<div class="admin-field media-admin__field">
+						<label class="admin-field__label" for={sourceFilterId}>Šaltinis</label>
+						<select
+							id={sourceFilterId}
+							class="admin-field__control"
+							bind:value={filterSourceKind}
+							on:change={handleFilterChange}
+						>
+							<option value="all">Visi šaltiniai</option>
+							<option value="upload">{sourceKindLabels.upload}</option>
+							<option value="external">{sourceKindLabels.external}</option>
+						</select>
+					</div>
+				</div>
+				<div class="media-admin__search">
+					<label class="visually-hidden" for={searchFieldId}>Paieška</label>
+					<input
+						id={searchFieldId}
+						type="search"
+						class="admin-field__control"
+						placeholder="Ieškoti pagal pavadinimą ar aprašą"
+						value={searchInput}
+						on:input={(event) => scheduleSearch(event.currentTarget.value)}
+					/>
 					<button
 						type="button"
-						class="danger"
-						on:click={() => void handleBulkDelete()}
-						disabled={bulkDeleteBusy}
+						class="admin-button admin-button--secondary"
+						on:click={resetFilters}
 					>
-						{#if bulkDeleteBusy}
-							Šalinama...
-						{:else}
-							Pašalinti pasirinktus ({selectedIds.size})
-						{/if}
-					</button>
-					<button type="button" class="plain" on:click={clearSelection} disabled={bulkDeleteBusy}>
-						Atšaukti pasirinkimą
+						Atstatyti filtrus
 					</button>
 				</div>
 			</div>
-		{/if}
-		<div class="media-table-wrapper">
-			<table class="media-table">
-				<thead>
-					<tr>
-						<th scope="col" class="media-table__select-header">
-							<input
-								type="checkbox"
-								aria-label="Pasirinkti visus matomus medijos įrašus"
-								checked={listState.items.length > 0 &&
-									listState.items.every((item) => selectedIds.has(item.id))}
-								on:change={(event) => toggleSelectAll(event.currentTarget.checked)}
-								bind:this={selectAllCheckbox}
-								disabled={listState.items.length === 0}
-							/>
-						</th>
-						<th scope="col">Medijos įrašas</th>
-						<th scope="col">Sąvoka</th>
-						<th scope="col">Šaltinis</th>
-						<th scope="col">Sukūrė</th>
-						<th scope="col">Sukurta</th>
-						<th scope="col" class="media-table__actions-header">Veiksmai</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each listState.items as item (item.id)}
-						{@const conceptSlugValue = conceptSlug(item.conceptId)}
-						<tr
-							tabindex="0"
-							class="media-table__row"
-							on:click={() => void openDetail(item)}
-							on:keydown={(event) => handleRowKeydown(event, item)}
-						>
-							<td class="media-table__select-cell">
-								<input
-									type="checkbox"
-									aria-label={`Pažymėti įrašą ${assetTitle(item)}`}
-									checked={selectedIds.has(item.id)}
-									on:click={(event) => event.stopPropagation()}
-									on:change={(event) => toggleSelection(item.id, event.currentTarget.checked)}
-								/>
-							</td>
-							<th scope="row">
-								<div class="media-table__title">{assetTitle(item)}</div>
-								{#if item.captionLt}
-									<p class="media-table__summary">{shortText(item.captionLt)}</p>
-								{:else if item.captionEn}
-									<p class="media-table__summary">{shortText(item.captionEn)}</p>
-								{/if}
-							</th>
-							<td>
-								{#if conceptSlugValue}
-									<a
-										href={`${resolve('/admin/concepts')}?slug=${conceptSlugValue}`}
-										on:click={(event) => event.stopPropagation()}
-									>
-										{conceptLabel(item.conceptId)}
-									</a>
-								{:else}
-									{conceptLabel(item.conceptId)}
-								{/if}
-							</td>
-							<td>{sourceSummary(item)}</td>
-							<td>{item.createdBy ?? '–'}</td>
-							<td>{formatDate(item.createdAt)}</td>
-							<td class="media-table__actions">
-								<button
-									type="button"
-									class="plain plain--danger"
-									on:click={(event) => void handleListDelete(event, item)}
-									disabled={rowDeleteBusyId === item.id}
-								>
-									{#if rowDeleteBusyId === item.id}
-										Šalinama...
-									{:else}
-										Šalinti
-									{/if}
-								</button>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
 
-		{#if listState.meta.hasMore}
-			<button
-				class="secondary media-shell__load-more"
-				type="button"
-				on:click={() => void loadMedia({ append: true })}
-				disabled={loadMoreLoading}
-			>
-				{#if loadMoreLoading}
-					Kraunama...
-				{:else}
-					Įkelti daugiau ({Math.max(listState.meta.count - listState.items.length, 0)})
+			{#if loading}
+				<p class="muted">Kraunama medija...</p>
+			{:else if listState.items.length === 0}
+				<div class="media-admin__empty">
+					<p class="muted">Pagal pasirinktus filtrus medijos įrašų nėra.</p>
+					<button
+						class="admin-button admin-button--primary"
+						type="button"
+						on:click={() => openCreate()}
+					>
+						Pridėti naują mediją
+					</button>
+				</div>
+			{:else}
+				{#if selectedIds.size > 0}
+					<div class="media-admin__selection admin-alert" role="status" aria-live="polite">
+						<p>
+							{selectedIds.size === 1
+								? 'Pasirinktas 1 medijos įrašas.'
+								: `Pasirinkta ${selectedIds.size} medijos įrašai (-ų).`}
+						</p>
+						<div class="media-admin__selection-actions">
+							<button
+								type="button"
+								class="admin-button admin-button--danger"
+								on:click={() => void handleBulkDelete()}
+								disabled={bulkDeleteBusy}
+							>
+								{#if bulkDeleteBusy}
+									Šalinama...
+								{:else}
+									Pašalinti pasirinktus ({selectedIds.size})
+								{/if}
+							</button>
+							<button
+								type="button"
+								class="plain"
+								on:click={clearSelection}
+								disabled={bulkDeleteBusy}
+							>
+								Atšaukti pasirinkimą
+							</button>
+						</div>
+					</div>
 				{/if}
-			</button>
-		{/if}
+				<div class="media-admin__table-wrapper">
+					<table class="admin-table media-table">
+						<thead>
+							<tr>
+								<th scope="col" class="media-table__select-header">
+									<input
+										type="checkbox"
+										aria-label="Pasirinkti visus matomus medijos įrašus"
+										checked={listState.items.length > 0 &&
+											listState.items.every((item) => selectedIds.has(item.id))}
+										on:change={(event) => toggleSelectAll(event.currentTarget.checked)}
+										bind:this={selectAllCheckbox}
+										disabled={listState.items.length === 0}
+									/>
+								</th>
+								<th scope="col">Medijos įrašas</th>
+								<th scope="col">Sąvoka</th>
+								<th scope="col">Šaltinis</th>
+								<th scope="col">Sukūrė</th>
+								<th scope="col">Sukurta</th>
+								<th scope="col" class="media-table__actions-header">Veiksmai</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each listState.items as item (item.id)}
+								{@const conceptSlugValue = conceptSlug(item.conceptId)}
+								<tr
+									tabindex="0"
+									class="media-table__row"
+									on:click={() => void openDetail(item)}
+									on:keydown={(event) => handleRowKeydown(event, item)}
+								>
+									<td class="media-table__select-cell">
+										<input
+											type="checkbox"
+											aria-label={`Pažymėti įrašą ${assetTitle(item)}`}
+											checked={selectedIds.has(item.id)}
+											on:click={(event) => event.stopPropagation()}
+											on:change={(event) => toggleSelection(item.id, event.currentTarget.checked)}
+										/>
+									</td>
+									<th scope="row">
+										<div class="media-table__title">{assetTitle(item)}</div>
+										{#if item.captionLt}
+											<p class="media-table__summary">{shortText(item.captionLt)}</p>
+										{:else if item.captionEn}
+											<p class="media-table__summary">{shortText(item.captionEn)}</p>
+										{/if}
+									</th>
+									<td>
+										{#if conceptSlugValue}
+											<a
+												href={`${resolve('/admin/concepts')}?slug=${conceptSlugValue}`}
+												on:click={(event) => event.stopPropagation()}
+											>
+												{conceptLabel(item.conceptId)}
+											</a>
+										{:else}
+											{conceptLabel(item.conceptId)}
+										{/if}
+									</td>
+									<td>{sourceSummary(item)}</td>
+									<td>{item.createdBy ?? '–'}</td>
+									<td>{formatDate(item.createdAt)}</td>
+									<td class="media-table__actions">
+										<button
+											type="button"
+											class="plain plain--danger"
+											on:click={(event) => void handleListDelete(event, item)}
+											disabled={rowDeleteBusyId === item.id}
+										>
+											{#if rowDeleteBusyId === item.id}
+												Šalinama...
+											{:else}
+												Šalinti
+											{/if}
+										</button>
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+
+				{#if listState.meta.hasMore}
+					<button
+						class="admin-button admin-button--secondary media-admin__load-more"
+						type="button"
+						on:click={() => void loadMedia({ append: true })}
+						disabled={loadMoreLoading}
+					>
+						{#if loadMoreLoading}
+							Kraunama...
+						{:else}
+							Įkelti daugiau ({Math.max(listState.meta.count - listState.items.length, 0)})
+						{/if}
+					</button>
+				{/if}
+			{/if}
+		</article>
 	{/if}
 </section>
 
@@ -1299,7 +1342,7 @@
 				<p class="drawer__placeholder muted">Įkeliama...</p>
 			{:else if detailError}
 				<div class="drawer__placeholder">
-					<div class="alert alert--error">{detailError}</div>
+					<div class="admin-alert admin-alert--error">{detailError}</div>
 				</div>
 			{:else if detailAsset}
 				<section class="drawer__section drawer__section--preview">
@@ -1310,7 +1353,7 @@
 					{#if previewLoading}
 						<p class="muted">Įkeliama peržiūra...</p>
 					{:else if previewError}
-						<div class="alert alert--warning">{previewError}</div>
+						<div class="admin-alert admin-alert--warning">{previewError}</div>
 					{:else if preview}
 						{#if preview.kind === 'image'}
 							<button
@@ -1331,7 +1374,7 @@
 								<video controls preload="metadata" src={preview.url} playsinline></video>
 								<button
 									type="button"
-									class="secondary preview-card__trigger"
+									class="admin-button admin-button--secondary preview-card__trigger"
 									on:click={handlePreviewExpand}
 								>
 									Peržiūrėti visame lange
@@ -1348,7 +1391,7 @@
 								></iframe>
 								<button
 									type="button"
-									class="secondary preview-card__trigger"
+									class="admin-button admin-button--secondary preview-card__trigger"
 									on:click={handlePreviewExpand}
 								>
 									Peržiūrėti visame lange
@@ -1374,14 +1417,20 @@
 						<h3>Metaduomenys</h3>
 						{#if !editMode}
 							<div class="drawer__section-actions">
-								<button class="secondary" type="button" on:click={beginEdit}>Redaguoti</button>
+								<button
+									class="admin-button admin-button--secondary"
+									type="button"
+									on:click={beginEdit}
+								>
+									Redaguoti
+								</button>
 							</div>
 						{/if}
 					</header>
 
 					{#if editMode}
 						{#if editError}
-							<div class="alert alert--error">{editError}</div>
+							<div class="admin-alert admin-alert--error">{editError}</div>
 						{/if}
 						<form class="metadata-form" on:submit|preventDefault={handleMetadataSubmit}>
 							<label>
@@ -1440,7 +1489,11 @@
 							{/if}
 
 							<div class="drawer__form-actions">
-								<button class="primary" type="submit" disabled={editBusy}>
+								<button
+									class="admin-button admin-button--primary"
+									type="submit"
+									disabled={editBusy}
+								>
 									{#if editBusy}
 										Išsaugoma...
 									{:else}
@@ -1520,11 +1573,11 @@
 						negrįžtamas.
 					</p>
 					{#if deleteError}
-						<div class="alert alert--error">{deleteError}</div>
+						<div class="admin-alert admin-alert--error">{deleteError}</div>
 					{/if}
 					<div class="drawer__danger-actions">
 						<button
-							class="danger"
+							class="admin-button admin-button--danger"
 							type="button"
 							on:click={() => void handleDelete()}
 							disabled={deleteBusy}
@@ -1549,7 +1602,7 @@
 						{/if}
 					</div>
 					{#if deleteConfirmVisible}
-						<p class="alert alert--warning">
+						<p class="admin-alert admin-alert--warning">
 							Patvirtinkite per 10 sekundžių, kad būtų pašalinta ši medija.
 						</p>
 					{/if}
@@ -1603,31 +1656,32 @@
 	>
 </dialog>
 
-<style>
-	.media-shell {
-		display: grid;
-		gap: 1.5rem;
-	}
 
-	.media-shell__header {
+<style>
+	.media-admin__header {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: 1rem;
+		flex-wrap: wrap;
 	}
 
-	.media-shell__header h1 {
+	.media-admin__header h1 {
 		margin: 0;
 		font-size: clamp(1.6rem, 3vw, 2.2rem);
 	}
 
-	.media-shell__header p {
+	.media-admin__header p {
 		margin: 0.35rem 0 0;
 		color: var(--color-text-soft);
 		max-width: 38rem;
 	}
 
-	.media-toolbar {
+	.media-admin__card {
+		gap: 1.5rem;
+	}
+
+	.media-admin__toolbar {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
@@ -1635,66 +1689,69 @@
 		align-items: flex-end;
 	}
 
-	.media-toolbar__filters {
+	.media-admin__filters {
 		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		align-items: flex-end;
+	}
+
+	.media-admin__field {
+		min-width: 12rem;
+	}
+
+	.media-admin__search {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		gap: 0.75rem;
+		flex: 1 1 240px;
+	}
+
+	.media-admin__search .admin-field__control {
+		min-width: 14rem;
+		flex: 1 1 240px;
+	}
+
+	.media-admin__empty {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.media-admin__selection {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 0.75rem;
 	}
 
-	.media-toolbar__filters label {
-		display: grid;
-		gap: 0.3rem;
-		font-size: 0.9rem;
-	}
-
-	.media-toolbar__filters select,
-	.media-toolbar__search input {
-		padding: 0.45rem 0.75rem;
-		border-radius: 0.6rem;
-		border: 1px solid var(--color-border);
-		background: var(--color-panel);
-		color: var(--color-text);
-	}
-
-	.media-toolbar__search {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-	}
-
-	.media-table__selection-bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
-		border: 1px solid var(--color-border);
-		border-radius: 0.9rem;
-		background: var(--color-panel-soft);
-		margin-bottom: 0.75rem;
-	}
-
-	.media-table__selection-bar p {
+	.media-admin__selection p {
 		margin: 0;
 		font-weight: 600;
 	}
 
-	.media-table__selection-actions {
+	.media-admin__selection-actions {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		flex-wrap: wrap;
 	}
 
-	.media-table-wrapper {
+	.media-admin__table-wrapper {
 		overflow-x: auto;
 		border-radius: 1rem;
 		border: 1px solid var(--color-border);
 		background: var(--color-panel);
 	}
 
+	.media-admin__load-more {
+		width: fit-content;
+	}
+
 	.media-table {
 		width: 100%;
+		min-width: 760px;
 		border-collapse: collapse;
 	}
 
@@ -1747,10 +1804,6 @@
 	.media-table__actions {
 		text-align: right;
 		vertical-align: middle;
-	}
-
-	.media-shell__load-more {
-		width: fit-content;
 	}
 
 	.drawer-backdrop {
@@ -2011,30 +2064,6 @@
 		margin: 0;
 	}
 
-	.alert {
-		padding: 0.75rem 1rem;
-		border-radius: 0.8rem;
-		font-size: 0.9rem;
-	}
-
-	.alert--success {
-		background: rgba(16, 185, 129, 0.12);
-		border: 1px solid rgba(16, 185, 129, 0.4);
-		color: rgb(5, 122, 85);
-	}
-
-	.alert--error {
-		background: rgba(239, 68, 68, 0.12);
-		border: 1px solid rgba(239, 68, 68, 0.4);
-		color: rgb(185, 28, 28);
-	}
-
-	.alert--warning {
-		background: rgba(251, 191, 36, 0.15);
-		border: 1px solid rgba(217, 119, 6, 0.4);
-		color: rgb(180, 83, 9);
-	}
-
 	.muted {
 		color: var(--color-text-soft);
 	}
@@ -2045,44 +2074,12 @@
 		margin: 0.35rem 0 0;
 	}
 
-	.primary,
-	.secondary,
-	.danger,
-	.plain {
-		border-radius: 0.7rem;
-		padding: 0.55rem 1rem;
-		font-weight: 600;
-		cursor: pointer;
-	}
-
-	.primary {
-		background: var(--color-pill-bg);
-		border: 1px solid var(--color-pill-border);
-		color: var(--color-pill-text);
-	}
-
-	.primary:disabled {
-		cursor: not-allowed;
-		opacity: 0.6;
-	}
-
-	.secondary {
-		background: transparent;
-		border: 1px solid var(--color-border);
-		color: var(--color-text);
-	}
-
-	.danger {
-		background: rgba(239, 68, 68, 0.12);
-		border: 1px solid rgba(239, 68, 68, 0.4);
-		color: rgb(185, 28, 28);
-	}
-
 	.plain {
 		background: none;
 		border: none;
 		color: var(--color-link);
 		padding: 0;
+		cursor: pointer;
 	}
 
 	.plain:hover,
@@ -2100,31 +2097,19 @@
 		opacity: 0.65;
 	}
 
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
-	}
-
 	@media (max-width: 860px) {
-		.media-toolbar {
+		.media-admin__toolbar {
 			flex-direction: column;
 			align-items: stretch;
 		}
 
-		.media-toolbar__filters,
-		.media-toolbar__search {
+		.media-admin__filters,
+		.media-admin__search {
 			width: 100%;
 		}
 
-		.media-toolbar__search {
-			justify-content: space-between;
+		.media-admin__search .admin-field__control {
+			min-width: 0;
 		}
 	}
 </style>

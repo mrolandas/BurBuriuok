@@ -209,42 +209,44 @@
 	<title>Naudotojų valdymas · BurKursas</title>
 </svelte:head>
 
-<section class="users">
+<section class="admin-section users">
 	<header class="users__header">
 		<div>
 			<h1>Naudotojų valdymas</h1>
 			<p>Sekite aktyvius administratorius ir siųskite kvietimus naujiems komandos nariams.</p>
 		</div>
-		<button type="button" class="secondary" on:click={navigateToAdminHome}>Grįžti į valdymo pultą</button>
+		<button type="button" class="admin-button admin-button--secondary" on:click={navigateToAdminHome}>
+			Grįžti į valdymo pultą
+		</button>
 	</header>
 
 	{#if !session && !impersonatingAdmin}
-		<p class="users__state">Prisijunkite kaip administratorius, kad pasiektumėte šį puslapį.</p>
+		<p class="admin-alert">Prisijunkite kaip administratorius, kad pasiektumėte šį puslapį.</p>
 	{:else if session && session.appRole !== 'admin' && !impersonatingAdmin}
-		<p class="users__state">Tik administratoriai gali valdyti naudotojų sąrašą.</p>
+		<p class="admin-alert">Tik administratoriai gali valdyti naudotojų sąrašą.</p>
 	{:else}
 		{#if impersonatingAdmin}
-			<p class="users__banner">Peržiūrite puslapį administratoriaus režimu (impersonation). Duomenys rodomi tik lokaliai.</p>
+			<p class="admin-alert admin-alert--warning users__banner">
+				Peržiūrite puslapį administratoriaus režimu (impersonation). Duomenys rodomi tik lokaliai.
+			</p>
 		{/if}
 		{#if loadState === 'loading'}
-			<p class="users__state">Įkeliame duomenis...</p>
+			<p class="admin-alert">Įkeliame duomenis...</p>
 		{:else if loadState === 'error'}
-			<p class="users__error" role="alert">{loadError}</p>
+			<p class="admin-alert admin-alert--error" role="alert">{loadError}</p>
 		{:else}
-			<section class="users__grid">
-				<article class="users__card users__card--list">
+			<section class="admin-grid admin-grid--two-column users__grid">
+				<article class="admin-card admin-card--hoverable users__card users__card--list">
 					<div class="users__card-header">
 						<div>
-							<h2>Visi naudotojai</h2>
-							<p class="users__card-subtitle">
-								Iš viso {totalUsers} · Administratoriai {adminCount}
-							</p>
+							<h2 class="admin-card__title">Visi naudotojai</h2>
+							<p class="admin-card__subtitle">Iš viso {totalUsers} · Administratoriai {adminCount}</p>
 						</div>
 					</div>
 					{#if !users.length}
 						<p>Šiuo metu nėra registruotų naudotojų.</p>
 					{:else}
-						<table class="users-table">
+						<table class="admin-table">
 							<thead>
 								<tr>
 									<th>El. paštas</th>
@@ -280,45 +282,53 @@
 					{/if}
 				</article>
 
-				<div class="users__stack">
-					<article class="users__card users__card--form">
-						<h2>Naujas kvietimas</h2>
-						<form class="invite-form" on:submit|preventDefault={handleInviteSubmit}>
-							<label for="invite-email">El. paštas</label>
-							<input
-								id="invite-email"
-								type="email"
-								required
-								placeholder="vardas@pavyzdys.lt"
-								bind:value={inviteForm.email}
-							/>
+				<div class="users__stack admin-grid">
+					<article class="admin-card users__card users__card--form">
+						<h2 class="admin-card__title">Naujas kvietimas</h2>
+						<form class="admin-form invite-form" on:submit|preventDefault={handleInviteSubmit}>
+							<div class="admin-field">
+								<label class="admin-field__label" for="invite-email">El. paštas</label>
+								<input
+									id="invite-email"
+									type="email"
+									required
+									placeholder="vardas@pavyzdys.lt"
+									bind:value={inviteForm.email}
+								/>
+							</div>
 
-							<label for="invite-role">Rolė</label>
-							<select id="invite-role" bind:value={inviteForm.role}>
-								{#each roleOptions as option}
-									<option value={option.value}>{option.label}</option>
-								{/each}
-							</select>
+							<div class="admin-field">
+								<label class="admin-field__label" for="invite-role">Rolė</label>
+								<select id="invite-role" bind:value={inviteForm.role}>
+									{#each roleOptions as option}
+										<option value={option.value}>{option.label}</option>
+									{/each}
+								</select>
+							</div>
 
-							<label for="invite-expiry">Galiojimas</label>
-							<select id="invite-expiry" bind:value={inviteForm.expiresInHours}>
-								{#each expiryOptions as option}
-									<option value={option.value}>{option.label}</option>
-								{/each}
-							</select>
+							<div class="admin-field">
+								<label class="admin-field__label" for="invite-expiry">Galiojimas</label>
+								<select id="invite-expiry" bind:value={inviteForm.expiresInHours}>
+									{#each expiryOptions as option}
+										<option value={option.value}>{option.label}</option>
+									{/each}
+								</select>
+							</div>
 
 							{#if inviteFormMessage}
-								<p class:success={inviteFormState === 'success'} class:error={inviteFormState === 'error'}>
+								<p
+									class={`invite-form__notice admin-alert ${inviteFormState === 'success' ? 'invite-form__notice--success' : 'admin-alert--error'}`}
+								>
 									{inviteFormMessage}
 								</p>
 							{/if}
 
 							<div class="invite-form__actions">
-								<button type="submit" class="primary" disabled={inviteFormState === 'submitting'}>
+								<button type="submit" class="admin-button admin-button--primary" disabled={inviteFormState === 'submitting'}>
 									{inviteFormState === 'submitting' ? 'Siunčiame…' : 'Siųsti kvietimą'}
 								</button>
 								{#if inviteShareVisible && inviteShareLink}
-									<button type="button" class="secondary" on:click={copyInviteLink}>
+									<button type="button" class="admin-button admin-button--secondary" on:click={copyInviteLink}>
 										Kopijuoti nuorodą
 									</button>
 								{/if}
@@ -326,7 +336,7 @@
 						</form>
 					</article>
 
-					<article class="users__card">
+					<article class="admin-card users__card">
 						<h2>Laukiantys kvietimai</h2>
 						{#if !invites.length}
 							<p>Nėra aktyvių kvietimų.</p>
@@ -336,13 +346,13 @@
 									<li>
 										<div>
 											<strong>{invite.email}</strong>
-											<span class={`status status--${invite.status}`}>{inviteStatus(invite)}</span>
+											<span class={`status-chip status-chip--${invite.status}`}>{inviteStatus(invite)}</span>
 											<p>Galioja iki {formatDate(invite.expiresAt)}</p>
 										</div>
 										{#if isPending(invite)}
 											<button
 												type="button"
-												class="secondary"
+												class="admin-button admin-button--secondary"
 												on:click={() => handleInviteRevoke(invite.id)}
 												disabled={revokingInvites.has(invite.id)}
 											>
@@ -361,190 +371,89 @@
 </section>
 
 <style>
-	.users {
-		display: grid;
-		gap: 1.5rem;
-		padding: 1rem;
-	}
-
 	.users__header {
-		display: flex;
-		justify-content: space-between;
 		align-items: center;
+		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
+		justify-content: space-between;
 	}
 
-	.users__state,
-	.users__error {
-		padding: 1rem;
-		border-radius: 0.75rem;
-	}
-
-	.users__error {
-		background: rgba(220, 38, 38, 0.1);
-		color: #7f1d1d;
-	}
-
-	.users__state {
-		background: var(--color-panel);
+	.users__header p {
+		color: var(--color-text-soft);
+		margin: 0.3rem 0 0;
 	}
 
 	.users__grid {
-		display: grid;
-		grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
-		gap: 1rem;
 		align-items: start;
 	}
 
-	.users__stack {
-		display: grid;
-		gap: 1rem;
-	}
-
-	.users__banner {
-		padding: 0.9rem 1rem;
-		border-radius: 0.8rem;
-		background: rgba(59, 130, 246, 0.1);
-		border: 1px solid rgba(59, 130, 246, 0.3);
-		color: #1d4ed8;
-		font-size: 0.95rem;
-	}
-
-	.users__card {
-		background: var(--color-panel, #fff);
-		border: 1px solid var(--color-border, #e5e7eb);
-		border-radius: 0.85rem;
-		padding: 1.25rem;
-		box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
-		display: grid;
-		gap: 0.75rem;
-	}
-
 	.users__card-header {
+		align-items: flex-start;
 		display: flex;
 		justify-content: space-between;
-		align-items: flex-start;
 	}
 
-	.users__card-subtitle {
-		margin: 0.2rem 0 0;
-		color: #64748b;
-		font-size: 0.9rem;
-	}
-
-	.invite-form {
-		display: grid;
-		gap: 0.75rem;
-	}
-
-	.invite-form input,
-	.invite-form select {
-		padding: 0.75rem 0.9rem;
-		border-radius: 0.75rem;
-		border: 1px solid var(--color-border, #d0d5dd);
+	.users__card--list {
+		overflow-x: auto;
 	}
 
 	.invite-form__actions {
 		display: flex;
-		gap: 0.5rem;
 		flex-wrap: wrap;
+		gap: 0.6rem;
 	}
 
-	button.primary,
-	button.secondary {
-		border: none;
-		border-radius: 0.75rem;
-		padding: 0.85rem 1rem;
-		font-weight: 600;
-		cursor: pointer;
+	.invite-form__notice {
+		font-size: 0.9rem;
+		margin: 0;
 	}
 
-	button.primary {
-		background: var(--brand-primary, #0f62fe);
-		color: #fff;
-	}
-
-	button.secondary {
-		background: var(--color-panel-hover, #f4f6fb);
-	}
-
-	.users-table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.users-table th,
-	.users-table td {
-		padding: 0.65rem;
-		text-align: left;
-		border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-	}
-
-	.users-table select {
-		width: 100%;
-		padding: 0.4rem;
-		border-radius: 0.5rem;
+	.invite-form__notice--success {
+		background: rgba(34, 197, 94, 0.12);
+		border: 1px solid rgba(34, 197, 94, 0.25);
+		color: #166534;
 	}
 
 	.invite-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
 		display: grid;
-		gap: 0.75rem;
+		gap: 0.85rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
 	}
 
 	.invite-list li {
-		display: flex;
-		justify-content: space-between;
 		align-items: center;
+		border-bottom: 1px solid var(--color-border-light, rgba(148, 163, 184, 0.25));
+		display: flex;
 		gap: 0.75rem;
-		padding-bottom: 0.75rem;
-		border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+		justify-content: space-between;
+		padding-bottom: 0.85rem;
 	}
 
 	.invite-list li:last-child {
 		border-bottom: none;
 	}
 
-	.status {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		border-radius: 999px;
-		padding: 0.15rem 0.6rem;
-		font-size: 0.85rem;
-	}
-
-	.status--pending {
-		background: #fef3c7;
-		color: #92400e;
-	}
-
-	.status--accepted {
-		background: #dcfce7;
-		color: #166534;
-	}
-
-	.status--revoked {
-		background: #fee2e2;
-		color: #991b1b;
-	}
-
-	.status--expired {
-		background: #e0e7ff;
-		color: #3730a3;
-	}
-
 	.muted {
-		color: #64748b;
+		color: var(--color-text-soft);
 		font-size: 0.9rem;
 	}
 
-	@media (max-width: 960px) {
-		.users__grid {
-			grid-template-columns: 1fr;
+	@media (max-width: 640px) {
+		.users__header {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+
+		.invite-form__actions {
+			flex-direction: column;
+		}
+
+		.invite-form__actions .admin-button {
+			width: 100%;
 		}
 	}
 </style>
+
