@@ -62,39 +62,6 @@ With media MVP complete, this session pivots to authentication, admin user manag
    - Update `docs/TESTING_GUIDE.md` with new smoke tests: request magic-link, follow callback, confirm Supabase session persists, hit `/admin/status`.
    - Extend `docs/references/API_CONTRACTS.md` to cover the new `/auth/*` endpoints and expected error codes.
 
-### Step 2 – AUTH-002 Learner Profiles & Admin Invite Console (3–4 days)
-
-1. **Schema & migrations**
-   - Create Supabase migration `0013_auth_profiles.sql` defining `profiles` (id uuid references auth user, preferred_language, callsign, role enum) and `admin_invites` (token, email, role, expires_at, invited_by).
-   - Add RLS policies: learners can `select/update` their own `profiles` row; only service-role/admin JWTs can read/write `admin_invites`.
-2. **Backend services**
-   - Extend `data/repositories` with `profileRepository.ts` (CRUD) and `adminInviteRepository.ts` (issue, revoke, accept). Use service client for invite issuance so tokens store hashed secrets (e.g., `argon2` hashed `invite_token`).
-   - Create `backend/src/routes/admin/users.ts` with endpoints:
-     - `GET /admin/users` – returns paginated list of admins + pending invites.
-     - `POST /admin/users/invite` – writes invite, triggers Supabase magic-link to `email`, stores audit via `logAdminSessionEvent`.
-     - `PATCH /admin/users/:id/role` – toggles between `admin`/`learner` (guards against demoting the last admin).
-     - `DELETE /admin/users/invite/:token` – cancels invite.
-   - Hook router under `backend/src/routes/admin.ts` and reuse `requireAdminRole` middleware already active on the parent router.
-3. **Frontend admin experience**
-   - Build `/frontend/src/routes/admin/users/+page.svelte` that consumes the above endpoints through `adminFetch`. Include three panels: active admins table, pending invites list, and invite form.
-   - Reuse design tokens from `MediaManager` for tables/search to keep UI consistent; share components via `frontend/src/lib/components/admin/Table.svelte` if duplication occurs.
-   - Wire the new route tile on `/admin/+page.svelte` (“Naudotojų valdymas”) once guarded endpoints exist.
-4. **Learner profile bootstrap**
-   - After Supabase login completes, call `POST /api/v1/profile` (new route) to ensure a profile row exists. Populate default language from browser locale; keep optional callsign blank.
-   - Provide `/profilis/+page.svelte` for learners to edit profile fields; reuse `authStore` so state updates propagate to AppShell.
-5. **Docs + Ops**
-   - Update `docs/references/PERSONAS_PERMISSIONS.md` to reflect that admin allowlist now lives entirely inside invites + role toggles.
-   - Extend `docs/ADMIN_SETUP.md` with invite issuance runbook, including “lost invite” and “rotate admin” steps.
-
-### Step 3 – ADM-006 Admin User Management Console Polish (1–2 days)
-
-- Layer additional UX niceties onto `/admin/users`:
-  - Search/filter by email/status, infinite scroll tied to backend cursor.
-  - Inline actions to resend invite emails (backend reuses Supabase OTP) and copy invite links.
-  - Activity log drawer pulling from `logAdminSessionEvent` output so admins can audit who invited/edited roles.
-- Add optimistic UI updates and toast feedback using the existing admin toast helpers.
-- Extend `docs/TESTING_GUIDE.md` with regression steps: invite a user, ensure email arrives, accept invite, verify role toggles.
-
 ### Step 4 – AUTH-003 Device-Key Coexistence & Sunset Toolkit (2 days)
 
 1. **Telemetry + monitoring**
@@ -146,10 +113,9 @@ With media MVP complete, this session pivots to authentication, admin user manag
 ## Next Implementation Tasks
 
 1. AUTH-001 groundwork – seeds for Supabase magic-link auth, environment wiring, and basic login UI scaffolding.
-2. AUTH-002 – admin invite workflow UI + backend endpoints.
-3. ADM-006 – build `/admin/users` management console with invite list, role toggle, and activity log.
-4. PROG-001 – implement progress persistence schema + API surface.
-5. PROG-002 – wire learner UI to the new progress endpoints and surface basic admin insights.
+2. PROG-001 – implement progress persistence schema + API surface (device-key coexistence + feature flags).
+3. PROG-002 – wire learner UI to the new progress endpoints and surface basic admin insights.
+4. Deferred backlog (AUTH-002 / ADM-006) – admin invites and `/admin/users` console remain out of scope unless roadmap changes.
 
 ## Session Log
 

@@ -115,7 +115,8 @@ export type ProgressStatus = ConceptStatus;
 
 export interface ConceptProgressRow {
   concept_id: string;
-  device_key: string;
+  device_key: string | null;
+  user_id: string | null;
   status: ProgressStatus | null;
   last_reviewed_at: string;
   created_at: string;
@@ -124,7 +125,8 @@ export interface ConceptProgressRow {
 
 export interface ConceptProgress {
   conceptId: string;
-  deviceKey: string;
+  deviceKey: string | null;
+  userId: string | null;
   status: ProgressStatus;
   lastReviewedAt: string;
   createdAt: string;
@@ -133,7 +135,8 @@ export interface ConceptProgress {
 
 export interface UpsertProgressInput {
   concept_id: string;
-  device_key: string;
+  device_key?: string | null;
+  user_id?: string | null;
   status?: ProgressStatus;
   last_reviewed_at?: string;
 }

@@ -4,13 +4,25 @@ This log captures authoritative decisions about the evolving Supabase schema so 
 
 ## 2025-11-06 – Concept Draft Status Metadata
 
-- **Tables**: `concepts`
-  - Draft/published state stores inside the `metadata` JSON column under the `status` key.
-  - Service defaults the value to `draft` when absent so legacy rows remain editable without migration.
-  - Admin API normalises optional metadata fields while preserving unknown keys for forward compatibility.
-- **Validation**: Shared schema (`shared/validation/adminConceptSchema.ts`) requires the request body to provide an explicit `status` (`draft` or `published`) and rejects mismatched `metadata.status` values.
-- **Audit logging**: Concept saves continue to write a row to `content_versions` with the requested `status` so moderation workflows can track promotion from draft to published.
-- **Follow-up**: Revisit once Supabase RLS rules enforce per-status visibility; until then, learners keep reading from the public view and ignore draft flag.
+- Draft/published state stores inside the `metadata` JSON column under the `status` key.
+- Service defaults the value to `draft` when absent so legacy rows remain editable without migration.
+- Admin API normalises optional metadata fields while preserving unknown keys for forward compatibility.
+
+## 2025-12-03 – Authenticated Progress Entries
+
+- **Tables**: `concept_progress`
+  - Added `user_id uuid references auth.users(id)` so authenticated learners can sync progress across devices. Existing rows keep `user_id = null` and continue to rely on the anonymous `device_key` column.
+  - Relaxed `device_key` to allow NULL; at least one of `user_id` or `device_key` must be supplied by the API layer when inserting/upserting records.
+  - Introduced surrogate key `id uuid default gen_random_uuid()` and redefined the primary key on this column so we can maintain simultaneous `(concept_id, user_id)` and `(concept_id, device_key)` uniqueness rules without overlapping composite constraints.
+  - Created filtered unique index `concept_progress_user_unique_idx` on `(concept_id, user_id)` (only when `user_id IS NOT NULL`) so each learner maintains a single row per concept regardless of device count.
+  - Added helper index `concept_progress_user_idx` to accelerate lookups for learner dashboards.
+- **Views**: `public.burburiuok_concept_progress`
+  - Now exposes `user_id` alongside `device_key` so the backend can merge authenticated rows with any remaining anonymous history during the transition.
+- **API / Backend**:
+  - `/api/v1/progress` accepts either a Supabase bearer token (preferred) or the legacy `x-device-key`. When both are present, user-linked rows are returned first and device-only leftovers append behind them.
+  - Writes automatically upsert by `(concept_id, user_id)` when authenticated and fall back to `(concept_id, device_key)` for anonymous sessions. Deletes honour whichever identifier was supplied.
+  - Rate limiting now keys off `user_id` when available; otherwise it continues to bucket by `device_key`.
+- **Follow-up**: AUTH-003 will add telemetry + a migration script that hashes historical device keys into `profiles.device_key_hash` and re-keys progress rows so we can eventually disable anonymous writes entirely.
 
 ## 2025-11-03 – Curriculum Dependencies
 
