@@ -134,6 +134,7 @@ With media MVP complete, this session pivots to authentication, admin user manag
 - Device-key migration path must be defined early to avoid data loss when progress moves to authenticated profiles.
 - Admin surface expansion could reintroduce `/admin` performance issues; ensure pagination/search requirements are part of the spec.
 - Progress analytics will require careful messaging to avoid privacy concerns; coordinate documentation with roadmap updates.
+- Supabase Security Advisor now flags the lack of per-user RLS on canonical curriculum/progress tables; capture remediation steps for these once authenticated learner work (AUTH-003+) re-keys writes away from device-only storage so we can layer owner policies without blocking service-role pipelines.
 
 ## Documentation & Tracking
 
