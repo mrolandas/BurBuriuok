@@ -323,8 +323,16 @@
 	<header class="app-shell__header">
 		<div class="app-shell__brand">
 			<a class="app-shell__brand-link" href={resolve('/')} aria-label="BurKursas pradžia">
-				<span class="app-shell__brand-mark">BurKursas</span>
-				<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
+				<svg class="app-shell__brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M12 2L2 22h20L12 2z"></path>
+					<path d="M2 22h20"></path>
+					<path d="M12 2v20"></path>
+					<path d="M12 12H4"></path>
+				</svg>
+				<div class="app-shell__brand-text">
+					<span class="app-shell__brand-mark">BurKursas</span>
+					<span class="app-shell__brand-subtitle">Mokymosi padėjėjas</span>
+				</div>
 			</a>
 		</div>
 		<div class="app-shell__controls">
@@ -714,25 +722,45 @@
 	}
 
 	.app-shell__brand {
-		flex: 1 1 auto;
+		flex: 0 0 auto;
 		min-width: 0;
 	}
 
 	.app-shell__brand-link {
 		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
+		align-items: center;
+		gap: 0.75rem;
 		text-decoration: none;
+		color: var(--color-text);
+		transition: opacity 0.2s ease;
+	}
+
+	.app-shell__brand-link:hover {
+		opacity: 0.8;
+	}
+
+	.app-shell__brand-logo {
+		width: 2rem;
+		height: 2rem;
+		color: var(--color-accent);
+	}
+
+	.app-shell__brand-text {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.1;
 	}
 
 	.app-shell__brand-mark {
-		font-size: clamp(1.2rem, 2.6vw, 1.6rem);
-		font-weight: 600;
-		letter-spacing: 0.05em;
+		font-size: 1.3rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		color: var(--color-text);
 	}
 
 	.app-shell__brand-subtitle {
-		font-size: 0.85rem;
+		font-size: 0.75rem;
+		font-weight: 500;
 		color: var(--color-text-muted);
 	}
 

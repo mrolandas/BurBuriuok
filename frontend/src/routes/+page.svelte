@@ -134,12 +134,17 @@
 
 	const cleanTitle = (title: string) => title.replace(/\s*\([^)]*\)\s*$/, '').trim();
 
-	const formatSummary = (summary: string | null, title: string) => {
-		const trimmed = summary?.trim();
-		if (trimmed && trimmed.length) {
-			return trimmed;
+	const formatTitle = (title: string) => {
+		const cleaned = cleanTitle(title);
+		// Check if title is mostly uppercase (simple heuristic: more than 50% uppercase letters)
+		const upperCount = cleaned.replace(/[^A-ZĄČĘĖĮŠŲŪŽ]/g, '').length;
+		const letterCount = cleaned.replace(/[^a-zA-ZąčęėįšųūžĄČĘĖĮŠŲŪŽ]/g, '').length;
+		
+		if (letterCount > 0 && upperCount / letterCount > 0.8) {
+			// Convert to sentence case
+			return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
 		}
-		return `${title} skilties aprašas bus papildytas netrukus.`;
+		return cleaned;
 	};
 
 	type AvatarSegment = {
@@ -159,78 +164,106 @@
 		icon: AvatarSegment[];
 	};
 
-	const avatarThemes: AvatarTheme[] = [
-		{
-			background: 'rgba(56, 189, 248, 0.16)',
-			border: 'rgba(14, 165, 233, 0.36)',
-			iconColor: '#0f172a',
+	const sectionThemes: Record<string, AvatarTheme> = {
+		'1': { // Konstrukcija
+			background: 'rgba(6, 182, 212, 0.12)',
+			border: 'rgba(8, 145, 178, 0.25)',
+			iconColor: '#0891b2',
 			icon: [
-				{ d: 'M12 4l5.5 9H6.5z', fill: 'currentColor', fillRule: 'evenodd' },
-				{ d: 'M5 18h14', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' }
+				{ d: 'M2 20a2.4 2.4 0 0 0 2 2h16a2.4 2.4 0 0 0 2-2c0-1.14-.9-2.08-2-2.15V14a2 2 0 0 0-2-2h-2v-2h2a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2H6a2 2 0 0 0-2 2v3.85A2.15 2.15 0 0 0 2 20zM6 4h12v4H6V4zm2 6h8v2H8v-2zm-2 4h12v4H6v-4z', fill: 'currentColor' }
 			]
 		},
-		{
-			background: 'rgba(249, 115, 22, 0.18)',
-			border: 'rgba(234, 88, 12, 0.32)',
-			iconColor: '#7c2d12',
+		'2': { // Teorija (Wind/Sails)
+			background: 'rgba(139, 92, 246, 0.12)',
+			border: 'rgba(124, 58, 237, 0.25)',
+			iconColor: '#7c3aed',
 			icon: [
-				{ d: 'M12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z', stroke: 'currentColor', strokeWidth: 1.4 },
-				{ d: 'M12 8l2.4 4L10 13.6z', fill: 'currentColor', fillRule: 'evenodd' }
+				{ d: 'M12.8 2.6l-3.6 11.4 6.8 1.4-10.4 6 3.6-11.4-6.8-1.4 10.4-6z', stroke: 'currentColor', strokeWidth: 1.5, strokeLinejoin: 'round', fill: 'none' }
 			]
 		},
-		{
-			background: 'rgba(16, 185, 129, 0.16)',
-			border: 'rgba(5, 150, 105, 0.28)',
-			iconColor: '#065f46',
+		'3': { // Valdymas (Helm)
+			background: 'rgba(249, 115, 22, 0.12)',
+			border: 'rgba(234, 88, 12, 0.25)',
+			iconColor: '#ea580c',
 			icon: [
-				{
-					d: 'M4 15c2.2 2 4.4 2 6.6 0s4.4-2 6.6 0 4.4 2 6.6 0',
-					stroke: 'currentColor',
-					strokeWidth: 1.6,
-					strokeLinecap: 'round'
-				}
+				{ d: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z', fill: 'currentColor', fillRule: 'evenodd' },
+				{ d: 'M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0', fill: 'currentColor' },
+				{ d: 'M12 2v4M12 18v4M2 12h4M18 12h4', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' }
 			]
 		},
-		{
-			background: 'rgba(236, 72, 153, 0.16)',
-			border: 'rgba(219, 39, 119, 0.32)',
-			iconColor: '#9d174d',
+		'4': { // Sauga (Lifebuoy/Cross)
+			background: 'rgba(239, 68, 68, 0.12)',
+			border: 'rgba(220, 38, 38, 0.25)',
+			iconColor: '#dc2626',
 			icon: [
-				{
-					d: 'M12 6l1.8 3.8 4.2.6-3 3 0.7 4.2L12 16.6 8.3 17.6 9 13.4l-3-3 4.2-.6z',
-					fill: 'currentColor',
-					fillRule: 'evenodd'
-				}
+				{ d: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+				{ d: 'M12 7v10M7 12h10', stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }
 			]
 		},
-		{
-			background: 'rgba(129, 140, 248, 0.18)',
-			border: 'rgba(99, 102, 241, 0.32)',
-			iconColor: '#4338ca',
+		'5': { // Meteorologija (Cloud/Sun)
+			background: 'rgba(14, 165, 233, 0.12)',
+			border: 'rgba(2, 132, 199, 0.25)',
+			iconColor: '#0284c7',
 			icon: [
-				{
-					d: 'M6 8l6-2 6 2v8l-6 2-6-2z',
-					stroke: 'currentColor',
-					strokeWidth: 1.6,
-					strokeLinejoin: 'round'
-				},
-				{ d: 'M6 8l6 2 6-2', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round' }
+				{ d: 'M17 17a5 5 0 0 0 2-9.9V7a7 7 0 0 0-13.8 1.6A5 5 0 0 0 7 17h10z', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' }
+			]
+		},
+		'6': { // Navigacija (Compass)
+			background: 'rgba(16, 185, 129, 0.12)',
+			border: 'rgba(5, 150, 105, 0.25)',
+			iconColor: '#059669',
+			icon: [
+				{ d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' },
+				{ d: 'M12 8v8M8 12h8', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' }
+			]
+		},
+		'7': { // Teisė (Scale/Book)
+			background: 'rgba(79, 70, 229, 0.12)',
+			border: 'rgba(67, 56, 202, 0.25)',
+			iconColor: '#4f46e5',
+			icon: [
+				{ d: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', fill: 'none' },
+				{ d: 'M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round', fill: 'none' }
+			]
+		},
+		'8': { // CEVNI (Sign)
+			background: 'rgba(217, 70, 239, 0.12)',
+			border: 'rgba(192, 38, 211, 0.25)',
+			iconColor: '#c026d3',
+			icon: [
+				{ d: 'M12 2L2 22h20L12 2z', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' },
+				{ d: 'M12 16v.01M12 8v4', stroke: 'currentColor', strokeWidth: 2.5, strokeLinecap: 'round' }
+			]
+		},
+		'9': { // COLREGS (Ships/Traffic)
+			background: 'rgba(245, 158, 11, 0.12)',
+			border: 'rgba(217, 119, 6, 0.25)',
+			iconColor: '#d97706',
+			icon: [
+				{ d: 'M3 11l18-5v12L3 14v-3z', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' },
+				{ d: 'M11.6 16.8L3 14', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' }
+			]
+		},
+		'10': { // Praktika (Anchor)
+			background: 'rgba(37, 99, 235, 0.12)',
+			border: 'rgba(29, 78, 216, 0.25)',
+			iconColor: '#1d4ed8',
+			icon: [
+				{ d: 'M12 2v20M5 12H2a10 10 0 0 0 20 0h-3', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', fill: 'none' },
+				{ d: 'M12 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', fill: 'currentColor' }
 			]
 		}
-	];
+	};
 
-	const hashCode = (value: string) => {
-		let hash = 0;
-		for (let index = 0; index < value.length; index += 1) {
-			hash = (hash << 5) - hash + value.charCodeAt(index);
-			hash |= 0;
-		}
-		return Math.abs(hash);
+	const defaultTheme: AvatarTheme = {
+		background: 'rgba(148, 163, 184, 0.12)',
+		border: 'rgba(100, 116, 139, 0.25)',
+		iconColor: '#64748b',
+		icon: [{ d: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' }]
 	};
 
 	const selectTheme = (code: string) => {
-		const index = hashCode(code) % avatarThemes.length;
-		return avatarThemes[index] ?? avatarThemes[0];
+		return sectionThemes[code] ?? defaultTheme;
 	};
 
 	const formatCount = (value: number, singular: string, few: string, many: string) => {
@@ -385,11 +418,6 @@
 
 <header class="hero">
 	<div class="hero__content">
-		<h1 class="hero__title">Buriavimo teorijos gidas</h1>
-		<p class="hero__subtitle">
-			Išsamus žinynas pradedantiesiems ir pažengusiems buriuotojams.
-		</p>
-		
 		<form class="hero__search" onsubmit={handleHeroSearch}>
 			<div class="hero__search-wrapper">
 				<svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -415,8 +443,7 @@
 		</div>
 	{:else}
 		{#each sections as section (section.code)}
-			{@const title = cleanTitle(section.title)}
-			{@const description = formatSummary(section.summary, title)}
+			{@const title = formatTitle(section.title)}
 			{@const theme = selectTheme(section.code)}
 			{@const metaLabel = formatMeta(section)}
 			{@const sectionLabel = `Skyrius #${section.ordinal}`}
@@ -428,41 +455,41 @@
 					href={resolve('/sections/[code]', { code: section.code })}
 					aria-labelledby={`section-${domId}`}
 				>
-					<div class="section-card__header">
-						<span
-							class="section-card__avatar"
-							style={`background:${theme.background};border-color:${theme.border};color:${theme.iconColor};`}
-						>
-							<svg viewBox="0 0 24 24" role="presentation" focusable="false" aria-hidden="true">
-								{#each theme.icon as segment, index (index)}
-									<path
-										d={segment.d}
-										fill={segment.fill ?? 'none'}
-										stroke={segment.stroke ?? theme.iconColor}
-										stroke-width={segment.strokeWidth}
-										stroke-linecap={segment.strokeLinecap}
-										stroke-linejoin={segment.strokeLinejoin}
-										fill-rule={segment.fillRule}
-									></path>
-								{/each}
-							</svg>
-						</span>
-						<span class="section-card__ordinal">{sectionLabel}</span>
+					<div 
+						class="section-card__visual"
+						style={`background:${theme.background};color:${theme.iconColor};`}
+					>
+						<svg viewBox="0 0 24 24" role="presentation" focusable="false" aria-hidden="true">
+							{#each theme.icon as segment, index (index)}
+								<path
+									d={segment.d}
+									fill={segment.fill ?? 'none'}
+									stroke={segment.stroke ?? theme.iconColor}
+									stroke-width={segment.strokeWidth}
+									stroke-linecap={segment.strokeLinecap}
+									stroke-linejoin={segment.strokeLinejoin}
+									fill-rule={segment.fillRule}
+								></path>
+							{/each}
+						</svg>
 					</div>
 					
-					<div class="section-card__content">
+					<div class="section-card__body">
+						<div class="section-card__header">
+							<span class="section-card__ordinal">{sectionLabel}</span>
+						</div>
+						
 						<h2 class="section-card__title" id={`section-${domId}`}>{title}</h2>
-						<p class="section-card__summary">{description}</p>
-					</div>
-					
-					<div class="section-card__footer">
-						<span class="section-card__meta-counts">{metaLabel}</span>
-						<span class="section-card__arrow">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<line x1="5" y1="12" x2="19" y2="12"></line>
-								<polyline points="12 5 19 12 12 19"></polyline>
-							</svg>
-						</span>
+						
+						<div class="section-card__footer">
+							<span class="section-card__meta-counts">{metaLabel}</span>
+							<span class="section-card__arrow">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<line x1="5" y1="12" x2="19" y2="12"></line>
+									<polyline points="12 5 19 12 12 19"></polyline>
+								</svg>
+							</span>
+						</div>
 					</div>
 				</a>
 				
@@ -569,7 +596,7 @@
 	.hero {
 		width: min(100%, var(--layout-max-width));
 		margin: 0 auto;
-		padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 2rem);
+		padding: 0 clamp(1rem, 3vw, 2rem) clamp(1.5rem, 4vw, 3rem);
 		text-align: center;
 		display: flex;
 		flex-direction: column;
@@ -582,10 +609,10 @@
 	}
 
 	.hero__title {
-		font-size: clamp(2.5rem, 6vw, 4.5rem);
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
 		font-weight: 800;
 		line-height: 1.1;
-		margin: 0 0 1.5rem;
+		margin: 0 0 1rem;
 		letter-spacing: -0.02em;
 		background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-strong) 100%);
 		-webkit-background-clip: text;
@@ -594,9 +621,9 @@
 	}
 
 	.hero__subtitle {
-		font-size: clamp(1.1rem, 2vw, 1.35rem);
+		font-size: clamp(1rem, 1.5vw, 1.1rem);
 		color: var(--color-text-muted);
-		margin: 0 auto 3rem;
+		margin: 0 auto 2rem;
 		line-height: 1.6;
 		max-width: 36rem;
 	}
@@ -649,8 +676,8 @@
 		width: min(100%, var(--layout-max-width));
 		margin: 0 auto;
 		display: grid;
-		gap: 2rem;
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
 		padding: 0 clamp(1rem, 3vw, 2rem) 6rem;
 	}
 
@@ -668,12 +695,11 @@
 	.section-card {
 		position: relative;
 		background: var(--color-surface);
-		border-radius: 1.5rem;
+		border-radius: 1.25rem;
 		border: 1px solid var(--color-border);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		display: flex;
-		flex-direction: column;
 		overflow: hidden;
+		height: 100%;
 	}
 
 	.section-card:hover {
@@ -683,13 +709,12 @@
 	}
 
 	.section-card__link {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		padding: 2rem;
+		display: grid;
+		grid-template-columns: 110px 1fr;
+		gap: 1.5rem;
+		height: 100%;
 		text-decoration: none;
 		color: inherit;
-		gap: 1.5rem;
 	}
 
 	.section-card__link:focus-visible {
@@ -701,79 +726,69 @@
 		outline-offset: 4px;
 	}
 
+	.section-card__visual {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 1.5rem;
+		position: relative;
+	}
+
+	.section-card__visual svg {
+		width: 100%;
+		height: 100%;
+		max-width: 3.5rem;
+		max-height: 3.5rem;
+		filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+		transition: transform 0.3s ease;
+	}
+
+	.section-card:hover .section-card__visual svg {
+		transform: scale(1.1) rotate(-5deg);
+	}
+
+	.section-card__body {
+		display: flex;
+		flex-direction: column;
+		padding: 1.25rem 1.5rem 1.25rem 0;
+		gap: 0.5rem;
+	}
+
 	.section-card__header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.section-card__avatar {
-		width: 3.5rem;
-		height: 3.5rem;
-		border-radius: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: transform 0.3s ease;
-	}
-
-	.section-card:hover .section-card__avatar {
-		transform: scale(1.1) rotate(-5deg);
-	}
-
-	.section-card__avatar svg {
-		width: 1.75rem;
-		height: 1.75rem;
 	}
 
 	.section-card__ordinal {
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--color-text-subtle);
-		background: var(--color-surface-alt);
-		padding: 0.35rem 0.75rem;
-		border-radius: 999px;
-	}
-
-	.section-card__content {
-		flex: 1;
 	}
 
 	.section-card__title {
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		font-weight: 700;
-		line-height: 1.2;
-		margin: 0 0 0.75rem;
-		color: var(--color-text);
-	}
-
-	.section-card__summary {
-		font-size: 1rem;
-		line-height: 1.6;
-		color: var(--color-text-muted);
+		line-height: 1.3;
 		margin: 0;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		color: var(--color-text);
 	}
 
 	.section-card__footer {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border-light);
 		margin-top: auto;
+		padding-top: 0.75rem;
 	}
 
 	.section-card__meta-counts {
-		font-size: 0.9rem;
-		font-weight: 600;
-		color: var(--color-text-subtle);
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--color-text-muted);
 	}
 
 	.section-card__arrow {
@@ -784,8 +799,8 @@
 	}
 
 	.section-card__arrow svg {
-		width: 1.5rem;
-		height: 1.5rem;
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
 	.section-card:hover .section-card__arrow {
@@ -795,10 +810,10 @@
 
 	.section-card__edit {
 		position: absolute;
-		top: 1rem;
-		right: 1rem;
-		width: 2.5rem;
-		height: 2.5rem;
+		top: 0.5rem;
+		right: 0.5rem;
+		width: 2rem;
+		height: 2rem;
 		border-radius: 50%;
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
@@ -809,6 +824,7 @@
 		cursor: pointer;
 		transition: all 0.2s ease;
 		opacity: 0;
+		z-index: 2;
 	}
 
 	.section-card:hover .section-card__edit,
@@ -823,8 +839,26 @@
 	}
 
 	.section-card__edit svg {
-		width: 1.25rem;
-		height: 1.25rem;
+		width: 1rem;
+		height: 1rem;
+	}
+
+	@media (max-width: 640px) {
+		.hero {
+			padding: 2rem 1rem;
+		}
+		
+		.section-card__link {
+			grid-template-columns: 90px 1fr;
+		}
+		
+		.section-card__visual {
+			padding: 1rem;
+		}
+		
+		.section-card__body {
+			padding: 1rem 1rem 1rem 0;
+		}
 	}
 
 	/* Status Block & Toast Styles (kept mostly same but updated vars) */
