@@ -20,9 +20,20 @@
 	} from '$lib/admin/conceptInlineEdit';
 	import { type InlineFieldErrors } from '$lib/admin/inlineAdvancedSummary';
 	import { page } from '$app/stores';
-	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import AdminMediaCreateDrawer from '$lib/admin/media/AdminMediaCreateDrawer.svelte';
 	import type { MediaConceptOption } from '$lib/admin/media/types';
+	import {
+		initializeProgressTracking,
+		learnerProgress,
+		learnerProgressError,
+		learnerProgressPending,
+		learnerProgressStatus,
+		setConceptProgressStatus,
+		type ConceptProgressRecord,
+		type ProgressStoreStatus,
+		type ProgressStatus as LearnerProgressStatus
+	} from '$lib/stores/progressStore';
 
 	type Breadcrumb = {
 		label: string;
@@ -40,8 +51,6 @@
 		previous?: NeighborLink | null;
 		next?: NeighborLink | null;
 	};
-
-	const conceptActionState: Record<string, { learning: boolean; known: boolean }> = {};
 
 	type Props = {
 		concept: ConceptDetailData;
@@ -67,11 +76,6 @@
 	const adminHasAccess = $derived(Boolean(adminContext?.session.allowed));
 
 	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset';
-	const dispatch = createEventDispatcher<{
-		setLearning: { conceptId: string; learning: boolean };
-		setKnown: { conceptId: string; known: boolean };
-	}>();
-
 	const descriptionLt = $derived(concept?.descriptionLt?.trim() ?? '');
 	const descriptionEn = $derived(concept?.descriptionEn?.trim() ?? '');
 	const initialInlineForm = concept ? conceptToInlineForm(concept) : createEmptyInlineForm();
@@ -91,6 +95,23 @@
 	let mediaLoadError = $state<string | null>(mediaError ?? null);
 	let mediaLoading = $state(false);
 	let mediaDrawerOpen = $state(false);
+	let progressRecords = $state<Map<string, ConceptProgressRecord>>(new Map());
+	let progressPendingConcepts = $state<Set<string>>(new Set());
+	let progressStoreStatus = $state<ProgressStoreStatus>('idle');
+	let progressStoreError = $state<string | null>(null);
+	let progressActionError = $state<string | null>(null);
+	let lastProgressConceptId: string | null = concept?.id ?? null;
+
+	$effect(() => {
+		const currentId = concept?.id ?? null;
+		if (currentId === lastProgressConceptId) {
+			return;
+		}
+		lastProgressConceptId = currentId;
+		progressActionError = null;
+		lastAction = 'idle';
+		actionMessage = '';
+	});
 
 	const inlineDirty = $derived(computeInlineSnapshot(inlineForm) !== inlineInitialSnapshot);
 	const mediaConceptOptions = $derived(
@@ -104,13 +125,54 @@
 				] satisfies MediaConceptOption[])
 			: ([] as MediaConceptOption[])
 	);
+	const currentProgressEntry = $derived((() => {
+		const id = concept?.id ?? null;
+		if (!id) {
+			return null;
+		}
+		return progressRecords.get(id) ?? null;
+	})());
+	const progressInputsDisabled = $derived((() => {
+		const id = concept?.id ?? null;
+		if (!id) {
+			return true;
+		}
+		if (!adminContext?.session.allowed && !adminContext?.session.authenticated) {
+			return true;
+		}
+		if (progressStoreStatus === 'loading') {
+			return true;
+		}
+		return progressPendingConcepts.has(id);
+	})());
 
 	let currentUrl = $state($page.url);
 	const unsubscribePage = page.subscribe(({ url }) => {
 		currentUrl = url;
 	});
+	const unsubscribeProgress = learnerProgress.subscribe((value) => {
+		progressRecords = value;
+	});
+	const unsubscribeProgressStatus = learnerProgressStatus.subscribe((value) => {
+		progressStoreStatus = value;
+	});
+	const unsubscribeProgressError = learnerProgressError.subscribe((value) => {
+		progressStoreError = value;
+	});
+	const unsubscribeProgressPending = learnerProgressPending.subscribe((value) => {
+		progressPendingConcepts = value;
+	});
+
+	onMount(() => {
+		void initializeProgressTracking();
+	});
+
 	onDestroy(() => {
 		unsubscribePage();
+		unsubscribeProgress();
+		unsubscribeProgressStatus();
+		unsubscribeProgressError();
+		unsubscribeProgressPending();
 	});
 
 	function createEmptyInlineForm(): InlineConceptForm {
@@ -173,6 +235,12 @@
 	$effect(() => {
 		mediaItems = media ?? [];
 		mediaLoadError = mediaError ?? null;
+	});
+
+	$effect(() => {
+		const progressEntry = currentProgressEntry;
+		learningChecked = progressEntry?.status === 'learning';
+		knownChecked = progressEntry?.status === 'known';
 	});
 
 	const getInlineError = (field: string): string | null => {
@@ -321,71 +389,74 @@
 		actionMessage = getMessageForAction(action);
 	};
 
-	const persistActionState = () => {
+	async function applyProgressStatus(target: LearnerProgressStatus | null): Promise<void> {
 		if (!concept?.id) {
 			return;
 		}
 
-		conceptActionState[concept.id] = {
-			learning: learningChecked,
-			known: knownChecked
-		};
-	};
+		progressActionError = null;
+
+		const currentStatus = currentProgressEntry?.status ?? null;
+		if (currentStatus === target) {
+			const action: ActionStatus =
+				target === 'known' ? 'known' : target === 'learning' ? 'learning' : 'reset';
+			setLastAction(action);
+			return;
+		}
+
+		try {
+			await setConceptProgressStatus(concept.id, target);
+			const action: ActionStatus =
+				target === 'known' ? 'known' : target === 'learning' ? 'learning' : 'reset';
+			setLastAction(action);
+		} catch (error) {
+			console.error('[ConceptDetail] Failed to update progress', error);
+			progressActionError =
+				error instanceof Error ? error.message : 'Nepavyko atnaujinti pažangos.';
+		}
+	}
 
 	const markLearning = (value: boolean) => {
-		if (!concept?.id) {
+		if (!concept?.id || progressInputsDisabled) {
 			return;
 		}
 
 		learningChecked = value;
 		if (value) {
 			knownChecked = false;
-			setLastAction('learning');
+			void applyProgressStatus('learning');
 		} else if (!knownChecked) {
-			setLastAction('reset');
+			void applyProgressStatus(null);
 		} else {
-			setLastAction('known');
+			void applyProgressStatus('known');
 		}
-		dispatch('setLearning', { conceptId: concept.id, learning: value });
-		persistActionState();
 	};
 
 	const markKnown = (value: boolean) => {
-		if (!concept?.id) {
+		if (!concept?.id || progressInputsDisabled) {
 			return;
 		}
 
 		knownChecked = value;
 		if (value) {
 			learningChecked = false;
-			setLastAction('known');
+			void applyProgressStatus('known');
 		} else if (!learningChecked) {
-			setLastAction('reset');
+			void applyProgressStatus(null);
 		} else {
-			setLastAction('learning');
+			void applyProgressStatus('learning');
 		}
-		dispatch('setKnown', { conceptId: concept.id, known: value });
-		persistActionState();
 	};
 
 	const handleLearningChange = (event: Event) => {
 		const target = event.currentTarget as HTMLInputElement | null;
 		markLearning(Boolean(target?.checked));
 	};
-
+ 
 	const handleKnownChange = (event: Event) => {
 		const target = event.currentTarget as HTMLInputElement | null;
 		markKnown(Boolean(target?.checked));
 	};
-
-	$effect(() => {
-		const currentId = concept?.id;
-		const stored = currentId ? conceptActionState[currentId] : null;
-		learningChecked = stored?.learning ?? false;
-		knownChecked = stored?.known ?? false;
-		lastAction = 'idle';
-		actionMessage = '';
-	});
 </script>
 
 {#snippet conceptMeta()}
@@ -566,36 +637,66 @@
 {/snippet}
 
 {#snippet conceptActions()}
-	<section
-		class="concept-detail__actions-panel"
-		aria-label="Veiksmai"
-		data-last-action={lastAction}
-		data-admin-mode={adminEditEnabled ? 'enabled' : 'disabled'}
-	>
-		<label class="concept-detail__action-option">
-			<input
-				type="checkbox"
-				checked={learningChecked}
-				onchange={handleLearningChange}
-				aria-label="Pažymėti temą kaip mokausi"
-			/>
-			<span>Mokausi</span>
-		</label>
-		<label class="concept-detail__action-option">
-			<input
-				type="checkbox"
-				checked={knownChecked}
-				onchange={handleKnownChange}
-				aria-label="Pažymėti temą kaip moku"
-			/>
-			<span>Moku</span>
-		</label>
-	</section>
+	{#if adminContext?.session.authenticated}
+		<section
+			class="concept-detail__actions-panel"
+			aria-label="Veiksmai"
+			data-last-action={lastAction}
+			data-admin-mode={adminEditEnabled ? 'enabled' : 'disabled'}
+			data-progress-state={progressStoreStatus}
+			aria-busy={progressInputsDisabled}
+		>
+			<label class="concept-detail__action-option">
+				<input
+					type="checkbox"
+					checked={learningChecked}
+					onchange={handleLearningChange}
+					disabled={progressInputsDisabled}
+					aria-label="Pažymėti temą kaip mokausi"
+				/>
+				<span>Mokausi</span>
+			</label>
+			<label class="concept-detail__action-option">
+				<input
+					type="checkbox"
+					checked={knownChecked}
+					onchange={handleKnownChange}
+					disabled={progressInputsDisabled}
+					aria-label="Pažymėti temą kaip moku"
+				/>
+				<span>Moku</span>
+			</label>
+		</section>
 
-	{#if actionMessage}
-		<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
-			{actionMessage}
-		</p>
+		{#if progressStoreStatus === 'loading'}
+			<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
+				Kraunama pažanga...
+			</p>
+		{:else if progressStoreError}
+			<div class="concept-detail__actions-alert concept-detail__actions-alert--error" role="status" aria-live="polite">
+				{progressStoreError}
+			</div>
+		{/if}
+
+		{#if progressActionError}
+			<div class="concept-detail__actions-alert concept-detail__actions-alert--error" role="alert">
+				{progressActionError}
+			</div>
+		{:else if actionMessage}
+			<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
+				{actionMessage}
+			</p>
+		{/if}
+	{:else}
+		<div class="concept-detail__login-prompt">
+			<a
+				href={`/auth/login?redirectTo=${encodeURIComponent($page.url.pathname)}`}
+				class="app-shell__user-item"
+			>
+				Prisijunkite
+			</a>
+			<span class="concept-detail__login-text">, kad galėtumėte žymėti pažangą.</span>
+		</div>
 	{/if}
 {/snippet}
 
@@ -651,6 +752,31 @@
 		margin: 0;
 		font-size: 0.95rem;
 		color: var(--color-text-subtle);
+	}
+
+	.concept-detail__login-prompt {
+		margin-top: 1.5rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.95rem;
+	}
+
+	.concept-detail__login-text {
+		color: var(--color-text-muted);
+	}
+
+	.concept-detail__actions-alert {
+		margin: 0.2rem 0 0;
+		padding: 0.65rem 0.9rem;
+		border-radius: 0.7rem;
+		font-size: 0.9rem;
+	}
+
+	.concept-detail__actions-alert--error {
+		background: rgba(217, 65, 65, 0.12);
+		border: 1px solid rgba(217, 65, 65, 0.35);
+		color: #8a1c1c;
 	}
 
 	.concept-detail__media {

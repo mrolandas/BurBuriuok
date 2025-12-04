@@ -9,28 +9,84 @@
       "ordinal": 1
     },
     {
+      "code": "2",
+      "title": "BURIAVIMO TEORIJOS PAGRINDAI",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 2
+    },
+    {
+      "code": "3",
+      "title": "JACHTOS VALDYMO TECHNIKA (6 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 3
+    },
+    {
+      "code": "4",
+      "title": "SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 4
+    },
+    {
+      "code": "5",
+      "title": "HIDROMETEOROLOGIJA (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 5
+    },
+    {
+      "code": "6",
+      "title": "NAVIGACIJA, LOCIJA (4 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 6
+    },
+    {
+      "code": "7",
+      "title": "JŪRŲ TEISĖ (4 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 7
+    },
+    {
+      "code": "8",
+      "title": "EUROPOS VIDAUS VANDENŲ LAIVYBOS TAISYKLĖS – CEVNI (6 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 8
+    },
+    {
+      "code": "9",
+      "title": "TARPTAUTINĖS TAISYKLĖS LAIVŲ SUSIDŪRIMAMS JŪROJE IŠVENGTI – COLREGS (2 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 9
+    },
+    {
+      "code": "10",
+      "title": "PRAKTINIAI MOKYMAI (12 val.)",
+      "summary": null,
+      "level": 1,
+      "parent_code": null,
+      "ordinal": 10
+    },
+    {
       "code": "1.1",
       "title": "Korpusų ir burlaivių tipai",
       "summary": null,
       "level": 2,
       "parent_code": "1",
       "ordinal": 1
-    },
-    {
-      "code": "1.1a",
-      "title": "Burinių jachtų korpusų tipai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.1",
-      "ordinal": 1
-    },
-    {
-      "code": "1.1.1",
-      "title": "Burlaivių tipai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.1",
-      "ordinal": 2
     },
     {
       "code": "1.2",
@@ -41,38 +97,6 @@
       "ordinal": 2
     },
     {
-      "code": "1.2.1",
-      "title": "Korpusas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.2",
-      "ordinal": 1
-    },
-    {
-      "code": "1.2.2",
-      "title": "Rangautas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.2",
-      "ordinal": 2
-    },
-    {
-      "code": "1.2.3",
-      "title": "Takelažas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.2",
-      "ordinal": 3
-    },
-    {
-      "code": "1.2.4",
-      "title": "Burių tipai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "1.2",
-      "ordinal": 4
-    },
-    {
       "code": "1.3",
       "title": "Jachtos įranga",
       "summary": null,
@@ -81,68 +105,140 @@
       "ordinal": 3
     },
     {
-      "code": "1.3.1",
-      "title": "Švartavimo ir inkaravimo priemonės",
+      "code": "10.1",
+      "title": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
       "summary": null,
-      "level": 3,
-      "parent_code": "1.3",
+      "level": 2,
+      "parent_code": "10",
       "ordinal": 1
     },
     {
-      "code": "1.3.2",
-      "title": "Avarinės ir gelbėjimo priemonės",
+      "code": "10.2",
+      "title": "Burių paruošimas išplaukiant",
       "summary": null,
-      "level": 3,
-      "parent_code": "1.3",
+      "level": 2,
+      "parent_code": "10",
       "ordinal": 2
     },
     {
-      "code": "1.3.3",
-      "title": "Jachtos pagalbinis mechaninis variklis",
+      "code": "10.3",
+      "title": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
       "summary": null,
-      "level": 3,
-      "parent_code": "1.3",
+      "level": 2,
+      "parent_code": "10",
       "ordinal": 3
     },
     {
-      "code": "1.3.4",
-      "title": "Variklio naudojimo atvejai jachtoje",
+      "code": "10.4",
+      "title": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
       "summary": null,
-      "level": 3,
-      "parent_code": "1.3",
+      "level": 2,
+      "parent_code": "10",
       "ordinal": 4
     },
     {
-      "code": "1.3.4.1",
-      "title": "Švartuojantis (judant į priekį ir judant atgaline eiga)",
+      "code": "10.5",
+      "title": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
       "summary": null,
-      "level": 4,
-      "parent_code": "1.3.4",
-      "ordinal": 1
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 5
     },
     {
-      "code": "1.3.4.2",
-      "title": "Lūžus stiebui",
+      "code": "10.6",
+      "title": "Burių rifavimas",
       "summary": null,
-      "level": 4,
-      "parent_code": "1.3.4",
-      "ordinal": 2
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 6
     },
     {
-      "code": "1.3.4.3",
-      "title": "Atliekant manevrus ,,žmogus už borto”",
+      "code": "10.7",
+      "title": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
       "summary": null,
-      "level": 4,
-      "parent_code": "1.3.4",
-      "ordinal": 3
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 7
     },
     {
-      "code": "2",
-      "title": "BURIAVIMO TEORIJOS PAGRINDAI",
+      "code": "10.8",
+      "title": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
       "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 2
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 8
+    },
+    {
+      "code": "10.9",
+      "title": "Laviruotė prieš vėją ir pavėjui",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 9
+    },
+    {
+      "code": "10.10",
+      "title": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 10
+    },
+    {
+      "code": "10.11",
+      "title": "Manevras „žmogus už borto“ plaukiant burėmis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 11
+    },
+    {
+      "code": "10.12",
+      "title": "Manevras „žmogus už borto“ plaukiant varikliu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 12
+    },
+    {
+      "code": "10.13",
+      "title": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 13
+    },
+    {
+      "code": "10.14",
+      "title": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 14
+    },
+    {
+      "code": "10.15",
+      "title": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 15
+    },
+    {
+      "code": "10.16",
+      "title": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 16
+    },
+    {
+      "code": "10.17",
+      "title": "Jūriniai mazgai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "10",
+      "ordinal": 17
     },
     {
       "code": "2.1",
@@ -207,14 +303,6 @@
       "level": 2,
       "parent_code": "2",
       "ordinal": 8
-    },
-    {
-      "code": "3",
-      "title": "JACHTOS VALDYMO TECHNIKA (6 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 3
     },
     {
       "code": "3.1",
@@ -305,76 +393,12 @@
       "ordinal": 11
     },
     {
-      "code": "3.11.1",
-      "title": "Atmušų (krancų, fenderių) vietos ir aukščio parinkimas švartuojantis prie aukštos ir žemos krantinės, lagu prie kito laivo",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.11",
-      "ordinal": 1
-    },
-    {
-      "code": "3.11.2",
-      "title": "Švartavimo lyno, jo storio ir ilgio pasirinkimas, apsauga nuo trinties, klampės mazgas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.11",
-      "ordinal": 2
-    },
-    {
-      "code": "3.11.3",
-      "title": "Švartavimo vietos pasirinkimas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.11",
-      "ordinal": 3
-    },
-    {
-      "code": "3.11.4",
-      "title": "Jachtos švartavimas prie krantinės, pontono, šonu (lagu), Šliuze, laivagaliu prie krantinės su inkaru priekyje, keliais bortais",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.11",
-      "ordinal": 4
-    },
-    {
-      "code": "3.11.5",
-      "title": "Priplaukimas prie švartavimo vietos, krypties pasirinkimas esant vėjui ir srovei",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.11",
-      "ordinal": 5
-    },
-    {
       "code": "3.12",
       "title": "Inkaravimas",
       "summary": null,
       "level": 2,
       "parent_code": "3",
       "ordinal": 12
-    },
-    {
-      "code": "3.12.1",
-      "title": "Vietos parinkimas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.12",
-      "ordinal": 1
-    },
-    {
-      "code": "3.12.2",
-      "title": "Inkaro nuleidimo tvarka ir reikalavimai, komandos ir pranešimai. Inkaro grandinės ilgis",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.12",
-      "ordinal": 2
-    },
-    {
-      "code": "3.12.3",
-      "title": "Inkaro iškėlimo tvarka ir reikalavimai, komandos ir pranešimai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.12",
-      "ordinal": 3
     },
     {
       "code": "3.13",
@@ -385,22 +409,6 @@
       "ordinal": 13
     },
     {
-      "code": "3.13.1",
-      "title": "Įgulos pasirengimas ir jachtos paruošimas audrai, buringumo mažinimo būdai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.13",
-      "ordinal": 1
-    },
-    {
-      "code": "3.13.2",
-      "title": "Plaukimas naudojant variklį. Manevrų atlikimas naudojant tik variklį",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.13",
-      "ordinal": 2
-    },
-    {
       "code": "3.14",
       "title": "Ypatingi plaukiojimo atvejai",
       "summary": null,
@@ -409,92 +417,12 @@
       "ordinal": 14
     },
     {
-      "code": "3.14.1",
-      "title": "Užplaukimas ant pavėjinės ir priešvėjinės seklumos",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.14",
-      "ordinal": 1
-    },
-    {
-      "code": "3.14.2",
-      "title": "Vilkimas (buksyravimas)",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.14",
-      "ordinal": 2
-    },
-    {
-      "code": "3.14.3",
-      "title": "Pagalbos suteikimas kitam laivui",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.14",
-      "ordinal": 3
-    },
-    {
-      "code": "3.14.4",
-      "title": "Švertboto apvirtimas, atvertimas ir atvertimo technika",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.14",
-      "ordinal": 4
-    },
-    {
       "code": "3.15",
       "title": "Avarijos ir jų likvidavimas",
       "summary": null,
       "level": 2,
       "parent_code": "3",
       "ordinal": 15
-    },
-    {
-      "code": "3.15.1",
-      "title": "Nutrūkus",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.15",
-      "ordinal": 1
-    },
-    {
-      "code": "3.15.2",
-      "title": "Atsikabinus",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.15",
-      "ordinal": 2
-    },
-    {
-      "code": "3.15.3",
-      "title": "Suplyšus burei",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.15",
-      "ordinal": 3
-    },
-    {
-      "code": "3.15.4",
-      "title": "Lūžus stiebui, gikui, gafeliui, rumpeliui, vairo plunksnai, nutrūkus šturtrosams",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.15",
-      "ordinal": 4
-    },
-    {
-      "code": "3.15.5",
-      "title": "Pažeidus korpuso hermetiškumą",
-      "summary": null,
-      "level": 3,
-      "parent_code": "3.15",
-      "ordinal": 5
-    },
-    {
-      "code": "4",
-      "title": "SAUGOS, GELBĖJIMO, PRIEŠGAISRINĖS PRIEMONĖS, PIRMOJI MEDICINOS PAGALBA (2 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 4
     },
     {
       "code": "4.1",
@@ -561,38 +489,6 @@
       "ordinal": 8
     },
     {
-      "code": "4.8.1",
-      "title": "Gesintuvai, jų rūšys galiojimas ir naudojimo taisyklės. Gesintuvų išdėstymo vietos jachtoje",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.8",
-      "ordinal": 1
-    },
-    {
-      "code": "4.8.2",
-      "title": "Gaisro gesinimas varikio skyriuje",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.8",
-      "ordinal": 2
-    },
-    {
-      "code": "4.8.3",
-      "title": "Elektros instaliacijos sukelto gaisro gesinimas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.8",
-      "ordinal": 3
-    },
-    {
-      "code": "4.8.4",
-      "title": "Kitos priešgaisrinės priemonės. Nedegus audeklas, parankinės priemonės",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.8",
-      "ordinal": 4
-    },
-    {
       "code": "4.9",
       "title": "Pagalbos iškvietimas",
       "summary": null,
@@ -607,62 +503,6 @@
       "level": 2,
       "parent_code": "4",
       "ordinal": 10
-    },
-    {
-      "code": "4.10.1",
-      "title": "Laivo vaistinėlės turinys. Naudojimo instrukcija",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 1
-    },
-    {
-      "code": "4.10.2",
-      "title": "Sumušimai, kaulų lūžiai, galvos traumos",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 2
-    },
-    {
-      "code": "4.10.3",
-      "title": "Žaizdos ir kraujavimas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 3
-    },
-    {
-      "code": "4.10.4",
-      "title": "Nudegimai, saulės smūgis,",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 4
-    },
-    {
-      "code": "4.10.5",
-      "title": "Apsinuodijimas maistu",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 5
-    },
-    {
-      "code": "4.10.6",
-      "title": "Dirbtinis kvėpavimas ir išorinis širdies masažas",
-      "summary": null,
-      "level": 3,
-      "parent_code": "4.10",
-      "ordinal": 6
-    },
-    {
-      "code": "5",
-      "title": "HIDROMETEOROLOGIJA (2 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 5
     },
     {
       "code": "5.1",
@@ -735,14 +575,6 @@
       "level": 2,
       "parent_code": "5",
       "ordinal": 9
-    },
-    {
-      "code": "6",
-      "title": "NAVIGACIJA, LOCIJA (4 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 6
     },
     {
       "code": "6.1",
@@ -881,14 +713,6 @@
       "ordinal": 17
     },
     {
-      "code": "7",
-      "title": "JŪRŲ TEISĖ (4 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 7
-    },
-    {
       "code": "7.1",
       "title": "Lietuvos Respublikos Vidaus vandenų transporto kodeksas. Vidaus vandenų kelių sąvoka, kelių naudotojai (6, 7str.), vidaus vandenų transporto priemonių sąvoka, klasifikacija (14, 15 str.), laivų registravimas ir techninė apžiūra (16 str.), burinių jachtų vadų diplomavimas (19.4 str.), laivo kapitono teisės (20 str.), laivo kapitono pareigos kilus pavojui laivui, žmonėms ir gamtai (21 str.), atlyginimas už pagalbos suteikimą (22 str.), vidaus vandenų transporto priemonių plaukiojimo rajonai (24 str.), valstybinė laivybos Lietuvos Respublikos vidaus vandenyse priežiūra (26 str.), Vidaus vandenų transporto priemonių avarijų saugos tyrimo tikslai ir tvarka (27 str.)",
       "summary": null,
@@ -902,22 +726,6 @@
       "summary": "straipsniai Nr.2/2; 3; 4; 5; 6; 9; 18.",
       "level": 2,
       "parent_code": "7",
-      "ordinal": 2
-    },
-    {
-      "code": "7.2.1",
-      "title": "Buriavimas pasienio ruože",
-      "summary": null,
-      "level": 3,
-      "parent_code": "7.2",
-      "ordinal": 1
-    },
-    {
-      "code": "7.2.2",
-      "title": "Draudimai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "7.2",
       "ordinal": 2
     },
     {
@@ -1001,14 +809,6 @@
       "ordinal": 12
     },
     {
-      "code": "8",
-      "title": "EUROPOS VIDAUS VANDENŲ LAIVYBOS TAISYKLĖS – CEVNI (6 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 8
-    },
-    {
       "code": "8.1",
       "title": "Pagrindinės sąvokos",
       "summary": null,
@@ -1065,22 +865,6 @@
       "ordinal": 7
     },
     {
-      "code": "8.7.1",
-      "title": "Visų tipų laivų eigos ir stovėjimo navigaciniai žiburiai ir ženklai",
-      "summary": null,
-      "level": 3,
-      "parent_code": "8.7",
-      "ordinal": 1
-    },
-    {
-      "code": "8.7.2",
-      "title": "Specialioji signalizacija (žiburiai ir ženklai)",
-      "summary": null,
-      "level": 3,
-      "parent_code": "8.7",
-      "ordinal": 2
-    },
-    {
       "code": "8.8",
       "title": "Laivų garsinė signalizacija",
       "summary": null,
@@ -1103,6 +887,358 @@
       "level": 2,
       "parent_code": "8",
       "ordinal": 10
+    },
+    {
+      "code": "9.1",
+      "title": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 1
+    },
+    {
+      "code": "9.2",
+      "title": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 2
+    },
+    {
+      "code": "9.3",
+      "title": "Laivų navigaciniai žiburiai ir ženklai",
+      "summary": null,
+      "level": 2,
+      "parent_code": "9",
+      "ordinal": 3
+    },
+    {
+      "code": "1.1.1",
+      "title": "Burinių jachtų korpusų tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.1",
+      "ordinal": 1
+    },
+    {
+      "code": "1.1.2",
+      "title": "Burlaivių tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.1",
+      "ordinal": 2
+    },
+    {
+      "code": "1.2.1",
+      "title": "Korpusas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 1
+    },
+    {
+      "code": "1.2.2",
+      "title": "Rangautas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 2
+    },
+    {
+      "code": "1.2.3",
+      "title": "Takelažas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 3
+    },
+    {
+      "code": "1.2.4",
+      "title": "Burių tipai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.2",
+      "ordinal": 4
+    },
+    {
+      "code": "1.3.1",
+      "title": "Švartavimo ir inkaravimo priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 1
+    },
+    {
+      "code": "1.3.2",
+      "title": "Avarinės ir gelbėjimo priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 2
+    },
+    {
+      "code": "1.3.3",
+      "title": "Jachtos pagalbinis mechaninis variklis",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 3
+    },
+    {
+      "code": "1.3.4",
+      "title": "Variklio naudojimo atvejai jachtoje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "1.3",
+      "ordinal": 4
+    },
+    {
+      "code": "3.11.1",
+      "title": "Atmušų (krancų, fenderių) vietos ir aukščio parinkimas švartuojantis prie aukštos ir žemos krantinės, lagu prie kito laivo",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 1
+    },
+    {
+      "code": "3.11.2",
+      "title": "Švartavimo lyno, jo storio ir ilgio pasirinkimas, apsauga nuo trinties, klampės mazgas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 2
+    },
+    {
+      "code": "3.11.3",
+      "title": "Švartavimo vietos pasirinkimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 3
+    },
+    {
+      "code": "3.11.4",
+      "title": "Jachtos švartavimas prie krantinės, pontono, šonu (lagu), Šliuze, laivagaliu prie krantinės su inkaru priekyje, keliais bortais",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 4
+    },
+    {
+      "code": "3.11.5",
+      "title": "Priplaukimas prie švartavimo vietos, krypties pasirinkimas esant vėjui ir srovei",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.11",
+      "ordinal": 5
+    },
+    {
+      "code": "3.12.1",
+      "title": "Vietos parinkimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 1
+    },
+    {
+      "code": "3.12.2",
+      "title": "Inkaro nuleidimo tvarka ir reikalavimai, komandos ir pranešimai. Inkaro grandinės ilgis",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 2
+    },
+    {
+      "code": "3.12.3",
+      "title": "Inkaro iškėlimo tvarka ir reikalavimai, komandos ir pranešimai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.12",
+      "ordinal": 3
+    },
+    {
+      "code": "3.13.1",
+      "title": "Įgulos pasirengimas ir jachtos paruošimas audrai, buringumo mažinimo būdai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.13",
+      "ordinal": 1
+    },
+    {
+      "code": "3.13.2",
+      "title": "Plaukimas naudojant variklį. Manevrų atlikimas naudojant tik variklį",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.13",
+      "ordinal": 2
+    },
+    {
+      "code": "3.14.1",
+      "title": "Užplaukimas ant pavėjinės ir priešvėjinės seklumos",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 1
+    },
+    {
+      "code": "3.14.2",
+      "title": "Vilkimas (buksyravimas)",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 2
+    },
+    {
+      "code": "3.14.3",
+      "title": "Pagalbos suteikimas kitam laivui",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 3
+    },
+    {
+      "code": "3.14.4",
+      "title": "Švertboto apvirtimas, atvertimas ir atvertimo technika",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.14",
+      "ordinal": 4
+    },
+    {
+      "code": "3.15.1",
+      "title": "Nutrūkus",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 1
+    },
+    {
+      "code": "3.15.2",
+      "title": "Atsikabinus",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 2
+    },
+    {
+      "code": "3.15.3",
+      "title": "Suplyšus burei",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 3
+    },
+    {
+      "code": "3.15.4",
+      "title": "Lūžus stiebui, gikui, gafeliui, rumpeliui, vairo plunksnai, nutrūkus šturtrosams",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 4
+    },
+    {
+      "code": "3.15.5",
+      "title": "Pažeidus korpuso hermetiškumą",
+      "summary": null,
+      "level": 3,
+      "parent_code": "3.15",
+      "ordinal": 5
+    },
+    {
+      "code": "4.10.1",
+      "title": "Laivo vaistinėlės turinys. Naudojimo instrukcija",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 1
+    },
+    {
+      "code": "4.10.2",
+      "title": "Sumušimai, kaulų lūžiai, galvos traumos",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 2
+    },
+    {
+      "code": "4.10.3",
+      "title": "Žaizdos ir kraujavimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 3
+    },
+    {
+      "code": "4.10.4",
+      "title": "Nudegimai, saulės smūgis,",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 4
+    },
+    {
+      "code": "4.10.5",
+      "title": "Apsinuodijimas maistu",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 5
+    },
+    {
+      "code": "4.10.6",
+      "title": "Dirbtinis kvėpavimas ir išorinis širdies masažas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.10",
+      "ordinal": 6
+    },
+    {
+      "code": "4.8.1",
+      "title": "Gesintuvai, jų rūšys galiojimas ir naudojimo taisyklės. Gesintuvų išdėstymo vietos jachtoje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 1
+    },
+    {
+      "code": "4.8.2",
+      "title": "Gaisro gesinimas varikio skyriuje",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 2
+    },
+    {
+      "code": "4.8.3",
+      "title": "Elektros instaliacijos sukelto gaisro gesinimas",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 3
+    },
+    {
+      "code": "4.8.4",
+      "title": "Kitos priešgaisrinės priemonės. Nedegus audeklas, parankinės priemonės",
+      "summary": null,
+      "level": 3,
+      "parent_code": "4.8",
+      "ordinal": 4
+    },
+    {
+      "code": "7.2.1",
+      "title": "Buriavimas pasienio ruože",
+      "summary": null,
+      "level": 3,
+      "parent_code": "7.2",
+      "ordinal": 1
+    },
+    {
+      "code": "7.2.2",
+      "title": "Draudimai",
+      "summary": null,
+      "level": 3,
+      "parent_code": "7.2",
+      "ordinal": 2
     },
     {
       "code": "8.10.1",
@@ -1177,180 +1313,44 @@
       "ordinal": 9
     },
     {
-      "code": "9",
-      "title": "TARPTAUTINĖS TAISYKLĖS LAIVŲ SUSIDŪRIMAMS JŪROJE IŠVENGTI – COLREGS (2 val.)",
+      "code": "8.7.1",
+      "title": "Visų tipų laivų eigos ir stovėjimo navigaciniai žiburiai ir ženklai",
       "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 9
-    },
-    {
-      "code": "9.1",
-      "title": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
-      "summary": null,
-      "level": 2,
-      "parent_code": "9",
+      "level": 3,
+      "parent_code": "8.7",
       "ordinal": 1
     },
     {
-      "code": "9.2",
-      "title": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
+      "code": "8.7.2",
+      "title": "Specialioji signalizacija (žiburiai ir ženklai)",
       "summary": null,
-      "level": 2,
-      "parent_code": "9",
+      "level": 3,
+      "parent_code": "8.7",
       "ordinal": 2
     },
     {
-      "code": "9.3",
-      "title": "Laivų navigaciniai žiburiai ir ženklai",
+      "code": "1.3.4.1",
+      "title": "Švartuojantis (judant į priekį ir judant atgaline eiga)",
       "summary": null,
-      "level": 2,
-      "parent_code": "9",
-      "ordinal": 3
-    },
-    {
-      "code": "10",
-      "title": "PRAKTINIAI MOKYMAI (12 val.)",
-      "summary": null,
-      "level": 1,
-      "parent_code": null,
-      "ordinal": 10
-    },
-    {
-      "code": "10.1",
-      "title": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
+      "level": 4,
+      "parent_code": "1.3.4",
       "ordinal": 1
     },
     {
-      "code": "10.2",
-      "title": "Burių paruošimas išplaukiant",
+      "code": "1.3.4.2",
+      "title": "Lūžus stiebui",
       "summary": null,
-      "level": 2,
-      "parent_code": "10",
+      "level": 4,
+      "parent_code": "1.3.4",
       "ordinal": 2
     },
     {
-      "code": "10.3",
-      "title": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
+      "code": "1.3.4.3",
+      "title": "Atliekant manevrus ,,žmogus už borto”",
       "summary": null,
-      "level": 2,
-      "parent_code": "10",
+      "level": 4,
+      "parent_code": "1.3.4",
       "ordinal": 3
-    },
-    {
-      "code": "10.4",
-      "title": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 4
-    },
-    {
-      "code": "10.5",
-      "title": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 5
-    },
-    {
-      "code": "10.6",
-      "title": "Burių rifavimas",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 6
-    },
-    {
-      "code": "10.7",
-      "title": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 7
-    },
-    {
-      "code": "10.8",
-      "title": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 8
-    },
-    {
-      "code": "10.9",
-      "title": "Laviruotė prieš vėją ir pavėjui",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 9
-    },
-    {
-      "code": "10.10",
-      "title": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 10
-    },
-    {
-      "code": "10.11",
-      "title": "Manevras „žmogus už borto“ plaukiant burėmis",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 11
-    },
-    {
-      "code": "10.12",
-      "title": "Manevras „žmogus už borto“ plaukiant varikliu",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 12
-    },
-    {
-      "code": "10.13",
-      "title": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 13
-    },
-    {
-      "code": "10.14",
-      "title": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 14
-    },
-    {
-      "code": "10.15",
-      "title": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 15
-    },
-    {
-      "code": "10.16",
-      "title": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 16
-    },
-    {
-      "code": "10.17",
-      "title": "Jūriniai mazgai",
-      "summary": null,
-      "level": 2,
-      "parent_code": "10",
-      "ordinal": 17
     }
   ],
   "items": [

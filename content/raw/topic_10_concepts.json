@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "10.10.1",
+    "section_code": "10.1",
     "section_title": "Instruktažas įgulai. Jachtos patikrinimas ir paruošimas plaukti",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.1"
   },
   {
-    "section_code": "10.10.2",
+    "section_code": "10.2",
     "section_title": "Burių paruošimas išplaukiant",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.2"
   },
   {
-    "section_code": "10.10.3",
+    "section_code": "10.3",
     "section_title": "Nuplaukimo nuo krantinės, pontono, bojos, kitos plaukiančios jachtos su burėmis arba varikliu būdai esant įvairioms vėjo kryptims ir stiprumui",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.3"
   },
   {
-    "section_code": "10.10.4",
+    "section_code": "10.4",
     "section_title": "Tinkamas laiko ir vietos parinkimas iškelti ar nuleisti bures išplaukiant bei atplaukiant",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.4"
   },
   {
-    "section_code": "10.10.5",
+    "section_code": "10.5",
     "section_title": "Pagrindinės saugaus plaukiojimo uoste taisyklės",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.5"
   },
   {
-    "section_code": "10.10.6",
+    "section_code": "10.6",
     "section_title": "Burių rifavimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.6"
   },
   {
-    "section_code": "10.10.7",
+    "section_code": "10.7",
     "section_title": "Plaukimas aštriais kursais. Posūkiai prieš vėją",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.7"
   },
   {
-    "section_code": "10.10.8",
+    "section_code": "10.8",
     "section_title": "Plaukimas pavėjiniais kursais. Posūkiai pavėjui",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.8"
   },
   {
-    "section_code": "10.10.9",
+    "section_code": "10.9",
     "section_title": "Laviruotė prieš vėją ir pavėjui",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.9"
   },
   {
-    "section_code": "10.10.10",
+    "section_code": "10.10",
     "section_title": "Jachtos valdymas, bendravimas su įgula, komandos plaukiant burėmis įvairiomis oro sąlygomis",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.10"
   },
   {
-    "section_code": "10.10.11",
+    "section_code": "10.11",
     "section_title": "Manevras „žmogus už borto“ plaukiant burėmis",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.11"
   },
   {
-    "section_code": "10.10.12",
+    "section_code": "10.12",
     "section_title": "Manevras „žmogus už borto“ plaukiant varikliu",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.12"
   },
   {
-    "section_code": "10.10.13",
+    "section_code": "10.13",
     "section_title": "Plaukiojimas varikliu, plaukimas varikliu atbuline eiga, sraigto sukimosi įtaka",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.13"
   },
   {
-    "section_code": "10.10.14",
+    "section_code": "10.14",
     "section_title": "Inkaro naudojimas. Inkaro lyno ar grandinės ilgio parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.14"
   },
   {
-    "section_code": "10.10.15",
+    "section_code": "10.15",
     "section_title": "Priplaukimas prie krantinės, pontono, bojos, kitos jachtos, plaukiančios burėmis, varikliu",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.15"
   },
   {
-    "section_code": "10.10.16",
+    "section_code": "10.16",
     "section_title": "Švartavimo būdai. Jachtos sutvarkymas po plaukimo",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,10 +284,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "10.16"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -286,10 +302,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -303,10 +320,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -320,10 +338,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -337,10 +356,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -354,10 +374,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -371,10 +392,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -388,10 +410,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -405,10 +428,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -422,10 +446,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -439,10 +464,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -456,10 +482,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -473,10 +500,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -490,10 +518,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -507,10 +536,11 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   },
   {
-    "section_code": "10.10.17",
+    "section_code": "10.17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
@@ -524,6 +554,7 @@
       "curriculum_required": true,
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
-    }
+    },
+    "curriculum_node_code": "10.17"
   }
 ]

@@ -1275,6 +1275,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
+		min-width: 0;
 	}
 
 	.app-shell__footer {

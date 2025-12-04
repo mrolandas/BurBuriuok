@@ -74,6 +74,12 @@ export type TreeNodeState = {
 	admin: TreeNodeAdminState;
 };
 
+export type TreeNodeProgressSummary = {
+	total: number;
+	known: number;
+	percentage: number | null;
+};
+
 export type TreeNodeOrderChange = {
 	parentCode: string | null;
 	orderedIds: string[];

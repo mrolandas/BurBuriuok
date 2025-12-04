@@ -9,7 +9,8 @@
     "term_en": "Dinghy",
     "description_lt": "Maža, lengva valties tipo jachta su plokščiu dugnu. Dažnai naudojama mokymuisi ar kaip papildomas laivelis. Lengvai traukiama į krantą.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -21,7 +22,8 @@
     "term_en": "Centreboard Boat",
     "description_lt": "Jachta su keliamu-nuleidžiamu švertu (centreboardu) vietoj nuolatinio kilio. Mažas grimzlimas, tinka sekliam vandeniui.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -33,7 +35,8 @@
     "term_en": "Keel Yacht",
     "description_lt": "Jachta su fiksuotu, sunkiu falškiliu. Stabili, tinkama jūroms. Didesnis grimzlimas nei šverto.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -45,7 +48,8 @@
     "term_en": "Bilge Keel",
     "description_lt": "Jachta su dviem trumpais kiliais šonuose. Gali stovėti ant dugno atoslūgyje. Vidutinis grimzlimas.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -57,7 +61,8 @@
     "term_en": "Catamaran",
     "description_lt": "Dvikojis laivas - du korpusai sujungti tiltu. Greitas, stabilus, didelis denio plotas. Mažas grimzlimas.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -69,7 +74,8 @@
     "term_en": "Trimaran",
     "description_lt": "Trikojis laivas - centrinis korpusas ir du mažesni šoniniai korpusai (amos). Greitas, lengvas, gera stabilumo sąvoka.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
@@ -81,138 +87,150 @@
     "term_en": "Proa",
     "description_lt": "Tradicinis Ramiojo vandenyno dvikojis laivas su nesimetrišku dizainu - vienas korpusas didesnis, kitas ama (stabilizatorius). Vairą lenkia keisdamas kryptį.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "ketas",
     "term_lt": "Ketas",
     "term_en": "Cat Rig",
     "description_lt": "Viena burė ant vieno stiebo be forštagio. Paprasčiausias rangautas - tik grotas, be priekinės burės.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "sliupas",
     "term_lt": "Šliupas",
     "term_en": "Sloop",
     "description_lt": "Vienas stiebas, grotas ir priekinė burė (stakselis/genuja). Populiariausias šiuolaikinis rangauto tipas. 90% jachtų.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "kuteris",
     "term_lt": "Kuteris (Tenderis)",
     "term_en": "Cutter",
     "description_lt": "Vienas stiebas, grotas ir DVI priekinės burės (stakselis + trinkelis). Stiebas dažnai toliau nuo priekio nei šliupe.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "kecas",
     "term_lt": "Kečas",
     "term_en": "Ketch",
     "description_lt": "Du stiebai: didesnis priekinis (grotstiebis) ir mažesnis galinis (bizanstiebis) PRIEŠ vairą. Bizanburė mažesnė už grotą.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "jolas",
     "term_lt": "Jolas",
     "term_en": "Yawl",
     "description_lt": "Du stiebai kaip kečas, bet mažas galinis bizanstiebis yra UŽ vairo. Bizanburė labai maža, daugiau balanso nustatymui.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "skuna",
     "term_lt": "Škuna",
     "term_en": "Schooner",
     "description_lt": "Du ar daugiau stiebų, galinis stiebas AUKŠTESNIS arba lygus priekiniam. Tradicinis prekybinis laivas.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "brigantina",
     "term_lt": "Brigantina",
     "term_en": "Brigantine",
     "description_lt": "Du stiebai: priekinis su skersėmis ir keturkampėmis burėmis, galinis su markoni (trikampėmis) burėmis.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "brigas",
     "term_lt": "Brigas",
     "term_en": "Brig",
     "description_lt": "Du stiebai, ant abiejų skersės su keturkampėmis burėmis. Karinis/prekybinis laivas 18-19 amžiuje.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "barkentina",
     "term_lt": "Barkentina",
     "term_en": "Barquentine",
     "description_lt": "3+ stiebai: priekinis su skersėmis (keturkampės burės), kiti su markoni burėmis.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "barkas",
     "term_lt": "Barkas",
     "term_en": "Barque",
     "description_lt": "3+ stiebai: visi išskyrus galinį turi skersės (keturkampės burės), galinis - markoni burė.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   },
   {
     "section_code": "1.1",
     "section_title": "KORPUSŲ IR BURLAIVIŲ TIPAI",
-    "subsection_code": "1.1.1",
+    "subsection_code": "1.1.2",
     "subsection_title": "Burlaivių tipai (rangauto tipai)",
     "slug": "burinis-laivas",
     "term_lt": "Burinis laivas",
     "term_en": "Full-rigged Ship",
     "description_lt": "3+ stiebai, ant visų - skersės su keturkampėmis burėmis. Didžiausi tradiciniai burlaiviai.",
     "description_en": null,
-    "source_ref": "LBS 1.1"
+    "source_ref": "LBS 1.1",
+    "curriculum_node_code": "1.1.2"
   }
 ]

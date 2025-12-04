@@ -109,6 +109,7 @@
 		background: var(--color-panel-soft);
 		padding: clamp(1.5rem, 3vw, 2rem);
 		min-height: 40vh;
+		min-width: 0;
 	}
 
 	.admin-fallback {

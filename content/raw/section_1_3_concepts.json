@@ -9,7 +9,8 @@
     "term_en": "Hawse Pipes",
     "description_lt": "Angos arba roleliai forštevenyje, per kuriuos eina inkaro lynai ar grandinė.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -21,7 +22,8 @@
     "term_en": "Cleats",
     "description_lt": "T arba V formos tvirtinimai lynams ant denio. Metaliniai ar plastikiniai.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -33,7 +35,8 @@
     "term_en": "Bollards",
     "description_lt": null,
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -45,7 +48,8 @@
     "term_en": "Bitts",
     "description_lt": "Dvigubi vertikalūs stulpai lynų tvirtinimui. Tvirtesni už klampės.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -57,7 +61,8 @@
     "term_en": "Ring Bolts",
     "description_lt": "Metaliniai žiedai švartavimo lynų vedimui ir tvirtinimui.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -69,7 +74,8 @@
     "term_en": "Fenders",
     "description_lt": "Pripučiami ar putplasčio apsaugos pagalvės tarp laivo ir krantinės. Apsaugo korpusą.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -81,7 +87,8 @@
     "term_en": "Bow Lines",
     "description_lt": "Lynai nuo priekio į krantinę. Laiko laivą prie krantinės.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -93,7 +100,8 @@
     "term_en": "Stern Lines",
     "description_lt": "Lynai nuo galo į krantinę. Laiko laivą stabiliai.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -105,7 +113,8 @@
     "term_en": "Breast Lines",
     "description_lt": "Lynai statmenai į krantinę, traukia laivą prie krantinės.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -117,7 +126,8 @@
     "term_en": "Spring Lines",
     "description_lt": "Įstrižai einantys lynai, neleidžiantys laivui judėti į priekį ar atgal.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.1"
   },
   {
     "section_code": "1.3",
@@ -129,7 +139,8 @@
     "term_en": "Admiralty Anchor",
     "description_lt": "Klasikinis inkaras su dviem ragais ir skerstiniu štoku. Sunkus, patikimas, bet nepatogus.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -141,7 +152,8 @@
     "term_en": "Danforth Anchor",
     "description_lt": "Plokščias inkaras su dviem didelėmis mentelėmis. Gerai laiko smėlyje ir dumbale.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -153,7 +165,8 @@
     "term_en": "Plow Anchor",
     "description_lt": "Arklo formos inkaras. Universalus, geras įvairiuose dugnuose. Populiarus jachtose.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -165,7 +178,8 @@
     "term_en": "Folding Anchor",
     "description_lt": "Inkaras su sulenkiamais ragais. Kompaktiškas saugojimui.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -177,7 +191,8 @@
     "term_en": "Mushroom Anchor",
     "description_lt": "Grybo formos inkaras. Geras minkštam dugnui ir ilgalaikiam inkaravimui (bujoms).",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -189,7 +204,8 @@
     "term_en": "Screw Anchor",
     "description_lt": "Į dugną įsukamas inkaras. Labai tvirtas, naudojamas nuolatinėms bujoms.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -201,7 +217,8 @@
     "term_en": "Grapnel Anchor",
     "description_lt": "Mažas 4-5 ragų inkaras. Tinka uolėtam dugnui ir mažiems laivams.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -213,7 +230,8 @@
     "term_en": "Delta Anchor",
     "description_lt": "Panašus į plūginį, bet viena mentele. Savarankiškai orientuojasi, geras laikymas.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -225,7 +243,8 @@
     "term_en": "Shank",
     "description_lt": "Centrinė inkaro dalis - ilgas vertikalus strypas.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -237,7 +256,8 @@
     "term_en": "Stock",
     "description_lt": "Skersinis kartis viršuje, užtikrinantis teisingą inkaro padėtį dugne.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -249,7 +269,8 @@
     "term_en": "Fluke",
     "description_lt": "Mentelė, įsikabinanti į dugną. Admiraliteto inkaras turi du ragus.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -261,7 +282,8 @@
     "term_en": "Crown",
     "description_lt": "Apatin inkaro dalis, kur susijungia ragas ir kotas.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -273,7 +295,8 @@
     "term_en": "Bill",
     "description_lt": "Aštrūs ragų galai, įsikabinantys į dugną.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -285,7 +308,8 @@
     "term_en": "Anchor Rode",
     "description_lt": "Virvė, jungianti inkarą su laivu. Nailoninis, elastingas.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -297,7 +321,8 @@
     "term_en": "Anchor Chain",
     "description_lt": "Metalinė grandinė tarp inkaro ir lyno arba vietoj lyno. Sunkesnė, tvirtesnė.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -309,7 +334,8 @@
     "term_en": "Windlass",
     "description_lt": "Rankinis ar elektrinis mechanizmas inkaro kėlimui. Ant denio forštevenyje.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -321,7 +347,8 @@
     "term_en": "Anchor Shackle",
     "description_lt": "Tvirtinimo jungtis tarp inkaro ir grandinės/lyno.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -333,7 +360,8 @@
     "term_en": "Chain Stopper",
     "description_lt": "Mechanizmas grandinei užfiksuoti, kad ji neslidtų.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -345,7 +373,8 @@
     "term_en": "Anchor Buoy",
     "description_lt": "Plūdė, pažyminti inkaro vietą vandenyje. Padeda rasti inkarą.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3"
   },
   {
     "section_code": "1.3",
@@ -357,7 +386,8 @@
     "term_en": "Fire Extinguishers",
     "description_lt": "Gaisro gesintuvai. Privalomi jachtose, kelių tipų (miltelių, CO2). Privalo būti prieinami.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -369,7 +399,8 @@
     "term_en": "Buckets",
     "description_lt": "Kibirai vandeniui semti avarijoje ar gaisrui gesinti. Paprastas, bet efektyvus įrankis.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -381,7 +412,8 @@
     "term_en": "Emergency Tiller",
     "description_lt": "Atsarginis vairo valdymo svertas, jei pagrindinė sistema suges.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -393,7 +425,8 @@
     "term_en": "Wire Cutters",
     "description_lt": "Stiprūs žirklės ar peilis trosų karpymui avarijoje.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -405,7 +438,8 @@
     "term_en": "Wooden Plugs",
     "description_lt": "Medinikeliū kamščiai skylių korpuse užkimšimui avarijoje.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -417,7 +451,8 @@
     "term_en": "Lifebuoy",
     "description_lt": "Plūduriuojantis ratas su virve. Mėtomas žmogui vandenyje.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -429,7 +464,8 @@
     "term_en": "Life Jackets",
     "description_lt": "Asmeninės plūduriavimo priemonės. Privalo būti kiekvienam įgulos nariui.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -441,7 +477,8 @@
     "term_en": "Safety Harnesses",
     "description_lt": "Diržai su trosais prie laivo pririšimui stipriame vėjyje ar bangose.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -453,7 +490,8 @@
     "term_en": "Jacklines",
     "description_lt": "Trosai išilgai denio, prie kurių kabinami saugos diržai.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.2"
   },
   {
     "section_code": "1.3",
@@ -465,7 +503,8 @@
     "term_en": "Diesel Engines",
     "description_lt": "Dyzeliu varomi varikliai. Ekonomiški, patikimi, dažniausias pasirinkimas jachtoms.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.3"
   },
   {
     "section_code": "1.3",
@@ -477,7 +516,8 @@
     "term_en": "Gasoline Engines",
     "description_lt": "Benzinu varomi varikliai. Lengvesni, pigesni, bet pavojingesni (garai).",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.3"
   },
   {
     "section_code": "1.3",
@@ -489,7 +529,8 @@
     "term_en": "Electric Motors",
     "description_lt": "Elektra varomi varikliai. Tylūs, ekologiški, bet ribotas nuotolis.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.3"
   },
   {
     "section_code": "1.3",
@@ -501,7 +542,8 @@
     "term_en": "Engine Power",
     "description_lt": "Matuojamas arklio galiomis (AG) arba kilovatais (kW). Priklauzo nuo jachtos dydžio.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.3"
   },
   {
     "section_code": "1.3",
@@ -513,6 +555,7 @@
     "term_en": "Engine Maintenance",
     "description_lt": "Reguliarus alyvos keitimas, filtrų valymas, aušinimo sistemos tikrinimas.",
     "description_en": null,
-    "source_ref": "LBS 1.3"
+    "source_ref": "LBS 1.3",
+    "curriculum_node_code": "1.3.3"
   }
 ]

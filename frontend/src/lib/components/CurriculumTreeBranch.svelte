@@ -6,8 +6,10 @@
 	import type {
 		TreeNodeOrderChange,
 		TreeNodeOrderFinalize,
-		TreeNodeState
+		TreeNodeState,
+		TreeNodeProgressSummary
 	} from './curriculumTreeTypes';
+	import type { ProgressStoreStatus } from '$lib/stores/progressStore';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -15,6 +17,8 @@
 	export let onToggle: (state: TreeNodeState) => Promise<void> | void;
 	export let onRetry: (state: TreeNodeState) => Promise<void> | void;
 	export let adminEnabled = false;
+	export let progressSummaries: Map<string, TreeNodeProgressSummary> = new Map();
+	export let progressStatus: ProgressStoreStatus = 'idle';
 	export let onOpenCreateChild: (state: TreeNodeState) => Promise<void> | void;
 	export let onCancelCreateChild: (state: TreeNodeState) => Promise<void> | void;
 	export let onCreateChildFieldChange: (
@@ -89,6 +93,10 @@
 	const extractOrderedNodes = (event: CustomEvent<DndEvent<unknown>>): TreeNodeState[] => {
 		const detail = event.detail as DndEvent<TreeNodeState>;
 		return detail.items.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID);
+	};
+
+	const getProgressSummary = (state: TreeNodeState): TreeNodeProgressSummary | null => {
+		return progressSummaries?.get(state.node.code) ?? null;
 	};
 
 	const handleDndConsider = (event: CustomEvent<DndEvent<unknown>>) => {
@@ -234,6 +242,7 @@
 	data-drag-enabled={dragAndDropEnabled}
 >
 	{#each nodes as state, index (state.id)}
+		{@const progress = getProgressSummary(state)}
 		<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
 			<div
 				class="tree-node__header"
@@ -260,14 +269,21 @@
 					</span>
 					<span class="tree-node__title">{state.node.title}</span>
 				</button>
-				{#if state.node.prerequisiteCount}
-					<span
-						class="tree-node__badge"
-						aria-label={`Turi ${state.node.prerequisiteCount} prielaidas`}
-					>
-						{state.node.prerequisiteCount} prielaidos
-					</span>
-				{/if}
+				<div class="tree-node__meta">
+					{#if state.node.prerequisiteCount}
+						<span
+							class="tree-node__badge"
+							aria-label={`Turi ${state.node.prerequisiteCount} prielaidas`}
+						>
+							{state.node.prerequisiteCount} prielaidos
+						</span>
+					{/if}
+					{#if progress && progress.total > 0}
+						<span class="tree-node__progress-text">
+							{progress.percentage ?? 0}% · {progress.known}/{progress.total}
+						</span>
+					{/if}
+				</div>
 			</div>
 
 			{#if adminEnabled}
@@ -445,6 +461,8 @@
 								{onToggle}
 								{onRetry}
 								{adminEnabled}
+								{progressSummaries}
+								{progressStatus}
 								{onOpenCreateChild}
 								{onCancelCreateChild}
 								{onCreateChildFieldChange}
@@ -794,6 +812,22 @@
 		padding-left: 0;
 	}
 
+	/* Special styling for root-level leaf nodes (when we are viewing the section itself) */
+	:global(.curriculum-tree__root-items) .tree-node {
+		border: none;
+		background: transparent;
+		padding: 0;
+		box-shadow: none;
+	}
+
+	:global(.curriculum-tree__root-items) .tree-node__header {
+		display: none;
+	}
+
+	:global(.curriculum-tree__root-items) .tree-node__panel {
+		gap: 1rem;
+	}
+
 	.tree-branch[data-level='1'] {
 		--branch-level: 1;
 	}
@@ -872,7 +906,22 @@
 		padding: 0.2rem 0.6rem;
 		border-radius: 999px;
 		border: 1px solid var(--color-badge-warning-border);
+	}
+
+	.tree-node__meta {
 		margin-left: auto;
+		display: inline-flex;
+		gap: 0.4rem;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+
+	.tree-node__progress-text {
+		font-size: 0.8rem;
+		color: var(--color-text-soft);
+		font-variant-numeric: tabular-nums;
+		margin-left: 0.5rem;
 	}
 
 	.tree-node__panel {

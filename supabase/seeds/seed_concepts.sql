@@ -1,5 +1,5 @@
 -- seed_concepts.sql
--- Generated 2025-11-05T11:57:51.836Z
+-- Generated 2025-12-03T16:17:23.618Z
 
 insert into burburiuok.concepts (
     section_code,
@@ -17,13 +17,13 @@ insert into burburiuok.concepts (
     curriculum_item_ordinal,
     curriculum_item_label
 ) values
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'jole', 'Jolė', 'Dinghy', 'Maža, lengva burinė valtis su atviru deniu, skirta mokymui ar trumpoms išvykoms.', NULL, 'LBS_concepts_master.md', true, '1.1a', 1, 'jolė'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'svertbotas', 'Švertbotas', 'Centreboard boat', 'Korpusas su keliama šverto plokšte, leidžiančia plaukti sekliuose vandenyse.', NULL, 'LBS_concepts_master.md', true, '1.1a', 2, 'švertbotas'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'kiline-jachta', 'Kilinė jachta', 'Keel yacht', 'Laivas su fiksuotu, sunkiu kilio balastu, suteikiančiu stabilumą vandenyne.', NULL, 'LBS_concepts_master.md', true, '1.1a', 3, 'kilinė jachta'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'kompromisas', 'Kompromisas', 'Bilge keel', 'Jachta su dviem trumpais kiliais abiejuose bortuose, leidžiančiais stovėti ant dugno atoslūgio metu.', NULL, 'LBS_concepts_master.md', true, '1.1a', 4, 'kompromisas'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'katamaranas', 'Katamaranas', 'Catamaran', 'Dvikorpusis burlaivis su tiltu, pasižymintis greičiu ir mažu grimzlimu.', NULL, 'LBS_concepts_master.md', true, '1.1a', 5, 'katamaranas'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'trimaranas', 'Trimaranas', 'Trimaran', 'Trijų korpusų burlaivis, turintis centrinį korpusą ir dvi mažesnes atramas stabilumui.', NULL, 'LBS_concepts_master.md', true, '1.1a', 6, 'trimaranas'),
-    ('1.1', 'Korpusų ir burlaivių tipai', '1.1a', 'Burinių jachtų korpusų tipai', 'proa', 'Proa', 'Proa', 'Nesimetriškas Ramiojo vandenyno tradicinis burlaivis su viena stabilizuojančia ama.', NULL, 'LBS_concepts_master.md', true, '1.1a', 7, 'proa.'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'jole', 'Jolė', 'Dinghy', 'Maža, lengva burinė valtis su atviru deniu, skirta mokymui ar trumpoms išvykoms.', NULL, 'LBS_concepts_master.md', true, '1.1a', 1, 'jolė'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'svertbotas', 'Švertbotas', 'Centreboard boat', 'Korpusas su keliama šverto plokšte, leidžiančia plaukti sekliuose vandenyse.', NULL, 'LBS_concepts_master.md', true, '1.1a', 2, 'švertbotas'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'kiline-jachta', 'Kilinė jachta', 'Keel yacht', 'Laivas su fiksuotu, sunkiu kilio balastu, suteikiančiu stabilumą vandenyne.', NULL, 'LBS_concepts_master.md', true, '1.1a', 3, 'kilinė jachta'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'kompromisas', 'Kompromisas', 'Bilge keel', 'Jachta su dviem trumpais kiliais abiejuose bortuose, leidžiančiais stovėti ant dugno atoslūgio metu.', NULL, 'LBS_concepts_master.md', true, '1.1a', 4, 'kompromisas'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'katamaranas', 'Katamaranas', 'Catamaran', 'Dvikorpusis burlaivis su tiltu, pasižymintis greičiu ir mažu grimzlimu.', NULL, 'LBS_concepts_master.md', true, '1.1a', 5, 'katamaranas'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'trimaranas', 'Trimaranas', 'Trimaran', 'Trijų korpusų burlaivis, turintis centrinį korpusą ir dvi mažesnes atramas stabilumui.', NULL, 'LBS_concepts_master.md', true, '1.1a', 6, 'trimaranas'),
+    ('1.1a', 'Burinių jachtų korpusų tipai', NULL, NULL, 'proa', 'Proa', 'Proa', 'Nesimetriškas Ramiojo vandenyno tradicinis burlaivis su viena stabilizuojančia ama.', NULL, 'LBS_concepts_master.md', true, '1.1a', 7, 'proa.'),
     ('1.1', 'Korpusų ir burlaivių tipai', '1.1.1', 'Burlaivių tipai', 'ketas', 'Ketas', 'Cat rig', 'Vieno stiebo laivas su viena groto bure be priekinės burės.', NULL, 'LBS_concepts_master.md', true, '1.1.1', 1, 'ketas'),
     ('1.1', 'Korpusų ir burlaivių tipai', '1.1.1', 'Burlaivių tipai', 'sliupas', 'Šliupas', 'Sloop', 'Populiariausias vieno stiebo takelažas su grotu ir viena priekine bure (stakseliu ar genuja).', NULL, 'LBS_concepts_master.md', true, '1.1.1', 2, 'šliupas'),
     ('1.1', 'Korpusų ir burlaivių tipai', '1.1.1', 'Burlaivių tipai', 'kuteris', 'Kuteris (tenderis)', 'Cutter', 'Vieno stiebo laivas su dviem priekinėmis burėmis ir toliau nuo priekio pastatytu stiebu.', NULL, 'LBS_concepts_master.md', true, '1.1.1', 3, 'kuteris (tenderis)'),

@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.1",
+    "section_code": "2.1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
-    }
+    },
+    "curriculum_node_code": "2.1"
   },
   {
-    "section_code": "2.2.2",
+    "section_code": "2.2",
     "section_title": "Jachtos teorinis brėžinys. Diametralioji plokštuma. Midelšpanhauto plokštuma. Vaterlinijos, batoksai, španhautai. Buringumo centras ir šoninio pasipriešinimo centras",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "2.2"
   },
   {
-    "section_code": "2.2.3",
+    "section_code": "2.3",
     "section_title": "Aerodinaminės jėgos susidarymas (kėlimo, traukos, dreifo jėgos, frontinis ir indukcinis pasipriešinimas). Šių jėgų vektorių schema, jachtos centravimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "2.3"
   },
   {
-    "section_code": "2.2.4",
+    "section_code": "2.4",
     "section_title": "Laminarinis oro srauto aptekėjimas, turbulencijos",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "2.4"
   },
   {
-    "section_code": "2.2.5",
+    "section_code": "2.5",
     "section_title": "Tikrasis vėjas",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Tikrasis vėjas"
-    }
+    },
+    "curriculum_node_code": "2.5"
   },
   {
-    "section_code": "2.2.6",
+    "section_code": "2.6",
     "section_title": "Kursinis vėjas",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Kursinis vėjas"
-    }
+    },
+    "curriculum_node_code": "2.6"
   },
   {
-    "section_code": "2.2.7",
+    "section_code": "2.7",
     "section_title": "Vimpelinis vėjas",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,10 +284,11 @@
       "curriculum_required": true,
       "topic_number": 2,
       "parent_section": "Vimpelinis vėjas"
-    }
+    },
+    "curriculum_node_code": "2.7"
   },
   {
-    "section_code": "2.2.8",
+    "section_code": "2.8",
     "section_title": "Vėjo indikatoriai, vėjarodės ir jų veikimo principas",
     "subsection_code": null,
     "subsection_title": null,
@@ -286,6 +302,7 @@
       "curriculum_required": true,
       "topic_number": 2,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "2.8"
   }
 ]

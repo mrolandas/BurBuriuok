@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "9.9.1",
+    "section_code": "9.1",
     "section_title": "Bendroji dalis. Atsakomybė. Terminai ir sąvokos. Laivų su mechaniniais varikliais ir burinių laivų teisės",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "9.1"
   },
   {
-    "section_code": "9.9.2",
+    "section_code": "9.2",
     "section_title": "Burlaivio prasilenkimas su kitais laivais dieną ir naktį (kursų susikirtimo, priešpriešinio plaukimo ir lenkimo atvejais). Burlaivio prasilenkimas su kitais laivais siaurumose, farvateriuose, laivų judėjimo skyrimo sistemose. Laivų veiksmai užleidžiant kelią. Plaukiojimas riboto matomumo sąlygomis, garso signalai riboto matomumo sąlygomis",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "9.2"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   },
   {
-    "section_code": "9.9.3",
+    "section_code": "9.3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,6 +212,7 @@
       "curriculum_required": true,
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
-    }
+    },
+    "curriculum_node_code": "9.3"
   }
 ]

@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "4.4.1",
+    "section_code": "4.1",
     "section_title": "Saugos planas",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.1"
   },
   {
-    "section_code": "4.4.2",
+    "section_code": "4.2",
     "section_title": "Buriuotojo apranga",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.2"
   },
   {
-    "section_code": "4.4.3",
+    "section_code": "4.3",
     "section_title": "Gelbėjimo liemenės ir jų tipai pagal plaukiojimo rajoną. Liemenės komplektacija",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.3"
   },
   {
-    "section_code": "4.4.4",
+    "section_code": "4.4",
     "section_title": "Gelbėjimo ratai, gelbėjimo pasagos dėvėjimas, metamoji virvė, metamasis žiburys, metamoji boja (angl. danbouy), saugos diržai",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.4"
   },
   {
-    "section_code": "4.4.5",
+    "section_code": "4.5",
     "section_title": "Gelbėjimo plaustas ir jo pripūtimas, tvarka gelbėjimo plauste",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.5"
   },
   {
-    "section_code": "4.4.6",
+    "section_code": "4.6",
     "section_title": "Elgesys gelbėjimo operacijos metu (su gelbėtojų kateriu, su gelbėtojų sraigtasparniu)",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.6"
   },
   {
-    "section_code": "4.4.7",
+    "section_code": "4.7",
     "section_title": "Privalomas jachtos inventorius 4-ai ir 5-ai plaukiojimo kategorijoms",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.7"
   },
   {
-    "section_code": "4.4.8.4.8.1",
+    "section_code": "4.8.1",
     "section_title": "Gesintuvai, jų rūšys galiojimas ir naudojimo taisyklės. Gesintuvų išdėstymo vietos jachtoje",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.8.1"
   },
   {
-    "section_code": "4.4.8.4.8.2",
+    "section_code": "4.8.2",
     "section_title": "Gaisro gesinimas varikio skyriuje",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.8.2"
   },
   {
-    "section_code": "4.4.8.4.8.3",
+    "section_code": "4.8.3",
     "section_title": "Elektros instaliacijos sukelto gaisro gesinimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.8.3"
   },
   {
-    "section_code": "4.4.8.4.8.4",
+    "section_code": "4.8.4",
     "section_title": "Kitos priešgaisrinės priemonės. Nedegus audeklas, parankinės priemonės",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.8.4"
   },
   {
-    "section_code": "4.4.9",
+    "section_code": "4.9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
-    }
+    },
+    "curriculum_node_code": "4.9"
   },
   {
-    "section_code": "4.4.9",
+    "section_code": "4.9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
-    }
+    },
+    "curriculum_node_code": "4.9"
   },
   {
-    "section_code": "4.4.9",
+    "section_code": "4.9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
-    }
+    },
+    "curriculum_node_code": "4.9"
   },
   {
-    "section_code": "4.4.9",
+    "section_code": "4.9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
-    }
+    },
+    "curriculum_node_code": "4.9"
   },
   {
-    "section_code": "4.4.10.4.10.1",
+    "section_code": "4.10.1",
     "section_title": "Laivo vaistinėlės turinys. Naudojimo instrukcija",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,10 +284,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.1"
   },
   {
-    "section_code": "4.4.10.4.10.2",
+    "section_code": "4.10.2",
     "section_title": "Sumušimai, kaulų lūžiai, galvos traumos",
     "subsection_code": null,
     "subsection_title": null,
@@ -286,10 +302,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.2"
   },
   {
-    "section_code": "4.4.10.4.10.3",
+    "section_code": "4.10.3",
     "section_title": "Žaizdos ir kraujavimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -303,10 +320,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.3"
   },
   {
-    "section_code": "4.4.10.4.10.4",
+    "section_code": "4.10.4",
     "section_title": "Nudegimai, saulės smūgis,",
     "subsection_code": null,
     "subsection_title": null,
@@ -320,10 +338,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.4"
   },
   {
-    "section_code": "4.4.10.4.10.5",
+    "section_code": "4.10.5",
     "section_title": "Apsinuodijimas maistu",
     "subsection_code": null,
     "subsection_title": null,
@@ -337,10 +356,11 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.5"
   },
   {
-    "section_code": "4.4.10.4.10.6",
+    "section_code": "4.10.6",
     "section_title": "Dirbtinis kvėpavimas ir išorinis širdies masažas",
     "subsection_code": null,
     "subsection_title": null,
@@ -354,6 +374,7 @@
       "curriculum_required": true,
       "topic_number": 4,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "4.10.6"
   }
 ]

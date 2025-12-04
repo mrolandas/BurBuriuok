@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "6.6.1",
+    "section_code": "6.1",
     "section_title": "Navigacijos paskirtis ir esmė (naudojami jūrlapiai, jų paskirtis, jūrlapių numeracija, platumos ir ilgumos tinklainių žymėjimai. Šiaurės, Pietų pusrutuliai. Žymėjimo principai, grafinio ženklinimo standartas (INT-1“))",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.1"
   },
   {
-    "section_code": "6.6.2",
+    "section_code": "6.2",
     "section_title": "Geografinės koordinatės, atstumo, greičio, gylio matavimas laivyboje (matai ir prietaisai)",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.2"
   },
   {
-    "section_code": "6.6.3",
+    "section_code": "6.3",
     "section_title": "Matomasis horizontas, jo dalijimo sistemos (laipsniai, rumbai). Merkatoriaus projekcija",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.3"
   },
   {
-    "section_code": "6.6.4",
+    "section_code": "6.4",
     "section_title": "Tikrasis kursas ir pelengas. Magnetinis kompasas ir jo naudojimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.4"
   },
   {
-    "section_code": "6.6.5",
+    "section_code": "6.5",
     "section_title": "Locija. Apibrėžimas. Paskirtis ir turinys",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.5"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,10 +284,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -286,10 +302,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -303,10 +320,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -320,10 +338,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -337,10 +356,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -354,10 +374,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -371,10 +392,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -388,10 +410,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -405,10 +428,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -422,10 +446,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -439,10 +464,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -456,10 +482,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -473,10 +500,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -490,10 +518,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.6",
+    "section_code": "6.6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
@@ -507,10 +536,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Locijos terminai"
-    }
+    },
+    "curriculum_node_code": "6.6"
   },
   {
-    "section_code": "6.6.7",
+    "section_code": "6.7",
     "section_title": "Vidaus vandenų keliai",
     "subsection_code": null,
     "subsection_title": null,
@@ -524,10 +554,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.7"
   },
   {
-    "section_code": "6.6.8",
+    "section_code": "6.8",
     "section_title": "Vidaus vandenų locija",
     "subsection_code": null,
     "subsection_title": null,
@@ -541,10 +572,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.8"
   },
   {
-    "section_code": "6.6.9",
+    "section_code": "6.9",
     "section_title": "Upių locija. Terminai, sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -558,10 +590,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.9"
   },
   {
-    "section_code": "6.6.10",
+    "section_code": "6.10",
     "section_title": "Jūrų locija",
     "subsection_code": null,
     "subsection_title": null,
@@ -575,10 +608,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.10"
   },
   {
-    "section_code": "6.6.11",
+    "section_code": "6.11",
     "section_title": "Kliūčių žymėjimo sistemos",
     "subsection_code": null,
     "subsection_title": null,
@@ -592,10 +626,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
-    }
+    },
+    "curriculum_node_code": "6.11"
   },
   {
-    "section_code": "6.6.11",
+    "section_code": "6.11",
     "section_title": "Kliūčių žymėjimo sistemos",
     "subsection_code": null,
     "subsection_title": null,
@@ -609,10 +644,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
-    }
+    },
+    "curriculum_node_code": "6.11"
   },
   {
-    "section_code": "6.6.12",
+    "section_code": "6.12",
     "section_title": "Jūrlapiai ir jų skaitymas (INT 1 standartas)",
     "subsection_code": null,
     "subsection_title": null,
@@ -626,10 +662,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.12"
   },
   {
-    "section_code": "6.6.13",
+    "section_code": "6.13",
     "section_title": "Darbo su jūrlapiais taisyklės",
     "subsection_code": null,
     "subsection_title": null,
@@ -643,10 +680,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
-    }
+    },
+    "curriculum_node_code": "6.13"
   },
   {
-    "section_code": "6.6.13",
+    "section_code": "6.13",
     "section_title": "Darbo su jūrlapiais taisyklės",
     "subsection_code": null,
     "subsection_title": null,
@@ -660,10 +698,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
-    }
+    },
+    "curriculum_node_code": "6.13"
   },
   {
-    "section_code": "6.6.14",
+    "section_code": "6.14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
@@ -677,10 +716,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
-    }
+    },
+    "curriculum_node_code": "6.14"
   },
   {
-    "section_code": "6.6.14",
+    "section_code": "6.14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
@@ -694,10 +734,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
-    }
+    },
+    "curriculum_node_code": "6.14"
   },
   {
-    "section_code": "6.6.14",
+    "section_code": "6.14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
@@ -711,10 +752,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
-    }
+    },
+    "curriculum_node_code": "6.14"
   },
   {
-    "section_code": "6.6.15",
+    "section_code": "6.15",
     "section_title": "Grafinių navigacinių uždavinių sprendimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -728,10 +770,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Grafinių navigacinių uždavinių sprendimas"
-    }
+    },
+    "curriculum_node_code": "6.15"
   },
   {
-    "section_code": "6.6.15",
+    "section_code": "6.15",
     "section_title": "Grafinių navigacinių uždavinių sprendimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -745,10 +788,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Grafinių navigacinių uždavinių sprendimas"
-    }
+    },
+    "curriculum_node_code": "6.15"
   },
   {
-    "section_code": "6.6.15",
+    "section_code": "6.15",
     "section_title": "Grafinių navigacinių uždavinių sprendimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -762,10 +806,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Grafinių navigacinių uždavinių sprendimas"
-    }
+    },
+    "curriculum_node_code": "6.15"
   },
   {
-    "section_code": "6.6.15",
+    "section_code": "6.15",
     "section_title": "Grafinių navigacinių uždavinių sprendimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -779,10 +824,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Grafinių navigacinių uždavinių sprendimas"
-    }
+    },
+    "curriculum_node_code": "6.15"
   },
   {
-    "section_code": "6.6.15",
+    "section_code": "6.15",
     "section_title": "Grafinių navigacinių uždavinių sprendimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -796,10 +842,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Grafinių navigacinių uždavinių sprendimas"
-    }
+    },
+    "curriculum_node_code": "6.15"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -813,10 +860,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -830,10 +878,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -847,10 +896,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -864,10 +914,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -881,10 +932,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.16",
+    "section_code": "6.16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
@@ -898,10 +950,11 @@
       "curriculum_required": true,
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
-    }
+    },
+    "curriculum_node_code": "6.16"
   },
   {
-    "section_code": "6.6.17",
+    "section_code": "6.17",
     "section_title": "Radiolokatoriaus atšvaitas",
     "subsection_code": null,
     "subsection_title": null,
@@ -915,6 +968,7 @@
       "curriculum_required": true,
       "topic_number": 6,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "6.17"
   }
 ]

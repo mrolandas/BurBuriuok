@@ -1743,6 +1743,7 @@
 		border-radius: 1rem;
 		border: 1px solid var(--color-border);
 		background: var(--color-panel);
+		min-width: 0;
 	}
 
 	.media-admin__load-more {

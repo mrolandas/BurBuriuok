@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "7.7.1",
+    "section_code": "7.1",
     "section_title": "Lietuvos Respublikos Vidaus vandenų transporto kodeksas. Vidaus vandenų kelių sąvoka, kelių naudotojai (6, 7str.), vidaus vandenų transporto priemonių sąvoka, klasifikacija (14, 15 str.), laivų registravimas ir techninė apžiūra (16 str.), burinių jachtų vadų diplomavimas (19.4 str.), laivo kapitono teisės (20 str.), laivo kapitono pareigos kilus pavojui laivui, žmonėms ir gamtai (21 str.), atlyginimas už pagalbos suteikimą (22 str.), vidaus vandenų transporto priemonių plaukiojimo rajonai (24 str.), valstybinė laivybos Lietuvos Respublikos vidaus vandenyse priežiūra (26 str.), Vidaus vandenų transporto priemonių avarijų saugos tyrimo tikslai ir tvarka (27 str.)",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.1"
   },
   {
-    "section_code": "7.7.2.7.2.1",
+    "section_code": "7.2.1",
     "section_title": "Buriavimas pasienio ruože",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Buriavimas pasienio ruože"
-    }
+    },
+    "curriculum_node_code": "7.2.1"
   },
   {
-    "section_code": "7.7.2.7.2.2",
+    "section_code": "7.2.2",
     "section_title": "Draudimai",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Draudimai"
-    }
+    },
+    "curriculum_node_code": "7.2.2"
   },
   {
-    "section_code": "7.7.3",
+    "section_code": "7.3",
     "section_title": "Klaipėdos valstybinio jūrų uosto laivybos taisyklės (3, 4, 6 str.), uosto akvatorijos ribos (priedas nr.1), laivų greičio ribojimas (50 str.), plaukimas laivybos kanalu (38, 54 str.); draudimas plaukioti uosto akvatorija, esant ribotam matomumui ir stipriam vėjui (56, 57 str.), draudimas plaukioti pramoginiams laivams tam tikrose uosto akvatorijos dalyse (62 str.), laivų prasilenkimas su SGD saugykla ir SGD vežančiais laivais (58, 59 str.), laivų eismo valdymas (60, 61, 63 str.), uosto akvatorijoje galiojantys apribojimai (136, 137 str.). Prasilenkimas su dugno gilintuvais (128, 130 str.), vėliavų etiketas uoste (81str.)",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.3"
   },
   {
-    "section_code": "7.7.4",
+    "section_code": "7.4",
     "section_title": "Pramoginių laivų uostų taisyklės. Bendras supratimas, ką šios taisyklės reglamentuoja",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.4"
   },
   {
-    "section_code": "7.7.5",
+    "section_code": "7.5",
     "section_title": "Burinių jachtų registravimo taisyklės. Registravimo tvarka, jachtų žymėjimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.5"
   },
   {
-    "section_code": "7.7.6",
+    "section_code": "7.6",
     "section_title": "Burinių jachtų techninių apžiūrų taisyklės. Bendras supratimas, ką šios taisyklės reglamentuoja",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.6"
   },
   {
-    "section_code": "7.7.7",
+    "section_code": "7.7",
     "section_title": "Burinių jachtų laivavedžių diplomavimo taisyklės. Laivavedžių kvalifikaciniai laipsniai, jiems keliami reikalavimai ir jų kompetencija",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.7"
   },
   {
-    "section_code": "7.7.8",
+    "section_code": "7.8",
     "section_title": "Buriavimo etiketas ir jūriniai papročiai",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.8"
   },
   {
-    "section_code": "7.7.9",
+    "section_code": "7.9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
-    }
+    },
+    "curriculum_node_code": "7.9"
   },
   {
-    "section_code": "7.7.9",
+    "section_code": "7.9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
-    }
+    },
+    "curriculum_node_code": "7.9"
   },
   {
-    "section_code": "7.7.9",
+    "section_code": "7.9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
-    }
+    },
+    "curriculum_node_code": "7.9"
   },
   {
-    "section_code": "7.7.9",
+    "section_code": "7.9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
-    }
+    },
+    "curriculum_node_code": "7.9"
   },
   {
-    "section_code": "7.7.10",
+    "section_code": "7.10",
     "section_title": "Buriuotojo apranga",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.10"
   },
   {
-    "section_code": "7.7.11",
+    "section_code": "7.11",
     "section_title": "Ekologiniai reikalavimai, burlaivio ir uosto etiketas",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.11"
   },
   {
-    "section_code": "7.7.12",
+    "section_code": "7.12",
     "section_title": "Buriuotojo etika",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,6 +284,7 @@
       "curriculum_required": true,
       "topic_number": 7,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "7.12"
   }
 ]

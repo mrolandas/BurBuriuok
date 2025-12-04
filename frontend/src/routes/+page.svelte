@@ -6,6 +6,14 @@
 	import { updateCurriculumNode } from '$lib/api/admin/curriculum';
 	import { AdminApiError } from '$lib/api/admin/client';
 	import type { PageData, SectionCard } from './+page';
+	import {
+		initializeProgressTracking,
+		learnerProgress,
+		learnerProgressStatus,
+		type ConceptProgressRecord,
+		type ProgressStoreStatus
+	} from '$lib/stores/progressStore';
+	import { fetchSectionProgressBlueprint } from '$lib/api/curriculum';
 
 	let { data } = $props<{ data: PageData }>();
 
@@ -15,6 +23,13 @@
 		data.sections.map((section: SectionCard) => ({ ...section }))
 	);
 	let lastDataSections: SectionCard[] = data.sections;
+
+	// Progress tracking
+	let progressRecords = $state<Map<string, ConceptProgressRecord>>(new Map());
+	let progressStatus = $state<ProgressStoreStatus>('idle');
+	let sectionProgress = $state<Map<string, { known: number; total: number }>>(new Map());
+	let unsubscribeProgress: (() => void) | null = null;
+	let unsubscribeProgressStatus: (() => void) | null = null;
 
 	type SectionEditForm = {
 		code: string;
@@ -34,15 +49,69 @@
 		unsubscribeAdmin = adminMode.subscribe((value) => {
 			adminModeEnabled = value;
 		});
+
+		unsubscribeProgress = learnerProgress.subscribe((value) => {
+			progressRecords = value;
+			calculateSectionProgress();
+		});
+		unsubscribeProgressStatus = learnerProgressStatus.subscribe((value) => {
+			progressStatus = value;
+		});
+		void initializeProgressTracking();
+		void loadAllSectionBlueprints();
 	});
 
 	onDestroy(() => {
 		unsubscribeAdmin?.();
+		unsubscribeProgress?.();
+		unsubscribeProgressStatus?.();
 		if (successTimeout) {
 			clearTimeout(successTimeout);
 			successTimeout = null;
 		}
 	});
+
+	async function loadAllSectionBlueprints() {
+		// We need to know which concepts belong to which section to calculate totals
+		// This is a bit heavy, but necessary for the dashboard view if we want accurate counts
+		// Optimization: In a real app, we might want to fetch this pre-calculated from the backend
+		for (const section of sections) {
+			try {
+				const blueprint = await fetchSectionProgressBlueprint(section.code);
+				const conceptIds = new Set<string>();
+				for (const assignment of blueprint.conceptAssignments) {
+					if (assignment.conceptId) {
+						conceptIds.add(assignment.conceptId);
+					}
+				}
+				sectionConceptMaps.set(section.code, conceptIds);
+			} catch (e) {
+				console.warn(`Failed to load blueprint for ${section.code}`, e);
+			}
+		}
+		calculateSectionProgress();
+	}
+
+	const sectionConceptMaps = new Map<string, Set<string>>();
+
+	function calculateSectionProgress() {
+		const next = new Map<string, { known: number; total: number }>();
+		for (const section of sections) {
+			const conceptIds = sectionConceptMaps.get(section.code);
+			if (!conceptIds) {
+				next.set(section.code, { known: 0, total: 0 });
+				continue;
+			}
+			let known = 0;
+			for (const id of conceptIds) {
+				if (progressRecords.get(id)?.status === 'known') {
+					known++;
+				}
+			}
+			next.set(section.code, { known, total: conceptIds.size });
+		}
+		sectionProgress = next;
+	}
 
 	$effect(() => {
 		if (data.sections !== lastDataSections) {
@@ -177,6 +246,13 @@
 	const formatMeta = (section: SectionCard) => {
 		const subsectionLabel = formatCount(section.subsectionCount, 'skyrius', 'skyriai', 'skyrių');
 		const conceptLabel = formatCount(section.conceptCount, 'sąvoka', 'sąvokos', 'sąvokų');
+		
+		const progress = sectionProgress.get(section.code);
+		if (progress && progress.total > 0 && progress.known > 0) {
+			const percentage = Math.round((progress.known / progress.total) * 100);
+			return `${percentage}% moku · ${progress.known}/${progress.total} sąvokų`;
+		}
+		
 		return `${subsectionLabel} · ${conceptLabel}`;
 	};
 
@@ -298,6 +374,16 @@
 {#if successMessage}
 	<div class="sections-toast" role="status" aria-live="polite">{successMessage}</div>
 {/if}
+
+<header class="hero">
+	<div class="hero__content">
+		<h1 class="hero__title">Buriavimo teorijos gidas</h1>
+		<p class="hero__subtitle">
+			Išsamus žinynas pradedantiesiems ir pažengusiems buriuotojams. Pasirinkite temą ir pradėkite
+			mokytis.
+		</p>
+	</div>
+</header>
 
 <section class="sections-grid" aria-live="polite">
 	{#if !sections.length && !data.loadError}
@@ -455,13 +541,40 @@
 {/if}
 
 <style>
+	.hero {
+		width: min(100%, var(--layout-max-width));
+		margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+		text-align: center;
+		padding: 0 clamp(1rem, 3vw, 2rem);
+	}
+
+	.hero__title {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		font-weight: 800;
+		line-height: 1.1;
+		margin: 0 0 1rem;
+		background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-strong) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero__subtitle {
+		font-size: clamp(1.1rem, 2vw, 1.25rem);
+		color: var(--color-text-muted);
+		max-width: 38rem;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
 	.sections-grid {
 		width: min(100%, var(--layout-max-width));
 		margin: 0 auto;
 		display: grid;
-		gap: clamp(1.4rem, 3vw, 2rem);
-		grid-template-columns: minmax(0, 1fr);
+		gap: clamp(1.5rem, 3vw, 2rem);
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
 		align-content: start;
+		padding-bottom: 4rem;
 	}
 
 	.sections-grid__placeholder {
@@ -534,76 +647,84 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: clamp(1rem, 3vw, 1.2rem);
-		padding: clamp(1.4rem, 3vw, 1.8rem);
+		gap: 1.25rem;
+		padding: 1.5rem;
 		min-height: 100%;
-		border-radius: 1.25rem;
+		border-radius: 1.5rem;
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		box-shadow: 0 18px 42px -28px rgba(15, 23, 42, 0.45);
 		transition:
 			transform 0.2s ease,
-			box-shadow 0.25s ease,
-			border-color 0.25s ease;
-		transform: translateY(0);
+			box-shadow 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.section-card:hover,
 	.section-card:focus-within {
 		transform: translateY(-4px);
-		border-color: rgba(56, 189, 248, 0.38);
-		box-shadow: 0 24px 55px -32px rgba(56, 189, 248, 0.5);
+		border-color: var(--color-accent-border);
+		box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.1);
 	}
 
 	.section-card__link {
 		display: flex;
-		align-items: center;
-		gap: clamp(1rem, 3vw, 1.4rem);
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1.25rem;
 		text-decoration: none;
 		color: inherit;
 		flex: 1 1 auto;
 	}
 
 	.section-card__link:focus-visible {
-		outline: 2px solid rgba(56, 189, 248, 0.65);
+		outline: none;
+	}
+
+	.section-card:focus-within {
+		outline: 2px solid var(--color-accent);
 		outline-offset: 4px;
 	}
 
 	.section-card__avatar {
-		flex: 0 0 auto;
-		width: 3.6rem;
-		height: 3.6rem;
-		border-radius: 0.9rem;
+		width: 3.2rem;
+		height: 3.2rem;
+		border-radius: 1rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		border: 1px solid transparent;
+		transition: transform 0.2s ease;
+	}
+
+	.section-card:hover .section-card__avatar {
+		transform: scale(1.05);
 	}
 
 	.section-card__avatar svg {
-		width: 1.8rem;
-		height: 1.8rem;
+		width: 1.6rem;
+		height: 1.6rem;
 	}
 
 	.section-card__content {
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: column;
-		gap: clamp(0.55rem, 2vw, 0.75rem);
+		gap: 0.5rem;
 	}
 
 	.section-card__title {
 		margin: 0;
-		font-size: clamp(1.1rem, 3vw, 1.35rem);
-		line-height: 1.35;
-		font-weight: 600;
+		font-size: 1.25rem;
+		line-height: 1.3;
+		font-weight: 700;
 		color: var(--color-text);
+		letter-spacing: -0.01em;
 	}
 
 	.section-card__summary {
 		margin: 0;
 		font-size: 0.95rem;
-		line-height: 1.55;
+		line-height: 1.6;
 		color: var(--color-text-muted);
 	}
 
@@ -613,9 +734,9 @@
 		justify-content: space-between;
 		gap: 1rem;
 		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		border-top: 1px solid var(--color-border);
-		padding-top: 0.85rem;
+		color: var(--color-text-subtle);
+		border-top: 1px solid var(--color-border-light);
+		padding-top: 1rem;
 		margin-top: auto;
 	}
 
@@ -850,16 +971,6 @@
 		.status-block__action {
 			width: 100%;
 			justify-content: center;
-		}
-
-		.section-card__link {
-			align-items: flex-start;
-		}
-	}
-
-	@media (min-width: 720px) {
-		.sections-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 </style>

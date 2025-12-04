@@ -14,6 +14,7 @@ export type AdminSessionReason =
 
 export type AdminSessionState = {
 	allowed: boolean;
+	authenticated: boolean;
 	reason: AdminSessionReason;
 	appRole: string | null;
 	email: string | null;
@@ -23,6 +24,7 @@ export type AdminSessionState = {
 
 const DEFAULT_DENIED_STATE: AdminSessionState = {
 	allowed: false,
+	authenticated: false,
 	reason: 'missing-session',
 	appRole: null,
 	email: null,
@@ -45,6 +47,7 @@ export async function resolveAdminSession(url: URL): Promise<AdminSessionState> 
 	if (impersonatingAdmin) {
 		return {
 			allowed: true,
+			authenticated: true,
 			reason: 'impersonation',
 			appRole: 'admin',
 			email: null,
@@ -85,6 +88,7 @@ export async function resolveAdminSession(url: URL): Promise<AdminSessionState> 
 	if (appRole === 'admin') {
 		return {
 			allowed: true,
+			authenticated: true,
 			reason: 'role-match',
 			appRole,
 			email,
@@ -96,6 +100,7 @@ export async function resolveAdminSession(url: URL): Promise<AdminSessionState> 
 
 	return {
 		...DEFAULT_DENIED_STATE,
+		authenticated: !!session,
 		reason: denialReason,
 		appRole,
 		email,

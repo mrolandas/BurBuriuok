@@ -17,7 +17,7 @@ const adminConceptResourceSchema = z
 		slug: z.string().min(1),
 		termLt: z.string(),
 		termEn: nullableString,
-		descriptionLt: z.string(),
+		descriptionLt: nullableString,
 		descriptionEn: nullableString,
 		sectionCode: z.string().min(1),
 		sectionTitle: nullableString,
@@ -37,6 +37,7 @@ const adminConceptResourceSchema = z
 	.transform((value) => ({
 		...value,
 		termEn: typeof value.termEn === 'string' ? value.termEn : null,
+		descriptionLt: typeof value.descriptionLt === 'string' ? value.descriptionLt : null,
 		descriptionEn: typeof value.descriptionEn === 'string' ? value.descriptionEn : null,
 		sectionTitle: typeof value.sectionTitle === 'string' ? value.sectionTitle : null,
 		subsectionCode: typeof value.subsectionCode === 'string' ? value.subsectionCode : null,

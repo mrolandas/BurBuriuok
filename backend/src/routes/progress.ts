@@ -6,6 +6,7 @@ import {
   upsertProgress,
   deleteProgressRecord,
 } from "../../../data/repositories/progressRepository.ts";
+import { getSupabaseClient } from "../../../data/supabaseClient.ts";
 import type { ConceptProgress, ProgressStatus } from "../../../data/types.ts";
 import { asyncHandler } from "../utils/asyncHandler.ts";
 import { HttpError } from "../utils/httpError.ts";
@@ -56,6 +57,15 @@ router.put(
   asyncHandler(async (req, res) => {
     const identity = resolveProgressIdentity(req);
     const { conceptId } = req.params;
+
+    if (!identity.userId) {
+      throw new HttpError(
+        401,
+        "Progress tracking is only available for authenticated users.",
+        "AUTHENTICATION_REQUIRED"
+      );
+    }
+
     const parsed = upsertProgressBodySchema.parse(req.body ?? {});
 
     if (!conceptId || !conceptId.trim()) {
@@ -91,6 +101,14 @@ router.delete(
   asyncHandler(async (req, res) => {
     const identity = resolveProgressIdentity(req);
     const { conceptId } = req.params;
+
+    if (!identity.userId) {
+      throw new HttpError(
+        401,
+        "Progress tracking is only available for authenticated users.",
+        "AUTHENTICATION_REQUIRED"
+      );
+    }
 
     if (!conceptId || !conceptId.trim()) {
       throw new HttpError(
@@ -137,17 +155,23 @@ function resolveProgressIdentity(req: Request): ProgressIdentity {
 }
 
 async function fetchProgress(identity: ProgressIdentity) {
+  // Use public schema for reading because listProgress* functions query the VIEW (burburiuok_concept_progress)
+  // which is in the public schema. Use service role to bypass RLS.
+  const readClient = getSupabaseClient({ service: true, schema: "public" });
+
   if (identity.userId) {
     const [userProgress, deviceProgress] = await Promise.all([
-      listProgressByUser(identity.userId),
-      identity.deviceKey ? listProgressByDevice(identity.deviceKey) : Promise.resolve([]),
+      listProgressByUser(identity.userId, readClient),
+      identity.deviceKey
+        ? listProgressByDevice(identity.deviceKey, readClient)
+        : Promise.resolve([]),
     ]);
 
     return mergeProgressRecords(userProgress, deviceProgress);
   }
 
   if (identity.deviceKey) {
-    return listProgressByDevice(identity.deviceKey);
+    return listProgressByDevice(identity.deviceKey, readClient);
   }
 
   return [];

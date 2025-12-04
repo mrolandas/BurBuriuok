@@ -55,16 +55,7 @@
 	const hasHiddenBreadcrumbs = $derived(!showAllBreadcrumbs && breadcrumbs.length > 2);
 
 	const formatBreadcrumbLabel = (crumb: Breadcrumb) => {
-		if (showAllBreadcrumbs) {
-			return crumb.label;
-		}
-
-		const MAX_LENGTH = 36;
-		if (crumb.label.length <= MAX_LENGTH) {
-			return crumb.label;
-		}
-
-		return `…${crumb.label.slice(-MAX_LENGTH + 1)}`;
+		return crumb.label;
 	};
 
 	$effect(() => {
@@ -241,23 +232,20 @@
 		display: inline-flex;
 		align-items: center;
 		flex: 0 1 auto;
-		max-width: min(100%, 20ch);
 		color: inherit;
 		text-decoration: none;
 		border-bottom: 1px solid transparent;
 		transition: border-color 0.2s ease;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	.concept-detail__crumb--static {
 		opacity: 0.8;
+		cursor: default;
 	}
 
 	.concept-detail__crumb--ellipsis,
 	.concept-detail__crumb--toggle {
 		flex: 0 0 auto;
-		max-width: none;
 	}
 
 	.concept-detail__crumb--toggle {
@@ -274,8 +262,10 @@
 		outline-offset: 2px;
 	}
 
-	.concept-detail__crumb:hover,
-	.concept-detail__crumb:focus-visible {
+	a.concept-detail__crumb:hover,
+	a.concept-detail__crumb:focus-visible,
+	button.concept-detail__crumb:hover,
+	button.concept-detail__crumb:focus-visible {
 		border-color: currentColor;
 	}
 

@@ -1,4 +1,4 @@
-import { fetchChildNodes } from '$lib/api/curriculum';
+import { fetchChildNodes, fetchNodeByCode } from '$lib/api/curriculum';
 import type { CurriculumNode } from '$lib/api/curriculum';
 import { getSupabaseClient } from '$lib/supabase/client';
 import type { PageLoad } from './$types';
@@ -11,9 +11,15 @@ export type SectionSummary = {
 	parent_code: string | null;
 };
 
+export type Breadcrumb = {
+	label: string;
+	href?: string;
+};
+
 export type SectionPageData = {
 	section: SectionSummary | null;
 	initialNodes: CurriculumNode[];
+	breadcrumbs: Breadcrumb[];
 	notFound?: boolean;
 	loadError?: string;
 };
@@ -34,6 +40,7 @@ export const load = (async ({ params }) => {
 		const fallback: SectionPageData = {
 			section: null,
 			initialNodes: [],
+			breadcrumbs: [],
 			loadError: 'Nepavyko įkelti skilties. Pabandykite dar kartą.'
 		};
 		return fallback;
@@ -43,17 +50,44 @@ export const load = (async ({ params }) => {
 		const fallback: SectionPageData = {
 			section: null,
 			initialNodes: [],
+			breadcrumbs: [],
 			notFound: true
 		};
 		return fallback;
 	}
+
+	const breadcrumbs: Breadcrumb[] = [];
+	let currentParentCode = section.parent_code;
+	const ancestors: Breadcrumb[] = [];
+
+	while (currentParentCode) {
+		try {
+			const parent = await fetchNodeByCode(currentParentCode);
+			if (parent) {
+				ancestors.unshift({
+					label: parent.title,
+					href: `/sections/${parent.code}`
+				});
+				currentParentCode = parent.parent_code;
+			} else {
+				break;
+			}
+		} catch (e) {
+			console.warn('Failed to fetch ancestor node', e);
+			break;
+		}
+	}
+
+	breadcrumbs.push(...ancestors);
+	breadcrumbs.push({ label: section.title });
 
 	try {
 		const initialNodes = await fetchChildNodes(section.code);
 
 		const payload: SectionPageData = {
 			section,
-			initialNodes
+			initialNodes,
+			breadcrumbs
 		};
 
 		return payload;
@@ -61,6 +95,7 @@ export const load = (async ({ params }) => {
 		const fallback: SectionPageData = {
 			section,
 			initialNodes: [],
+			breadcrumbs,
 			loadError: err instanceof Error ? err.message : 'Nepavyko įkelti poskyrių.'
 		};
 		return fallback;

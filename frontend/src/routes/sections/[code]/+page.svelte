@@ -10,11 +10,18 @@
 </script>
 
 <div class="section-view">
-	<nav class="section-view__nav">
-		<a class="section-view__back" href={homeHref}>
-			<span aria-hidden="true">←</span>
-			Grįžti į skilčių lentą
-		</a>
+	<nav class="section-breadcrumbs" aria-label="Navigacija">
+		<a class="section-breadcrumb" href={homeHref}>Pagrindinis</a>
+		{#if data.breadcrumbs}
+			{#each data.breadcrumbs as crumb}
+				<span class="section-breadcrumb-separator" aria-hidden="true">›</span>
+				{#if crumb.href}
+					<a class="section-breadcrumb" href={resolve(crumb.href)}>{crumb.label}</a>
+				{:else}
+					<span class="section-breadcrumb section-breadcrumb--static">{crumb.label}</span>
+				{/if}
+			{/each}
+		{/if}
 	</nav>
 
 	{#if data.notFound}
@@ -40,34 +47,36 @@
 		gap: clamp(1rem, 2vw, 1.5rem);
 	}
 
-	.section-view__nav {
+	.section-breadcrumbs {
 		display: flex;
-		justify-content: flex-start;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.45rem;
+		font-size: 0.85rem;
+		color: var(--color-breadcrumb, var(--color-text-soft));
+		margin-bottom: 0.5rem;
 	}
 
-	.section-view__back {
+	.section-breadcrumb {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.35rem;
+		color: inherit;
 		text-decoration: none;
-		font-weight: 600;
-		color: var(--color-pill-text);
-		border: 1px solid var(--color-pill-border);
-		background: var(--color-pill-bg);
-		padding: 0.35rem 0.8rem;
-		border-radius: 999px;
-		transition:
-			transform 0.2s ease,
-			background 0.2s ease,
-			border-color 0.2s ease,
-			color 0.2s ease;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.2s ease;
 	}
 
-	.section-view__back:hover,
-	.section-view__back:focus-visible {
-		transform: translateY(-1px);
-		background: var(--color-pill-hover-bg);
-		border-color: var(--color-pill-hover-border);
-		color: var(--color-text);
+	.section-breadcrumb--static {
+		opacity: 0.8;
+		cursor: default;
+	}
+
+	a.section-breadcrumb:hover,
+	a.section-breadcrumb:focus-visible {
+		border-color: currentColor;
+	}
+
+	.section-breadcrumb-separator {
+		opacity: 0.5;
 	}
 </style>

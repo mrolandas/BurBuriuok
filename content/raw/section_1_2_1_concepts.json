@@ -9,7 +9,8 @@
     "term_en": "Ballast Keel",
     "description_lt": "Svertas po vandeniu su sunkiu balastiniu galu (švinas/geležis). Suteikia stabilumą ir neleidžia laivui apvirsti ar dreifuoti į šoną.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -21,7 +22,8 @@
     "term_en": "Keel",
     "description_lt": "Pagrindinė išilginė korpuso konstrukcija - laivo 'stuburas', einantis nuo priekio iki galo dugne.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -33,7 +35,8 @@
     "term_en": "Keelson",
     "description_lt": "Vidinis išilginis sutvirtinimas virš kilio, sustiprina korpuso konstrukciją.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -45,7 +48,8 @@
     "term_en": "Floor Timber",
     "description_lt": "Skersinė korpuso konstrukcija dugne, jungia šonus per kilį.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -57,7 +61,8 @@
     "term_en": "Mast Step",
     "description_lt": "Stiebo tvirtinimo vieta ant kilio ar denio. Priima visą stiebo ir burių apkrovą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -69,7 +74,8 @@
     "term_en": "Frames / Ribs",
     "description_lt": "Skersiniai korpuso rėmo elementai - kaip 'šonkauliai', formuojantys korpuso formą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -81,7 +87,8 @@
     "term_en": "Stringers",
     "description_lt": "Išilginiai sutvirtinimai palei korpusą, jungia španhautus ir sustiprina konstrukciją.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -93,7 +100,8 @@
     "term_en": "Knees",
     "description_lt": "Kampiniai tvirtinimai tarp šonų ir denio, sustiprina jungtį.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -105,7 +113,8 @@
     "term_en": "Deck Beams",
     "description_lt": "Skersiniai denio atramų sijūnai, laikantys denį.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -117,7 +126,8 @@
     "term_en": "Half Beams",
     "description_lt": "Pusiau ilgio denio sijūnai, naudojami ten, kur reikia angos (pvz., liukui).",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -129,7 +139,8 @@
     "term_en": "Carlings",
     "description_lt": "Išilginiai denio sijūnai, laikantys denį išilgai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -141,7 +152,8 @@
     "term_en": "Coamings",
     "description_lt": "Pakelta kokpito ar liuko atrama, saugo nuo vandens patekimo į vidų.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -153,7 +165,8 @@
     "term_en": "Pillars",
     "description_lt": "Vertikalūs denio atramos stulpai kajutėje, perduoda apkrovą nuo denio į kilį.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -165,7 +178,8 @@
     "term_en": "Centreboard",
     "description_lt": "Keliama-nuleidžiama plokštuma per šverto šulinį, neleidžianti dreifuoti. Šliūžė = daggerboard (vertikaliai ištraukiama).",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -177,7 +191,8 @@
     "term_en": "Centreboard Trunk",
     "description_lt": "Vertikali anga korpuse, pro kurią keliamas ir nuleidžiamas švertas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -189,7 +204,8 @@
     "term_en": "Centreboard Pennant",
     "description_lt": "Virvė ar trosas, kuriuo keliamas ir nuleidžiamas švertas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -201,7 +217,8 @@
     "term_en": "Outboard Rudder",
     "description_lt": "Vairas, tvirtinamas prie achterštevens galinio krašto pavyzdais (pintles & gudgeons). Lengvai nuimamas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -213,7 +230,8 @@
     "term_en": "Inboard Rudder",
     "description_lt": "Vairas, integruotas į korpuso konstrukciją, vairo ašis eina per korpusą. Tvirtesnis, tinkamas jūrai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -225,7 +243,8 @@
     "term_en": "Skeg",
     "description_lt": "Stacionari vertikali plokštuma prieš vairą, sustiprina vairo sistemą ir pagerina stabilumą kurse.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -237,7 +256,8 @@
     "term_en": "Rudder Blade",
     "description_lt": "Besisukanti vairo dalis vandenyje, plokščia plokštuma, kuri keičia vandens srautą ir valdo laivą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -249,7 +269,8 @@
     "term_en": "Rudder Trunk",
     "description_lt": "Korpuse esanti vairo mechanizmo dalis su sandarinimais, kur eina sorlynis.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -261,7 +282,8 @@
     "term_en": "Rudder Stock",
     "description_lt": "Vairo ašis, einanti per korpusą ir jungiantis vairo plunksną su valdymo mechanizmu.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -273,7 +295,8 @@
     "term_en": "Tiller Arm",
     "description_lt": "Svertas ant sorlyno denyje, perduodantis jėgą nuo rumpelio ar šturvalo į vairą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -285,7 +308,8 @@
     "term_en": "Rudder Head",
     "description_lt": "Viršutinė sorlyno dalis, kur tvirtinamas valdymo mechanizmas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -297,7 +321,8 @@
     "term_en": "Tiller",
     "description_lt": "Horizontalus svertas tiesiogiam vairo valdymui. Paprastas, patikimas, dažnai mažose jachtose iki 30'.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -309,7 +334,8 @@
     "term_en": "Wheel / Helm",
     "description_lt": "Vairo ratas vairo valdymui per šturtrosus arba hidrauliką. Naudojamas didesnėse jachtose.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -321,7 +347,8 @@
     "term_en": "Steering Cables",
     "description_lt": "Trosai ar grandinė, sujungiantys šturvą su vairo mechanizmu.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -333,7 +360,8 @@
     "term_en": "Balanced Rudder",
     "description_lt": "Vairas, kurio dalis yra PRIEŠ ašį. Sumažina valdomą jėgą, lengviau valdyti.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -345,7 +373,8 @@
     "term_en": "Semi-balanced Rudder",
     "description_lt": "Vairas su nedidele priekine dalimi už ašies. Kompromisas tarp balanso ir efektyvumo.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -357,7 +386,8 @@
     "term_en": "Lifelines",
     "description_lt": "Trosai ar virvės palei denio kraštą, saugantys įgulą nuo kritimo į vandenį. Tvirtinami prie lejerių stovų.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -369,7 +399,8 @@
     "term_en": "Stanchions",
     "description_lt": "Vertikalūs metaliniai stulpeliai palei denį, per kuriuos eina relingai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -381,7 +412,8 @@
     "term_en": "Stanchion Bases",
     "description_lt": "Lejerių tvirtinimo bazės ant denio ar falšborto.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -393,7 +425,8 @@
     "term_en": "Forepeak",
     "description_lt": "Priekinė patalpa jachtoje už forštevens. Dažnai saugoma inkarai, lynai, burės.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -405,7 +438,8 @@
     "term_en": "Cabin",
     "description_lt": "Gyvenamoji erdvė po deniu su lovomis, stalu. Pagrindinė patogumų vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -417,7 +451,8 @@
     "term_en": "Saloon",
     "description_lt": "Pagrindinė bendra erdvė - valgomasis su stalu, suoliukais. Socialinė vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -429,7 +464,8 @@
     "term_en": "Aft Cabin",
     "description_lt": "Galinė patalpa už kajutės arba saugykla po kokpitu. Saugomi įrankiai, atsarginės dalys.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -441,7 +477,8 @@
     "term_en": "Bilge",
     "description_lt": "Žemiausia vidaus vieta korpuse, kur renkasi vanduo. Čia dažnai siurbliai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -453,7 +490,8 @@
     "term_en": "Head",
     "description_lt": "Tualetas jachtoje. Paprastai su unituazu ir kriaukle.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -465,7 +503,8 @@
     "term_en": "Galley",
     "description_lt": "Virtuvė jachtoje su virykle, kriaukle, šaldytuvu.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -477,7 +516,8 @@
     "term_en": "Engine Compartment",
     "description_lt": "Atskirta erdvė varikliui. Su garso izoliacija, ventiliacija.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -489,7 +529,8 @@
     "term_en": "Hatches",
     "description_lt": "Atidaromi denio dangčiai, leidžiantys patekti į vidų. Pagrindinė įėjimo vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -501,7 +542,8 @@
     "term_en": "Portholes",
     "description_lt": "Apvalūs ar ovalūs langai korpuse. Leidžia šviesą ir vėdinimą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -513,7 +555,8 @@
     "term_en": "Ventilators",
     "description_lt": "Vėdinimo sistemos įtaisai denio, leidžiantys orui cirkuliuoti be vandens patekimo.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -525,7 +568,8 @@
     "term_en": "Water Tanks",
     "description_lt": "Gėlo vandens saugojimo talpyklos korpuse. Paprastai kelių šimtų litrų.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -537,7 +581,8 @@
     "term_en": "Water System",
     "description_lt": "Pompos, vamzdžiai, filtrai gėlo vandens tiekimui į kriaušles ir dušą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -549,7 +594,8 @@
     "term_en": "Scuppers",
     "description_lt": "Vandens nubėgimo angos kokpite ir denyje. Leidžia vandeniui ištekėti už borto.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -561,7 +607,8 @@
     "term_en": "Bilge Pumps",
     "description_lt": "Rankiniai ar elektriniai siurbliai triumo vandeniui išpumpuoti. Būtini saugumui.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -573,7 +620,8 @@
     "term_en": "Dorade Vents",
     "description_lt": "Specialūs vėdinimo įtaisai su vandens gaudyklėmis. Klasikinis dizainas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -585,7 +633,8 @@
     "term_en": "Cowl Vents",
     "description_lt": "Besisukantys vėjo gaudyklės vėdinimui. Orientuojasi į vėją automatiškai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -597,7 +646,8 @@
     "term_en": "Lifelines",
     "description_lt": "Trosai ar virvės palei denio kraštą, saugantys įgulą nuo kritimo į vandenį. Tvirtinami prie lejerių stovų.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -609,7 +659,8 @@
     "term_en": "Stanchions",
     "description_lt": "Vertikalūs metaliniai stulpeliai palei denį, per kuriuos eina relingai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -621,7 +672,8 @@
     "term_en": "Stanchion Bases",
     "description_lt": "Lejerių tvirtinimo bazės ant denio ar falšborto.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -633,7 +685,8 @@
     "term_en": "Forepeak",
     "description_lt": "Priekinė patalpa jachtoje už forštevens. Dažnai saugoma inkarai, lynai, burės.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -645,7 +698,8 @@
     "term_en": "Cabin",
     "description_lt": "Gyvenamoji erdvė po deniu su lovomis, stalu. Pagrindinė patogumų vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -657,7 +711,8 @@
     "term_en": "Saloon",
     "description_lt": "Pagrindinė bendra erdvė - valgomasis su stalu, suoliukais. Socialinė vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -669,7 +724,8 @@
     "term_en": "Aft Cabin",
     "description_lt": "Galinė patalpa už kajutės arba saugykla po kokpitu. Saugomi įrankiai, atsarginės dalys.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -681,7 +737,8 @@
     "term_en": "Bilge",
     "description_lt": "Žemiausia vidaus vieta korpuse, kur renkasi vanduo. Čia dažnai siurbliai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -693,7 +750,8 @@
     "term_en": "Head",
     "description_lt": "Tualetas jachtoje. Paprastai su unituazu ir kriaukle.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -705,7 +763,8 @@
     "term_en": "Galley",
     "description_lt": "Virtuvė jachtoje su virykle, kriaukle, šaldytuvu.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -717,7 +776,8 @@
     "term_en": "Engine Compartment",
     "description_lt": "Atskirta erdvė varikliui. Su garso izoliacija, ventiliacija.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -729,7 +789,8 @@
     "term_en": "Hatches",
     "description_lt": "Atidaromi denio dangčiai, leidžiantys patekti į vidų. Pagrindinė įėjimo vieta.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -741,7 +802,8 @@
     "term_en": "Portholes",
     "description_lt": "Apvalūs ar ovalūs langai korpuse. Leidžia šviesą ir vėdinimą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -753,7 +815,8 @@
     "term_en": "Ventilators",
     "description_lt": "Vėdinimo sistemos įtaisai denio, leidžiantys orui cirkuliuoti be vandens patekimo.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -765,7 +828,8 @@
     "term_en": "Water Tanks",
     "description_lt": "Gėlo vandens saugojimo talpyklos korpuse. Paprastai kelių šimtų litrų.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -777,7 +841,8 @@
     "term_en": "Water System",
     "description_lt": "Pompos, vamzdžiai, filtrai gėlo vandens tiekimui į kriaušles ir dušą.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -789,7 +854,8 @@
     "term_en": "Scuppers",
     "description_lt": "Vandens nubėgimo angos kokpite ir denyje. Leidžia vandeniui ištekėti už borto.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -801,7 +867,8 @@
     "term_en": "Bilge Pumps",
     "description_lt": "Rankiniai ar elektriniai siurbliai triumo vandeniui išpumpuoti. Būtini saugumui.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -813,7 +880,8 @@
     "term_en": "Dorade Vents",
     "description_lt": "Specialūs vėdinimo įtaisai su vandens gaudyklėmis. Klasikinis dizainas.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   },
   {
     "section_code": "1.2.1",
@@ -825,6 +893,7 @@
     "term_en": "Cowl Vents",
     "description_lt": "Besisukantys vėjo gaudyklės vėdinimui. Orientuojasi į vėją automatiškai.",
     "description_en": null,
-    "source_ref": "LBS 1.2.1"
+    "source_ref": "LBS 1.2.1",
+    "curriculum_node_code": "1.2.1"
   }
 ]

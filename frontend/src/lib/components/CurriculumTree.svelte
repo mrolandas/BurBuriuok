@@ -1,8 +1,8 @@
 <script lang="ts">
 	import CurriculumTreeBranch from './CurriculumTreeBranch.svelte';
 	import ConceptEditModal from './ConceptEditModal.svelte';
-	import type { CurriculumNode, CurriculumItem } from '$lib/api/curriculum';
-	import { fetchChildNodes, fetchNodeItems } from '$lib/api/curriculum';
+	import type { CurriculumNode, CurriculumItem, SectionProgressBlueprint } from '$lib/api/curriculum';
+	import { fetchChildNodes, fetchNodeItems, fetchSectionProgressBlueprint } from '$lib/api/curriculum';
 	import {
 		createCurriculumItem,
 		createCurriculumNode,
@@ -14,6 +14,14 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { AdminApiError } from '$lib/api/admin/client';
+	import {
+		initializeProgressTracking,
+		learnerProgress,
+		learnerProgressError,
+		learnerProgressStatus,
+		type ConceptProgressRecord,
+		type ProgressStoreStatus
+	} from '$lib/stores/progressStore';
 	import type {
 		TreeNodeState,
 		TreeNodeAdminState,
@@ -25,8 +33,11 @@
 		TreeNodeOrderChange,
 		TreeNodeOrderFinalize,
 		TreeNodeConceptConflict,
-		TreeItemAdminState
+		TreeItemAdminState,
+		TreeNodeProgressSummary
 	} from './curriculumTreeTypes';
+
+	import { getSupabaseClient } from '$lib/supabase/client';
 
 	type SectionSummary = {
 		code: string;
@@ -34,8 +45,30 @@
 		summary: string | null;
 	};
 
+	type SectionProgressTopology = {
+		nodeParents: Map<string, string | null>;
+		nodeSet: Set<string>;
+		conceptNodeMap: Map<string, string>;
+	};
+
 	export let section: SectionSummary;
 	export let initialNodes: CurriculumNode[] = [];
+
+	let sectionItems: CurriculumItem[] = [];
+	let sectionItemsLoading = false;
+
+	onMount(async () => {
+		if (!initialNodes.length) {
+			sectionItemsLoading = true;
+			try {
+				sectionItems = await fetchNodeItems(section.code);
+			} catch (e) {
+				console.error('Failed to fetch section items', e);
+			} finally {
+				sectionItemsLoading = false;
+			}
+		}
+	});
 
 	let adminEnabled = false;
 	let adminModeUnsubscribe: (() => void) | null = null;
@@ -68,6 +101,180 @@
 	});
 
 	let conceptEditor: ConceptEditorState = createConceptEditorState();
+
+	let progressRecords = new Map<string, ConceptProgressRecord>();
+	let progressStatus: ProgressStoreStatus = 'idle';
+	let progressDisplayStatus: ProgressStoreStatus = 'idle';
+	let progressStoreError: string | null = null;
+	let progressSummaries = new SvelteMap<string, TreeNodeProgressSummary>();
+	let sectionProgressSummary: TreeNodeProgressSummary | null = null;
+	let progressUnsubscribe: (() => void) | null = null;
+	let progressStatusUnsubscribe: (() => void) | null = null;
+	let progressErrorUnsubscribe: (() => void) | null = null;
+	let progressRefreshScheduled = false;
+	let hasPrefetchedVisibleNodes = false;
+	let sectionProgressTopology: SectionProgressTopology | null = null;
+	let sectionProgressTopologyStatus: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
+	let sectionProgressTopologyError: string | null = null;
+	let sectionProgressTopologyCode: string | null = null;
+	let sectionProgressTopologyVersion = 0;
+	let isAuthenticated = false;
+
+	const createEmptyProgressSummary = (): TreeNodeProgressSummary => ({
+		total: 0,
+		known: 0,
+		percentage: null
+	});
+
+	const isConceptKnown = (conceptId: string | null): boolean => {
+		if (!conceptId) {
+			return false;
+		}
+		const record = progressRecords.get(conceptId);
+		return record?.status === 'known';
+	};
+
+	const finalizeProgressSummary = (total: number, known: number): TreeNodeProgressSummary => ({
+		total,
+		known,
+		percentage: total ? Math.round((known / total) * 100) : null
+	});
+
+	const buildSectionProgressTopology = (
+		blueprint: SectionProgressBlueprint
+	): SectionProgressTopology => {
+		const nodeParents = new Map<string, string | null>();
+		const nodeSet = new Set<string>();
+		const conceptNodeMap = new Map<string, string>();
+
+		for (const node of blueprint.nodes) {
+			if (!node.code) {
+				continue;
+			}
+			nodeSet.add(node.code);
+			nodeParents.set(node.code, node.parentCode ?? null);
+		}
+
+		for (const assignment of blueprint.conceptAssignments) {
+			if (!assignment.conceptId || !assignment.nodeCode) {
+				continue;
+			}
+			if (!nodeSet.has(assignment.nodeCode)) {
+				continue;
+			}
+			conceptNodeMap.set(assignment.conceptId, assignment.nodeCode);
+		}
+
+		return {
+			nodeParents,
+			nodeSet,
+			conceptNodeMap
+		};
+	};
+
+	const resetSectionProgressSummaries = () => {
+		progressSummaries = new SvelteMap();
+		sectionProgressSummary = createEmptyProgressSummary();
+	};
+
+	const recomputeProgressSummaries = () => {
+		if (!sectionProgressTopology) {
+			resetSectionProgressSummaries();
+			return;
+		}
+
+		const totals = new Map<string, { total: number; known: number }>();
+
+		const accumulateForNode = (nodeCode: string, isKnown: boolean) => {
+			let current: string | null = nodeCode;
+			while (current) {
+				if (!sectionProgressTopology?.nodeSet.has(current)) {
+					// If the current node is not in the topology (e.g. it's a root or outside the section), stop.
+					// However, we should check if we are at the section root.
+					if (current === section.code) {
+						// We reached the section root, accumulate there too if it's not in the set (it should be though)
+					}
+					break;
+				}
+				const entry = totals.get(current) ?? { total: 0, known: 0 };
+				entry.total += 1;
+				if (isKnown) {
+					entry.known += 1;
+				}
+				totals.set(current, entry);
+				const nextParent: string | null = sectionProgressTopology.nodeParents.get(current) ?? null;
+				
+				// Prevent infinite loops or moving up beyond the section
+				if (!nextParent || nextParent === current) {
+					break;
+				}
+				current = nextParent;
+			}
+		};
+
+		for (const [conceptId, nodeCode] of sectionProgressTopology.conceptNodeMap.entries()) {
+			if (!nodeCode) {
+				continue;
+			}
+			const known = isConceptKnown(conceptId);
+			accumulateForNode(nodeCode, known);
+		}
+
+		const nextSummaries = new SvelteMap<string, TreeNodeProgressSummary>();
+		for (const code of sectionProgressTopology.nodeSet) {
+			const entry = totals.get(code) ?? { total: 0, known: 0 };
+			nextSummaries.set(code, finalizeProgressSummary(entry.total, entry.known));
+		}
+
+		progressSummaries = nextSummaries;
+		const rootSummary = nextSummaries.get(section.code) ?? createEmptyProgressSummary();
+		sectionProgressSummary =
+			rootSummary.total || rootSummary.known ? rootSummary : createEmptyProgressSummary();
+	};
+
+	const requestProgressRefresh = () => {
+		if (progressRefreshScheduled) {
+			return;
+		}
+		progressRefreshScheduled = true;
+		Promise.resolve().then(() => {
+			progressRefreshScheduled = false;
+			recomputeProgressSummaries();
+		});
+	};
+
+	const loadSectionProgressTopology = async (code: string, { force = false } = {}) => {
+		if (!code) {
+			return;
+		}
+		if (!force && sectionProgressTopology && sectionProgressTopologyCode === code) {
+			return;
+		}
+
+		const version = ++sectionProgressTopologyVersion;
+		sectionProgressTopologyStatus = 'loading';
+		sectionProgressTopologyError = null;
+		sectionProgressTopologyCode = code;
+		sectionProgressTopology = null;
+		resetSectionProgressSummaries();
+
+		try {
+			const blueprint = await fetchSectionProgressBlueprint(code);
+			if (version !== sectionProgressTopologyVersion) {
+				return;
+			}
+			sectionProgressTopology = buildSectionProgressTopology(blueprint);
+			sectionProgressTopologyStatus = 'ready';
+			requestProgressRefresh();
+		} catch (error) {
+			if (version !== sectionProgressTopologyVersion) {
+				return;
+			}
+			sectionProgressTopologyStatus = 'error';
+			sectionProgressTopologyError =
+				error instanceof Error ? error.message : 'Nepavyko apskaičiuoti pažangos santraukos.';
+		}
+	};
 
 	type AdminErrorBody = {
 		error?: {
@@ -362,6 +569,8 @@
 		pendingReorders = next;
 	};
 
+	let authSubscription: { unsubscribe: () => void } | null = null;
+
 	onMount(() => {
 		adminMode.initialize();
 		adminModeUnsubscribe = adminMode.subscribe((value) => {
@@ -371,6 +580,32 @@
 			}
 			refreshTree();
 		});
+		progressUnsubscribe = learnerProgress.subscribe((value) => {
+			progressRecords = value;
+		});
+		progressStatusUnsubscribe = learnerProgressStatus.subscribe((value) => {
+			progressStatus = value;
+		});
+		progressErrorUnsubscribe = learnerProgressError.subscribe((value) => {
+			progressStoreError = value;
+		});
+		void initializeProgressTracking();
+		
+		const supabase = getSupabaseClient();
+		supabase.auth.getSession().then(({ data }) => {
+			isAuthenticated = !!data.session;
+		});
+		const { data } = supabase.auth.onAuthStateChange((event, session) => {
+			isAuthenticated = !!session;
+		});
+		authSubscription = data.subscription;
+
+		if (!hasPrefetchedVisibleNodes) {
+			hasPrefetchedVisibleNodes = true;
+			Promise.all(roots.map((state) => ensureChildren(state))).catch((error) => {
+				console.warn('[CurriculumTree] Failed to preload child nodes for progress summaries', error);
+			});
+		}
 	});
 
 	onDestroy(() => {
@@ -378,10 +613,36 @@
 			adminModeUnsubscribe();
 			adminModeUnsubscribe = null;
 		}
+		if (progressUnsubscribe) {
+			progressUnsubscribe();
+			progressUnsubscribe = null;
+		}
+		if (progressStatusUnsubscribe) {
+			progressStatusUnsubscribe();
+			progressStatusUnsubscribe = null;
+		}
+		if (progressErrorUnsubscribe) {
+			progressErrorUnsubscribe();
+			progressErrorUnsubscribe = null;
+		}
+		authSubscription?.unsubscribe();
 	});
 
 	$: if (initialNodes) {
 		roots = initialNodes.map(createState);
+	}
+
+	$: if (section?.code && section.code !== sectionProgressTopologyCode) {
+		void loadSectionProgressTopology(section.code);
+	}
+
+	$: progressDisplayStatus =
+		sectionProgressTopologyStatus === 'loading' ? 'loading' : progressStatus;
+
+	$: {
+		void progressRecords;
+		void sectionProgressTopology;
+		requestProgressRefresh();
 	}
 
 	const resetCreateChildForm = (state: TreeNodeState, options: { open?: boolean } = {}) => {
@@ -519,6 +780,7 @@
 				);
 				if (target) {
 					target.conceptSlug = savedConcept.slug;
+					target.conceptId = savedConcept.id ?? target.conceptId;
 					target.conceptTerm = savedConcept.termLt ?? target.conceptTerm;
 					if (savedConcept.termLt) {
 						target.label = savedConcept.termLt;
@@ -1268,6 +1530,29 @@
 		{#if section.summary}
 			<p class="curriculum-tree__summary">{section.summary}</p>
 		{/if}
+		{#if isAuthenticated}
+			<div class="curriculum-tree__progress" data-status={progressStatus} aria-live="polite">
+				<span class="curriculum-tree__progress-label">Pažanga</span>
+				{#if sectionProgressTopologyStatus === 'loading' || progressStatus === 'loading'}
+					<strong>Kraunama…</strong>
+				{:else if sectionProgressTopologyStatus === 'error'}
+					<strong>–</strong>
+					<small>Nepavyko apskaičiuoti pažangos.</small>
+				{:else if sectionProgressSummary && (sectionProgressSummary.total || sectionProgressSummary.known)}
+					<strong>{sectionProgressSummary.percentage ?? 0}%</strong>
+					<small>{sectionProgressSummary.known}/{sectionProgressSummary.total} temų „moku“</small>
+				{:else}
+					<strong>–</strong>
+					<small>Pažymėkite bent vieną temą.</small>
+				{/if}
+			</div>
+			{#if progressStatus === 'error' && progressStoreError}
+				<p class="curriculum-tree__progress-error" role="alert">{progressStoreError}</p>
+			{/if}
+			{#if sectionProgressTopologyStatus === 'error' && sectionProgressTopologyError}
+				<p class="curriculum-tree__progress-error" role="alert">{sectionProgressTopologyError}</p>
+			{/if}
+		{/if}
 		{#if adminEnabled}
 			<div class="curriculum-tree__toolbar">
 				<label class="curriculum-tree__toggle">
@@ -1315,7 +1600,67 @@
 	{/if}
 
 	{#if !roots.length}
-		<p class="curriculum-tree__empty">Šioje skiltyje dar nėra įkelto turinio.</p>
+		{#if sectionItems.length}
+			<div class="curriculum-tree__root-items">
+				<CurriculumTreeBranch
+					nodes={[{
+						id: section.code,
+						loaded: true,
+						node: {
+							code: section.code,
+							title: section.title,
+							summary: section.summary,
+							level: 0,
+							ordinal: 1,
+							prerequisiteCount: 0
+						},
+						expanded: true,
+						loading: false,
+						error: null,
+						items: sectionItems,
+						children: [],
+						admin: createAdminState(),
+						itemAdmin: {}
+					}]}
+					parentState={null}
+					onToggle={() => {}}
+					onRetry={() => {}}
+					{adminEnabled}
+					progressSummaries={isAuthenticated ? progressSummaries : undefined}
+					progressStatus={progressDisplayStatus}
+					onOpenCreateChild={openCreateChildForm}
+					onCancelCreateChild={cancelCreateChildForm}
+					onCreateChildFieldChange={updateCreateChildField}
+					onSubmitCreateChild={submitCreateChild}
+					onOpenCreateItem={openCreateItemForm}
+					onCancelCreateItem={cancelCreateItemForm}
+					onCreateItemFieldChange={updateCreateItemField}
+					onSubmitCreateItem={submitCreateItem}
+					onEditItem={openConceptEditor}
+					onRequestDeleteItem={requestConceptDeletion}
+					onCancelDeleteItem={cancelConceptDeletion}
+					onConfirmDeleteItem={confirmConceptDeletion}
+					onOpenEdit={openEditForm}
+					onCancelEdit={cancelEditForm}
+					onEditFieldChange={updateEditField}
+					onSubmitEdit={submitEditForm}
+					onRequestDelete={openDeleteConfirmation}
+					onCancelDelete={cancelDeleteConfirmation}
+					onConfirmDelete={confirmDeleteNode}
+					onMoveNode={moveNode}
+					{dragAndDropEnabled}
+					onNodeDragConsider={handleNodeDragConsider}
+					onNodeDragFinalize={handleNodeDragFinalize}
+					{pendingParentCodes}
+					{pendingNodeCodes}
+					{dragSessionActive}
+					{allowCreateChild}
+					pendingActive={Boolean(pendingChangeCount)}
+				/>
+			</div>
+		{:else}
+			<p class="curriculum-tree__empty">Šioje skiltyje dar nėra įkelto turinio.</p>
+		{/if}
 	{:else}
 		<CurriculumTreeBranch
 			nodes={roots}
@@ -1323,6 +1668,8 @@
 			onToggle={toggleNode}
 			onRetry={retryNode}
 			{adminEnabled}
+			progressSummaries={isAuthenticated ? progressSummaries : undefined}
+			progressStatus={progressDisplayStatus}
 			onOpenCreateChild={openCreateChildForm}
 			onCancelCreateChild={cancelCreateChildForm}
 			onCreateChildFieldChange={updateCreateChildField}
@@ -1383,6 +1730,40 @@
 		margin: 0;
 		color: var(--color-text-muted);
 		line-height: 1.6;
+	}
+
+	.curriculum-tree__progress {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		align-items: baseline;
+		margin-top: 0.35rem;
+		padding: 0.4rem 0.85rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-border-light);
+		background: var(--color-panel-secondary);
+		font-size: 0.9rem;
+	}
+
+	.curriculum-tree__progress-label {
+		font-weight: 600;
+		color: var(--color-text-muted);
+	}
+
+	.curriculum-tree__progress strong {
+		font-size: 1rem;
+		color: var(--color-text);
+	}
+
+	.curriculum-tree__progress small {
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+	}
+
+	.curriculum-tree__progress-error {
+		margin: 0.25rem 0 0;
+		color: #b91c1c;
+		font-size: 0.85rem;
 	}
 
 	.curriculum-tree__toolbar {

@@ -1,6 +1,6 @@
 [
   {
-    "section_code": "3.3.1",
+    "section_code": "3.1",
     "section_title": "Terminai ir sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -14,10 +14,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.1"
   },
   {
-    "section_code": "3.3.2",
+    "section_code": "3.2",
     "section_title": "Jachtos kursai vėjo atžvilgiu. Jachtos kursai pasaulio šalių atžvilgiu",
     "subsection_code": null,
     "subsection_title": null,
@@ -31,10 +32,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.2"
   },
   {
-    "section_code": "3.3.3",
+    "section_code": "3.3",
     "section_title": "Jachtos kursai laivų (burinių ir kitų) atžvilgiu",
     "subsection_code": null,
     "subsection_title": null,
@@ -48,10 +50,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.3"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -65,10 +68,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -82,10 +86,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -99,10 +104,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -116,10 +122,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -133,10 +140,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -150,10 +158,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -167,10 +176,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -184,10 +194,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.4",
+    "section_code": "3.4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
@@ -201,10 +212,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
-    }
+    },
+    "curriculum_node_code": "3.4"
   },
   {
-    "section_code": "3.3.5",
+    "section_code": "3.5",
     "section_title": "Pasiruošimas išplaukti. Jachtos patikrinimas. Jachtos aptakelavimas ir nutakelavimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -218,10 +230,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.5"
   },
   {
-    "section_code": "3.3.6",
+    "section_code": "3.6",
     "section_title": "Jachtos (švertboto ir kilinės) vairavimas. Dreifo mažinimo būdai lengvose ir sunkiose jachtose. Kaip sumažinti kreną ir kaip reguliuoti diferentą",
     "subsection_code": null,
     "subsection_title": null,
@@ -235,10 +248,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.6"
   },
   {
-    "section_code": "3.3.7",
+    "section_code": "3.7",
     "section_title": "Jachtos valdymas vairu ir burėmis. Jachtos valdymas tik burėmis. Jachtos stabdymo būdai. Švertboto valdymo ypatumai",
     "subsection_code": null,
     "subsection_title": null,
@@ -252,10 +266,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.7"
   },
   {
-    "section_code": "3.3.8",
+    "section_code": "3.8",
     "section_title": "Išplaukimas (nuo kranto, prieplaukos, bojos), priplaukimas (prie kranto, prieplaukos, bojos)",
     "subsection_code": null,
     "subsection_title": null,
@@ -269,10 +284,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.8"
   },
   {
-    "section_code": "3.3.9",
+    "section_code": "3.9",
     "section_title": "Manevravimas iškritus žmogui už borto (plaukiant su burėmis). Įgulos veiksmai ir žmogaus iškėlimas iš vandens",
     "subsection_code": null,
     "subsection_title": null,
@@ -286,10 +302,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.9"
   },
   {
-    "section_code": "3.3.10",
+    "section_code": "3.10",
     "section_title": "Žmogaus už borto situacija, jachtos apsisukimas ir grįžimas,",
     "subsection_code": null,
     "subsection_title": null,
@@ -303,10 +320,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.10"
   },
   {
-    "section_code": "3.3.11.3.11.1",
+    "section_code": "3.11.1",
     "section_title": "Atmušų (krancų, fenderių) vietos ir aukščio parinkimas švartuojantis prie aukštos ir žemos krantinės, lagu prie kito laivo",
     "subsection_code": null,
     "subsection_title": null,
@@ -320,10 +338,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.11.1"
   },
   {
-    "section_code": "3.3.11.3.11.2",
+    "section_code": "3.11.2",
     "section_title": "Švartavimo lyno, jo storio ir ilgio pasirinkimas, apsauga nuo trinties, klampės mazgas",
     "subsection_code": null,
     "subsection_title": null,
@@ -337,10 +356,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.11.2"
   },
   {
-    "section_code": "3.3.11.3.11.3",
+    "section_code": "3.11.3",
     "section_title": "Švartavimo vietos pasirinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -354,10 +374,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.11.3"
   },
   {
-    "section_code": "3.3.11.3.11.4",
+    "section_code": "3.11.4",
     "section_title": "Jachtos švartavimas prie krantinės, pontono, šonu (lagu), Šliuze, laivagaliu prie krantinės su inkaru priekyje, keliais bortais",
     "subsection_code": null,
     "subsection_title": null,
@@ -371,10 +392,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.11.4"
   },
   {
-    "section_code": "3.3.11.3.11.5",
+    "section_code": "3.11.5",
     "section_title": "Priplaukimas prie švartavimo vietos, krypties pasirinkimas esant vėjui ir srovei",
     "subsection_code": null,
     "subsection_title": null,
@@ -388,10 +410,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.11.5"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -405,10 +428,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -422,10 +446,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -439,10 +464,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -456,10 +482,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -473,10 +500,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -490,10 +518,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -507,10 +536,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.1",
+    "section_code": "3.12.1",
     "section_title": "Vietos parinkimas",
     "subsection_code": null,
     "subsection_title": null,
@@ -524,10 +554,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Vietos parinkimas"
-    }
+    },
+    "curriculum_node_code": "3.12.1"
   },
   {
-    "section_code": "3.3.12.3.12.2",
+    "section_code": "3.12.2",
     "section_title": "Inkaro nuleidimo tvarka ir reikalavimai, komandos ir pranešimai. Inkaro grandinės ilgis",
     "subsection_code": null,
     "subsection_title": null,
@@ -541,10 +572,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.12.2"
   },
   {
-    "section_code": "3.3.12.3.12.3",
+    "section_code": "3.12.3",
     "section_title": "Inkaro iškėlimo tvarka ir reikalavimai, komandos ir pranešimai",
     "subsection_code": null,
     "subsection_title": null,
@@ -558,10 +590,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.12.3"
   },
   {
-    "section_code": "3.3.13.3.13.1",
+    "section_code": "3.13.1",
     "section_title": "Įgulos pasirengimas ir jachtos paruošimas audrai, buringumo mažinimo būdai",
     "subsection_code": null,
     "subsection_title": null,
@@ -575,10 +608,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.13.1"
   },
   {
-    "section_code": "3.3.13.3.13.2",
+    "section_code": "3.13.2",
     "section_title": "Plaukimas naudojant variklį. Manevrų atlikimas naudojant tik variklį",
     "subsection_code": null,
     "subsection_title": null,
@@ -592,10 +626,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.13.2"
   },
   {
-    "section_code": "3.3.14.3.14.1",
+    "section_code": "3.14.1",
     "section_title": "Užplaukimas ant pavėjinės ir priešvėjinės seklumos",
     "subsection_code": null,
     "subsection_title": null,
@@ -609,10 +644,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.14.1"
   },
   {
-    "section_code": "3.3.14.3.14.2",
+    "section_code": "3.14.2",
     "section_title": "Vilkimas (buksyravimas)",
     "subsection_code": null,
     "subsection_title": null,
@@ -626,10 +662,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.14.2"
   },
   {
-    "section_code": "3.3.14.3.14.3",
+    "section_code": "3.14.3",
     "section_title": "Pagalbos suteikimas kitam laivui",
     "subsection_code": null,
     "subsection_title": null,
@@ -643,10 +680,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.14.3"
   },
   {
-    "section_code": "3.3.14.3.14.4",
+    "section_code": "3.14.4",
     "section_title": "Švertboto apvirtimas, atvertimas ir atvertimo technika",
     "subsection_code": null,
     "subsection_title": null,
@@ -660,10 +698,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.14.4"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -677,10 +716,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -694,10 +734,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -711,10 +752,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -728,10 +770,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -745,10 +788,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.1",
+    "section_code": "3.15.1",
     "section_title": "Nutrūkus",
     "subsection_code": null,
     "subsection_title": null,
@@ -762,10 +806,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Nutrūkus"
-    }
+    },
+    "curriculum_node_code": "3.15.1"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -779,10 +824,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -796,10 +842,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -813,10 +860,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -830,10 +878,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -847,10 +896,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.2",
+    "section_code": "3.15.2",
     "section_title": "Atsikabinus",
     "subsection_code": null,
     "subsection_title": null,
@@ -864,10 +914,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "parent_section": "Atsikabinus"
-    }
+    },
+    "curriculum_node_code": "3.15.2"
   },
   {
-    "section_code": "3.3.15.3.15.3",
+    "section_code": "3.15.3",
     "section_title": "Suplyšus burei",
     "subsection_code": null,
     "subsection_title": null,
@@ -881,10 +932,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.15.3"
   },
   {
-    "section_code": "3.3.15.3.15.4",
+    "section_code": "3.15.4",
     "section_title": "Lūžus stiebui, gikui, gafeliui, rumpeliui, vairo plunksnai, nutrūkus šturtrosams",
     "subsection_code": null,
     "subsection_title": null,
@@ -898,10 +950,11 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.15.4"
   },
   {
-    "section_code": "3.3.15.3.15.5",
+    "section_code": "3.15.5",
     "section_title": "Pažeidus korpuso hermetiškumą",
     "subsection_code": null,
     "subsection_title": null,
@@ -915,6 +968,7 @@
       "curriculum_required": true,
       "topic_number": 3,
       "is_section_header": true
-    }
+    },
+    "curriculum_node_code": "3.15.5"
   }
 ]

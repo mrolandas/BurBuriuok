@@ -1,7 +1,7 @@
 import type { ConceptDetail } from '$lib/api/concepts';
 import { fetchConceptBySlug } from '$lib/api/concepts';
 import type { CurriculumItem } from '$lib/api/curriculum';
-import { fetchNodeItems } from '$lib/api/curriculum';
+import { fetchNodeItems, fetchNodeByCode } from '$lib/api/curriculum';
 import { fetchConceptMedia, type ConceptMediaItem } from '$lib/api/media';
 import { type ConceptAdminEditContext, resolveConceptAdminContext } from '$lib/admin/session';
 
@@ -37,6 +37,7 @@ export type ConceptPageData = {
 const defaultDeps = {
 	fetchConcept: fetchConceptBySlug,
 	fetchItems: fetchNodeItems,
+	fetchNode: fetchNodeByCode,
 	resolveAdminContext: resolveConceptAdminContext,
 	fetchConceptMedia: fetchConceptMedia
 };
@@ -59,6 +60,7 @@ export async function loadConceptDetailData({
 	const {
 		fetchConcept,
 		fetchItems,
+		fetchNode,
 		resolveAdminContext,
 		fetchConceptMedia: fetchConceptMediaFn
 	} = {
@@ -120,6 +122,24 @@ export async function loadConceptDetailData({
 
 		const breadcrumbs: ConceptBreadcrumb[] = [];
 
+		if (concept.sectionCode) {
+			try {
+				const sectionNode = await fetchNode(concept.sectionCode);
+				if (sectionNode?.parent_code) {
+					const parentNode = await fetchNode(sectionNode.parent_code);
+					if (parentNode) {
+						breadcrumbs.push({
+							label: parentNode.title,
+							routeId: '/sections/[code]',
+							params: { code: parentNode.code }
+						});
+					}
+				}
+			} catch (e) {
+				console.warn('Breadcrumb hierarchy fetch failed', e);
+			}
+		}
+
 		if (concept.sectionCode && concept.sectionTitle) {
 			breadcrumbs.push({
 				label: concept.sectionTitle,
@@ -129,11 +149,11 @@ export async function loadConceptDetailData({
 		}
 
 		if (concept.subsectionTitle) {
-			if (concept.sectionCode) {
+			if (concept.subsectionCode && concept.subsectionCode !== concept.sectionCode) {
 				breadcrumbs.push({
 					label: concept.subsectionTitle,
 					routeId: '/sections/[code]',
-					params: { code: concept.sectionCode }
+					params: { code: concept.subsectionCode }
 				});
 			} else {
 				breadcrumbs.push({ label: concept.subsectionTitle });
