@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidateAll, goto } from '$app/navigation';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { adminMode } from '$lib/stores/adminMode';
 	import { updateCurriculumNode } from '$lib/api/admin/curriculum';
@@ -43,6 +43,14 @@
 	let editTitleInput = $state<HTMLInputElement | null>(null);
 	let successMessage = $state<string | null>(null);
 	let successTimeout: ReturnType<typeof setTimeout> | null = null;
+	let heroSearchTerm = $state('');
+
+	const handleHeroSearch = (event: Event) => {
+		event.preventDefault();
+		if (heroSearchTerm.trim()) {
+			goto(`/search?q=${encodeURIComponent(heroSearchTerm.trim())}`);
+		}
+	};
 
 	onMount(() => {
 		adminMode.initialize();
@@ -379,9 +387,24 @@
 	<div class="hero__content">
 		<h1 class="hero__title">Buriavimo teorijos gidas</h1>
 		<p class="hero__subtitle">
-			Išsamus žinynas pradedantiesiems ir pažengusiems buriuotojams. Pasirinkite temą ir pradėkite
-			mokytis.
+			Išsamus žinynas pradedantiesiems ir pažengusiems buriuotojams.
 		</p>
+		
+		<form class="hero__search" onsubmit={handleHeroSearch}>
+			<div class="hero__search-wrapper">
+				<svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8"></circle>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+				</svg>
+				<input 
+					type="search" 
+					class="hero__search-input" 
+					placeholder="Ieškoti temų, sąvokų..." 
+					bind:value={heroSearchTerm}
+					aria-label="Paieška"
+				/>
+			</div>
+		</form>
 	</div>
 </header>
 
@@ -405,55 +428,57 @@
 					href={resolve('/sections/[code]', { code: section.code })}
 					aria-labelledby={`section-${domId}`}
 				>
-					<span
-						class="section-card__avatar"
-						style={`background:${theme.background};border-color:${theme.border};color:${theme.iconColor};`}
-					>
-						<svg viewBox="0 0 24 24" role="presentation" focusable="false" aria-hidden="true">
-							{#each theme.icon as segment, index (index)}
-								<path
-									d={segment.d}
-									fill={segment.fill ?? 'none'}
-									stroke={segment.stroke ?? theme.iconColor}
-									stroke-width={segment.strokeWidth}
-									stroke-linecap={segment.strokeLinecap}
-									stroke-linejoin={segment.strokeLinejoin}
-									fill-rule={segment.fillRule}
-								></path>
-							{/each}
-						</svg>
-					</span>
+					<div class="section-card__header">
+						<span
+							class="section-card__avatar"
+							style={`background:${theme.background};border-color:${theme.border};color:${theme.iconColor};`}
+						>
+							<svg viewBox="0 0 24 24" role="presentation" focusable="false" aria-hidden="true">
+								{#each theme.icon as segment, index (index)}
+									<path
+										d={segment.d}
+										fill={segment.fill ?? 'none'}
+										stroke={segment.stroke ?? theme.iconColor}
+										stroke-width={segment.strokeWidth}
+										stroke-linecap={segment.strokeLinecap}
+										stroke-linejoin={segment.strokeLinejoin}
+										fill-rule={segment.fillRule}
+									></path>
+								{/each}
+							</svg>
+						</span>
+						<span class="section-card__ordinal">{sectionLabel}</span>
+					</div>
+					
 					<div class="section-card__content">
 						<h2 class="section-card__title" id={`section-${domId}`}>{title}</h2>
 						<p class="section-card__summary">{description}</p>
 					</div>
-				</a>
-				<div class="section-card__meta">
-					<span class="section-card__meta-counts">{metaLabel}</span>
-					<div class="section-card__meta-actions">
-						<span class="section-card__meta-ordinal">{sectionLabel}</span>
-						{#if adminModeEnabled}
-							<button
-								type="button"
-								class="section-card__edit"
-								onclick={(event) => handleEditClick(event, section)}
-							>
-								<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-									<path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-									></path>
-									<path
-										d="M14.5 4.5l5 5L9 20l-5 1 1-5z"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linejoin="round"
-									></path>
-								</svg>
-								<span>Redaguoti skiltį</span>
-							</button>
-						{/if}
+					
+					<div class="section-card__footer">
+						<span class="section-card__meta-counts">{metaLabel}</span>
+						<span class="section-card__arrow">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+								<polyline points="12 5 19 12 12 19"></polyline>
+							</svg>
+						</span>
 					</div>
-				</div>
+				</a>
+				
+				{#if adminModeEnabled}
+					<button
+						type="button"
+						class="section-card__edit"
+						onclick={(event) => handleEditClick(event, section)}
+						aria-label="Redaguoti skiltį"
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+						</svg>
+					</button>
+				{/if}
 			</article>
 		{/each}
 	{/if}
@@ -543,16 +568,25 @@
 <style>
 	.hero {
 		width: min(100%, var(--layout-max-width));
-		margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+		margin: 0 auto;
+		padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 2rem);
 		text-align: center;
-		padding: 0 clamp(1rem, 3vw, 2rem);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.hero__content {
+		max-width: 48rem;
+		width: 100%;
 	}
 
 	.hero__title {
-		font-size: clamp(2rem, 5vw, 3.5rem);
+		font-size: clamp(2.5rem, 6vw, 4.5rem);
 		font-weight: 800;
 		line-height: 1.1;
-		margin: 0 0 1rem;
+		margin: 0 0 1.5rem;
+		letter-spacing: -0.02em;
 		background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-strong) 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -560,120 +594,102 @@
 	}
 
 	.hero__subtitle {
-		font-size: clamp(1.1rem, 2vw, 1.25rem);
+		font-size: clamp(1.1rem, 2vw, 1.35rem);
 		color: var(--color-text-muted);
-		max-width: 38rem;
-		margin: 0 auto;
+		margin: 0 auto 3rem;
 		line-height: 1.6;
+		max-width: 36rem;
+	}
+
+	.hero__search {
+		width: 100%;
+		max-width: 32rem;
+		margin: 0 auto;
+	}
+
+	.hero__search-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.hero__search-icon {
+		position: absolute;
+		left: 1.25rem;
+		width: 1.5rem;
+		height: 1.5rem;
+		color: var(--color-text-subtle);
+		pointer-events: none;
+	}
+
+	.hero__search-input {
+		width: 100%;
+		height: 3.5rem;
+		padding: 0 1.25rem 0 3.5rem;
+		font-size: 1.1rem;
+		border-radius: 999px;
+		border: 2px solid var(--color-border);
+		background: var(--color-surface);
+		color: var(--color-text);
+		transition: all 0.2s ease;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+	}
+
+	.hero__search-input:focus {
+		outline: none;
+		border-color: var(--color-accent);
+		box-shadow: 0 0 0 4px var(--color-accent-faint);
+	}
+
+	.hero__search-input::placeholder {
+		color: var(--color-text-subtle);
 	}
 
 	.sections-grid {
 		width: min(100%, var(--layout-max-width));
 		margin: 0 auto;
 		display: grid;
-		gap: clamp(1.5rem, 3vw, 2rem);
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-		align-content: start;
-		padding-bottom: 4rem;
+		gap: 2rem;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+		padding: 0 clamp(1rem, 3vw, 2rem) 6rem;
 	}
 
 	.sections-grid__placeholder {
-		min-height: 160px;
+		grid-column: 1 / -1;
+		min-height: 200px;
 		display: grid;
 		place-items: center;
-		border-radius: 1.25rem;
-		background: rgba(15, 23, 42, 0.24);
-		border: 1px dashed rgba(148, 163, 184, 0.32);
+		border-radius: 1.5rem;
+		background: rgba(15, 23, 42, 0.03);
+		border: 2px dashed var(--color-border);
 		color: var(--color-text-muted);
-		font-size: 0.95rem;
-	}
-
-	.status-block {
-		width: min(100%, var(--layout-max-width));
-		margin: 0 auto clamp(1.2rem, 2vw, 1.8rem);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1.25rem;
-		padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.2rem, 3vw, 1.5rem);
-		border-radius: 1.25rem;
-		border: 1px solid rgba(239, 68, 68, 0.35);
-		background: rgba(239, 68, 68, 0.12);
-		color: #fee2e2;
-	}
-
-	.status-block__title {
-		margin: 0 0 0.35rem;
-		font-weight: 600;
-		font-size: 1rem;
-	}
-
-	.status-block__body {
-		margin: 0;
-		font-size: 0.9rem;
-		color: #fecaca;
-	}
-
-	.status-block__action {
-		border: 0;
-		border-radius: 999px;
-		padding: 0.55rem 1.2rem;
-		font-weight: 600;
-		cursor: pointer;
-		background: rgba(248, 113, 113, 0.9);
-		color: #fff;
-		transition: transform 0.2s ease;
-	}
-
-	.status-block__action:hover,
-	.status-block__action:focus-visible {
-		transform: translateY(-1px);
-	}
-
-	.sections-toast {
-		position: fixed;
-		top: clamp(1rem, 3vw, 1.6rem);
-		right: clamp(1rem, 3vw, 1.6rem);
-		background: rgba(16, 185, 129, 0.95);
-		color: #fff;
-		padding: 0.6rem 1rem;
-		border-radius: 0.85rem;
-		font-weight: 600;
-		box-shadow: 0 18px 45px rgba(16, 185, 129, 0.25);
-		z-index: 60;
 	}
 
 	.section-card {
 		position: relative;
+		background: var(--color-surface);
+		border-radius: 1.5rem;
+		border: 1px solid var(--color-border);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
-		padding: 1.5rem;
-		min-height: 100%;
-		border-radius: 1.5rem;
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		transition:
-			transform 0.2s ease,
-			box-shadow 0.2s ease,
-			border-color 0.2s ease;
+		overflow: hidden;
 	}
 
-	.section-card:hover,
-	.section-card:focus-within {
+	.section-card:hover {
 		transform: translateY(-4px);
+		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 		border-color: var(--color-accent-border);
-		box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.1);
 	}
 
 	.section-card__link {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
-		gap: 1.25rem;
+		flex: 1;
+		padding: 2rem;
 		text-decoration: none;
 		color: inherit;
-		flex: 1 1 auto;
+		gap: 1.5rem;
 	}
 
 	.section-card__link:focus-visible {
@@ -685,138 +701,207 @@
 		outline-offset: 4px;
 	}
 
-	.section-card__avatar {
-		width: 3.2rem;
-		height: 3.2rem;
-		border-radius: 1rem;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		border: 1px solid transparent;
-		transition: transform 0.2s ease;
-	}
-
-	.section-card:hover .section-card__avatar {
-		transform: scale(1.05);
-	}
-
-	.section-card__avatar svg {
-		width: 1.6rem;
-		height: 1.6rem;
-	}
-
-	.section-card__content {
-		flex: 1 1 auto;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	.section-card__title {
-		margin: 0;
-		font-size: 1.25rem;
-		line-height: 1.3;
-		font-weight: 700;
-		color: var(--color-text);
-		letter-spacing: -0.01em;
-	}
-
-	.section-card__summary {
-		margin: 0;
-		font-size: 0.95rem;
-		line-height: 1.6;
-		color: var(--color-text-muted);
-	}
-
-	.section-card__meta {
+	.section-card__header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		font-size: 0.85rem;
+	}
+
+	.section-card__avatar {
+		width: 3.5rem;
+		height: 3.5rem;
+		border-radius: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.3s ease;
+	}
+
+	.section-card:hover .section-card__avatar {
+		transform: scale(1.1) rotate(-5deg);
+	}
+
+	.section-card__avatar svg {
+		width: 1.75rem;
+		height: 1.75rem;
+	}
+
+	.section-card__ordinal {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 		color: var(--color-text-subtle);
+		background: var(--color-surface-alt);
+		padding: 0.35rem 0.75rem;
+		border-radius: 999px;
+	}
+
+	.section-card__content {
+		flex: 1;
+	}
+
+	.section-card__title {
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1.2;
+		margin: 0 0 0.75rem;
+		color: var(--color-text);
+	}
+
+	.section-card__summary {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: var(--color-text-muted);
+		margin: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.section-card__footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-top: 1.5rem;
 		border-top: 1px solid var(--color-border-light);
-		padding-top: 1rem;
 		margin-top: auto;
 	}
 
 	.section-card__meta-counts {
-		flex: 1 1 auto;
+		font-size: 0.9rem;
 		font-weight: 600;
-		letter-spacing: 0.01em;
+		color: var(--color-text-subtle);
 	}
 
-	.section-card__meta-actions {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.8rem;
-		flex: 0 0 auto;
+	.section-card__arrow {
+		color: var(--color-accent);
+		opacity: 0;
+		transform: translateX(-10px);
+		transition: all 0.3s ease;
 	}
 
-	.section-card__meta-ordinal {
-		font-weight: 600;
-		color: var(--color-text);
-		white-space: nowrap;
-		font-size: 0.82rem;
+	.section-card__arrow svg {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.section-card:hover .section-card__arrow {
+		opacity: 1;
+		transform: translateX(0);
 	}
 
 	.section-card__edit {
-		display: inline-flex;
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		color: var(--color-text-muted);
+		display: flex;
 		align-items: center;
-		gap: 0.35rem;
-		border-radius: 999px;
-		border: 1px solid transparent;
-		background: var(--color-surface-alt);
-		color: var(--color-text);
-		padding: 0.35rem 0.75rem;
-		font: inherit;
-		font-weight: 600;
+		justify-content: center;
 		cursor: pointer;
-		transition:
-			background-color 0.2s ease,
-			border-color 0.2s ease,
-			transform 0.2s ease;
+		transition: all 0.2s ease;
+		opacity: 0;
+	}
+
+	.section-card:hover .section-card__edit,
+	.section-card:focus-within .section-card__edit {
+		opacity: 1;
+	}
+
+	.section-card__edit:hover {
+		background: var(--color-accent);
+		border-color: var(--color-accent);
+		color: white;
 	}
 
 	.section-card__edit svg {
-		width: 1rem;
-		height: 1rem;
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
-	.section-card__edit:hover,
-	.section-card__edit:focus-visible {
-		border-color: var(--color-accent-border);
-		background: var(--color-accent-faint);
-		transform: translateY(-1px);
+	/* Status Block & Toast Styles (kept mostly same but updated vars) */
+	.status-block {
+		width: min(100%, var(--layout-max-width));
+		margin: 0 auto 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.25rem;
+		padding: 1.5rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(239, 68, 68, 0.3);
+		background: rgba(239, 68, 68, 0.1);
+		color: var(--color-error);
 	}
 
-	.section-card__edit:focus-visible {
-		outline: none;
-		box-shadow: 0 0 0 3px var(--color-accent-faint-strong);
+	.status-block__title {
+		margin: 0 0 0.25rem;
+		font-weight: 700;
 	}
 
+	.status-block__body {
+		margin: 0;
+		font-size: 0.95rem;
+		opacity: 0.9;
+	}
+
+	.status-block__action {
+		border: 0;
+		border-radius: 999px;
+		padding: 0.5rem 1.25rem;
+		font-weight: 600;
+		cursor: pointer;
+		background: var(--color-error);
+		color: white;
+		transition: transform 0.2s ease;
+	}
+
+	.sections-toast {
+		position: fixed;
+		bottom: 2rem;
+		right: 2rem;
+		background: var(--color-surface);
+		color: var(--color-success);
+		padding: 1rem 1.5rem;
+		border-radius: 1rem;
+		font-weight: 600;
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+		border: 1px solid var(--color-success);
+		z-index: 100;
+		animation: slideUp 0.3s ease;
+	}
+
+	@keyframes slideUp {
+		from { transform: translateY(100%); opacity: 0; }
+		to { transform: translateY(0); opacity: 1; }
+	}
+
+	/* Edit Modal Styles */
 	.section-edit-layer {
 		position: fixed;
 		inset: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: clamp(1rem, 4vw, 2.5rem);
-		z-index: 50;
+		padding: 1rem;
+		z-index: 1000;
 	}
 
 	.section-edit-backdrop {
 		position: absolute;
 		inset: 0;
 		border: none;
-		background: rgba(15, 23, 42, 0.6);
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
 		cursor: pointer;
-		z-index: 0;
-	}
-
-	.section-edit-backdrop:focus-visible {
-		outline: 2px solid rgba(56, 189, 248, 0.6);
-		outline-offset: 2px;
 	}
 
 	.section-edit-dialog {
@@ -824,153 +909,126 @@
 		z-index: 1;
 		width: min(600px, 100%);
 		display: grid;
-		gap: 1rem;
-		padding: clamp(1.25rem, 3vw, 1.8rem);
-		border-radius: 1rem;
+		gap: 1.5rem;
+		padding: 2rem;
+		border-radius: 1.5rem;
 		border: 1px solid var(--color-border);
-		background: var(--color-surface, #fff);
-		box-shadow: 0 30px 70px rgba(15, 23, 42, 0.35);
+		background: var(--color-surface);
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 	}
 
 	.section-edit-header {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 1rem;
 	}
 
 	.section-edit-header h2 {
 		margin: 0;
-		font-size: 1.35rem;
+		font-size: 1.5rem;
+		font-weight: 700;
 	}
 
 	.section-edit-subtitle {
-		margin: 0.2rem 0 0;
-		font-size: 0.85rem;
+		margin: 0.25rem 0 0;
 		color: var(--color-text-muted);
 	}
 
 	.section-edit-close {
-		border: none;
 		background: transparent;
-		color: var(--color-text-muted);
+		border: none;
 		font-size: 1.5rem;
-		padding: 0.15rem;
+		color: var(--color-text-muted);
 		cursor: pointer;
-		line-height: 1;
+		padding: 0.5rem;
+		margin: -0.5rem;
+		border-radius: 50%;
+		transition: all 0.2s;
 	}
 
-	.section-edit-close:hover,
-	.section-edit-close:focus-visible {
+	.section-edit-close:hover {
+		background: var(--color-surface-alt);
 		color: var(--color-text);
 	}
 
 	.section-edit-form {
 		display: grid;
-		gap: 1rem;
+		gap: 1.25rem;
 	}
 
 	.section-edit-field {
 		display: grid;
-		gap: 0.45rem;
+		gap: 0.5rem;
 	}
 
 	.section-edit-field label {
 		font-weight: 600;
-		font-size: 0.9rem;
+		font-size: 0.95rem;
 	}
 
 	.section-edit-field input,
 	.section-edit-field textarea {
 		border-radius: 0.75rem;
 		border: 1px solid var(--color-border);
-		background: var(--color-panel, #fff);
-		padding: 0.6rem 0.75rem;
+		background: var(--color-surface-alt);
+		padding: 0.75rem 1rem;
 		font: inherit;
 		color: inherit;
+		transition: all 0.2s;
 	}
 
-	.section-edit-field textarea {
-		resize: vertical;
-		min-height: 120px;
-	}
-
-	.section-edit-field input:focus-visible,
-	.section-edit-field textarea:focus-visible {
-		outline: 2px solid rgba(56, 189, 248, 0.6);
-		outline-offset: 2px;
-	}
-
-	.section-edit-hint {
-		margin: 0;
-		font-size: 0.8rem;
-		color: var(--color-text-muted);
-	}
-
-	.section-edit-error {
-		margin: 0;
-		color: var(--color-error, #ef4444);
-		font-weight: 600;
+	.section-edit-field input:focus,
+	.section-edit-field textarea:focus {
+		outline: none;
+		border-color: var(--color-accent);
+		background: var(--color-surface);
+		box-shadow: 0 0 0 3px var(--color-accent-faint);
 	}
 
 	.section-edit-actions {
 		display: flex;
 		justify-content: flex-end;
-		gap: 0.75rem;
+		gap: 1rem;
+		margin-top: 0.5rem;
 	}
 
 	.section-edit-button {
 		border-radius: 999px;
 		font-weight: 600;
-		padding: 0.45rem 1.1rem;
+		padding: 0.6rem 1.5rem;
 		border: 1px solid transparent;
 		cursor: pointer;
 		font: inherit;
-		transition:
-			transform 0.2s ease,
-			background 0.2s ease,
-			border-color 0.2s ease;
-	}
-
-	.section-edit-button[disabled] {
-		opacity: 0.65;
-		cursor: default;
+		transition: all 0.2s;
 	}
 
 	.section-edit-button--ghost {
-		background: var(--color-surface-alt, rgba(148, 163, 184, 0.12));
-		color: var(--color-text);
+		background: transparent;
+		color: var(--color-text-muted);
 	}
 
-	.section-edit-button--ghost:hover,
-	.section-edit-button--ghost:focus-visible {
-		border-color: var(--color-border);
-		transform: translateY(-1px);
+	.section-edit-button--ghost:hover {
+		background: var(--color-surface-alt);
+		color: var(--color-text);
 	}
 
 	.section-edit-button--primary {
-		background: var(--color-pill-bg);
-		color: var(--color-pill-text);
-		border-color: var(--color-pill-border);
+		background: var(--color-accent);
+		color: white;
 	}
 
-	.section-edit-button--primary:hover,
-	.section-edit-button--primary:focus-visible {
-		background: var(--color-pill-hover-bg);
-		border-color: var(--color-pill-hover-border);
-		color: var(--color-text);
+	.section-edit-button--primary:hover {
+		background: var(--color-accent-strong);
 		transform: translateY(-1px);
 	}
 
 	@media (max-width: 640px) {
-		.status-block {
-			flex-direction: column;
-			align-items: flex-start;
+		.hero {
+			padding: 3rem 1rem;
 		}
-
-		.status-block__action {
-			width: 100%;
-			justify-content: center;
+		
+		.section-card__link {
+			padding: 1.5rem;
 		}
 	}
 </style>

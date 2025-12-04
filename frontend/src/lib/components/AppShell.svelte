@@ -70,7 +70,8 @@
 	);
 	const hasFooterNote = $derived(Boolean(footerNote?.trim()));
 	const isAdminRoute = $derived(activePath.startsWith('/admin'));
-	const showSearch = $derived(!isAdminRoute);
+	const isHomeRoute = $derived(activePath === '/');
+	const showSearch = $derived(!isAdminRoute && !isHomeRoute);
 	const isAuthenticated = $derived(Boolean(currentSession));
 	const loginRedirectTarget = $derived(
 		isAdminRoute ? '/' : `${activePath}${$page.url.search}${$page.url.hash}`
