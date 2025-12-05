@@ -1611,8 +1611,7 @@
 							title: section.title,
 							summary: section.summary,
 							level: 0,
-							ordinal: 1,
-							prerequisiteCount: 0
+							ordinal: 1
 						},
 						expanded: true,
 						loading: false,

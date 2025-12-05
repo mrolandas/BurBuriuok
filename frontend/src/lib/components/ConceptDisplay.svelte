@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
+	import type { NextSection } from '$lib/page-data/conceptDetail';
 	import type { Snippet } from 'svelte';
 
 	export type Breadcrumb = {
@@ -25,8 +26,9 @@
 	type Props = {
 		concept: ConceptDetailData;
 		breadcrumbs?: Breadcrumb[];
-		peerItems?: CurriculumItem[];
+		sectionItems?: CurriculumItem[];
 		neighbors?: NeighborSet;
+		nextSection?: NextSection | null;
 		meta?: Snippet;
 		actions?: Snippet;
 		content?: Snippet;
@@ -35,8 +37,9 @@
 	let {
 		concept,
 		breadcrumbs = [],
-		peerItems = [],
+		sectionItems = [],
 		neighbors,
+		nextSection,
 		meta,
 		actions,
 		content
@@ -177,16 +180,24 @@
 		{/if}
 
 		<aside class="concept-detail__sidebar">
-			{#if peerItems.length}
+			{#if sectionItems.length}
 				<section class="concept-detail__panel concept-detail__panel--list">
-					<h2>Susijusios temos</h2>
-					<ul>
-						{#each peerItems as item (item.ordinal)}
-							<li>
+					<h2>Šiame skyriuje</h2>
+					<ul class="concept-agenda">
+						{#each sectionItems as item (item.ordinal)}
+							{@const isCurrent = item.conceptSlug === concept.slug}
+							<li class="concept-agenda__item" class:concept-agenda__item--current={isCurrent}>
+								<div class="concept-agenda__marker" aria-hidden="true"></div>
 								{#if item.conceptSlug}
-									<a href={resolve('/concepts/[slug]', { slug: item.conceptSlug })}>{item.label}</a>
+									{#if isCurrent}
+										<span class="concept-agenda__label">{item.label}</span>
+									{:else}
+										<a href={resolve('/concepts/[slug]', { slug: item.conceptSlug })} class="concept-agenda__link">
+											{item.label}
+										</a>
+									{/if}
 								{:else}
-									<span>{item.label}</span>
+									<span class="concept-agenda__label concept-agenda__label--muted">{item.label}</span>
 								{/if}
 							</li>
 						{/each}
@@ -194,13 +205,18 @@
 				</section>
 			{/if}
 
-			<section class="concept-detail__panel">
-				<h2>Prieraišos</h2>
-				<p>
-					Tikros prielaidos atsiras, kai viešoje schemoje publikavimo metas suteiks priklausomybių
-					duomenis. Kol kas žymime, kad ši sritis laukia backend atnaujinimo.
-				</p>
-			</section>
+			{#if nextSection}
+				<section class="concept-detail__panel concept-detail__panel--next">
+					<h2>Kitas skyrius</h2>
+					<a
+						href={resolve('/sections/[code]', { code: nextSection.code })}
+						class="concept-detail__next-link"
+					>
+						<span class="concept-detail__next-label">{nextSection.title}</span>
+						<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
+					</a>
+				</section>
+			{/if}
 		</aside>
 	</div>
 </section>
@@ -386,24 +402,109 @@
 		font-size: 1.1rem;
 	}
 
-	.concept-detail__panel ul {
+	.concept-agenda {
 		margin: 0;
 		padding: 0;
 		list-style: none;
 		display: grid;
-		gap: 0.5rem;
+		gap: 0;
+		position: relative;
 	}
 
-	.concept-detail__panel a {
+	.concept-agenda::before {
+		content: '';
+		position: absolute;
+		top: 0.8rem;
+		bottom: 0.8rem;
+		left: 0.6rem;
+		width: 2px;
+		background: var(--color-border);
+		z-index: 0;
+	}
+
+	.concept-agenda__item {
+		display: grid;
+		grid-template-columns: 1.2rem 1fr;
+		gap: 0.75rem;
+		align-items: baseline;
+		padding: 0.4rem 0;
+		position: relative;
+		z-index: 1;
+	}
+
+	.concept-agenda__marker {
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 50%;
+		background: var(--color-panel);
+		border: 2px solid var(--color-border-strong);
+		margin-top: 0.3rem;
+		justify-self: center;
+		transition: all 0.2s ease;
+	}
+
+	.concept-agenda__item--current .concept-agenda__marker {
+		background: var(--color-accent);
+		border-color: var(--color-accent);
+		transform: scale(1.2);
+		box-shadow: 0 0 0 3px var(--color-accent-faint);
+	}
+
+	.concept-agenda__link {
 		text-decoration: none;
-		color: var(--color-link);
-		border-bottom: 1px solid transparent;
-		transition: border-color 0.2s ease;
+		color: var(--color-text-subtle);
+		font-size: 0.95rem;
+		transition: color 0.2s ease;
+		line-height: 1.4;
 	}
 
-	.concept-detail__panel a:hover,
-	.concept-detail__panel a:focus-visible {
-		border-color: currentColor;
+	.concept-agenda__link:hover {
+		color: var(--color-accent-strong);
+	}
+
+	.concept-agenda__label {
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--color-text);
+		line-height: 1.4;
+	}
+
+	.concept-agenda__label--muted {
+		color: var(--color-text-muted);
+		font-weight: 400;
+		font-style: italic;
+	}
+
+	.concept-detail__panel--next {
+		background: var(--color-panel);
+		border-color: var(--color-accent-faint);
+	}
+
+	.concept-detail__next-link {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.8rem;
+		text-decoration: none;
+		color: var(--color-text);
+		font-weight: 500;
+		padding: 0.4rem 0;
+		transition: color 0.2s ease;
+	}
+
+	.concept-detail__next-link:hover {
+		color: var(--color-accent-strong);
+	}
+
+	.concept-detail__next-arrow {
+		font-size: 1.2rem;
+		line-height: 1;
+		color: var(--color-accent);
+		transition: transform 0.2s ease;
+	}
+
+	.concept-detail__next-link:hover .concept-detail__next-arrow {
+		transform: translateX(4px);
 	}
 
 	@media (min-width: 900px) {

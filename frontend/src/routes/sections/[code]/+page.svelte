@@ -16,7 +16,7 @@
 			{#each data.breadcrumbs as crumb}
 				<span class="section-breadcrumb-separator" aria-hidden="true">›</span>
 				{#if crumb.href}
-					<a class="section-breadcrumb" href={resolve(crumb.href)}>{crumb.label}</a>
+					<a class="section-breadcrumb" href={crumb.href}>{crumb.label}</a>
 				{:else}
 					<span class="section-breadcrumb section-breadcrumb--static">{crumb.label}</span>
 				{/if}

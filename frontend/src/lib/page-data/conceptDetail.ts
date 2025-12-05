@@ -1,7 +1,7 @@
 import type { ConceptDetail } from '$lib/api/concepts';
 import { fetchConceptBySlug } from '$lib/api/concepts';
 import type { CurriculumItem } from '$lib/api/curriculum';
-import { fetchNodeItems, fetchNodeByCode } from '$lib/api/curriculum';
+import { fetchNodeItems, fetchNodeByCode, fetchChildNodes } from '$lib/api/curriculum';
 import { fetchConceptMedia, type ConceptMediaItem } from '$lib/api/media';
 import { type ConceptAdminEditContext, resolveConceptAdminContext } from '$lib/admin/session';
 
@@ -22,11 +22,17 @@ export type ConceptNeighbors = {
 	next?: ConceptNeighbor | null;
 };
 
+export type NextSection = {
+	title: string;
+	code: string;
+};
+
 export type ConceptPageData = {
 	concept: ConceptDetail | null;
-	peerItems: CurriculumItem[];
+	sectionItems: CurriculumItem[];
 	breadcrumbs: ConceptBreadcrumb[];
 	neighbors: ConceptNeighbors;
+	nextSection?: NextSection | null;
 	media: ConceptMediaItem[];
 	mediaError?: string | null;
 	notFound?: boolean;
@@ -38,6 +44,7 @@ const defaultDeps = {
 	fetchConcept: fetchConceptBySlug,
 	fetchItems: fetchNodeItems,
 	fetchNode: fetchNodeByCode,
+	fetchChildNodes: fetchChildNodes,
 	resolveAdminContext: resolveConceptAdminContext,
 	fetchConceptMedia: fetchConceptMedia
 };
@@ -61,6 +68,7 @@ export async function loadConceptDetailData({
 		fetchConcept,
 		fetchItems,
 		fetchNode,
+		fetchChildNodes,
 		resolveAdminContext,
 		fetchConceptMedia: fetchConceptMediaFn
 	} = {
@@ -78,7 +86,7 @@ export async function loadConceptDetailData({
 			const adminContext = await adminContextPromise;
 			return {
 				concept: null,
-				peerItems: [],
+				sectionItems: [],
 				breadcrumbs: [],
 				neighbors: {},
 				media: [],
@@ -87,13 +95,14 @@ export async function loadConceptDetailData({
 			};
 		}
 
-		let peerItems: CurriculumItem[] = [];
+		let sectionItems: CurriculumItem[] = [];
 		const neighbors: ConceptNeighbors = {};
+		let nextSection: NextSection | null = null;
 
 		if (concept.curriculumNodeCode) {
 			try {
 				const items = await fetchItems(concept.curriculumNodeCode);
-				peerItems = items.filter((item) => item.conceptSlug && item.conceptSlug !== concept.slug);
+				sectionItems = items;
 
 				const currentIndex = items.findIndex((item) => item.conceptSlug === concept.slug);
 				if (currentIndex !== -1) {
@@ -113,6 +122,24 @@ export async function loadConceptDetailData({
 							slug: nextCandidate.conceptSlug,
 							ordinal: nextCandidate.ordinal ?? null
 						};
+					} else if (currentIndex === items.length - 1) {
+						// If we are at the last item, try to find the next section
+						try {
+							const currentNode = await fetchNode(concept.curriculumNodeCode);
+							if (currentNode?.parent_code) {
+								const siblings = await fetchChildNodes(currentNode.parent_code);
+								const currentNodeIndex = siblings.findIndex((n) => n.code === concept.curriculumNodeCode);
+								if (currentNodeIndex !== -1 && currentNodeIndex < siblings.length - 1) {
+									const nextNode = siblings[currentNodeIndex + 1];
+									nextSection = {
+										title: nextNode.title,
+										code: nextNode.code
+									};
+								}
+							}
+						} catch (e) {
+							console.warn('Failed to fetch next section', e);
+						}
 					}
 				}
 			} catch (itemError) {
@@ -179,9 +206,10 @@ export async function loadConceptDetailData({
 
 		return {
 			concept,
-			peerItems,
+			sectionItems,
 			breadcrumbs,
 			neighbors,
+			nextSection,
 			media,
 			mediaError,
 			adminContext
@@ -191,7 +219,7 @@ export async function loadConceptDetailData({
 		const adminContext = await adminContextPromise;
 		return {
 			concept: null,
-			peerItems: [],
+			sectionItems: [],
 			breadcrumbs: [],
 			neighbors: {},
 			media: [],

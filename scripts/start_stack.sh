@@ -68,10 +68,14 @@ ensure_port_free 4000 "Backend"
 ensure_port_free 5173 "Frontend"
 
 echo "Checking Supabase connectivity..."
-node "$SUPABASE_CHECK"
+if ! node "$SUPABASE_CHECK"; then
+	echo "WARNING: Supabase connectivity check failed. The stack will start, but database features may be unavailable."
+fi
 
 echo "Verifying auth/profile tables..."
-node "$AUTH_TABLE_CHECK"
+if ! node "$AUTH_TABLE_CHECK"; then
+	echo "WARNING: Auth table check failed. The stack will start, but auth features may be unavailable."
+fi
 
 echo "Starting backend (logs: $BACKEND_LOG)..."
 cd "$REPO_ROOT"

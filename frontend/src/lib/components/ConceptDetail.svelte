@@ -4,6 +4,7 @@
 	import ConceptMediaGallery from '$lib/components/ConceptMediaGallery.svelte';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
+	import type { NextSection } from '$lib/page-data/conceptDetail';
 	import { fetchConceptMedia, type ConceptMediaItem } from '$lib/api/media';
 	import {
 		saveAdminConcept,
@@ -55,8 +56,9 @@
 	type Props = {
 		concept: ConceptDetailData;
 		breadcrumbs?: Breadcrumb[];
-		peerItems?: CurriculumItem[];
+		sectionItems?: CurriculumItem[];
 		neighbors?: NeighborSet;
+		nextSection?: NextSection | null;
 		media?: ConceptMediaItem[];
 		mediaError?: string | null;
 		adminContext?: ConceptAdminEditContext;
@@ -65,8 +67,9 @@
 	let {
 		concept,
 		breadcrumbs = [],
-		peerItems = [],
+		sectionItems = [],
 		neighbors,
+		nextSection,
 		media = [],
 		mediaError = null,
 		adminContext
@@ -703,8 +706,9 @@
 <ConceptDisplay
 	{concept}
 	{breadcrumbs}
-	{peerItems}
+	{sectionItems}
 	{neighbors}
+	{nextSection}
 	meta={conceptMeta}
 	actions={conceptActions}
 	content={conceptContent}

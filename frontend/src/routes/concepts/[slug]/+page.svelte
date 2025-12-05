@@ -19,8 +19,9 @@
 		<ConceptDetail
 			concept={data.concept}
 			breadcrumbs={data.breadcrumbs}
-			peerItems={data.peerItems}
+			sectionItems={data.sectionItems}
 			neighbors={data.neighbors}
+			nextSection={data.nextSection}
 			media={data.media}
 			mediaError={data.mediaError}
 			adminContext={data.adminContext}

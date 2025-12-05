@@ -27,7 +27,6 @@ export type CurriculumNode = {
 	summary: string | null;
 	level: number;
 	ordinal: number;
-	prerequisiteCount: number;
 };
 
 export type CurriculumItem = {
@@ -44,25 +43,6 @@ export type SectionProgressBlueprint = {
 	nodes: Array<{ code: string; parentCode: string | null }>;
 	conceptAssignments: Array<{ conceptId: string; nodeCode: string | null }>;
 };
-
-let hasWarnedAboutPrerequisiteCounts = false;
-
-async function fetchPrerequisiteCounts(nodeCodes: string[]): Promise<Map<string, number>> {
-	const counts = new Map<string, number>();
-
-	if (!nodeCodes.length) {
-		return counts;
-	}
-
-	if (!hasWarnedAboutPrerequisiteCounts) {
-		console.info(
-			'[curriculum] Prerequisite counts unavailable in public schema; defaulting to zero until public view is exposed.'
-		);
-		hasWarnedAboutPrerequisiteCounts = true;
-	}
-
-	return counts;
-}
 
 export async function fetchNodeByCode(code: string) {
 	const supabase = getSupabaseClient();
@@ -94,15 +74,13 @@ export async function fetchChildNodes(parentCode: string): Promise<CurriculumNod
 	}
 
 	const nodes = data ?? [];
-	const prerequisiteCounts = await fetchPrerequisiteCounts(nodes.map((node) => node.code));
 
 	return nodes.map((node) => ({
 		code: node.code,
 		title: node.title,
 		summary: node.summary,
 		level: node.level,
-		ordinal: node.ordinal,
-		prerequisiteCount: prerequisiteCounts.get(node.code) ?? 0
+		ordinal: node.ordinal
 	}));
 }
 

@@ -270,18 +270,20 @@
 					<span class="tree-node__title">{state.node.title}</span>
 				</button>
 				<div class="tree-node__meta">
-					{#if state.node.prerequisiteCount}
-						<span
-							class="tree-node__badge"
-							aria-label={`Turi ${state.node.prerequisiteCount} prielaidas`}
-						>
-							{state.node.prerequisiteCount} prielaidos
-						</span>
-					{/if}
 					{#if progress && progress.total > 0}
-						<span class="tree-node__progress-text">
-							{progress.percentage ?? 0}% · {progress.known}/{progress.total}
-						</span>
+						<div
+							class="tree-node__progress-pill"
+							role="progressbar"
+							aria-valuenow={progress.percentage ?? 0}
+							aria-valuemin="0"
+							aria-valuemax="100"
+							aria-label={`Baigta ${progress.percentage ?? 0}% (${progress.known}/${progress.total})`}
+						>
+							<div
+								class="tree-node__progress-fill"
+								style:width="{progress.percentage ?? 0}%"
+							></div>
+						</div>
 					{/if}
 				</div>
 			</div>
@@ -897,16 +899,7 @@
 		justify-content: center;
 	}
 
-	.tree-node__badge {
-		font-size: 0.7rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		background: var(--color-badge-warning-bg);
-		color: var(--color-badge-warning-text);
-		padding: 0.2rem 0.6rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-badge-warning-border);
-	}
+
 
 	.tree-node__meta {
 		margin-left: auto;
@@ -917,11 +910,19 @@
 		justify-content: flex-end;
 	}
 
-	.tree-node__progress-text {
-		font-size: 0.8rem;
-		color: var(--color-text-soft);
-		font-variant-numeric: tabular-nums;
+	.tree-node__progress-pill {
+		width: 3rem;
+		height: 0.4rem;
+		background: var(--color-border);
+		border-radius: 99px;
+		overflow: hidden;
 		margin-left: 0.5rem;
+	}
+
+	.tree-node__progress-fill {
+		height: 100%;
+		background: var(--color-accent);
+		transition: width 0.3s ease;
 	}
 
 	.tree-node__panel {

@@ -448,8 +448,15 @@
 			{@const metaLabel = formatMeta(section)}
 			{@const sectionLabel = `Skyrius #${section.ordinal}`}
 			{@const domId = toDomId(section.code)}
+			{@const progress = sectionProgress.get(section.code)}
+			{@const isStarted = progress && progress.known > 0}
+			{@const isUntouched = !progress || progress.known === 0}
 
-			<article class="section-card">
+			<article
+				class="section-card"
+				class:section-card--started={isStarted}
+				class:section-card--untouched={isUntouched}
+			>
 				<a
 					class="section-card__link"
 					href={resolve('/sections/[code]', { code: section.code })}
@@ -608,25 +615,6 @@
 		width: 100%;
 	}
 
-	.hero__title {
-		font-size: clamp(1.8rem, 4vw, 2.5rem);
-		font-weight: 800;
-		line-height: 1.1;
-		margin: 0 0 1rem;
-		letter-spacing: -0.02em;
-		background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-strong) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.hero__subtitle {
-		font-size: clamp(1rem, 1.5vw, 1.1rem);
-		color: var(--color-text-muted);
-		margin: 0 auto 2rem;
-		line-height: 1.6;
-		max-width: 36rem;
-	}
 
 	.hero__search {
 		width: 100%;
@@ -841,6 +829,21 @@
 	.section-card__edit svg {
 		width: 1rem;
 		height: 1rem;
+	}
+
+	/* Progress states */
+	.section-card--untouched .section-card__visual {
+		filter: grayscale(0.8) opacity(0.7);
+		transition: filter 0.3s ease;
+	}
+
+	.section-card--untouched:hover .section-card__visual {
+		filter: grayscale(0) opacity(1);
+	}
+
+	.section-card--started {
+		border-color: var(--color-accent-faint);
+		background: linear-gradient(to bottom right, var(--color-surface), var(--color-panel-secondary));
 	}
 
 	@media (max-width: 640px) {

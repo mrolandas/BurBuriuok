@@ -58,12 +58,20 @@ async function main() {
   ).toString();
 
   try {
+    const headers = {
+      apikey: anonKey,
+      Accept: "application/json",
+    };
+
+    // If the key is a legacy JWT (doesn't start with "sb_"), we must send it as a Bearer token.
+    // If it's a new Supabase API key (starts with "sb_"), we should NOT send it in the Authorization header
+    // with "Bearer", as it's not a JWT. The 'apikey' header is sufficient.
+    if (!anonKey.startsWith("sb_")) {
+      headers.Authorization = `Bearer ${anonKey}`;
+    }
+
     const response = await fetch(endpoint, {
-      headers: {
-        apikey: anonKey,
-        Authorization: `Bearer ${anonKey}`,
-        Accept: "application/json",
-      },
+      headers,
     });
 
     if (!response.ok) {
