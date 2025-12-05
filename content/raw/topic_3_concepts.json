@@ -8,7 +8,7 @@
     "term_lt": "Vendas",
     "term_en": "Tack",
     "description_lt": "Posūkis prieš vėją, kai nosis kerta vėją ir burės persimetamos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Halsas",
     "term_en": "Gybe",
     "description_lt": "Posūkis pavėjui, kai laivagalys kerta vėjo kryptį ir gikas persimetamas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Kilti",
     "term_en": "Luff up",
     "description_lt": "Pasukti laivą arčiau vėjo krypties.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Kristi",
     "term_en": "Bear away",
     "description_lt": "Nukreipti laivą toliau nuo vėjo krypties.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Laviruoti",
     "term_en": "Beat",
     "description_lt": "Plaukti zigzagais prieš vėją keičiant halsus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Buriuoti aštriau/bukiau",
     "term_en": "Sail closer/further off the wind",
     "description_lt": "Reguliuoti kursą taip, kad burės dirbtų optimaliai pagal vėjo kampą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Dreifuoti",
     "term_en": "Drift",
     "description_lt": "Nekontroliuojamas laivo slinkimas dėl vėjo ar srovės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Dreifuoti su burėmis ir be jų",
     "term_en": "Heave-to / drift",
     "description_lt": "Sustabdyti laivą vėjo atžvilgiu su burių pagalba arba be jų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Manevrų komandos",
     "term_en": "Helm orders",
     "description_lt": "Standartinės frazės, nurodančios įgulai veiksmus manevrų metu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Vandens telkinio dugno gruntas",
     "term_en": "Seabed type",
     "description_lt": "Vertiname dugno sudėtį (smėlis, molis, uoliena), kad inkaras įsikibtų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Povandeniniai kliuviniai",
     "term_en": "Underwater hazards",
     "description_lt": "Patikriname ar nėra akmenų, nuolaužų ar kitų kliūčių inkaro vietoje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Dugno nuolydis",
     "term_en": "Bottom slope",
     "description_lt": "Įvertiname dugno pasvirimą, kad inkaras neslystų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Kranto orientyrai",
     "term_en": "Shore marks",
     "description_lt": "Pasirenkame lengvai atpažįstamus orientyrus pozicijai stebėti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -242,7 +242,7 @@
     "term_lt": "Meteorologiniai aspektai",
     "term_en": "Weather factors",
     "description_lt": "Analizuojame vėjo kryptį, stiprumą ir prognozes.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -260,7 +260,7 @@
     "term_lt": "Hidrologiniai aspektai",
     "term_en": "Tidal/current factors",
     "description_lt": "Įvertiname sroves, potvynius ir vandens lygio pokyčius.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -278,7 +278,7 @@
     "term_lt": "Teisiniai aspektai",
     "term_en": "Legal constraints",
     "description_lt": "Patikriname draudžiamas zonas, rezervatus ar leidimų poreikį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -296,7 +296,7 @@
     "term_lt": "Urbanistiniai aspektai",
     "term_en": "Local infrastructure",
     "description_lt": "Įvertiname kaimynystės objektus, eismo intensyvumą ir triukšmą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -314,7 +314,7 @@
     "term_lt": "Priešvėjiniam vantui",
     "term_en": "Windward shroud failure",
     "description_lt": "Situacija, kai nutrūksta vėjo pusėje esantis vantas – reikia skubiai atramos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -332,7 +332,7 @@
     "term_lt": "Bakštagui",
     "term_en": "Runner failure",
     "description_lt": "Nutrūkus bakštagui, stiebas gali prarasti atramą plaukaujant aštriai pavėjui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -350,7 +350,7 @@
     "term_lt": "Forštagui",
     "term_en": "Forestay failure",
     "description_lt": "Priekinio stovo nutrūkimas kelia pavojų stiebo stabilumui ir stakseliui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -368,7 +368,7 @@
     "term_lt": "Achterštagui",
     "term_en": "Backstay failure",
     "description_lt": "Galinio stovo praradimas leidžia stiebui pasvirti į priekį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -386,7 +386,7 @@
     "term_lt": "Stakselio falui",
     "term_en": "Jib halyard failure",
     "description_lt": "Praradus falą priekis burė nusileidžia, reikia atsarginio kėlimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -404,7 +404,7 @@
     "term_lt": "Groto falui",
     "term_en": "Main halyard failure",
     "description_lt": "Groto nuleidimas dėl falo gedimo, būtina fiksuoti burę.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -422,7 +422,7 @@
     "term_lt": "Pavėjiniam vantui",
     "term_en": "Leeward shroud slip",
     "description_lt": "Atsikabinęs pavėjinės pusės vantas praranda įtempimą, stiebas gali vibruoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -440,7 +440,7 @@
     "term_lt": "Bakštagui",
     "term_en": "Runner slip",
     "description_lt": "Bakštagas nuslysta nuo tvirtinimo, reikia iš naujo įtempti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -458,7 +458,7 @@
     "term_lt": "Forštagui",
     "term_en": "Forestay slip",
     "description_lt": "Forštagas atsilaisvina, pablogėja stakselio profilis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -476,7 +476,7 @@
     "term_lt": "Achterštagui",
     "term_en": "Backstay slip",
     "description_lt": "Achterštagas praranda įtempimą, stiebas pasvyra į priekį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -494,7 +494,7 @@
     "term_lt": "Stakselio falui",
     "term_en": "Jib halyard slip",
     "description_lt": "Falas išslysta iš fiksatoriaus ir burė nusileidžia.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -512,7 +512,7 @@
     "term_lt": "Groto falui",
     "term_en": "Main halyard slip",
     "description_lt": "Groto falas atsilaisvina, sumažėja burės įtempimas ir profilis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

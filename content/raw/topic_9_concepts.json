@@ -8,7 +8,7 @@
     "term_lt": "Burinis laivas",
     "term_en": "Sailing vessel lights",
     "description_lt": "Navigaciniai žiburiai, kuriuos privalo rodyti burlaivis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Laivas su mechaniniu varikliu",
     "term_en": "Power-driven lights",
     "description_lt": "Žiburiai, kai burinis laivas plaukia su varikliu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Žvejojantis laivas",
     "term_en": "Fishing vessel lights",
     "description_lt": "Specialūs žiburiai ribotų manevrų žvejybos laivams.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Velkantis laivas",
     "term_en": "Towing lights",
     "description_lt": "Žiburiai, rodantys vilkimo veiklą ir vilkstinės ilgį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Vilkstinė",
     "term_en": "Tow",
     "description_lt": "Bendras vilkstinės ženklinimas (vilkikas ir vilkiamas laivas).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Žemkasė",
     "term_en": "Dredger",
     "description_lt": "Navigaciniai žiburiai darbinius laivus ribotais manevrais.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Stovintis nuleidus inkarą",
     "term_en": "Anchored vessel",
     "description_lt": "Šviesos ir dieniniai ženklai, kai laivas stovi.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Ant seklumos",
     "term_en": "Aground",
     "description_lt": "Žiburiai ir ženklai, nurodantys, kad laivas užplaukęs ant seklumos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Locmano laivas",
     "term_en": "Pilot vessel",
     "description_lt": "Žiburiai, rodantys locmano paslaugas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Minų traluotojas",
     "term_en": "Mine clearance",
     "description_lt": "Specialūs žiburiai traluojantiems minas, įspėjantys apie pavojų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

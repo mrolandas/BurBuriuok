@@ -8,7 +8,7 @@
     "term_lt": "Jolė",
     "term_en": "Dinghy",
     "description_lt": "Maža, lengva burinė valtis su atviru deniu, skirta mokymui ar trumpoms išvykoms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Švertbotas",
     "term_en": "Centreboard boat",
     "description_lt": "Korpusas su keliama šverto plokšte, leidžiančia plaukti sekliuose vandenyse.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Kilinė jachta",
     "term_en": "Keel yacht",
     "description_lt": "Laivas su fiksuotu, sunkiu kilio balastu, suteikiančiu stabilumą vandenyne.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Kompromisas",
     "term_en": "Bilge keel",
     "description_lt": "Jachta su dviem trumpais kiliais abiejuose bortuose, leidžiančiais stovėti ant dugno atoslūgio metu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Katamaranas",
     "term_en": "Catamaran",
     "description_lt": "Dvikorpusis burlaivis su tiltu, pasižymintis greičiu ir mažu grimzlimu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Trimaranas",
     "term_en": "Trimaran",
     "description_lt": "Trijų korpusų burlaivis, turintis centrinį korpusą ir dvi mažesnes atramas stabilumui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Proa",
     "term_en": "Proa",
     "description_lt": "Nesimetriškas Ramiojo vandenyno tradicinis burlaivis su viena stabilizuojančia ama.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Ketas",
     "term_en": "Cat rig",
     "description_lt": "Vieno stiebo laivas su viena groto bure be priekinės burės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Šliupas",
     "term_en": "Sloop",
     "description_lt": "Populiariausias vieno stiebo takelažas su grotu ir viena priekine bure (stakseliu ar genuja).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Kuteris (tenderis)",
     "term_en": "Cutter",
     "description_lt": "Vieno stiebo laivas su dviem priekinėmis burėmis ir toliau nuo priekio pastatytu stiebu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Kečas",
     "term_en": "Ketch",
     "description_lt": "Du stiebai, mažesnis bizanstiebis stovi priešais vairą; bizanburė padeda balansuoti laivą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Jolas",
     "term_en": "Yawl",
     "description_lt": "Du stiebai, mažas bizanstiebis už vairo; naudojamas balanso reguliavimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Škuna",
     "term_en": "Schooner",
     "description_lt": "Bent du stiebai, galinis stiebas lygus arba aukštesnis už priekinį, burės mišrios.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -242,7 +242,7 @@
     "term_lt": "Brigantina",
     "term_en": "Brigantine",
     "description_lt": "Priekinis stiebas su keturkampėmis burėmis, galinis – su trikampėmis (markoni) burėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -260,7 +260,7 @@
     "term_lt": "Brigas",
     "term_en": "Brig",
     "description_lt": "Du stiebai su keturkampėmis burėmis ant abiejų stiebų; klasikinis kariniai/prekybiniai laivai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -278,7 +278,7 @@
     "term_lt": "Barkentina",
     "term_en": "Barquentine",
     "description_lt": "Trys ar daugiau stiebų: priekinis su keturkampėmis burėmis, likę su trikampėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -296,7 +296,7 @@
     "term_lt": "Barkas",
     "term_en": "Barque",
     "description_lt": "Keli stiebai, visi, išskyrus galinį, su keturkampėmis burėmis; galinis su markoni bure.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -314,7 +314,7 @@
     "term_lt": "Burinis laivas",
     "term_en": "Full-rigged ship",
     "description_lt": "Trys ar daugiau stiebų, ant kiekvieno įrengtos keturkampės burės; didžiausi tradiciniai burlaiviai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -332,7 +332,7 @@
     "term_lt": "Falškilis",
     "term_en": "False keel",
     "description_lt": "Papildomas išorinis kilio sluoksnis, saugantis pagrindinį kilį nuo nusidėvėjimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -350,7 +350,7 @@
     "term_lt": "Kilis",
     "term_en": "Keel",
     "description_lt": "Pagrindinė išilginė korpuso sija, suteikianti tvirtumą ir stabilumą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -368,7 +368,7 @@
     "term_lt": "Kilsonas",
     "term_en": "Keelson",
     "description_lt": "Vidinis sutvirtinimas virš kilio, paskirstantis apkrovas ir standinantis dugną.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -386,7 +386,7 @@
     "term_lt": "Floras",
     "term_en": "Floor timber",
     "description_lt": "Skersinė rėmo dalis, jungianti bortus per kilį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -404,7 +404,7 @@
     "term_lt": "Stepsas",
     "term_en": "Mast step",
     "description_lt": "Stiebo padas, kuriame stiebas įtvirtinamas ir perimamos apkrovos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -422,7 +422,7 @@
     "term_lt": "Španhautai",
     "term_en": "Frames / ribs",
     "description_lt": "Korpuso šonkauliai, formuojantys laivo kontūrą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -440,7 +440,7 @@
     "term_lt": "Stringeriai",
     "term_en": "Stringers",
     "description_lt": "Išilginės sutvirtinančios sijos, jungiančios španhautus ir standinančios korpusą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -458,7 +458,7 @@
     "term_lt": "Knicos",
     "term_en": "Knees",
     "description_lt": "Sustiprintos kampinės jungtys tarp borto ir denio ar sijų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -476,7 +476,7 @@
     "term_lt": "Bimsai",
     "term_en": "Deck beams",
     "description_lt": "Skersinės denio sijos, laikančios denį ir perduodančios apkrovas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -494,7 +494,7 @@
     "term_lt": "Pusbimsiai",
     "term_en": "Half beams",
     "description_lt": "Sutrumpintos denio sijos aplink liukus ar angas, palaikančios atidarymus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -512,7 +512,7 @@
     "term_lt": "Karlingsai",
     "term_en": "Carlings",
     "description_lt": "Išilginės sijos, jungiančios bimsus ir remiančios liukus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -530,7 +530,7 @@
     "term_lt": "Komingsai",
     "term_en": "Coamings",
     "description_lt": "Pakelti borteliai aplink liukus ar kokpitą, apsaugantys nuo vandens.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -548,7 +548,7 @@
     "term_lt": "Pileriai",
     "term_en": "Pillars",
     "description_lt": "Vertikalūs denio atraminiai stulpai, perduodantys apkrovas į kilį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -566,7 +566,7 @@
     "term_lt": "Švertas (šliūžė)",
     "term_en": "Centreboard / daggerboard",
     "description_lt": "Keliama plokštuma, stabdanti dreifą ir reguliuojanti kursą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -584,7 +584,7 @@
     "term_lt": "Šverto šulinys",
     "term_en": "Centreboard trunk",
     "description_lt": "Korpuso anga, kurioje slenka švertas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -602,7 +602,7 @@
     "term_lt": "Šverto talė",
     "term_en": "Centreboard pennant",
     "description_lt": "Virvė ar talė, skirta švertui kelti ir nuleisti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -620,7 +620,7 @@
     "term_lt": "Pakabinamasis ir stacionarusis vairas",
     "term_en": "Rudder types",
     "description_lt": "Pagrindiniai vairo variantai: išorinis (pakabinamas) ir integruotas (stacionarus) su jų detalėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -638,7 +638,7 @@
     "term_lt": "Balansyrinis ir pusiau balansyrinis vairas",
     "term_en": "Balanced rudders",
     "description_lt": "Vairo konstrukcijos, turinčios dalį ploto prieš ašį, kad sumažintų valdymo jėgą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -656,7 +656,7 @@
     "term_lt": "Forštevenis",
     "term_en": "Stem",
     "description_lt": "Priekinis korpuso kraštas, formuojantis laivapriekį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -674,7 +674,7 @@
     "term_lt": "Achterštevenis",
     "term_en": "Sternpost",
     "description_lt": "Galinis korpuso kraštas, formuojantis laivagalį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -692,7 +692,7 @@
     "term_lt": "Priekinė ir galinė nuosvyros",
     "term_en": "Rake (stem/stern rake)",
     "description_lt": "Stiebo ar borto pasvirimo kampai, veikiantys balansą ir buringumą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -710,7 +710,7 @@
     "term_lt": "Deidvudas",
     "term_en": "Deadwood",
     "description_lt": "Sustorinta kilio dalis laivagalio srityje, apimanti vairo veleną.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -728,7 +728,7 @@
     "term_lt": "Kairysis bortas",
     "term_en": "Port side",
     "description_lt": "Laivo pusė, esanti į kairę žiūrint į priekį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -746,7 +746,7 @@
     "term_lt": "Dešinysis bortas",
     "term_en": "Starboard side",
     "description_lt": "Laivo pusė, esanti į dešinę žiūrint į priekį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -764,7 +764,7 @@
     "term_lt": "Falšbortas",
     "term_en": "Bulwark",
     "description_lt": "Vertikalus borto prailginimas virš denio, saugantis įgulą ir įrangą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -782,7 +782,7 @@
     "term_lt": "Denio sritys",
     "term_en": "Deck areas",
     "description_lt": "Skirtingos denio zonos (bakas, midelis, jutas, kokpitas, kajutės antstatas) ir jų funkcijos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -800,7 +800,7 @@
     "term_lt": "Lejeriai",
     "term_en": "Stanchions",
     "description_lt": "Vertikalūs stulpeliai, laikantys relingus ar saugos trosus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -818,7 +818,7 @@
     "term_lt": "Lejerių stovai",
     "term_en": "Stanchion bases",
     "description_lt": "Tvirtinimo plokštelės ar laikikliai lejeriams prie denio ar falšborto.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -836,7 +836,7 @@
     "term_lt": "Forpikas",
     "term_en": "Forepeak",
     "description_lt": "Priekinė patalpa po deniu, skirta įrangai, burėms ar inkarams laikyti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -854,7 +854,7 @@
     "term_lt": "Kajutė",
     "term_en": "Cabin",
     "description_lt": "Gyvenamoji patalpa po deniu su miegamosiomis vietomis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -872,7 +872,7 @@
     "term_lt": "Kajutkompanija",
     "term_en": "Saloon",
     "description_lt": "Pagrindinė bendro naudojimo erdvė su stalu ir sėdimomis vietomis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -890,7 +890,7 @@
     "term_lt": "Achterpikas",
     "term_en": "Aft cabin",
     "description_lt": "Galinėje korpuso dalyje esanti saugykla ar kambarys.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -908,7 +908,7 @@
     "term_lt": "Triumas",
     "term_en": "Bilge",
     "description_lt": "Žemiausia korpuso dalis, kur susirenka vanduo ir įrengiami siurbliai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -926,7 +926,7 @@
     "term_lt": "Galjūnas (WC)",
     "term_en": "Head",
     "description_lt": "Sanitarinis mazgas su unitazu ir kriaukle.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -944,7 +944,7 @@
     "term_lt": "Kambuzas (virtuvė)",
     "term_en": "Galley",
     "description_lt": "Virtuvės zona su virykle, kriaukle ir spintelėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -962,7 +962,7 @@
     "term_lt": "Variklio skyrius",
     "term_en": "Engine compartment",
     "description_lt": "Izoliuota patalpa, kur sumontuotas pagalbinis variklis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -980,7 +980,7 @@
     "term_lt": "Liukai",
     "term_en": "Hatches",
     "description_lt": "Atidaromos angos deniuose ar priekyje, suteikiančios priėjimą ir ventiliaciją.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -998,7 +998,7 @@
     "term_lt": "Iliuminatoriai",
     "term_en": "Portholes",
     "description_lt": "Apvalūs ar ovalūs korpuso langai šviesai ir oro cirkuliacijai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1016,7 +1016,7 @@
     "term_lt": "Ventiliatoriai",
     "term_en": "Ventilators",
     "description_lt": "Vėdinimo įtaisai, leidžiantys orui cirkuliuoti neįleidžiant vandens.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1034,7 +1034,7 @@
     "term_lt": "Vandens tankai",
     "term_en": "Water tanks",
     "description_lt": "Talpyklos gėlam vandeniui saugoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1052,7 +1052,7 @@
     "term_lt": "Vandens tiekimo sistemos",
     "term_en": "Water systems",
     "description_lt": "Pompos, filtrai ir vamzdynai, tiekiantys vandenį į virtuvę ar sanitarinį mazgą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1070,7 +1070,7 @@
     "term_lt": "Špigatai",
     "term_en": "Scuppers",
     "description_lt": "Nutekėjimo angos deniuose, kurios išleidžia vandenį už borto.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1088,7 +1088,7 @@
     "term_lt": "Triumo siurbliai",
     "term_en": "Bilge pumps",
     "description_lt": "Rankiniai ar elektriniai siurbliai, pašalinantys vandenį iš triumo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1106,7 +1106,7 @@
     "term_lt": "Ventiliacijos alsuokliai",
     "term_en": "Dorade vents",
     "description_lt": "Specialūs vėdinimo gaubtai su vandens gaudyklėmis, leidžiantys orui cirkuliuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1124,7 +1124,7 @@
     "term_lt": "Deflektoriai",
     "term_en": "Cowl vents",
     "description_lt": "Pasukami gaubtai, nukreipiantys vėją ir didinantys natūralią ventiliaciją.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1142,7 +1142,7 @@
     "term_lt": "Stiebas",
     "term_en": "Mast",
     "description_lt": "Vertikalus rangauto elementas su topu, klotiku, pėda, šporu ir zalingiais, laikantis bures.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1160,7 +1160,7 @@
     "term_lt": "Gikas",
     "term_en": "Boom",
     "description_lt": "Horizontalus karčis, prie kurio tvirtinama groto apačia ir kuriuo valdoma burė.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1178,7 +1178,7 @@
     "term_lt": "Bušpritas",
     "term_en": "Bowsprit",
     "description_lt": "Iš laivapriekio išsikišęs karčis, leidžiantis iškelti priekinę burę toliau nuo stiebo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1196,7 +1196,7 @@
     "term_lt": "Spinakerio gikas",
     "term_en": "Spinnaker pole",
     "description_lt": "Horizontalus karčis spinakerio kampui laikyti priešingoje borto pusėje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1214,7 +1214,7 @@
     "term_lt": "Gafelis",
     "term_en": "Gaff",
     "description_lt": "Viršutinis karčis keturkampėse (gafelinėse) burėse.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1232,7 +1232,7 @@
     "term_lt": "Pėdos ir nokai, stiebų pavadinimai",
     "term_en": "Spar foots & mast names",
     "description_lt": "Bendri terminai, apibūdinantys karčių tvirtinimo vietas ir stiebų pavadinimus daugiastiebiuose laivuose (grotstiebis, forstiebis, bizanstiebis).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1250,7 +1250,7 @@
     "term_lt": "Forštagai",
     "term_en": "Forestays",
     "description_lt": "Stovinčio takelažo trosai, laikantys stiebą nuo pasvyrimo atgal ir laikančios priekines bures.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1268,7 +1268,7 @@
     "term_lt": "Achterštagai",
     "term_en": "Backstays",
     "description_lt": "Trosai, laikantys stiebą nuo pasvyrimo į priekį ir reguliuojantys stiebo lenkimą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1286,7 +1286,7 @@
     "term_lt": "Bakštagai",
     "term_en": "Running backstays",
     "description_lt": "Reguliuojami šoneliai, stabilizuojantys stiebą pagal burės apkrovą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1304,7 +1304,7 @@
     "term_lt": "Vantai",
     "term_en": "Shrouds",
     "description_lt": "Šoniniai stovo trosai (topvantai, pagrindiniai), suteikiantys šoninę atramą stiebui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1322,7 +1322,7 @@
     "term_lt": "Talrepai (tempikliai)",
     "term_en": "Turnbuckles",
     "description_lt": "Srieginiai įtempėjai takelažo trosams preciziškai įtempti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1340,7 +1340,7 @@
     "term_lt": "Falai",
     "term_en": "Halyards",
     "description_lt": "Judamojo takelažo virvės burėms, stiebams ar karčiams kelti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1358,7 +1358,7 @@
     "term_lt": "Šotai",
     "term_en": "Sheets",
     "description_lt": "Virvės, reguliuojančios burės kampą į vėją.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1376,7 +1376,7 @@
     "term_lt": "Brasai",
     "term_en": "Braces",
     "description_lt": "Virvės, naudojamos skersinėms burėms pasukti vėjo atžvilgiu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1394,7 +1394,7 @@
     "term_lt": "Halsai",
     "term_en": "Tacks",
     "description_lt": "Virvės, fiksuojančios burės priekinį kampą prie karčio ar denio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1412,7 +1412,7 @@
     "term_lt": "Rifštertai",
     "term_en": "Reefing lines",
     "description_lt": "Virvės, sutrumpinančios burės plotą stipraus vėjo metu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1430,7 +1430,7 @@
     "term_lt": "Topenantai",
     "term_en": "Topping lifts",
     "description_lt": "Virvės, keliančios karčius (pvz., giko galo) kai burė nuleista.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1448,7 +1448,7 @@
     "term_lt": "Atotampos",
     "term_en": "Preventers",
     "description_lt": "Virvės, ribojančios karčio judėjimą (groto giko, spinakerio barberio atotampos) ir apsaugančios nuo nekontroliuoto vento gūsio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1466,7 +1466,7 @@
     "term_lt": "Raksai",
     "term_en": "Slides",
     "description_lt": "Takelažo detalės, kuriomis burė pritvirtinta prie stiebo ar karčio bėgelio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1484,7 +1484,7 @@
     "term_lt": "Karabinai",
     "term_en": "Snap hooks",
     "description_lt": "Greito tvirtinimo jungtys virvėms ar burėms sujungti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1502,7 +1502,7 @@
     "term_lt": "Šekeliai (jungės)",
     "term_en": "Shackles",
     "description_lt": "Metalinės U formos jungės su varžtu, jungiančios takelažo detales.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1520,7 +1520,7 @@
     "term_lt": "Blokai (skridiniai)",
     "term_en": "Blocks",
     "description_lt": "Skridiniai, leidžiantys keisti traukos kryptį ir santykį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1538,7 +1538,7 @@
     "term_lt": "Klampės",
     "term_en": "Cleats",
     "description_lt": "Tvirtinimo detalės virvėms pritvirtinti ar užfiksuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1556,7 +1556,7 @@
     "term_lt": "Fiksatoriai (stoporai)",
     "term_en": "Jammers / stoppers",
     "description_lt": "Įtaisai, blokuojantys virvę, kad ji neišslystų iš bloko.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1574,7 +1574,7 @@
     "term_lt": "Kipos",
     "term_en": "Fairleads",
     "description_lt": "Įvorės ar žiedai, nukreipiantys virvės eigą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1592,7 +1592,7 @@
     "term_lt": "Putensai",
     "term_en": "Deadeyes",
     "description_lt": "Medinės ar plastikinės plokštelės su skylėmis vantų įtempimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1610,7 +1610,7 @@
     "term_lt": "Gervės",
     "term_en": "Winches",
     "description_lt": "Mechaniniai įrenginiai, didinantys traukos jėgą dirbant su virvėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1628,7 +1628,7 @@
     "term_lt": "Grotšotų bėgelis su šliaužikliu",
     "term_en": "Mainsheet traveler",
     "description_lt": "Bėgelis su slankikliu, leidžiantis reguliuoti giko padėtį šonine kryptimi.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1646,7 +1646,7 @@
     "term_lt": "Stakselšotų ir kiti bėgeliai",
     "term_en": "Jib tracks",
     "description_lt": "Bėgeliai su slankikliais priekinių burių šotų kampui reguliuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1664,7 +1664,7 @@
     "term_lt": "Tiesioji burė",
     "term_en": "Square sail",
     "description_lt": "Keturkampė burė, statmena stiebui, naudojama tradiciniuose laivuose.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1682,7 +1682,7 @@
     "term_lt": "Špritinė burė",
     "term_en": "Spritsail",
     "description_lt": "Burė su įstrižiniu špritu, ištempiama įstrižai nuo stiebo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1700,7 +1700,7 @@
     "term_lt": "Gafelinė burė",
     "term_en": "Gaff sail",
     "description_lt": "Keturkampė burė su gafaeliniu viršutiniu karčiu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1718,7 +1718,7 @@
     "term_lt": "Markoninė (bermudinė) burė",
     "term_en": "Bermudan sail",
     "description_lt": "Trikampė burė su aukštu stiebu ir ilgu liktrosu, šiandien dažniausia.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1736,7 +1736,7 @@
     "term_lt": "Liugerinė burė",
     "term_en": "Lug sail",
     "description_lt": "Įstrižinė burė, slenkanti aplink stiebą be grotostiebio griovelio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1754,7 +1754,7 @@
     "term_lt": "Huari burė",
     "term_en": "Leg-of-mutton",
     "description_lt": "Trikampė burė su trumpu karčiu, dažnai mažuose burlaiviuose.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1772,7 +1772,7 @@
     "term_lt": "Lotyniška burė",
     "term_en": "Lateen sail",
     "description_lt": "Trikampė burė su ilgu įstrižiniu karčiu, pasisukanti aplink stiebą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1790,7 +1790,7 @@
     "term_lt": "Džonko burė",
     "term_en": "Junk sail",
     "description_lt": "Segmentuota burė su horizontaliomis latėmis, paplitusi Azijos laivuose.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1808,7 +1808,7 @@
     "term_lt": "Grotas",
     "term_en": "Mainsail",
     "description_lt": "Pagrindinė burė ant grotstiebo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1826,7 +1826,7 @@
     "term_lt": "Stakselis",
     "term_en": "Jib",
     "description_lt": "Priekinė trikampė burė, tvirtinama prie forštagio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1844,7 +1844,7 @@
     "term_lt": "Genuja",
     "term_en": "Genoa",
     "description_lt": "Didelis stakselis, dengiantis grotą ir didinantis burės plotą esant silpnam vėjui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1862,7 +1862,7 @@
     "term_lt": "Spinakeris (simetrinis/ asimetrinis)",
     "term_en": "Spinnaker",
     "description_lt": "Didelė pripūsta burė plaukiant pavėjui; gali būti simetrinė ar asimetrinė.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1880,7 +1880,7 @@
     "term_lt": "Triselis",
     "term_en": "Trysail",
     "description_lt": "Maža audros burė, keičianti pagrindinę burę esant stipriam vėjui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1898,7 +1898,7 @@
     "term_lt": "Audros stakselis",
     "term_en": "Storm jib",
     "description_lt": "Mažas, tvirtas priekis burė, naudojama audros sąlygomis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1916,7 +1916,7 @@
     "term_lt": "Bermudinio groto kampai/kraštinės",
     "term_en": "Sail corners",
     "description_lt": "Terminai, apibūdinantys burės kampus (galinis, priekinis, viršutinis), kraštines ir jų funkcijas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1934,7 +1934,7 @@
     "term_lt": "Boutai",
     "term_en": "Battens",
     "description_lt": "Plonos juostos latės, suteikiančios burės profiliui formą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1952,7 +1952,7 @@
     "term_lt": "Liktrosas",
     "term_en": "Bolt rope",
     "description_lt": "Virvė burės kraštuose, įsitvirtinanti griovelyje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1970,7 +1970,7 @@
     "term_lt": "Bulinis",
     "term_en": "Foot",
     "description_lt": "Burės apatinė kraštinė, tvirtinama prie giko ar denio.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -1988,7 +1988,7 @@
     "term_lt": "Liuversai",
     "term_en": "Grommets",
     "description_lt": "Sustiprintos skylės burėje virvėms ar rifams perverti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2006,7 +2006,7 @@
     "term_lt": "Falo lentelė",
     "term_en": "Headboard",
     "description_lt": "Sustiprinta plokštelė burės viršūnėje falo pritvirtinimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2024,7 +2024,7 @@
     "term_lt": "Latės",
     "term_en": "Battens",
     "description_lt": "Į burę įstatytos standžios juostos, palaikančios profilį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2042,7 +2042,7 @@
     "term_lt": "Lačių kišenės",
     "term_en": "Batten pockets",
     "description_lt": "Kišenės, į kurias įstatomos latės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2060,7 +2060,7 @@
     "term_lt": "Rifbantai",
     "term_en": "Reef bands",
     "description_lt": "Sutvirtintos burės zonos, kuriose pritvirtinami rifai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2078,7 +2078,7 @@
     "term_lt": "Rifsezeniai",
     "term_en": "Reef points",
     "description_lt": "Virvės ar dirželiai rifams surišti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2096,7 +2096,7 @@
     "term_lt": "Rifštertai",
     "term_en": "Reefing lines",
     "description_lt": "Virvės, naudojamos sutrumpinti burę (sutampa su takelažo sąvoka).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2114,7 +2114,7 @@
     "term_lt": "Kliuzai",
     "term_en": "Fairleads",
     "description_lt": "Metalinės ar plastikinės angos, nukreipiančios lynus per bortą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2132,7 +2132,7 @@
     "term_lt": "Klampės",
     "term_en": "Cleats",
     "description_lt": "Tvirtinimo dvilaikės virvėms rišti prie denio ar borto.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2150,7 +2150,7 @@
     "term_lt": "Knechtai",
     "term_en": "Bollards",
     "description_lt": "Tvirtinimo stulpai laivuose ar krantinėse lynams prisirišti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2168,7 +2168,7 @@
     "term_lt": "Bitengai",
     "term_en": "Bitts",
     "description_lt": "Dvigubi metaliniai stulpai deniuose, skirti švartavimo virvėms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2186,7 +2186,7 @@
     "term_lt": "Žiedai",
     "term_en": "Mooring rings",
     "description_lt": "Metalo žiedai krantinėse ar ant denio lynams tvirtinti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2204,7 +2204,7 @@
     "term_lt": "Atmušai (krancai, fenderiai)",
     "term_en": "Fenders",
     "description_lt": "Minkštos apsaugos tarp laivo ir krantinės ar kito laivo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2222,7 +2222,7 @@
     "term_lt": "Priekiniai lynai",
     "term_en": "Head lines",
     "description_lt": "Švartavimo virvės, vedamos į priekį nuo laivo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2240,7 +2240,7 @@
     "term_lt": "Galiniai lynai",
     "term_en": "Stern lines",
     "description_lt": "Virvės, vedamos į laivagalį tvirtinimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2258,7 +2258,7 @@
     "term_lt": "Pripaudžiamieji lynai",
     "term_en": "Breast lines",
     "description_lt": "Šoninės virvės, laikančios laivą arčiau krantinės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2276,7 +2276,7 @@
     "term_lt": "Špringai",
     "term_en": "Springs",
     "description_lt": "Įstrižos virvės, ribojančios laivo judėjimą pirmyn/atgal.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2294,7 +2294,7 @@
     "term_lt": "Inkarai",
     "term_en": "Anchors",
     "description_lt": "Įrangos elementas, tvirtinantis laivą prie dugno.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2312,7 +2312,7 @@
     "term_lt": "Inkarų tipai",
     "term_en": "Anchor types",
     "description_lt": "Skirtingos konstrukcijos (Admiraliteto, Denforto, plūginis, sudedamasis, grybo, sraigtinis, katė, delta) ir jų panaudojimas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2330,7 +2330,7 @@
     "term_lt": "Inkaro lynas",
     "term_en": "Anchor rode",
     "description_lt": "Virvė ar kombinacija, jungianti inkarą su laivu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2348,7 +2348,7 @@
     "term_lt": "Grandinė",
     "term_en": "Chain",
     "description_lt": "Metalinė grandinė inkaravimo sistemoms, didinanti svorį ir atsparumą trinčiai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2366,7 +2366,7 @@
     "term_lt": "Suktukas",
     "term_en": "Swivel",
     "description_lt": "Jungtis tarp grandinės ir inkaro, leidžianti suktis nesusukant lyno.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2384,7 +2384,7 @@
     "term_lt": "Žvakahalsas",
     "term_en": "Anchor shackle",
     "description_lt": "U formos jungė inkaro ir grandinės sujungimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2402,7 +2402,7 @@
     "term_lt": "Grandinės stabdis",
     "term_en": "Chain stopper",
     "description_lt": "Mechanizmas, fiksuojantis grandinę esant apkrovai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2420,7 +2420,7 @@
     "term_lt": "Inkaro boja (tomboja)",
     "term_en": "Anchor buoy",
     "description_lt": "Plūdė, žyminti inkaro vietą vandenyje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2438,7 +2438,7 @@
     "term_lt": "Admiraliteto inkaro kotas",
     "term_en": "Anchor shank",
     "description_lt": "Tiesioji Admiraliteto inkaro dalis, pereinanti į rankeną.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2456,7 +2456,7 @@
     "term_lt": "Štokas",
     "term_en": "Stock",
     "description_lt": "Horizontalus strypas, statantis inkarą reikiamu kampu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2474,7 +2474,7 @@
     "term_lt": "Ragas",
     "term_en": "Fluke",
     "description_lt": "Inkarų sparnai, įsikimbantys į dugną.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2492,7 +2492,7 @@
     "term_lt": "Letena",
     "term_en": "Crown",
     "description_lt": "Apatinė dalis, jungianti štoką ir ragus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2510,7 +2510,7 @@
     "term_lt": "Inkaro kulnas (trentas)",
     "term_en": "Bill",
     "description_lt": "Aštrus ragų galas, įsikimbantis į gruntą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2528,7 +2528,7 @@
     "term_lt": "Gesintuvai",
     "term_en": "Fire extinguishers",
     "description_lt": "Privalomi gaisro gesinimo prietaisai su tinkamomis klasėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2546,7 +2546,7 @@
     "term_lt": "Kibirai",
     "term_en": "Buckets",
     "description_lt": "Paprasti įrankiai vandeniui semti ar gesinti gaisrą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2564,7 +2564,7 @@
     "term_lt": "Avarinis rumpelis",
     "term_en": "Emergency tiller",
     "description_lt": "Atsarginė vairo valdymo sistema, naudojama sugedus pagrindinei.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2582,7 +2582,7 @@
     "term_lt": "Įrankiai trosams nukirpti",
     "term_en": "Wire cutters",
     "description_lt": "Stiprios žnyplės ar pjovimo įrankiai trosams skubiai nupjauti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2600,7 +2600,7 @@
     "term_lt": "Kūginių kamščių rinkinys",
     "term_en": "Wooden plugs",
     "description_lt": "Mediniai kaiščiai skylių ar vamzdžių pratekėjimams užkimšti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2618,7 +2618,7 @@
     "term_lt": "Gelbėjimo ratas ir liemenės",
     "term_en": "Lifebuoy & lifejackets",
     "description_lt": "Asmeninės plūdrumo ir gelbėjimo priemonės, privalomos kiekvienam įgulos nariui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2636,7 +2636,7 @@
     "term_lt": "Saugos diržai",
     "term_en": "Safety harnesses",
     "description_lt": "Diržai su karabinais, pririšantys žmogų prie laivo esant sudėtingoms sąlygoms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2654,7 +2654,7 @@
     "term_lt": "Saugos lejeriai",
     "term_en": "Jacklines",
     "description_lt": "Trosai deniu per visą laivo ilgį, prie kurių segami saugos diržai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2672,7 +2672,7 @@
     "term_lt": "Sanitarinės priemonės",
     "term_en": "Medical supplies",
     "description_lt": "Pirmosios pagalbos rinkiniai ir higienos priemonės ekstremalioms situacijoms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2690,7 +2690,7 @@
     "term_lt": "Navigacinės priemonės",
     "term_en": "Signalling equipment",
     "description_lt": "Signalinės priemonės (radijas, reflektoriai) pagalbai iškviesti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2708,7 +2708,7 @@
     "term_lt": "Signalizavimo priemonės",
     "term_en": "Pyrotechnics",
     "description_lt": "Pirotechnika, garsiniai ar šviesos signalai nelaimės pranešimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2726,7 +2726,7 @@
     "term_lt": "Variklių rūšys ir paruošimas",
     "term_en": "Engine types & commissioning",
     "description_lt": "Dyzeliniai, benzininiai, elektriniai varikliai, jų galingumų parinkimas ir paleidimo procedūros.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -2744,7 +2744,7 @@
     "term_lt": "Priežiūra",
     "term_en": "Maintenance",
     "description_lt": "Reguliarus alyvos keitimas, filtrų priežiūra, aušinimo ir kuro sistemos kontrolė.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

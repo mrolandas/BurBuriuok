@@ -1,5 +1,5 @@
 -- seed_curriculum.sql
--- Generated 2025-12-05T09:55:45.829Z
+-- Generated 2025-12-05T09:59:43.022Z
 
 insert into burburiuok.curriculum_nodes (
     code,

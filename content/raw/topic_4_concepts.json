@@ -8,7 +8,7 @@
     "term_lt": "Mob. tel. Nr. 112",
     "term_en": "Emergency phone 112",
     "description_lt": "Bendras Europos skubios pagalbos numeris.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "VHF radijo ryšiu",
     "term_en": "VHF distress",
     "description_lt": "Skubios pagalbos kanalai (CH16), naudojant MAYDAY/PAN-PAN signalus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Gestais matomumo ribose",
     "term_en": "Visual signals",
     "description_lt": "Rankiniai signalai ar vėliavos, kai ryšys matomas iš arti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Signalizacinė pirotechnika",
     "term_en": "Pyrotechnics",
     "description_lt": "Parašiutinės raketos, dūminiai signalai ar žibintai pagalbai prisišaukti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

@@ -505,7 +505,7 @@ const conceptSchema = z.object({
 
 function loadConceptRecordsFromRaw() {
   const files = readdirSync(RAW_DIR)
-    .filter((file) => /^section_[a-z0-9_]+_concepts\.json$/i.test(file))
+    .filter((file) => /^(section|topic)_[a-z0-9_]+_concepts\.json$/i.test(file))
     .sort();
 
   if (!files.length) {
@@ -534,9 +534,9 @@ function loadConceptRecordsFromRaw() {
 }
 
 function loadConceptRecords(structure) {
-  if (existsSync(MASTER_CONCEPT_PATH)) {
-    return loadConceptRecordsFromMaster(structure);
-  }
+  // if (existsSync(MASTER_CONCEPT_PATH)) {
+  //   return loadConceptRecordsFromMaster(structure);
+  // }
 
   const records = loadConceptRecordsFromRaw();
   return {

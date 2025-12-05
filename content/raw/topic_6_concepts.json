@@ -8,7 +8,7 @@
     "term_lt": "Baseinas",
     "term_en": "Basin",
     "description_lt": "Uždaresnė vandens akvatorija uostuose ar prieplaukose.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Akvatorija",
     "term_en": "Water area",
     "description_lt": "Vandens telkinio dalis, skirta navigacijai ar kitoms veikloms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Sekluma",
     "term_en": "Shoal",
     "description_lt": "Nedidelis gylis, keliantis pavojų laivams.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Sėklius",
     "term_en": "Sandbank",
     "description_lt": "Smėlio ar dumblo sankaupa po vandeniu, galinti iškilti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Baras",
     "term_en": "Bar",
     "description_lt": "Nuosėdų sankaupa upės žiotyse, ribojanti gylį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "RIfas",
     "term_en": "Reef",
     "description_lt": "Uolėta, seklėjanti struktūra, pavojinga navigacijai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Bankė",
     "term_en": "Bank",
     "description_lt": "Platoka sekluma jūrose su mažesniu gyliu nei aplink.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Reidas",
     "term_en": "Roads",
     "description_lt": "Atvira akvatorija netoli uosto, skirta laikinam inkaravimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Uostas",
     "term_en": "Port",
     "description_lt": "Įrengta krantinė infrastruktūra laivams priimti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Avanportas (priešuostis)",
     "term_en": "Outer harbour",
     "description_lt": "Uosto prieiga prieš pagrindinę akvatoriją, skirtas manevrams ar laukimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Prieplauka",
     "term_en": "Pier",
     "description_lt": "Smulkesnė krantinė ar pontonas nedideliems laivams.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Pirsas",
     "term_en": "Wharf",
     "description_lt": "Ilga krantinė struktūra, skirta laivams prišvartuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Damba",
     "term_en": "Dyke",
     "description_lt": "Apsauginis pylimas, saugantis nuo užliejimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -242,7 +242,7 @@
     "term_lt": "Molas",
     "term_en": "Breakwater",
     "description_lt": "Statinys, saugantis uostą nuo bangavimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -260,7 +260,7 @@
     "term_lt": "Bangolaužis",
     "term_en": "Breakwater",
     "description_lt": "Konstrukcija, mažinanti bangų energiją uoste.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -278,7 +278,7 @@
     "term_lt": "Kanalas",
     "term_en": "Channel",
     "description_lt": "Dalis akvatorijos, gilinama navigacijai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -296,7 +296,7 @@
     "term_lt": "Farvateris",
     "term_en": "Fairway",
     "description_lt": "Oficialus laivybai skirtas kelias su nustatytomis koordinatėmis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -314,7 +314,7 @@
     "term_lt": "Gairė",
     "term_en": "Leading mark",
     "description_lt": "Pažymėti orientyrai kursui palaikyti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -332,7 +332,7 @@
     "term_lt": "Bakenas",
     "term_en": "Beacon",
     "description_lt": "Fiksuotas navigacinis ženklas vandenyje ar krante.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -350,7 +350,7 @@
     "term_lt": "Boja",
     "term_en": "Buoy",
     "description_lt": "Plūduriuojantis navigacinis ženklas gylio, kliūčių ar maršruto nurodymui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -368,7 +368,7 @@
     "term_lt": "Švyturys",
     "term_en": "Lighthouse",
     "description_lt": "Pastovus šviesos signalas laivybai orientuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -386,7 +386,7 @@
     "term_lt": "Pludrusis švyturys",
     "term_en": "Light vessel",
     "description_lt": "Plūduriuojanti priemonė su šviesos signalais, žyminti pavojų ar kelią.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -404,7 +404,7 @@
     "term_lt": "Sektорinis švyturys",
     "term_en": "Sector light",
     "description_lt": "Švyturys, rodantis skirtingas spalvas pagal kursą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -422,7 +422,7 @@
     "term_lt": "Kranto orientyras",
     "term_en": "Landmark",
     "description_lt": "Aiškus objektas krante, padedantis nustatyti padėtį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -440,7 +440,7 @@
     "term_lt": "Vedlinė",
     "term_en": "Leading line",
     "description_lt": "Du orientyrai, sudarantys liniją teisingam kursui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -458,7 +458,7 @@
     "term_lt": "Kardinalinė sistema",
     "term_en": "Cardinal marks",
     "description_lt": "Ženklai, rodantys saugiausią pusę aplenkti kliūtį pagal pasaulio šalis.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -476,7 +476,7 @@
     "term_lt": "Lateralinė ir kiti ženklai",
     "term_en": "Lateral & special marks",
     "description_lt": "Ženklai, nurodantys farvaterio kraštus, specialias zonas, izoliuotus pavojus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -494,7 +494,7 @@
     "term_lt": "Linijų ilgis",
     "term_en": "Plotting lines",
     "description_lt": "Tikslus atstumų žymėjimas jūrlapyje pagal mastelį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -512,7 +512,7 @@
     "term_lt": "Kampų nustatymas",
     "term_en": "Bearing measurement",
     "description_lt": "Krypties ir kursų žymėjimas naudojant braižymo įrankius.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -530,7 +530,7 @@
     "term_lt": "Matlankis",
     "term_en": "Protractor",
     "description_lt": "Kampų matavimo įrankis kursams braižyti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -548,7 +548,7 @@
     "term_lt": "Lygiagrečioji liniuotė",
     "term_en": "Parallel ruler",
     "description_lt": "Įrankis kursams perkelti per jūrlapį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -566,7 +566,7 @@
     "term_lt": "Skriestuvas-matuoklis",
     "term_en": "Dividers",
     "description_lt": "Įrankis atstumams matuoti pagal mastelį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -584,7 +584,7 @@
     "term_lt": "Koordinačių nustatymas",
     "term_en": "Fixing position",
     "description_lt": "Taško ilgumos ir platumos nustatymas jūrlapyje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -602,7 +602,7 @@
     "term_lt": "Taško radimas pagal koordinates",
     "term_en": "Plotting position",
     "description_lt": "Koordinačių perkėlimas į jūrlapį, norint rasti vietą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -620,7 +620,7 @@
     "term_lt": "Atstumo tarp taškų nustatymas",
     "term_en": "Distance measurement",
     "description_lt": "Atstumo skaičiavimas tarp dviejų pozicijų naudojant skriestuvą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -638,7 +638,7 @@
     "term_lt": "Tikrojo kurso ar pelengo brėžimas",
     "term_en": "True course/bearing",
     "description_lt": "Kursų žymėjimas nuo pasirinkto taško.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -656,7 +656,7 @@
     "term_lt": "Nubrėžtos linijos krypties nustatymas",
     "term_en": "Bearing of a line",
     "description_lt": "Esamos linijos krypties nustatymas kursais ar pelengais.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -674,7 +674,7 @@
     "term_lt": "Lagas",
     "term_en": "Log",
     "description_lt": "Prietaisas laivo greičiui ir nuplauktam atstumui matuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -692,7 +692,7 @@
     "term_lt": "Echolotas",
     "term_en": "Echo sounder",
     "description_lt": "Prietaisas gylio matavimui po laivu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -710,7 +710,7 @@
     "term_lt": "Vėjo matuokliai",
     "term_en": "Wind instruments",
     "description_lt": "Prietaisai, rodantys vėjo kryptį ir greitį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -728,7 +728,7 @@
     "term_lt": "GPS (stacionari ir mobili)",
     "term_en": "GPS",
     "description_lt": "Palydovinė navigacijos sistema, teikianti poziciją ir greitį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -746,7 +746,7 @@
     "term_lt": "A.I.S.",
     "term_en": "Automatic Identification System",
     "description_lt": "Sistema, perduodanti laivo duomenis ir padedanti išvengti susidūrimų.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -764,7 +764,7 @@
     "term_lt": "Kompasas",
     "term_en": "Compass",
     "description_lt": "Magnetinis ar giroskopinis prietaisas, rodantis kryptį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

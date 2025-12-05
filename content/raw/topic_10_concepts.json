@@ -8,7 +8,7 @@
     "term_lt": "Vytulas (virvės suringavimas)",
     "term_en": "Coil",
     "description_lt": "Tvarkingas virvės susukimas laikymui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Klampės mazgas",
     "term_en": "Cleat hitch",
     "description_lt": "Mazgas virvei pritvirtinti prie klampės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Aštuoniukė",
     "term_en": "Figure eight",
     "description_lt": "Mazgas virvės galui apsaugoti nuo išslydimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Tikrasis mazgas",
     "term_en": "Reef knot",
     "description_lt": "Mazgas dviem vienodo diametro virvėms sujungti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Rifo mazgas",
     "term_en": "Reef knot (context)",
     "description_lt": "Mazgas burėms apriboti (sutampa su tikruoju, bet mokoma rifavimo kontekste).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Šoto mazgas",
     "term_en": "Sheet bend",
     "description_lt": "Mazgas virvei prie burės kampo tvirtinti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Bramšoto mazgas",
     "term_en": "Double sheet bend",
     "description_lt": "Sustiprintas šoto mazgo variantas skirtingo diametro virvėms.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Paprastasis štekas",
     "term_en": "Clove hitch",
     "description_lt": "Mazgas virvei pritvirtinti prie strypo ar poliaus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Inkaro mazgas",
     "term_en": "Anchor bend",
     "description_lt": "Patikimas mazgas inkarų lynui pritvirtinti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Gelbėjimo kilpa",
     "term_en": "Bowline",
     "description_lt": "Kilpa žmogui pakelti ar virvei pritvirtinti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Buksyravimo mazgas",
     "term_en": "Tow hitch",
     "description_lt": "Mazgas, skirtas užtikrintam buksyravimo lyno tvirtinimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Žvejų mazgas",
     "term_en": "Fisherman’s knot",
     "description_lt": "Mazgas monofilamentinėms virvelėms sujungti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Piemenų (veblingo) mazgas",
     "term_en": "Sheepshank",
     "description_lt": "Mazgas virvei sutrumpinti ar pažeistai vietai izoliuoti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -242,7 +242,7 @@
     "term_lt": "Stoporo mazgas",
     "term_en": "Stopper knot",
     "description_lt": "Mazgas, sukuriantis storesnį galą, kad virvė neišlįstų iš įrangos.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -260,7 +260,7 @@
     "term_lt": "Plokščiasis mazgas",
     "term_en": "Square knot",
     "description_lt": "Klasikinis mazgas, kai dvi virvės sujungtos plokščiai (lygiavertis tikrajam).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

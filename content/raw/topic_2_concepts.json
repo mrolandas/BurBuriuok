@@ -8,7 +8,7 @@
     "term_lt": "Ilgis (LOA)",
     "term_en": "Length overall",
     "description_lt": "Bendrasis jachtos ilgis nuo laivapriekio iki laivagalio, įskaitant išsikišimus.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Plotis (BMAX)",
     "term_en": "Beam",
     "description_lt": "Didžiausias korpuso plotis, lemiantis stabilumą ir vidaus erdves.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Grimzlė (T)",
     "term_en": "Draft",
     "description_lt": "Gylis nuo vandens linijos iki žemiausio taško, nusakantis, kiek laivas panyra.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Vaterlinijos ilgis (LWL)",
     "term_en": "Length on waterline",
     "description_lt": "Korabio ilgis vandens linijoje, įtakojantis teorinį greitį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Laisvo borto aukštis (F)",
     "term_en": "Freeboard",
     "description_lt": "Atstumas nuo vandens linijos iki denio briaunos, svarbus saugumui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Vandentalpa",
     "term_en": "Displacement volume",
     "description_lt": "Vandens tūris, kurį laivas išstumia, rodo masę ir keliamąją galią.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Keliamoji galia",
     "term_en": "Displacement",
     "description_lt": "Maksimalus svoris, kurį laivas gali saugiai nešti.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Stovumas",
     "term_en": "Stability",
     "description_lt": "Įgimtas laivo gebėjimas grįžti į vertikalią padėtį po pasvirimo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Buringumas",
     "term_en": "Sail area",
     "description_lt": "Burių plotas, turintis tiesioginę įtaką varomajai jėgai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Plūdrumas",
     "term_en": "Buoyancy",
     "description_lt": "Laivo gebėjimas išlaikyti save ir krovinį vandens paviršiuje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Stiprumas (TWS) ir kryptis (TWA)",
     "term_en": "True wind speed & angle",
     "description_lt": "Meteorologinis vėjas, kurio greitis ir kryptis matuojami ramioje aplinkoje, naudojami navigacijai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Sąvoka ir susidarymo priežastis",
     "term_en": "Apparent wind basics",
     "description_lt": "Vėjas, jaučiamas laive dėl laivo judėjimo, susidarantis tarp tikrojo vėjo ir laivo greičio vektorių.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Kryptis (AWA) ir stiprumas (AWS)",
     "term_en": "Apparent wind",
     "description_lt": "Laive matuojamas vėjas; nustatomas pagal vimpelį ar prietaisus ir būtinas burių reguliavimui.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,

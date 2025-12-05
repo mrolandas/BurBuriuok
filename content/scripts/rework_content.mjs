@@ -206,9 +206,9 @@ function parseMasterFile() {
             subsection_title: null,
             slug: slug,
             term_lt: termLt,
-            term_en: termEn,
-            description_lt: definition,
-            description_en: "",
+            term_en: termEn || null,
+            description_lt: definition || null,
+            description_en: null,
             source_ref: "LBS_concepts_master.md",
             metadata: {
               curriculum_required: true,

@@ -8,7 +8,7 @@
     "term_lt": "Laivas",
     "term_en": "Vessel",
     "description_lt": "Bet koks plaukiojantis įrenginys, tinkamas judėti vandeniu.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -26,7 +26,7 @@
     "term_lt": "Laivas su mechaniniu varikliu",
     "term_en": "Power-driven vessel",
     "description_lt": "Laivas, varomas mechanine jėga.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -44,7 +44,7 @@
     "term_lt": "Burinis laivas",
     "term_en": "Sailing vessel",
     "description_lt": "Laivas, kurio pagrindinė varomoji jėga yra burės.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -62,7 +62,7 @@
     "term_lt": "Greitaeigis laivas",
     "term_en": "High-speed craft",
     "description_lt": "Vandens transportas, galintis plaukti labai dideliu greičiu, reikalaujantis specialių taisyklių.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -80,7 +80,7 @@
     "term_lt": "Mažasis laivas",
     "term_en": "Small craft",
     "description_lt": "Laivas iki nacionalinių teisės aktų nustatytos ribos (dažnai <20 m).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -98,7 +98,7 @@
     "term_lt": "Keltas",
     "term_en": "Ferry",
     "description_lt": "Laivas žmonėms ar transportui perkelti per vandens telkinius.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -116,7 +116,7 @@
     "term_lt": "Žvejojantis laivas",
     "term_en": "Fishing vessel",
     "description_lt": "Laivas, užsiimantis žvejyba ir turintis apribotas manevravimo galimybes.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -134,7 +134,7 @@
     "term_lt": "Laivas stovi",
     "term_en": "Vessel at anchor",
     "description_lt": "Laivas, kuris nenaudoja varomosios jėgos ir nekontroliuojamai nejuda.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -152,7 +152,7 @@
     "term_lt": "Laivas plaukia",
     "term_en": "Vessel underway",
     "description_lt": "Laivas, kuris juda vandeniu savo ar kitų priemonių pagalba.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -170,7 +170,7 @@
     "term_lt": "Saugus greitis",
     "term_en": "Safe speed",
     "description_lt": "Greitis, leidžiantis laiku sustabdyti ar manevruoti pagal situaciją.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -188,7 +188,7 @@
     "term_lt": "Diena",
     "term_en": "Daytime",
     "description_lt": "Laikotarpis, kuriame naudojami dieniniai ženklai ir signalai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -206,7 +206,7 @@
     "term_lt": "Naktis",
     "term_en": "Nighttime",
     "description_lt": "Laikotarpis, kai naudojami šviesos signalai.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -224,7 +224,7 @@
     "term_lt": "Ribotas matomumas",
     "term_en": "Restricted visibility",
     "description_lt": "Sąlygos (rūkas, lietus) ribojančios matymo atstumą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -242,7 +242,7 @@
     "term_lt": "Trumpas garsas",
     "term_en": "Short blast",
     "description_lt": "Trumpas (apie 1 sekundės) garso signalas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -260,7 +260,7 @@
     "term_lt": "Ilgas garsas",
     "term_en": "Prolonged blast",
     "description_lt": "Ilgesnis (4–6 sekundžių) garso signalas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -278,7 +278,7 @@
     "term_lt": "Labai trumpų garsų serija",
     "term_en": "Very short blasts",
     "description_lt": "Keletas greitų signalų, naudojamų specialiems pranešimams.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -296,7 +296,7 @@
     "term_lt": "Garsiniai signalai",
     "term_en": "Sound signals",
     "description_lt": "Signalų seka (dėmesio, posūkiai, ribotas matomumas, nelaimės) pagal CEVNI taisykles.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -314,7 +314,7 @@
     "term_lt": "Draudžiamieji",
     "term_en": "Prohibitory signs",
     "description_lt": "Ženklai, draudžiantys tam tikrą veiklą ar judėjimą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -332,7 +332,7 @@
     "term_lt": "Privalomieji",
     "term_en": "Mandatory signs",
     "description_lt": "Ženklai, įpareigojantys laikytis nurodytos krypties ar veiksmo.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -350,7 +350,7 @@
     "term_lt": "Ribojamieji",
     "term_en": "Restrictive signs",
     "description_lt": "Nurodo apribojimus (greitį, gylį, toną).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -368,7 +368,7 @@
     "term_lt": "Nurodomieji",
     "term_en": "Indicative signs",
     "description_lt": "Informuoja apie rekomenduojamą elgesį ar kryptį.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -386,7 +386,7 @@
     "term_lt": "Informaciniai",
     "term_en": "Information signs",
     "description_lt": "Suteikia papildomos informacijos (pvz., infrastruktūra).",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -404,7 +404,7 @@
     "term_lt": "Pagalbiniai",
     "term_en": "Auxiliary signs",
     "description_lt": "Papildo kitų ženklų reikšmę ar taikymo ribas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -422,7 +422,7 @@
     "term_lt": "Plaukimas aukštyn/žemyn",
     "term_en": "Upstream/downstream",
     "description_lt": "Navigacija prieš ar pasroviui upėje.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -440,7 +440,7 @@
     "term_lt": "Priešpriešinis plaukimas",
     "term_en": "Head-on situation",
     "description_lt": "Situacija, kai laivai artėja vienas prieš kitą.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -458,7 +458,7 @@
     "term_lt": "Kursų susikirtimas",
     "term_en": "Crossing situation",
     "description_lt": "Situacija, kai laivų kursai kertasi.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
@@ -476,7 +476,7 @@
     "term_lt": "Lenkimas",
     "term_en": "Overtaking",
     "description_lt": "Vieno laivo manevras, kai aplenkiamas kitas laivas.",
-    "description_en": "",
+    "description_en": null,
     "source_ref": "LBS_concepts_master.md",
     "metadata": {
       "curriculum_required": true,
