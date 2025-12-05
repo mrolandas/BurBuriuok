@@ -10,6 +10,7 @@
 		TreeNodeProgressSummary
 	} from './curriculumTreeTypes';
 	import type { ProgressStoreStatus } from '$lib/stores/progressStore';
+	import { learnerProgress, type ConceptProgressRecord } from '$lib/stores/progressStore';
 
 	export let nodes: TreeNodeState[] = [];
 	export let level = 0;
@@ -76,6 +77,15 @@
 	export let dragSessionActive = false;
 	export let allowCreateChild = false;
 	export let pendingActive = false;
+
+	let progressRecords = new Map<string, ConceptProgressRecord>();
+	const unsubscribeProgress = learnerProgress.subscribe((value) => {
+		progressRecords = value;
+	});
+
+	onDestroy(() => {
+		unsubscribeProgress();
+	});
 
 	let isDragOver = false;
 	let hoverExpandTimeout: number | null = null;
@@ -244,7 +254,11 @@
 >
 	{#each nodes as state, index (state.id)}
 		{@const progress = getProgressSummary(state)}
-		<li class="tree-node" class:tree-node--pending={isNodePending(state)}>
+		<li
+			class="tree-node"
+			class:tree-node--pending={isNodePending(state)}
+			id={'node-' + state.node.code}
+		>
 			<div
 				class="tree-node__header"
 				class:tree-node__header--pending={isNodePending(state)}
@@ -372,6 +386,7 @@
 								{#each state.items as item (item.ordinal)}
 									{@const displayLabel = item.conceptTerm ?? item.label}
 									{@const itemAdmin = getItemAdminState(state, item)}
+									{@const isKnown = item.conceptId && progressRecords.get(item.conceptId)?.status === 'known'}
 									<li
 										class="tree-node__item"
 										class:tree-node__item--admin={adminEnabled}
@@ -381,6 +396,7 @@
 											{#if item.conceptSlug}
 												<a
 													class="tree-node__item-link"
+													class:tree-node__item-link--known={isKnown}
 													href={resolve('/concepts/[slug]', { slug: item.conceptSlug })}
 													on:click|preventDefault={(e) => {
 														if (onSelectConcept && item.conceptSlug) {
@@ -393,6 +409,13 @@
 												>
 													<span class="tree-node__item-ordinal">{item.ordinal}.</span>
 													<span class="tree-node__item-label">{displayLabel}</span>
+													{#if isKnown}
+														<span class="tree-node__item-check" aria-label="Išmokta">
+															<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+																<polyline points="20 6 9 17 4 12"></polyline>
+															</svg>
+														</span>
+													{/if}
 												</a>
 											{:else}
 												<span class="tree-node__item-text">
@@ -1242,13 +1265,14 @@
 	.tree-node__item-link,
 	.tree-node__item-text {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: flex-start;
 		gap: 0.5rem;
 		font-size: 0.9rem;
 		color: var(--color-text);
 		text-align: left;
-		flex: 1;
+		flex: 0 1 auto;
+		width: fit-content;
 	}
 
 	.tree-node__item-link {
@@ -1261,6 +1285,26 @@
 			border-color 0.2s ease,
 			background 0.2s ease,
 			transform 0.2s ease;
+	}
+
+	.tree-node__item-link--known {
+		background: var(--color-surface-01);
+		border-color: var(--color-border);
+		color: var(--color-text-muted);
+	}
+
+	.tree-node__item-link--known:hover,
+	.tree-node__item-link--known:focus-visible {
+		background: var(--color-surface-02);
+		border-color: var(--color-border-strong);
+		color: var(--color-text);
+	}
+
+	.tree-node__item-check {
+		color: var(--color-status-success-text);
+		display: flex;
+		align-items: center;
+		margin-left: 0.2rem;
 	}
 
 	.tree-node__item-link:hover,

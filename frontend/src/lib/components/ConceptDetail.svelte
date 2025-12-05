@@ -130,6 +130,27 @@
 				] satisfies MediaConceptOption[])
 			: ([] as MediaConceptOption[])
 	);
+
+	const learnedSlugs = $derived.by(() => {
+		const slugs = new Set<string>();
+		const idToSlug = new Map<string, string>();
+		for (const item of sectionItems) {
+			if (item.conceptId && item.conceptSlug) {
+				idToSlug.set(item.conceptId, item.conceptSlug);
+			}
+		}
+		
+		for (const [id, record] of progressRecords.entries()) {
+			if (record.status === 'known') {
+				const slug = idToSlug.get(id);
+				if (slug) {
+					slugs.add(slug);
+				}
+			}
+		}
+		return slugs;
+	});
+
 	const currentProgressEntry = $derived((() => {
 		const id = concept?.id ?? null;
 		if (!id) {
@@ -428,11 +449,15 @@
 		} catch (error) {
 			console.error('[ConceptDetail] Failed to update progress', error);
 			progressActionError =
-				error instanceof Error ? error.message : 'Nepavyko atnaujinti pažangos.';
+				error instanceof Error ? error.message : 'Nepavyko išsaugoti pažangos.';
 		}
 	}
 
-
+	async function toggleKnown() {
+		if (!concept?.id) return;
+		const newStatus = knownChecked ? 'seen' : 'known';
+		await applyProgressStatus(newStatus);
+	}
 
 	const markKnown = (value: boolean) => {
 		if (!concept?.id || progressInputsDisabled) {
@@ -630,39 +655,70 @@
 	{/if}
 {/snippet}
 
-{#snippet headerActionsSnippet()}
-	{#if adminContext?.session.authenticated}
-		<div class="concept-detail__header-actions-wrapper">
-			<button
-				type="button"
-				class="concept-detail__status-toggle"
-				class:concept-detail__status-toggle--known={knownChecked}
-				onclick={() => markKnown(!knownChecked)}
-				disabled={progressInputsDisabled}
-				aria-pressed={knownChecked}
-				aria-label={knownChecked ? "Pažymėta kaip moku" : "Pažymėti kaip moku"}
-				title={knownChecked ? "Pažymėta kaip moku" : "Pažymėti kaip moku"}
-			>
-				<svg class="concept-detail__toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
-					{#if knownChecked}
-						<path d="M20 6L9 17l-5-5" />
-					{:else}
-						<circle cx="12" cy="12" r="10" stroke-width="2" fill="none" />
-					{/if}
-				</svg>
-				<span>Moku</span>
-			</button>
-			
-			{#if progressStoreStatus === 'loading'}
-				<span class="concept-detail__header-status" role="status" aria-live="polite">
-					<span class="concept-detail__spinner"></span>
-				</span>
-			{:else if progressStoreError}
-				<span class="concept-detail__header-status concept-detail__header-status--error" title={progressStoreError}>!</span>
-			{/if}
-		</div>
-	{/if}
-{/snippet}
+	{#snippet actionsSnippet()}
+		{#if !adminHasAccess}
+			<div class="concept-detail__actions-wrapper">
+				<button
+					type="button"
+					class="concept-detail__status-toggle"
+					class:concept-detail__status-toggle--active={knownChecked}
+					onclick={toggleKnown}
+					disabled={progressStoreStatus === 'loading' || progressInputsDisabled}
+					aria-pressed={knownChecked}
+				>
+					<svg
+						viewBox="0 0 24 24"
+						width="20"
+						height="20"
+						stroke="currentColor"
+						stroke-width="2"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						{#if knownChecked}
+							<polyline points="20 6 9 17 4 12" />
+						{:else}
+							<circle cx="12" cy="12" r="10" stroke-width="2" fill="none" />
+						{/if}
+					</svg>
+					<span>{knownChecked ? 'Išmokta' : 'Pažymėti kaip išmoktą'}</span>
+				</button>
+				
+				{#if progressStoreStatus === 'loading'}
+					<span class="concept-detail__status-spinner" role="status" aria-live="polite"></span>
+				{:else if progressStoreError}
+					<span class="concept-detail__status-error" title={progressStoreError}>!</span>
+				{/if}
+			</div>
+		{/if}
+	{/snippet}
+
+	{#snippet headerActionsSnippet()}
+		{#if adminHasAccess}
+			<div class="concept-detail__header-actions-wrapper">
+				<a
+					href="/admin/concepts/{concept.id}"
+					class="concept-detail__admin-link"
+					title="Redaguoti administraciniame skydelyje"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						width="18"
+						height="18"
+						stroke="currentColor"
+						stroke-width="2"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+						<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+					</svg>
+				</a>
+			</div>
+		{/if}
+	{/snippet}
 
 <ConceptDisplay
 	{concept}
@@ -672,9 +728,13 @@
 	{nextSection}
 	meta={conceptMeta}
 	headerActions={headerActionsSnippet}
+	actions={actionsSnippet}
 	content={conceptContent}
 	{isModal}
+	{learnedSlugs}
 />
+
+
 
 {#if mediaDrawerOpen && concept && adminHasAccess}
 	<AdminMediaCreateDrawer
@@ -687,46 +747,43 @@
 {/if}
 
 <style>
-	.concept-detail__header-actions-wrapper {
+	.concept-detail__actions-wrapper {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 1rem;
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--color-border-light);
 	}
 
 	.concept-detail__status-toggle {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.4rem 0.9rem;
-		border-radius: 2rem;
+		gap: 0.6rem;
+		padding: 0.6rem 1.2rem;
+		border-radius: 999px;
 		border: 1px solid var(--color-border);
-		background: transparent;
-		color: var(--color-text-muted);
-		font-weight: 600;
-		font-size: 0.9rem;
+		background: var(--color-surface-01);
+		color: var(--color-text);
+		font-size: 0.95rem;
+		font-weight: 500;
 		cursor: pointer;
-		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-		user-select: none;
-		line-height: 1;
+		transition: all 0.2s ease;
 	}
 
 	.concept-detail__status-toggle:hover:not(:disabled) {
-		border-color: var(--color-accent);
-		color: var(--color-accent-strong);
-		background: var(--color-panel-hover);
+		background: var(--color-surface-02);
+		border-color: var(--color-border-strong);
 	}
 
-	.concept-detail__status-toggle--known {
-		background: var(--color-accent);
-		border-color: var(--color-accent);
-		color: white;
-		padding-right: 1rem;
+	.concept-detail__status-toggle--active {
+		background: var(--color-status-success-bg);
+		border-color: var(--color-status-success-border);
+		color: var(--color-status-success-text);
 	}
 
-	.concept-detail__status-toggle--known:hover:not(:disabled) {
-		background: var(--color-accent-strong);
-		border-color: var(--color-accent-strong);
-		color: white;
+	.concept-detail__status-toggle--active:hover:not(:disabled) {
+		background: var(--color-status-success-bg-hover);
 	}
 
 	.concept-detail__status-toggle:disabled {
@@ -734,45 +791,106 @@
 		cursor: not-allowed;
 	}
 
-	.concept-detail__toggle-icon {
-		width: 1.1em;
-		height: 1.1em;
-		fill: none;
-		stroke: currentColor;
-		stroke-width: 2.5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		transition: transform 0.2s ease;
+	.concept-detail__status-spinner {
+		width: 1.2rem;
+		height: 1.2rem;
+		border: 2px solid var(--color-border);
+		border-top-color: var(--color-accent);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
 	}
 
-	.concept-detail__status-toggle--known .concept-detail__toggle-icon {
-		transform: scale(1.1);
-	}
-
-	.concept-detail__header-status {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 1.5rem;
-		height: 1.5rem;
-	}
-
-	.concept-detail__header-status--error {
-		color: #dc2626;
+	.concept-detail__status-error {
+		color: var(--color-status-error-text);
 		font-weight: bold;
 	}
 
-	.concept-detail__spinner {
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid var(--color-border-light);
+	.concept-detail__actions-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--color-border-light);
+	}
+
+	.concept-detail__status-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.6rem 1.2rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-01);
+		color: var(--color-text);
+		font-size: 0.95rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.concept-detail__status-toggle:hover:not(:disabled) {
+		background: var(--color-surface-02);
+		border-color: var(--color-border-strong);
+	}
+
+	.concept-detail__status-toggle--active {
+		background: var(--color-status-success-bg);
+		border-color: var(--color-status-success-border);
+		color: var(--color-status-success-text);
+	}
+
+	.concept-detail__status-toggle--active:hover:not(:disabled) {
+		background: var(--color-status-success-bg-hover);
+	}
+
+	.concept-detail__status-toggle:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.concept-detail__status-spinner {
+		width: 1.2rem;
+		height: 1.2rem;
+		border: 2px solid var(--color-border);
 		border-top-color: var(--color-accent);
 		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
+		animation: spin 1s linear infinite;
+	}
+
+	.concept-detail__status-error {
+		color: var(--color-status-error-text);
+		font-weight: bold;
+	}
+
+	.concept-detail__header-actions-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.concept-detail__admin-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		color: var(--color-text-muted);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.concept-detail__admin-link:hover {
+		background: var(--color-surface-02);
+		color: var(--color-text);
 	}
 
 	@keyframes spin {
-		to { transform: rotate(360deg); }
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.concept-detail__media {

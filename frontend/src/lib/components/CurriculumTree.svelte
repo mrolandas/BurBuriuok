@@ -11,7 +11,7 @@
 	} from '$lib/api/admin/curriculum';
 	import { deleteAdminConcept } from '$lib/api/admin/concepts';
 	import { adminMode } from '$lib/stores/adminMode';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { AdminApiError } from '$lib/api/admin/client';
 	import {
@@ -54,6 +54,7 @@
 	export let section: SectionSummary;
 	export let initialNodes: CurriculumNode[] = [];
 	export let onSelectConcept: ((slug: string) => void) | undefined = undefined;
+	export let expandCode: string | null = null;
 
 	let sectionItems: CurriculumItem[] = [];
 	let sectionItemsLoading = false;
@@ -633,8 +634,88 @@
 		roots = initialNodes.map(createState);
 	}
 
+	$: if (expandCode && roots.length > 0) {
+		void handleExpandCode(expandCode);
+	}
+
 	$: if (section?.code && section.code !== sectionProgressTopologyCode) {
 		void loadSectionProgressTopology(section.code);
+	}
+
+	async function handleExpandCode(code: string) {
+		// Assuming codes are hierarchical like "1.1.1"
+		// We need to expand "1", then "1.1", then "1.1.1"
+		
+		const parts = code.split('.');
+		let currentPath = parts[0];
+		
+		// We'll try to expand level by level
+		for (let i = 0; i < parts.length; i++) {
+			if (i > 0) {
+				currentPath += '.' + parts[i];
+			}
+			
+			// Find node with this code in the currently loaded tree
+			const nodeState = findNodeState(currentPath);
+			if (nodeState) {
+				if (!nodeState.expanded) {
+					nodeState.expanded = true;
+					if (!nodeState.loaded) {
+						await ensureChildren(nodeState);
+						await tick();
+					} else {
+						await tick();
+					}
+				}
+				// If it's the target node, scroll to it
+				if (currentPath === code) {
+					// Give a small delay for DOM update and try multiple times
+					for (let attempt = 0; attempt < 5; attempt++) {
+						const element = document.getElementById(`node-${code}`);
+						if (element) {
+							element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+							// Only focus if it's not the body (it shouldn't be, but safety first)
+							if (element.tabIndex >= -1) {
+								element.focus({ preventScroll: true }); // scrollIntoView handles scrolling
+							}
+							break;
+						}
+						await new Promise(r => setTimeout(r, 100));
+					}
+				}
+			} else {
+				// If we can't find the node, it might be because the parent isn't expanded yet
+				// But we are iterating level by level.
+				// If we are at "1.1" and can't find it, it means "1" didn't have "1.1" in its children.
+				// This could happen if ensureChildren failed or returned empty.
+				// Or if the code structure doesn't match the tree structure.
+				
+				// Let's try to find the parent and ensure it's expanded
+				const parentPath = parts.slice(0, i).join('.');
+				if (parentPath) {
+					const parentNode = findNodeState(parentPath);
+					if (parentNode) {
+						if (!parentNode.expanded) {
+							parentNode.expanded = true;
+							if (!parentNode.loaded) {
+								await ensureChildren(parentNode);
+								await tick();
+								// Retry current level
+								i--;
+								continue;
+							}
+						} else if (!parentNode.loaded) {
+							// Parent is expanded but not loaded? Should not happen usually, but let's handle it
+							await ensureChildren(parentNode);
+							await tick();
+							i--;
+							continue;
+						}
+					}
+				}
+				break;
+			}
+		}
 	}
 
 	$: progressDisplayStatus =

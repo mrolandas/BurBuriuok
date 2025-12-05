@@ -13,6 +13,7 @@
 	const homeHref = resolve('/');
 
 	let selectedConceptSlug: string | null = null;
+	let expandCode: string | null = null;
 
 	function handleSelectConcept(slug: string) {
 		selectedConceptSlug = slug;
@@ -39,12 +40,21 @@
 				selectedConceptSlug = slug;
 			}
 		}
+		
+		const expand = $page.url.searchParams.get('expand');
+		if (expand !== expandCode) {
+			expandCode = expand;
+		}
 	}
 
 	onMount(() => {
 		const slug = $page.url.searchParams.get('concept');
 		if (slug) {
 			selectedConceptSlug = slug;
+		}
+		const expand = $page.url.searchParams.get('expand');
+		if (expand) {
+			expandCode = expand;
 		}
 	});
 </script>
@@ -77,6 +87,7 @@
 			section={data.section} 
 			initialNodes={data.initialNodes} 
 			onSelectConcept={handleSelectConcept}
+			{expandCode}
 		/>
 	{:else}
 		<Card title="Kraunama skiltis">

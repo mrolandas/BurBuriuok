@@ -36,6 +36,7 @@
 		headerActions?: Snippet;
 		content?: Snippet;
 		isModal?: boolean;
+		learnedSlugs?: Set<string>;
 	};
 
 	let {
@@ -48,7 +49,8 @@
 		actions,
 		headerActions,
 		content,
-		isModal = false
+		isModal = false,
+		learnedSlugs = new Set()
 	}: Props = $props();
 
 	let showAllBreadcrumbs = $state(false);
@@ -63,9 +65,26 @@
 
 	const hasHiddenBreadcrumbs = $derived(!showAllBreadcrumbs && breadcrumbs.length > 2);
 
+	const visibleSectionItems = $derived.by(() => {
+		if (!sectionItems.length) return [];
+		const currentIndex = sectionItems.findIndex(i => i.conceptSlug === concept.slug);
+		if (currentIndex === -1) return sectionItems.slice(0, 10);
+		
+		const start = Math.max(0, currentIndex - 5);
+		const end = Math.min(sectionItems.length, currentIndex + 6);
+		return sectionItems.slice(start, end);
+	});
+
+	const hasMoreBefore = $derived(sectionItems.length > 0 && sectionItems.findIndex(i => i.conceptSlug === concept.slug) > 5);
+	const hasMoreAfter = $derived(sectionItems.length > 0 && sectionItems.findIndex(i => i.conceptSlug === concept.slug) < sectionItems.length - 6);
+
 	const formatBreadcrumbLabel = (crumb: Breadcrumb) => {
 		return crumb.label;
 	};
+
+	function getRootCode(code: string) {
+		return code.split('.')[0];
+	}
 
 	function handleModalNavigate(event: MouseEvent, slug: string) {
 		if (!isModal) return;
@@ -161,16 +180,16 @@
 					</p>
 				{/if}
 
-				{#if actions}
-					{@render actions()}
-				{/if}
-
 				{#if concept.descriptionEn}
 					<div class="concept-detail__translation">
 						<h3>Anglų kalbos užuomina</h3>
 						<p>{concept.descriptionEn}</p>
 					</div>
 				{/if}
+			{/if}
+
+			{#if actions}
+				{@render actions()}
 			{/if}
 		</article>
 
@@ -209,10 +228,25 @@
 				<section class="concept-detail__panel concept-detail__panel--list">
 					<h2>Šiame skyriuje</h2>
 					<ul class="concept-agenda">
-						{#each sectionItems as item (item.ordinal)}
-							{@const isCurrent = item.conceptSlug === concept.slug}
-							<li class="concept-agenda__item" class:concept-agenda__item--current={isCurrent}>
+						{#if hasMoreBefore}
+							<li class="concept-agenda__item">
 								<div class="concept-agenda__marker" aria-hidden="true"></div>
+								<span class="concept-agenda__label concept-agenda__label--muted">...</span>
+							</li>
+						{/if}
+						{#each visibleSectionItems as item (item.ordinal)}
+							{@const isCurrent = item.conceptSlug === concept.slug}
+							{@const isLearned = item.conceptSlug && learnedSlugs.has(item.conceptSlug)}
+							<li class="concept-agenda__item" class:concept-agenda__item--current={isCurrent}>
+								{#if isLearned && !isCurrent}
+									<div class="concept-agenda__marker concept-agenda__marker--learned" aria-hidden="true">
+										<svg viewBox="0 0 24 24" width="10" height="10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+											<polyline points="20 6 9 17 4 12"></polyline>
+										</svg>
+									</div>
+								{:else}
+									<div class="concept-agenda__marker" aria-hidden="true"></div>
+								{/if}
 								{#if item.conceptSlug}
 									{#if isCurrent}
 										<span class="concept-agenda__label">{item.label}</span>
@@ -230,6 +264,12 @@
 								{/if}
 							</li>
 						{/each}
+						{#if hasMoreAfter}
+							<li class="concept-agenda__item">
+								<div class="concept-agenda__marker" aria-hidden="true"></div>
+								<span class="concept-agenda__label concept-agenda__label--muted">...</span>
+							</li>
+						{/if}
 					</ul>
 				</section>
 			{/if}
@@ -238,7 +278,7 @@
 				<section class="concept-detail__panel concept-detail__panel--next">
 					<h2>Kitas skyrius</h2>
 					<a
-						href={resolve('/sections/[code]', { code: nextSection.code })}
+						href="{resolve('/sections/[code]', { code: getRootCode(nextSection.code) })}?expand={nextSection.code}"
 						class="concept-detail__next-link"
 					>
 						<span class="concept-detail__next-label">{nextSection.title}</span>
@@ -350,6 +390,10 @@
 		padding-right: 3rem;
 	}
 
+	.concept-detail__layout--modal .concept-detail__pager {
+		padding: 0 2rem;
+	}
+
 	.concept-detail__content {
 		display: grid;
 		gap: 1.3rem;
@@ -403,6 +447,7 @@
 		justify-content: space-between;
 		gap: 1rem;
 		flex-wrap: wrap;
+		margin-bottom: 2rem;
 	}
 
 	.concept-detail__pager-link {
@@ -497,6 +542,15 @@
 		margin-top: 0.3rem;
 		justify-self: center;
 		transition: all 0.2s ease;
+	}
+
+	.concept-agenda__marker--learned {
+		background: var(--color-accent-success, #10b981);
+		border-color: var(--color-accent-success, #10b981);
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.concept-agenda__item--current .concept-agenda__marker {
