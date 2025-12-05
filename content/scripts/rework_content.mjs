@@ -199,6 +199,9 @@ function parseMasterFile() {
 
           const slug = `${sectionCode}-${slugify(termLt)}`.replace(/\./g, "-");
 
+          const ordinal =
+            items.filter((it) => it.node_code === sectionCode).length + 1;
+
           const concept = {
             section_code: sectionCode,
             section_title: sectionTitle,
@@ -216,6 +219,8 @@ function parseMasterFile() {
               parent_section: sectionTitle,
             },
             curriculum_node_code: sectionCode,
+            curriculum_item_ordinal: ordinal,
+            curriculum_item_label: termLt,
           };
 
           conceptsByTopic[topicCode].push(concept);
@@ -223,8 +228,7 @@ function parseMasterFile() {
           // Add to items
           items.push({
             node_code: sectionCode,
-            ordinal:
-              items.filter((it) => it.node_code === sectionCode).length + 1,
+            ordinal: ordinal,
             label: termLt,
           });
         }

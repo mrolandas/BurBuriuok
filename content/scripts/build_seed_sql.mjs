@@ -1003,6 +1003,8 @@ function buildSeedSql(records) {
   const header = `-- seed_concepts.sql
 -- Generated ${new Date().toISOString()}
 
+truncate table burburiuok.concepts cascade;
+
 insert into burburiuok.concepts (
     section_code,
     section_title,

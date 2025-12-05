@@ -95,7 +95,7 @@ function buildItemValues(items) {
 }
 
 function buildSql(nodes, items) {
-  const header = `-- seed_curriculum.sql\n-- Generated ${new Date().toISOString()}\n\n`;
+  const header = `-- seed_curriculum.sql\n-- Generated ${new Date().toISOString()}\n\ntruncate table burburiuok.curriculum_nodes, burburiuok.curriculum_items cascade;\n\n`;
 
   const nodeSection = `insert into burburiuok.curriculum_nodes (\n    code,\n    title,\n    summary,\n    level,\n    parent_code,\n    ordinal\n) values\n${buildNodeValues(
     nodes

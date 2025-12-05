@@ -15,7 +15,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Vytulas (virvės suringavimas)"
   },
   {
     "section_code": "10.17",
@@ -33,7 +35,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Klampės mazgas"
   },
   {
     "section_code": "10.17",
@@ -51,7 +55,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Aštuoniukė"
   },
   {
     "section_code": "10.17",
@@ -69,7 +75,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Tikrasis mazgas"
   },
   {
     "section_code": "10.17",
@@ -87,7 +95,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Rifo mazgas"
   },
   {
     "section_code": "10.17",
@@ -105,7 +115,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Šoto mazgas"
   },
   {
     "section_code": "10.17",
@@ -123,7 +135,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Bramšoto mazgas"
   },
   {
     "section_code": "10.17",
@@ -141,7 +155,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Paprastasis štekas"
   },
   {
     "section_code": "10.17",
@@ -159,7 +175,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Inkaro mazgas"
   },
   {
     "section_code": "10.17",
@@ -177,7 +195,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 10,
+    "curriculum_item_label": "Gelbėjimo kilpa"
   },
   {
     "section_code": "10.17",
@@ -195,7 +215,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 11,
+    "curriculum_item_label": "Buksyravimo mazgas"
   },
   {
     "section_code": "10.17",
@@ -213,7 +235,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 12,
+    "curriculum_item_label": "Žvejų mazgas"
   },
   {
     "section_code": "10.17",
@@ -231,7 +255,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 13,
+    "curriculum_item_label": "Piemenų (veblingo) mazgas"
   },
   {
     "section_code": "10.17",
@@ -249,7 +275,9 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 14,
+    "curriculum_item_label": "Stoporo mazgas"
   },
   {
     "section_code": "10.17",
@@ -267,6 +295,8 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17"
+    "curriculum_node_code": "10.17",
+    "curriculum_item_ordinal": 15,
+    "curriculum_item_label": "Plokščiasis mazgas"
   }
 ]

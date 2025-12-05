@@ -62,6 +62,7 @@
 		media?: ConceptMediaItem[];
 		mediaError?: string | null;
 		adminContext?: ConceptAdminEditContext;
+		isModal?: boolean;
 	};
 
 	let {
@@ -72,13 +73,14 @@
 		nextSection,
 		media = [],
 		mediaError = null,
-		adminContext
+		adminContext,
+		isModal = false
 	}: Props = $props();
 	const adminEditEnabled = $derived(Boolean(adminContext?.enabled));
 	const adminSessionError = $derived(adminContext?.session.errorMessage ?? null);
 	const adminHasAccess = $derived(Boolean(adminContext?.session.allowed));
 
-	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset';
+	type ActionStatus = 'idle' | 'learning' | 'known' | 'reset' | 'seen';
 	const descriptionLt = $derived(concept?.descriptionLt?.trim() ?? '');
 	const descriptionEn = $derived(concept?.descriptionEn?.trim() ?? '');
 	const initialInlineForm = concept ? conceptToInlineForm(concept) : createEmptyInlineForm();
@@ -242,8 +244,18 @@
 
 	$effect(() => {
 		const progressEntry = currentProgressEntry;
-		learningChecked = progressEntry?.status === 'learning';
 		knownChecked = progressEntry?.status === 'known';
+	});
+
+	$effect(() => {
+		if (
+			concept?.id &&
+			progressStoreStatus === 'idle' &&
+			!currentProgressEntry &&
+			adminContext?.session.authenticated
+		) {
+			void applyProgressStatus('seen');
+		}
 	});
 
 	const getInlineError = (field: string): string | null => {
@@ -365,7 +377,6 @@
 		void reloadMedia();
 	}
 
-	let learningChecked = $state(false);
 	let knownChecked = $state(false);
 	let lastAction = $state<ActionStatus>('idle');
 	let actionMessage = $state('');
@@ -378,6 +389,8 @@
 		switch (action) {
 			case 'learning':
 				return 'Pažymėta kaip „mokausi“ – ši tema liks mokymosi sąraše.';
+			case 'seen':
+				return 'Tema peržiūrėta.';
 			case 'known':
 				return 'Pažymėta kaip „moku“ – perkelsime į pasiruošimo patikros eilę.';
 			case 'reset':
@@ -402,7 +415,7 @@
 		const currentStatus = currentProgressEntry?.status ?? null;
 		if (currentStatus === target) {
 			const action: ActionStatus =
-				target === 'known' ? 'known' : target === 'learning' ? 'learning' : 'reset';
+				target === 'known' ? 'known' : target === 'learning' ? 'learning' : target === 'seen' ? 'seen' : 'reset';
 			setLastAction(action);
 			return;
 		}
@@ -410,7 +423,7 @@
 		try {
 			await setConceptProgressStatus(concept.id, target);
 			const action: ActionStatus =
-				target === 'known' ? 'known' : target === 'learning' ? 'learning' : 'reset';
+				target === 'known' ? 'known' : target === 'learning' ? 'learning' : target === 'seen' ? 'seen' : 'reset';
 			setLastAction(action);
 		} catch (error) {
 			console.error('[ConceptDetail] Failed to update progress', error);
@@ -419,21 +432,7 @@
 		}
 	}
 
-	const markLearning = (value: boolean) => {
-		if (!concept?.id || progressInputsDisabled) {
-			return;
-		}
 
-		learningChecked = value;
-		if (value) {
-			knownChecked = false;
-			void applyProgressStatus('learning');
-		} else if (!knownChecked) {
-			void applyProgressStatus(null);
-		} else {
-			void applyProgressStatus('known');
-		}
-	};
 
 	const markKnown = (value: boolean) => {
 		if (!concept?.id || progressInputsDisabled) {
@@ -442,19 +441,13 @@
 
 		knownChecked = value;
 		if (value) {
-			learningChecked = false;
 			void applyProgressStatus('known');
-		} else if (!learningChecked) {
-			void applyProgressStatus(null);
 		} else {
-			void applyProgressStatus('learning');
+			void applyProgressStatus('seen');
 		}
 	};
 
-	const handleLearningChange = (event: Event) => {
-		const target = event.currentTarget as HTMLInputElement | null;
-		markLearning(Boolean(target?.checked));
-	};
+
  
 	const handleKnownChange = (event: Event) => {
 		const target = event.currentTarget as HTMLInputElement | null;
@@ -628,8 +621,6 @@
 			</section>
 		{/if}
 
-		{@render conceptActions()}
-
 		{#if descriptionEn}
 			<div class="concept-detail__translation">
 				<h3>Anglų kalbos užuomina</h3>
@@ -639,66 +630,36 @@
 	{/if}
 {/snippet}
 
-{#snippet conceptActions()}
+{#snippet headerActionsSnippet()}
 	{#if adminContext?.session.authenticated}
-		<section
-			class="concept-detail__actions-panel"
-			aria-label="Veiksmai"
-			data-last-action={lastAction}
-			data-admin-mode={adminEditEnabled ? 'enabled' : 'disabled'}
-			data-progress-state={progressStoreStatus}
-			aria-busy={progressInputsDisabled}
-		>
-			<label class="concept-detail__action-option">
-				<input
-					type="checkbox"
-					checked={learningChecked}
-					onchange={handleLearningChange}
-					disabled={progressInputsDisabled}
-					aria-label="Pažymėti temą kaip mokausi"
-				/>
-				<span>Mokausi</span>
-			</label>
-			<label class="concept-detail__action-option">
-				<input
-					type="checkbox"
-					checked={knownChecked}
-					onchange={handleKnownChange}
-					disabled={progressInputsDisabled}
-					aria-label="Pažymėti temą kaip moku"
-				/>
-				<span>Moku</span>
-			</label>
-		</section>
-
-		{#if progressStoreStatus === 'loading'}
-			<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
-				Kraunama pažanga...
-			</p>
-		{:else if progressStoreError}
-			<div class="concept-detail__actions-alert concept-detail__actions-alert--error" role="status" aria-live="polite">
-				{progressStoreError}
-			</div>
-		{/if}
-
-		{#if progressActionError}
-			<div class="concept-detail__actions-alert concept-detail__actions-alert--error" role="alert">
-				{progressActionError}
-			</div>
-		{:else if actionMessage}
-			<p class="concept-detail__actions-feedback" role="status" aria-live="polite">
-				{actionMessage}
-			</p>
-		{/if}
-	{:else}
-		<div class="concept-detail__login-prompt">
-			<a
-				href={`/auth/login?redirectTo=${encodeURIComponent($page.url.pathname)}`}
-				class="app-shell__user-item"
+		<div class="concept-detail__header-actions-wrapper">
+			<button
+				type="button"
+				class="concept-detail__status-toggle"
+				class:concept-detail__status-toggle--known={knownChecked}
+				onclick={() => markKnown(!knownChecked)}
+				disabled={progressInputsDisabled}
+				aria-pressed={knownChecked}
+				aria-label={knownChecked ? "Pažymėta kaip moku" : "Pažymėti kaip moku"}
+				title={knownChecked ? "Pažymėta kaip moku" : "Pažymėti kaip moku"}
 			>
-				Prisijunkite
-			</a>
-			<span class="concept-detail__login-text">, kad galėtumėte žymėti pažangą.</span>
+				<svg class="concept-detail__toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+					{#if knownChecked}
+						<path d="M20 6L9 17l-5-5" />
+					{:else}
+						<circle cx="12" cy="12" r="10" stroke-width="2" fill="none" />
+					{/if}
+				</svg>
+				<span>Moku</span>
+			</button>
+			
+			{#if progressStoreStatus === 'loading'}
+				<span class="concept-detail__header-status" role="status" aria-live="polite">
+					<span class="concept-detail__spinner"></span>
+				</span>
+			{:else if progressStoreError}
+				<span class="concept-detail__header-status concept-detail__header-status--error" title={progressStoreError}>!</span>
+			{/if}
 		</div>
 	{/if}
 {/snippet}
@@ -710,8 +671,9 @@
 	{neighbors}
 	{nextSection}
 	meta={conceptMeta}
-	actions={conceptActions}
+	headerActions={headerActionsSnippet}
 	content={conceptContent}
+	{isModal}
 />
 
 {#if mediaDrawerOpen && concept && adminHasAccess}
@@ -725,62 +687,92 @@
 {/if}
 
 <style>
-	.concept-detail__actions-panel {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		justify-content: center;
-		border: 1px dashed var(--color-border-light);
-		padding: 1rem;
-		border-radius: 0.8rem;
-		background: var(--color-panel-secondary);
-	}
-
-	.concept-detail__action-option {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.6rem;
-		font-weight: 600;
-		flex: 1 1 0;
-		justify-content: center;
-		min-width: 6rem;
-	}
-
-	.concept-detail__action-option input[type='checkbox'] {
-		width: 1.1rem;
-		height: 1.1rem;
-		flex-shrink: 0;
-	}
-
-	.concept-detail__actions-feedback {
-		margin: 0;
-		font-size: 0.95rem;
-		color: var(--color-text-subtle);
-	}
-
-	.concept-detail__login-prompt {
-		margin-top: 1.5rem;
+	.concept-detail__header-actions-wrapper {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		font-size: 0.95rem;
 	}
 
-	.concept-detail__login-text {
+	.concept-detail__status-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.4rem 0.9rem;
+		border-radius: 2rem;
+		border: 1px solid var(--color-border);
+		background: transparent;
 		color: var(--color-text-muted);
-	}
-
-	.concept-detail__actions-alert {
-		margin: 0.2rem 0 0;
-		padding: 0.65rem 0.9rem;
-		border-radius: 0.7rem;
+		font-weight: 600;
 		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		user-select: none;
+		line-height: 1;
 	}
 
-	.concept-detail__actions-alert--error {
-		background: rgba(217, 65, 65, 0.12);
-		border: 1px solid rgba(217, 65, 65, 0.35);
-		color: #8a1c1c;
+	.concept-detail__status-toggle:hover:not(:disabled) {
+		border-color: var(--color-accent);
+		color: var(--color-accent-strong);
+		background: var(--color-panel-hover);
+	}
+
+	.concept-detail__status-toggle--known {
+		background: var(--color-accent);
+		border-color: var(--color-accent);
+		color: white;
+		padding-right: 1rem;
+	}
+
+	.concept-detail__status-toggle--known:hover:not(:disabled) {
+		background: var(--color-accent-strong);
+		border-color: var(--color-accent-strong);
+		color: white;
+	}
+
+	.concept-detail__status-toggle:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.concept-detail__toggle-icon {
+		width: 1.1em;
+		height: 1.1em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		transition: transform 0.2s ease;
+	}
+
+	.concept-detail__status-toggle--known .concept-detail__toggle-icon {
+		transform: scale(1.1);
+	}
+
+	.concept-detail__header-status {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.concept-detail__header-status--error {
+		color: #dc2626;
+		font-weight: bold;
+	}
+
+	.concept-detail__spinner {
+		width: 1rem;
+		height: 1rem;
+		border: 2px solid var(--color-border-light);
+		border-top-color: var(--color-accent);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 
 	.concept-detail__media {
@@ -1039,18 +1031,6 @@
 
 		.concept-detail__admin-form > .concept-detail__form-grid {
 			padding: 0.75rem;
-		}
-
-		.concept-detail__actions-panel {
-			gap: 0.55rem;
-			flex-wrap: nowrap;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.concept-detail__action-option {
-			font-size: 0.88rem;
-			min-width: 0;
 		}
 	}
 </style>

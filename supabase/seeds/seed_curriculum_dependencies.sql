@@ -1,5 +1,5 @@
 -- seed_curriculum_dependencies.sql
--- Generated 2025-12-05T09:55:56.855Z
+-- Generated 2025-12-05T10:07:21.015Z
 
 insert into burburiuok.curriculum_dependencies (
     source_type,

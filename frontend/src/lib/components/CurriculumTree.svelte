@@ -53,6 +53,7 @@
 
 	export let section: SectionSummary;
 	export let initialNodes: CurriculumNode[] = [];
+	export let onSelectConcept: ((slug: string) => void) | undefined = undefined;
 
 	let sectionItems: CurriculumItem[] = [];
 	let sectionItemsLoading = false;
@@ -1678,6 +1679,7 @@
 			onCreateItemFieldChange={updateCreateItemField}
 			onSubmitCreateItem={submitCreateItem}
 			onEditItem={openConceptEditor}
+			{onSelectConcept}
 			onRequestDeleteItem={requestConceptDeletion}
 			onCancelDeleteItem={cancelConceptDeletion}
 			onConfirmDeleteItem={confirmConceptDeletion}

@@ -15,7 +15,9 @@
       "topic_number": 7,
       "parent_section": "Buriavimas pasienio ruože"
     },
-    "curriculum_node_code": "7.2.1"
+    "curriculum_node_code": "7.2.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Straipsniai Nr. 14/1; 7.8"
   },
   {
     "section_code": "7.2.2",
@@ -33,7 +35,9 @@
       "topic_number": 7,
       "parent_section": "Draudimai"
     },
-    "curriculum_node_code": "7.2.2"
+    "curriculum_node_code": "7.2.2",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Straipsniai Nr. 14/12; 13; 14"
   },
   {
     "section_code": "7.9",
@@ -51,7 +55,9 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9"
+    "curriculum_node_code": "7.9",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Buriuojant"
   },
   {
     "section_code": "7.9",
@@ -69,7 +75,9 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9"
+    "curriculum_node_code": "7.9",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Stovint uoste ar nuleidus inkarą"
   },
   {
     "section_code": "7.9",
@@ -87,7 +95,9 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9"
+    "curriculum_node_code": "7.9",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Plaukiant varikliu"
   },
   {
     "section_code": "7.9",
@@ -105,6 +115,8 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9"
+    "curriculum_node_code": "7.9",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Kitos valstybės vandenyse"
   }
 ]

@@ -15,7 +15,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Vendas"
   },
   {
     "section_code": "3.4",
@@ -33,7 +35,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Halsas"
   },
   {
     "section_code": "3.4",
@@ -51,7 +55,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Kilti"
   },
   {
     "section_code": "3.4",
@@ -69,7 +75,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Kristi"
   },
   {
     "section_code": "3.4",
@@ -87,7 +95,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Laviruoti"
   },
   {
     "section_code": "3.4",
@@ -105,7 +115,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Buriuoti aštriau/bukiau"
   },
   {
     "section_code": "3.4",
@@ -123,7 +135,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Dreifuoti"
   },
   {
     "section_code": "3.4",
@@ -141,7 +155,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Dreifuoti su burėmis ir be jų"
   },
   {
     "section_code": "3.4",
@@ -159,7 +175,9 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4"
+    "curriculum_node_code": "3.4",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Manevrų komandos"
   },
   {
     "section_code": "3.12.1",
@@ -177,7 +195,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Vandens telkinio dugno gruntas"
   },
   {
     "section_code": "3.12.1",
@@ -195,7 +215,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Povandeniniai kliuviniai"
   },
   {
     "section_code": "3.12.1",
@@ -213,7 +235,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Dugno nuolydis"
   },
   {
     "section_code": "3.12.1",
@@ -231,7 +255,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Kranto orientyrai"
   },
   {
     "section_code": "3.12.1",
@@ -249,7 +275,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Meteorologiniai aspektai"
   },
   {
     "section_code": "3.12.1",
@@ -267,7 +295,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Hidrologiniai aspektai"
   },
   {
     "section_code": "3.12.1",
@@ -285,7 +315,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Teisiniai aspektai"
   },
   {
     "section_code": "3.12.1",
@@ -303,7 +335,9 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1"
+    "curriculum_node_code": "3.12.1",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Urbanistiniai aspektai"
   },
   {
     "section_code": "3.15.1",
@@ -321,7 +355,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Priešvėjiniam vantui"
   },
   {
     "section_code": "3.15.1",
@@ -339,7 +375,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Bakštagui"
   },
   {
     "section_code": "3.15.1",
@@ -357,7 +395,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Forštagui"
   },
   {
     "section_code": "3.15.1",
@@ -375,7 +415,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Achterštagui"
   },
   {
     "section_code": "3.15.1",
@@ -393,7 +435,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Stakselio falui"
   },
   {
     "section_code": "3.15.1",
@@ -411,7 +455,9 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1"
+    "curriculum_node_code": "3.15.1",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Groto falui"
   },
   {
     "section_code": "3.15.2",
@@ -429,7 +475,9 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Pavėjiniam vantui"
   },
   {
     "section_code": "3.15.2",
@@ -447,7 +495,9 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Bakštagui"
   },
   {
     "section_code": "3.15.2",
@@ -465,7 +515,9 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Forštagui"
   },
   {
     "section_code": "3.15.2",
@@ -483,7 +535,9 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Achterštagui"
   },
   {
     "section_code": "3.15.2",
@@ -501,7 +555,9 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Stakselio falui"
   },
   {
     "section_code": "3.15.2",
@@ -519,6 +575,8 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2"
+    "curriculum_node_code": "3.15.2",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Groto falui"
   }
 ]

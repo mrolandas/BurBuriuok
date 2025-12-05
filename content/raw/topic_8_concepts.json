@@ -15,7 +15,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Laivas"
   },
   {
     "section_code": "8.1",
@@ -33,7 +35,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Laivas su mechaniniu varikliu"
   },
   {
     "section_code": "8.1",
@@ -51,7 +55,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Burinis laivas"
   },
   {
     "section_code": "8.1",
@@ -69,7 +75,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Greitaeigis laivas"
   },
   {
     "section_code": "8.1",
@@ -87,7 +95,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Mažasis laivas"
   },
   {
     "section_code": "8.1",
@@ -105,7 +115,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Keltas"
   },
   {
     "section_code": "8.1",
@@ -123,7 +135,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Žvejojantis laivas"
   },
   {
     "section_code": "8.1",
@@ -141,7 +155,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Laivas stovi"
   },
   {
     "section_code": "8.1",
@@ -159,7 +175,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Laivas plaukia"
   },
   {
     "section_code": "8.1",
@@ -177,7 +195,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 10,
+    "curriculum_item_label": "Saugus greitis"
   },
   {
     "section_code": "8.1",
@@ -195,7 +215,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 11,
+    "curriculum_item_label": "Diena"
   },
   {
     "section_code": "8.1",
@@ -213,7 +235,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 12,
+    "curriculum_item_label": "Naktis"
   },
   {
     "section_code": "8.1",
@@ -231,7 +255,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 13,
+    "curriculum_item_label": "Ribotas matomumas"
   },
   {
     "section_code": "8.1",
@@ -249,7 +275,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 14,
+    "curriculum_item_label": "Trumpas garsas"
   },
   {
     "section_code": "8.1",
@@ -267,7 +295,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 15,
+    "curriculum_item_label": "Ilgas garsas"
   },
   {
     "section_code": "8.1",
@@ -285,7 +315,9 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1"
+    "curriculum_node_code": "8.1",
+    "curriculum_item_ordinal": 16,
+    "curriculum_item_label": "Labai trumpų garsų serija"
   },
   {
     "section_code": "8.8",
@@ -303,7 +335,9 @@
       "topic_number": 8,
       "parent_section": "Laivų garsinė signalizacija"
     },
-    "curriculum_node_code": "8.8"
+    "curriculum_node_code": "8.8",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Garsiniai signalai"
   },
   {
     "section_code": "8.9",
@@ -321,7 +355,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Draudžiamieji"
   },
   {
     "section_code": "8.9",
@@ -339,7 +375,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Privalomieji"
   },
   {
     "section_code": "8.9",
@@ -357,7 +395,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Ribojamieji"
   },
   {
     "section_code": "8.9",
@@ -375,7 +415,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Nurodomieji"
   },
   {
     "section_code": "8.9",
@@ -393,7 +435,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Informaciniai"
   },
   {
     "section_code": "8.9",
@@ -411,7 +455,9 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9"
+    "curriculum_node_code": "8.9",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Pagalbiniai"
   },
   {
     "section_code": "8.10.1",
@@ -429,7 +475,9 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1"
+    "curriculum_node_code": "8.10.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Plaukimas aukštyn/žemyn"
   },
   {
     "section_code": "8.10.1",
@@ -447,7 +495,9 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1"
+    "curriculum_node_code": "8.10.1",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Priešpriešinis plaukimas"
   },
   {
     "section_code": "8.10.1",
@@ -465,7 +515,9 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1"
+    "curriculum_node_code": "8.10.1",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Kursų susikirtimas"
   },
   {
     "section_code": "8.10.1",
@@ -483,6 +535,8 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1"
+    "curriculum_node_code": "8.10.1",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Lenkimas"
   }
 ]

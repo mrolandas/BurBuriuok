@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { invalidateAll, goto } from '$app/navigation';
+	import { invalidateAll, goto, pushState } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { adminMode } from '$lib/stores/adminMode';
 	import { updateCurriculumNode } from '$lib/api/admin/curriculum';
 	import { AdminApiError } from '$lib/api/admin/client';
 	import type { PageData, SectionCard } from './+page';
+	import ConceptModal from '$lib/components/ConceptModal.svelte';
 	import {
 		initializeProgressTracking,
 		learnerProgress,
@@ -23,6 +25,9 @@
 		data.sections.map((section: SectionCard) => ({ ...section }))
 	);
 	let lastDataSections: SectionCard[] = data.sections;
+
+	// Modal state
+	let selectedConceptSlug = $state<string | null>(null);
 
 	// Progress tracking
 	let progressRecords = $state<Map<string, ConceptProgressRecord>>(new Map());
@@ -52,6 +57,34 @@
 		}
 	};
 
+	function handleSelectConcept(slug: string) {
+		selectedConceptSlug = slug;
+		const url = new URL($page.url);
+		url.searchParams.set('concept', slug);
+		pushState(url, { conceptSlug: slug });
+	}
+
+	function closeConceptModal() {
+		selectedConceptSlug = null;
+		const url = new URL($page.url);
+		url.searchParams.delete('concept');
+		pushState(url, { conceptSlug: null });
+	}
+
+	// Handle browser back/forward
+	$effect(() => {
+		const state = $page.state as { conceptSlug?: string | null };
+		if (state.conceptSlug !== undefined) {
+			selectedConceptSlug = state.conceptSlug;
+		} else {
+			// Fallback to query param if state is missing (e.g. on load)
+			const slug = $page.url.searchParams.get('concept');
+			if (slug !== selectedConceptSlug) {
+				selectedConceptSlug = slug;
+			}
+		}
+	});
+
 	onMount(() => {
 		adminMode.initialize();
 		unsubscribeAdmin = adminMode.subscribe((value) => {
@@ -67,6 +100,12 @@
 		});
 		void initializeProgressTracking();
 		void loadAllSectionBlueprints();
+
+		// Check initial URL
+		const slug = $page.url.searchParams.get('concept');
+		if (slug) {
+			selectedConceptSlug = slug;
+		}
 	});
 
 	onDestroy(() => {

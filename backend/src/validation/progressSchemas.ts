@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const progressStatusSchema = z.enum(["learning", "known", "review"]);
+export const progressStatusSchema = z.enum(["learning", "known", "review", "seen"]);
 
 export const upsertProgressBodySchema = z
   .object({

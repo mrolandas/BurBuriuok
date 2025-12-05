@@ -36,6 +36,7 @@
 	) => void;
 	export let onSubmitCreateItem: (state: TreeNodeState) => Promise<void> | void;
 	export let onEditItem: (state: TreeNodeState, item: CurriculumItem) => Promise<void> | void;
+	export let onSelectConcept: ((slug: string) => void) | undefined = undefined;
 	export let onRequestDeleteItem: (
 		state: TreeNodeState,
 		item: CurriculumItem
@@ -381,6 +382,14 @@
 												<a
 													class="tree-node__item-link"
 													href={resolve('/concepts/[slug]', { slug: item.conceptSlug })}
+													on:click|preventDefault={(e) => {
+														if (onSelectConcept && item.conceptSlug) {
+															onSelectConcept(item.conceptSlug);
+														} else {
+															// Fallback to default navigation if no handler
+															window.location.href = e.currentTarget.href;
+														}
+													}}
 												>
 													<span class="tree-node__item-ordinal">{item.ordinal}.</span>
 													<span class="tree-node__item-label">{displayLabel}</span>
@@ -474,6 +483,7 @@
 								{onCreateItemFieldChange}
 								{onSubmitCreateItem}
 								{onEditItem}
+								{onSelectConcept}
 								{onRequestDeleteItem}
 								{onCancelDeleteItem}
 								{onConfirmDeleteItem}

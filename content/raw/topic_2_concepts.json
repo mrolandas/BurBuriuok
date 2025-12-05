@@ -15,7 +15,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Ilgis (LOA)"
   },
   {
     "section_code": "2.1",
@@ -33,7 +35,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Plotis (BMAX)"
   },
   {
     "section_code": "2.1",
@@ -51,7 +55,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Grimzlė (T)"
   },
   {
     "section_code": "2.1",
@@ -69,7 +75,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Vaterlinijos ilgis (LWL)"
   },
   {
     "section_code": "2.1",
@@ -87,7 +95,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Laisvo borto aukštis (F)"
   },
   {
     "section_code": "2.1",
@@ -105,7 +115,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Vandentalpa"
   },
   {
     "section_code": "2.1",
@@ -123,7 +135,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Keliamoji galia"
   },
   {
     "section_code": "2.1",
@@ -141,7 +155,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Stovumas"
   },
   {
     "section_code": "2.1",
@@ -159,7 +175,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Buringumas"
   },
   {
     "section_code": "2.1",
@@ -177,7 +195,9 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1"
+    "curriculum_node_code": "2.1",
+    "curriculum_item_ordinal": 10,
+    "curriculum_item_label": "Plūdrumas"
   },
   {
     "section_code": "2.5",
@@ -195,7 +215,9 @@
       "topic_number": 2,
       "parent_section": "Tikrasis vėjas"
     },
-    "curriculum_node_code": "2.5"
+    "curriculum_node_code": "2.5",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Stiprumas (TWS) ir kryptis (TWA)"
   },
   {
     "section_code": "2.6",
@@ -213,7 +235,9 @@
       "topic_number": 2,
       "parent_section": "Kursinis vėjas"
     },
-    "curriculum_node_code": "2.6"
+    "curriculum_node_code": "2.6",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Sąvoka ir susidarymo priežastis"
   },
   {
     "section_code": "2.7",
@@ -231,6 +255,8 @@
       "topic_number": 2,
       "parent_section": "Vimpelinis vėjas"
     },
-    "curriculum_node_code": "2.7"
+    "curriculum_node_code": "2.7",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Kryptis (AWA) ir stiprumas (AWS)"
   }
 ]

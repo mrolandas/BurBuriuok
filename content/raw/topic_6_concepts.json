@@ -15,7 +15,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Baseinas"
   },
   {
     "section_code": "6.6",
@@ -33,7 +35,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Akvatorija"
   },
   {
     "section_code": "6.6",
@@ -51,7 +55,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Sekluma"
   },
   {
     "section_code": "6.6",
@@ -69,7 +75,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Sėklius"
   },
   {
     "section_code": "6.6",
@@ -87,7 +95,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Baras"
   },
   {
     "section_code": "6.6",
@@ -105,7 +115,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "RIfas"
   },
   {
     "section_code": "6.6",
@@ -123,7 +135,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Bankė"
   },
   {
     "section_code": "6.6",
@@ -141,7 +155,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Reidas"
   },
   {
     "section_code": "6.6",
@@ -159,7 +175,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Uostas"
   },
   {
     "section_code": "6.6",
@@ -177,7 +195,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 10,
+    "curriculum_item_label": "Avanportas (priešuostis)"
   },
   {
     "section_code": "6.6",
@@ -195,7 +215,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 11,
+    "curriculum_item_label": "Prieplauka"
   },
   {
     "section_code": "6.6",
@@ -213,7 +235,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 12,
+    "curriculum_item_label": "Pirsas"
   },
   {
     "section_code": "6.6",
@@ -231,7 +255,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 13,
+    "curriculum_item_label": "Damba"
   },
   {
     "section_code": "6.6",
@@ -249,7 +275,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 14,
+    "curriculum_item_label": "Molas"
   },
   {
     "section_code": "6.6",
@@ -267,7 +295,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 15,
+    "curriculum_item_label": "Bangolaužis"
   },
   {
     "section_code": "6.6",
@@ -285,7 +315,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 16,
+    "curriculum_item_label": "Kanalas"
   },
   {
     "section_code": "6.6",
@@ -303,7 +335,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 17,
+    "curriculum_item_label": "Farvateris"
   },
   {
     "section_code": "6.6",
@@ -321,7 +355,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 18,
+    "curriculum_item_label": "Gairė"
   },
   {
     "section_code": "6.6",
@@ -339,7 +375,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 19,
+    "curriculum_item_label": "Bakenas"
   },
   {
     "section_code": "6.6",
@@ -357,7 +395,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 20,
+    "curriculum_item_label": "Boja"
   },
   {
     "section_code": "6.6",
@@ -375,7 +415,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 21,
+    "curriculum_item_label": "Švyturys"
   },
   {
     "section_code": "6.6",
@@ -393,7 +435,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 22,
+    "curriculum_item_label": "Pludrusis švyturys"
   },
   {
     "section_code": "6.6",
@@ -411,7 +455,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 23,
+    "curriculum_item_label": "Sektорinis švyturys"
   },
   {
     "section_code": "6.6",
@@ -429,7 +475,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 24,
+    "curriculum_item_label": "Kranto orientyras"
   },
   {
     "section_code": "6.6",
@@ -447,7 +495,9 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6"
+    "curriculum_node_code": "6.6",
+    "curriculum_item_ordinal": 25,
+    "curriculum_item_label": "Vedlinė"
   },
   {
     "section_code": "6.11",
@@ -465,7 +515,9 @@
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
     },
-    "curriculum_node_code": "6.11"
+    "curriculum_node_code": "6.11",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Kardinalinė sistema"
   },
   {
     "section_code": "6.11",
@@ -483,7 +535,9 @@
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
     },
-    "curriculum_node_code": "6.11"
+    "curriculum_node_code": "6.11",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Lateralinė ir kiti ženklai"
   },
   {
     "section_code": "6.13",
@@ -501,7 +555,9 @@
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
     },
-    "curriculum_node_code": "6.13"
+    "curriculum_node_code": "6.13",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Linijų ilgis"
   },
   {
     "section_code": "6.13",
@@ -519,7 +575,9 @@
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
     },
-    "curriculum_node_code": "6.13"
+    "curriculum_node_code": "6.13",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Kampų nustatymas"
   },
   {
     "section_code": "6.14",
@@ -537,7 +595,9 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14"
+    "curriculum_node_code": "6.14",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Matlankis"
   },
   {
     "section_code": "6.14",
@@ -555,7 +615,9 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14"
+    "curriculum_node_code": "6.14",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Lygiagrečioji liniuotė"
   },
   {
     "section_code": "6.14",
@@ -573,7 +635,9 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14"
+    "curriculum_node_code": "6.14",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Skriestuvas-matuoklis"
   },
   {
     "section_code": "6.15",
@@ -591,7 +655,9 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15"
+    "curriculum_node_code": "6.15",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Koordinačių nustatymas"
   },
   {
     "section_code": "6.15",
@@ -609,7 +675,9 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15"
+    "curriculum_node_code": "6.15",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Taško radimas pagal koordinates"
   },
   {
     "section_code": "6.15",
@@ -627,7 +695,9 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15"
+    "curriculum_node_code": "6.15",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Atstumo tarp taškų nustatymas"
   },
   {
     "section_code": "6.15",
@@ -645,7 +715,9 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15"
+    "curriculum_node_code": "6.15",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Tikrojo kurso ar pelengo brėžimas"
   },
   {
     "section_code": "6.15",
@@ -663,7 +735,9 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15"
+    "curriculum_node_code": "6.15",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Nubrėžtos linijos krypties nustatymas"
   },
   {
     "section_code": "6.16",
@@ -681,7 +755,9 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Lagas"
   },
   {
     "section_code": "6.16",
@@ -699,7 +775,9 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Echolotas"
   },
   {
     "section_code": "6.16",
@@ -717,7 +795,9 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Vėjo matuokliai"
   },
   {
     "section_code": "6.16",
@@ -735,7 +815,9 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "GPS (stacionari ir mobili)"
   },
   {
     "section_code": "6.16",
@@ -753,7 +835,9 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "A.I.S."
   },
   {
     "section_code": "6.16",
@@ -771,6 +855,8 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16"
+    "curriculum_node_code": "6.16",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Kompasas"
   }
 ]

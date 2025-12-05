@@ -2,7 +2,7 @@ import { buildPublicApiUrl } from '$lib/api/base';
 import { ensureDeviceKey } from '$lib/utils/deviceKey';
 import { getSupabaseClient } from '$lib/supabase/client';
 
-export type ProgressStatus = 'learning' | 'known' | 'review';
+export type ProgressStatus = 'learning' | 'known' | 'review' | 'seen';
 
 export type ConceptProgressRecord = {
 	conceptId: string;

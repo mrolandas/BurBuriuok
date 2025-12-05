@@ -1,6 +1,8 @@
 <script lang="ts">
 	/* eslint-disable svelte/prefer-writable-derived */
 	import { resolve } from '$app/paths';
+	import { pushState } from '$app/navigation';
+	import { page } from '$app/stores';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
 	import type { NextSection } from '$lib/page-data/conceptDetail';
@@ -31,7 +33,9 @@
 		nextSection?: NextSection | null;
 		meta?: Snippet;
 		actions?: Snippet;
+		headerActions?: Snippet;
 		content?: Snippet;
+		isModal?: boolean;
 	};
 
 	let {
@@ -42,7 +46,9 @@
 		nextSection,
 		meta,
 		actions,
-		content
+		headerActions,
+		content,
+		isModal = false
 	}: Props = $props();
 
 	let showAllBreadcrumbs = $state(false);
@@ -61,6 +67,14 @@
 		return crumb.label;
 	};
 
+	function handleModalNavigate(event: MouseEvent, slug: string) {
+		if (!isModal) return;
+		event.preventDefault();
+		const url = new URL($page.url);
+		url.searchParams.set('concept', slug);
+		pushState(url, { conceptSlug: slug });
+	}
+
 	$effect(() => {
 		showAllBreadcrumbs = false;
 	});
@@ -69,55 +83,64 @@
 </script>
 
 <section class="concept-detail">
-	<nav
-		class="concept-detail__breadcrumbs"
-		class:concept-detail__breadcrumbs--expanded={showAllBreadcrumbs}
-		aria-label="Navigacija"
-	>
-		<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
+	{#if !isModal}
+		<nav
+			class="concept-detail__breadcrumbs"
+			class:concept-detail__breadcrumbs--expanded={showAllBreadcrumbs}
+			aria-label="Navigacija"
+		>
+			<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
 
-		{#if hasHiddenBreadcrumbs}
-			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-			<span
-				class="concept-detail__crumb concept-detail__crumb--static concept-detail__crumb--ellipsis"
-				aria-hidden="true"
-			>
-				…
-			</span>
-			<button
-				type="button"
-				class="concept-detail__crumb concept-detail__crumb--toggle"
-				onclick={() => (showAllBreadcrumbs = true)}
-				aria-expanded={showAllBreadcrumbs}
-				aria-label="Rodyti pilną naršymo kelią"
-			>
-				>>
-			</button>
-		{/if}
-
-		{#each visibleBreadcrumbs as crumb (crumb.label)}
-			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-			{#if crumb.routeId && crumb.params}
-				<a class="concept-detail__crumb" href={resolve(crumb.routeId, crumb.params)}
-					>{formatBreadcrumbLabel(crumb)}</a
+			{#if hasHiddenBreadcrumbs}
+				<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
+				<span
+					class="concept-detail__crumb concept-detail__crumb--static concept-detail__crumb--ellipsis"
+					aria-hidden="true"
 				>
-			{:else}
-				<span class="concept-detail__crumb concept-detail__crumb--static">
-					{formatBreadcrumbLabel(crumb)}
+					…
 				</span>
+				<button
+					type="button"
+					class="concept-detail__crumb concept-detail__crumb--toggle"
+					onclick={() => (showAllBreadcrumbs = true)}
+					aria-expanded={showAllBreadcrumbs}
+					aria-label="Rodyti pilną naršymo kelią"
+				>
+					>>
+				</button>
 			{/if}
-		{/each}
-	</nav>
 
-	<div class="concept-detail__layout">
+			{#each visibleBreadcrumbs as crumb (crumb.label)}
+				<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
+				{#if crumb.routeId && crumb.params}
+					<a class="concept-detail__crumb" href={resolve(crumb.routeId, crumb.params)}
+						>{formatBreadcrumbLabel(crumb)}</a
+					>
+				{:else}
+					<span class="concept-detail__crumb concept-detail__crumb--static">
+						{formatBreadcrumbLabel(crumb)}
+					</span>
+				{/if}
+			{/each}
+		</nav>
+	{/if}
+
+	<div class="concept-detail__layout" class:concept-detail__layout--modal={isModal}>
 		<article class="concept-detail__content">
 			<header class="concept-detail__content-header">
-				<h1 class="concept-detail__title">
-					{concept.termLt}
-					{#if concept.termEn}
-						<span class="concept-detail__subtitle">({concept.termEn})</span>
+				<div class="concept-detail__title-wrapper">
+					<h1 class="concept-detail__title">
+						{concept.termLt}
+						{#if concept.termEn}
+							<span class="concept-detail__subtitle">({concept.termEn})</span>
+						{/if}
+					</h1>
+					{#if headerActions}
+						<div class="concept-detail__header-actions">
+							{@render headerActions()}
+						</div>
 					{/if}
-				</h1>
+				</div>
 			</header>
 
 			{#if meta}
@@ -157,6 +180,7 @@
 					<a
 						class="concept-detail__pager-link concept-detail__pager-link--prev"
 						href={resolve('/concepts/[slug]', { slug: neighbors.previous.slug })}
+						onclick={(e) => handleModalNavigate(e, neighbors.previous!.slug)}
 					>
 						<span aria-hidden="true">‹</span>
 						<span>
@@ -169,6 +193,7 @@
 					<a
 						class="concept-detail__pager-link concept-detail__pager-link--next"
 						href={resolve('/concepts/[slug]', { slug: neighbors.next.slug })}
+						onclick={(e) => handleModalNavigate(e, neighbors.next!.slug)}
 					>
 						<span>
 							<span class="concept-detail__pager-label">{neighbors.next.label}</span>
@@ -192,7 +217,11 @@
 									{#if isCurrent}
 										<span class="concept-agenda__label">{item.label}</span>
 									{:else}
-										<a href={resolve('/concepts/[slug]', { slug: item.conceptSlug })} class="concept-agenda__link">
+										<a 
+											href={resolve('/concepts/[slug]', { slug: item.conceptSlug })} 
+											class="concept-agenda__link"
+											onclick={(e) => handleModalNavigate(e, item.conceptSlug!)}
+										>
 											{item.label}
 										</a>
 									{/if}
@@ -289,9 +318,36 @@
 		flex: 0 0 auto;
 	}
 
+	.concept-detail__title-wrapper {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.concept-detail__header-actions {
+		flex-shrink: 0;
+		margin-top: 0.2rem;
+	}
+
 	.concept-detail__layout {
 		display: grid;
 		gap: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.concept-detail__layout--modal {
+		gap: 1.5rem;
+	}
+
+	.concept-detail__layout--modal .concept-detail__content {
+		border: none;
+		background: transparent;
+		padding: 2rem;
+		box-shadow: none;
+	}
+
+	.concept-detail__layout--modal .concept-detail__content-header {
+		padding-right: 3rem;
 	}
 
 	.concept-detail__content {

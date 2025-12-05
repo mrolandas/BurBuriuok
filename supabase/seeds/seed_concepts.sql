@@ -1,5 +1,7 @@
 -- seed_concepts.sql
--- Generated 2025-12-05T10:00:45.927Z
+-- Generated 2025-12-05T10:08:44.016Z
+
+truncate table burburiuok.concepts cascade;
 
 insert into burburiuok.concepts (
     section_code,

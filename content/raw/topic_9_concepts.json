@@ -15,7 +15,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Burinis laivas"
   },
   {
     "section_code": "9.3",
@@ -33,7 +35,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "Laivas su mechaniniu varikliu"
   },
   {
     "section_code": "9.3",
@@ -51,7 +55,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Žvejojantis laivas"
   },
   {
     "section_code": "9.3",
@@ -69,7 +75,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Velkantis laivas"
   },
   {
     "section_code": "9.3",
@@ -87,7 +95,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 5,
+    "curriculum_item_label": "Vilkstinė"
   },
   {
     "section_code": "9.3",
@@ -105,7 +115,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 6,
+    "curriculum_item_label": "Žemkasė"
   },
   {
     "section_code": "9.3",
@@ -123,7 +135,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 7,
+    "curriculum_item_label": "Stovintis nuleidus inkarą"
   },
   {
     "section_code": "9.3",
@@ -141,7 +155,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 8,
+    "curriculum_item_label": "Ant seklumos"
   },
   {
     "section_code": "9.3",
@@ -159,7 +175,9 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 9,
+    "curriculum_item_label": "Locmano laivas"
   },
   {
     "section_code": "9.3",
@@ -177,6 +195,8 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3"
+    "curriculum_node_code": "9.3",
+    "curriculum_item_ordinal": 10,
+    "curriculum_item_label": "Minų traluotojas"
   }
 ]

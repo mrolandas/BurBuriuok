@@ -15,7 +15,9 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9"
+    "curriculum_node_code": "4.9",
+    "curriculum_item_ordinal": 1,
+    "curriculum_item_label": "Mob. tel. Nr. 112"
   },
   {
     "section_code": "4.9",
@@ -33,7 +35,9 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9"
+    "curriculum_node_code": "4.9",
+    "curriculum_item_ordinal": 2,
+    "curriculum_item_label": "VHF radijo ryšiu"
   },
   {
     "section_code": "4.9",
@@ -51,7 +55,9 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9"
+    "curriculum_node_code": "4.9",
+    "curriculum_item_ordinal": 3,
+    "curriculum_item_label": "Gestais matomumo ribose"
   },
   {
     "section_code": "4.9",
@@ -69,6 +75,8 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9"
+    "curriculum_node_code": "4.9",
+    "curriculum_item_ordinal": 4,
+    "curriculum_item_label": "Signalizacinė pirotechnika"
   }
 ]

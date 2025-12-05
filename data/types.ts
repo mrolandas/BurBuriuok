@@ -1,4 +1,4 @@
-export type ConceptStatus = "learning" | "known" | "review";
+export type ConceptStatus = "learning" | "known" | "review" | "seen";
 
 export interface CurriculumNodeRow {
   code: string;

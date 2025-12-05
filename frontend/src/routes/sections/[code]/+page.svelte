@@ -1,12 +1,52 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { pushState } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	import Card from '$lib/components/Card.svelte';
 	import CurriculumTree from '$lib/components/CurriculumTree.svelte';
+	import ConceptModal from '$lib/components/ConceptModal.svelte';
 	import type { SectionPageData } from './+page';
 
 	export let data: SectionPageData;
 
 	const homeHref = resolve('/');
+
+	let selectedConceptSlug: string | null = null;
+
+	function handleSelectConcept(slug: string) {
+		selectedConceptSlug = slug;
+		const url = new URL($page.url);
+		url.searchParams.set('concept', slug);
+		pushState(url, { conceptSlug: slug });
+	}
+
+	function closeConceptModal() {
+		selectedConceptSlug = null;
+		const url = new URL($page.url);
+		url.searchParams.delete('concept');
+		pushState(url, { conceptSlug: null });
+	}
+
+	// Handle browser back/forward
+	$: {
+		const state = $page.state as { conceptSlug?: string | null };
+		if (state.conceptSlug !== undefined) {
+			selectedConceptSlug = state.conceptSlug;
+		} else {
+			const slug = $page.url.searchParams.get('concept');
+			if (slug !== selectedConceptSlug) {
+				selectedConceptSlug = slug;
+			}
+		}
+	}
+
+	onMount(() => {
+		const slug = $page.url.searchParams.get('concept');
+		if (slug) {
+			selectedConceptSlug = slug;
+		}
+	});
 </script>
 
 <div class="section-view">
@@ -33,11 +73,22 @@
 			<p>{data.loadError}</p>
 		</Card>
 	{:else if data.section}
-		<CurriculumTree section={data.section} initialNodes={data.initialNodes} />
+		<CurriculumTree 
+			section={data.section} 
+			initialNodes={data.initialNodes} 
+			onSelectConcept={handleSelectConcept}
+		/>
 	{:else}
 		<Card title="Kraunama skiltis">
 			<p>Laukiame duomenų iš Supabase...</p>
 		</Card>
+	{/if}
+
+	{#if selectedConceptSlug}
+		<ConceptModal 
+			slug={selectedConceptSlug} 
+			onClose={closeConceptModal} 
+		/>
 	{/if}
 </div>
 
