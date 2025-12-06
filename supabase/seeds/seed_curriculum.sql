@@ -1,5 +1,5 @@
 -- seed_curriculum.sql
--- Generated 2025-12-05T10:08:43.908Z
+-- Generated 2025-12-06T14:19:06.614Z
 
 truncate table burburiuok.curriculum_nodes, burburiuok.curriculum_items cascade;
 

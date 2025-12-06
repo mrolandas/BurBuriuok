@@ -1,5 +1,5 @@
 -- seed_concepts.sql
--- Generated 2025-12-05T10:08:44.016Z
+-- Generated 2025-12-06T14:19:06.726Z
 
 truncate table burburiuok.concepts cascade;
 
