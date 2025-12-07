@@ -13,7 +13,8 @@ export const load = (async ({ url }) => {
 			query,
 			minimumLength: MIN_QUERY_LENGTH,
 			conceptHits: [],
-			descriptionHits: []
+			descriptionHits: [],
+			sectionHits: []
 		};
 	}
 
@@ -23,18 +24,20 @@ export const load = (async ({ url }) => {
 			minimumLength: MIN_QUERY_LENGTH,
 			conceptHits: [],
 			descriptionHits: [],
+			sectionHits: [],
 			tooShort: true
 		};
 	}
 
 	try {
-		const { conceptHits, descriptionHits } = await searchConcepts(query);
+		const { conceptHits, descriptionHits, sectionHits } = await searchConcepts(query);
 
 		return {
 			query,
 			minimumLength: MIN_QUERY_LENGTH,
 			conceptHits,
-			descriptionHits
+			descriptionHits,
+			sectionHits
 		};
 	} catch (error) {
 		console.error('Nepavyko atlikti paieškos', error);
@@ -43,6 +46,7 @@ export const load = (async ({ url }) => {
 			minimumLength: MIN_QUERY_LENGTH,
 			conceptHits: [],
 			descriptionHits: [],
+			sectionHits: [],
 			loadError: 'Nepavyko atlikti paieškos. Bandykite dar kartą.'
 		};
 	}

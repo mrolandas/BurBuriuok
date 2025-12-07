@@ -9,9 +9,16 @@ export type SearchHit = {
 	snippet: string | null;
 };
 
+export type SectionHit = {
+	code: string;
+	title: string;
+	snippet: string | null;
+};
+
 export type SearchResults = {
 	conceptHits: SearchHit[];
 	descriptionHits: SearchHit[];
+	sectionHits: SectionHit[];
 };
 
 const SELECT_FIELDS = 'id,slug,term_lt,term_en,description_lt,section_title,section_code';
@@ -74,9 +81,12 @@ export async function searchConcepts(query: string, limit = 20): Promise<SearchR
 		.from('burburiuok_concepts')
 		.select(SELECT_FIELDS)
 		.or(
-			[`slug.ilike.%${escaped}%`, `term_lt.ilike.%${escaped}%`, `term_en.ilike.%${escaped}%`].join(
-				','
-			)
+			[
+				`slug.ilike.%${escaped}%`,
+				`term_lt.ilike.%${escaped}%`,
+				`term_en.ilike.%${escaped}%`,
+				`section_title.ilike.%${escaped}%`
+			].join(',')
 		)
 		.order('term_lt', { ascending: true, nullsFirst: false })
 		.limit(limit);
@@ -93,6 +103,23 @@ export async function searchConcepts(query: string, limit = 20): Promise<SearchR
 		sectionTitle: item.section_title ?? null,
 		sectionCode: item.section_code ?? null,
 		snippet: buildSnippet(item.description_lt, trimmed)
+	}));
+
+	// Search for sections that match the query
+	const { data: sectionData, error: sectionError } = await supabase
+		.from('burburiuok_curriculum_nodes')
+		.select('code, title, summary')
+		.ilike('title', `%${escaped}%`)
+		.limit(limit);
+
+	if (sectionError) {
+		console.error('Nepavyko gauti temų paieškos rezultatų', sectionError);
+	}
+
+	const sectionHits: SectionHit[] = (sectionData ?? []).map((item) => ({
+		code: item.code,
+		title: item.title,
+		snippet: buildSnippet(item.summary, trimmed)
 	}));
 
 	const conceptIds = new Set(conceptHits.map((hit) => hit.id));
@@ -120,5 +147,5 @@ export async function searchConcepts(query: string, limit = 20): Promise<SearchR
 			snippet: buildSnippet(item.description_lt, trimmed)
 		}));
 
-	return { conceptHits, descriptionHits };
+	return { conceptHits, descriptionHits, sectionHits };
 }

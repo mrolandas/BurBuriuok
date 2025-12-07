@@ -87,6 +87,12 @@
 
 	const themeOptions = [
 		{
+			id: 'sand',
+			label: 'Smėlio krantai',
+			description: 'Šilta pastelė su gintaro akcentais',
+			preview: ['#fff7ed', '#f97316', '#ea580c']
+		},
+		{
 			id: 'dawn',
 			label: 'Rytmečio dangus',
 			description: 'Šviesi schema su sodria mėlyna',
@@ -97,12 +103,6 @@
 			label: 'Jūrinė naktis',
 			description: 'Subtili tamsi su melsvais akcentais',
 			preview: ['#0f172a', '#38bdf8', '#0ea5e9']
-		},
-		{
-			id: 'sand',
-			label: 'Smėlio krantai',
-			description: 'Šilta pastelė su gintaro akcentais',
-			preview: ['#fff7ed', '#f97316', '#ea580c']
 		}
 	] as const;
 
