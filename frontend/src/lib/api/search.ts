@@ -72,7 +72,7 @@ export async function searchConcepts(query: string, limit = 20): Promise<SearchR
 	const trimmed = query.trim();
 
 	if (!trimmed) {
-		return { conceptHits: [], descriptionHits: [] };
+		return { conceptHits: [], descriptionHits: [], sectionHits: [] };
 	}
 
 	const escaped = escapeIlike(trimmed);

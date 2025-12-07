@@ -10,6 +10,9 @@ import {
   getRequiredAuthEnv,
   sanitizeRedirectTarget,
 } from "../utils/authRedirect.ts";
+import { getSetting } from "../../../data/repositories/settingsRepository.ts";
+import { getProfileByEmail } from "../../../data/repositories/profileRepository.ts";
+import { findPendingInviteByEmail } from "../../../data/repositories/adminInviteRepository.ts";
 
 const router = Router();
 
@@ -62,16 +65,36 @@ router.post(
       emailRedirectTo,
     });
 
+    const registrationEnabled = await getSetting("registration_enabled", true);
+
+    if (!registrationEnabled) {
+      const existingProfile = await getProfileByEmail(normalizedEmail);
+      if (!existingProfile) {
+        // Check if there is a pending invite for this email
+        const pendingInvite = await findPendingInviteByEmail(normalizedEmail);
+        if (!pendingInvite) {
+          throw new HttpError(
+            403,
+            "Naujų vartotojų registracija šiuo metu išjungta.",
+            "REGISTRATION_DISABLED"
+          );
+        }
+      }
+    }
+
     const { error } = await supabaseServiceClient.auth.signInWithOtp({
       email: normalizedEmail,
       options: {
         emailRedirectTo,
-        shouldCreateUser: true,
+        shouldCreateUser: registrationEnabled,
       },
     });
 
     if (error) {
-      throw new HttpError(502, "Nepavyko išsiųsti prisijungimo nuorodos.", "AUTH_MAGIC_LINK_FAILED");
+      console.error('[auth] signInWithOtp failed', error);
+      const status = (error as any).status || 502;
+      const message = (error as any).message || "Nepavyko išsiųsti prisijungimo nuorodos.";
+      throw new HttpError(status, message, "AUTH_MAGIC_LINK_FAILED");
     }
 
     res.json({

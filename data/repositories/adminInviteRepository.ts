@@ -98,19 +98,41 @@ export async function findInviteByTokenHash(
     .maybeSingle();
 
   if (error) {
-    throw new Error("Failed to look up admin invite by token.");
+    throw new Error(`Failed to find invite by token hash: ${error.message}`);
   }
 
   if (!data) {
     return null;
   }
 
-  const row = data as AdminInviteRow & { token_hash: string };
-  return {
-    ...mapRow(row),
-    tokenHash: row.token_hash,
-  };
+  return { ...mapRow(data as AdminInviteRow), tokenHash: data.token_hash };
 }
+
+export async function findPendingInviteByEmail(
+  email: string,
+  client: SupabaseClient | null = null
+): Promise<AdminInvite | null> {
+  const supabase = resolveClient(client) as any;
+
+  const { data, error } = await supabase
+    .from(TABLE)
+    .select(
+      "id, email, role, expires_at, invited_by, accepted_profile_id, accepted_at, revoked_at, created_at, updated_at"
+    )
+    .eq("email", email)
+    .is("revoked_at", null)
+    .is("accepted_at", null)
+    .gt("expires_at", new Date().toISOString())
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to find pending invite by email: ${error.message}`);
+  }
+
+  return data ? mapRow(data as AdminInviteRow) : null;
+}
+
+
 
 export async function markInviteAccepted(
   inviteId: string,

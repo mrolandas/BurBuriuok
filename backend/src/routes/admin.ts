@@ -4,6 +4,7 @@ import conceptsRouter from "./admin/concepts.ts";
 import curriculumRouter from "./admin/curriculum.ts";
 import mediaRouter from "./admin/media.ts";
 import usersRouter from "./admin/users.ts";
+import settingsRouter from "./admin/settings.ts";
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.use("/concepts", conceptsRouter);
 router.use("/curriculum", curriculumRouter);
 router.use("/media", mediaRouter);
 router.use("/users", usersRouter);
+router.use("/settings", settingsRouter);
 
 export default router;

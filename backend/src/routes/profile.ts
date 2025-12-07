@@ -6,9 +6,11 @@ import {
   getProfileById,
   upsertProfile,
 } from "../../../data/repositories/profileRepository.ts";
+import { getSetting } from "../../../data/repositories/settingsRepository.ts";
 import { hashInviteToken } from "../utils/inviteTokens.ts";
 import {
   findInviteByTokenHash,
+  findPendingInviteByEmail,
   markInviteAccepted,
 } from "../../../data/repositories/adminInviteRepository.ts";
 import { updateSupabaseAppRole } from "../services/supabaseUserService.ts";
@@ -101,6 +103,28 @@ router.post(
 
         inviteId = invite.id;
         upsertInput.role = invite.role;
+      }
+
+      if (!inviteId) {
+        const registrationEnabled = await getSetting("registration_enabled", true);
+        if (!registrationEnabled) {
+          const existing = await getProfileById(userId);
+          if (!existing) {
+            const pendingInvite = await findPendingInviteByEmail(email);
+            if (pendingInvite) {
+              inviteId = pendingInvite.id;
+              upsertInput.role = pendingInvite.role;
+            } else {
+              res.status(403).json({
+                error: {
+                  code: "REGISTRATION_DISABLED",
+                  message: "Registracija šiuo metu išjungta.",
+                },
+              });
+              return;
+            }
+          }
+        }
       }
 
       const profile = await upsertProfile(upsertInput);

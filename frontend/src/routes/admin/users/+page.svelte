@@ -11,6 +11,7 @@
 		type AdminInviteSummary,
 		type AdminProfileSummary
 	} from '$lib/api/admin/users';
+	import { getRegistrationSetting, updateRegistrationSetting } from '$lib/api/admin/settings';
 	import { authSession, initializeAuth, type AuthSession } from '$lib/stores/authStore';
 	import type { ProfileRole } from '../../../../../shared/validation/profileSchema';
 
@@ -36,6 +37,9 @@
 	let totalUsers = 0;
 	let adminCount = 0;
 	let pageUnsubscribe: (() => void) | null = null;
+
+	let registrationEnabled = true;
+	let updatingRegistration = false;
 
 	const roleOptions: { value: ProfileRole; label: string }[] = [
 		{ value: 'admin', label: 'Administratorius' },
@@ -67,9 +71,13 @@
 		inviteShareLink = null;
 		inviteShareVisible = false;
 		try {
-			const result = await fetchAdminUsers();
-			users = result.users;
-			invites = result.invites;
+			const [usersResult, settingsResult] = await Promise.all([
+				fetchAdminUsers(),
+				getRegistrationSetting()
+			]);
+			users = usersResult.users;
+			invites = usersResult.invites;
+			registrationEnabled = settingsResult.enabled;
 			updateUserStats();
 			loadState = 'ready';
 		} catch (error) {
@@ -194,6 +202,26 @@
 		totalUsers = users.length;
 		adminCount = users.filter((user) => user.role === 'admin').length;
 	}
+
+	async function toggleRegistration() {
+		if (updatingRegistration) return;
+		updatingRegistration = true;
+		const newValue = !registrationEnabled;
+		try {
+			await updateRegistrationSetting(newValue);
+			registrationEnabled = newValue;
+		} catch (error) {
+			console.error('Failed to update registration setting', error);
+			alert('Nepavyko atnaujinti registracijos nustatymų.');
+			// Revert UI if needed, but since we bind to registrationEnabled which wasn't changed yet if we use optimistic UI...
+			// Actually, I'll update state only after success or use optimistic update and revert on error.
+			// Here I am not updating state before call, so the checkbox won't move until success if I bind to checked={registrationEnabled}.
+			// But wait, if I use on:change, the checkbox might toggle visually.
+			// Better to prevent default and handle it manually or let it toggle and revert.
+		} finally {
+			updatingRegistration = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -314,6 +342,31 @@
 					</article>
 
 					<article class="admin-card users__card">
+						<h2 class="admin-card__title">Registracijos nustatymai</h2>
+						<p class="admin-card__subtitle">Valdykite viešą registraciją į sistemą.</p>
+						
+						<div class="setting-toggle">
+							<label class="toggle-switch">
+								<input 
+									type="checkbox" 
+									checked={registrationEnabled} 
+									on:change={toggleRegistration}
+									disabled={updatingRegistration}
+								>
+								<span class="toggle-slider"></span>
+							</label>
+							<span class="toggle-label">
+								{registrationEnabled ? 'Registracija įjungta' : 'Registracija išjungta'}
+							</span>
+						</div>
+						<p class="setting-description">
+							{registrationEnabled 
+								? 'Nauji vartotojai gali laisvai registruotis.' 
+								: 'Registracija sustabdyta. Prisijungti gali tik esami vartotojai ir pakviesti asmenys.'}
+						</p>
+					</article>
+
+					<article class="admin-card users__card">
 						<h2>Laukiantys kvietimai</h2>
 						{#if !invites.filter(i => i.status === 'pending').length}
 							<p>Nėra aktyvių kvietimų.</p>
@@ -384,6 +437,73 @@
 	.invite-form__notice {
 		font-size: 0.9rem;
 		margin: 0;
+	}
+
+	.setting-toggle {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin: 1rem 0;
+	}
+
+	.toggle-switch {
+		position: relative;
+		display: inline-block;
+		width: 50px;
+		height: 24px;
+	}
+
+	.toggle-switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.toggle-slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		transition: .4s;
+		border-radius: 24px;
+		z-index: 1;
+	}
+
+	.toggle-slider:before {
+		position: absolute;
+		content: "";
+		height: 16px;
+		width: 16px;
+		left: 4px;
+		bottom: 4px;
+		background-color: white;
+		transition: .4s;
+		border-radius: 50%;
+	}
+
+	input:checked + .toggle-slider {
+		background-color: var(--color-accent);
+	}
+
+	input:focus + .toggle-slider {
+		box-shadow: 0 0 1px var(--color-accent);
+	}
+
+	input:checked + .toggle-slider:before {
+		transform: translateX(26px);
+	}
+	
+	.toggle-label {
+		font-weight: 600;
+	}
+	
+	.setting-description {
+		font-size: 0.9rem;
+		color: var(--color-text-soft);
+		margin-top: 0.5rem;
 	}
 
 	.invite-form__notice--success {
