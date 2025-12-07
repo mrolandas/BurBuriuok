@@ -15,6 +15,8 @@ export type ConceptNeighbor = {
 	label: string;
 	slug: string;
 	ordinal: number | null;
+	isNextSection?: boolean;
+	isPreviousSection?: boolean;
 };
 
 export type ConceptNeighbors = {
@@ -28,12 +30,19 @@ export type NextSection = {
 	firstConceptSlug?: string | null;
 };
 
+export type PreviousSection = {
+	title: string;
+	code: string;
+	lastConceptSlug?: string | null;
+};
+
 export type ConceptPageData = {
 	concept: ConceptDetail | null;
 	sectionItems: CurriculumItem[];
 	breadcrumbs: ConceptBreadcrumb[];
 	neighbors: ConceptNeighbors;
 	nextSection?: NextSection | null;
+	previousSection?: PreviousSection | null;
 	media: ConceptMediaItem[];
 	mediaError?: string | null;
 	notFound?: boolean;
@@ -99,6 +108,7 @@ export async function loadConceptDetailData({
 		let sectionItems: CurriculumItem[] = [];
 		const neighbors: ConceptNeighbors = {};
 		let nextSection: NextSection | null = null;
+		let previousSection: PreviousSection | null = null;
 
 		if (concept.curriculumNodeCode) {
 			try {
@@ -123,14 +133,48 @@ export async function loadConceptDetailData({
 							slug: nextCandidate.conceptSlug,
 							ordinal: nextCandidate.ordinal ?? null
 						};
-					} else if (currentIndex === items.length - 1) {
-						// If we are at the last item, try to find the next section
+					}
+					
+					// Check for adjacent sections
+					if (currentIndex === 0 || currentIndex === items.length - 1) {
 						try {
 							const currentNode = await fetchNode(concept.curriculumNodeCode);
 							if (currentNode?.parent_code) {
 								const siblings = await fetchChildNodes(currentNode.parent_code);
 								const currentNodeIndex = siblings.findIndex((n) => n.code === concept.curriculumNodeCode);
-								if (currentNodeIndex !== -1 && currentNodeIndex < siblings.length - 1) {
+								
+								// Previous Section Logic
+								if (currentIndex === 0 && currentNodeIndex > 0) {
+									const prevNode = siblings[currentNodeIndex - 1];
+									let lastConceptSlug: string | null = null;
+									try {
+										const prevItems = await fetchItems(prevNode.code);
+										// Find the last item with a concept slug
+										const lastItem = [...prevItems].reverse().find(i => i.conceptSlug);
+										if (lastItem?.conceptSlug) {
+											lastConceptSlug = lastItem.conceptSlug;
+											if (!neighbors.previous) {
+												neighbors.previous = {
+													label: lastItem.label,
+													slug: lastItem.conceptSlug,
+													ordinal: lastItem.ordinal ?? null,
+													isPreviousSection: true
+												};
+											}
+										}
+									} catch (e) {
+										console.warn('Failed to fetch items for previous section', e);
+									}
+
+									previousSection = {
+										title: prevNode.title,
+										code: prevNode.code,
+										lastConceptSlug
+									};
+								}
+
+								// Next Section Logic
+								if (currentIndex === items.length - 1 && currentNodeIndex !== -1 && currentNodeIndex < siblings.length - 1) {
 									const nextNode = siblings[currentNodeIndex + 1];
 									
 									let firstConceptSlug: string | null = null;
@@ -145,7 +189,8 @@ export async function loadConceptDetailData({
 												neighbors.next = {
 													label: firstItem.label,
 													slug: firstItem.conceptSlug,
-													ordinal: firstItem.ordinal ?? null
+													ordinal: firstItem.ordinal ?? null,
+													isNextSection: true
 												};
 											}
 										}
@@ -161,7 +206,7 @@ export async function loadConceptDetailData({
 								}
 							}
 						} catch (e) {
-							console.warn('Failed to fetch next section', e);
+							console.warn('Failed to fetch adjacent sections', e);
 						}
 					}
 				}
@@ -233,6 +278,7 @@ export async function loadConceptDetailData({
 			breadcrumbs,
 			neighbors,
 			nextSection,
+			previousSection,
 			media,
 			mediaError,
 			adminContext

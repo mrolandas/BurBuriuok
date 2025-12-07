@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
-	import type { NextSection } from '$lib/page-data/conceptDetail';
+	import type { NextSection, PreviousSection } from '$lib/page-data/conceptDetail';
 	import type { Snippet } from 'svelte';
 
 	export type Breadcrumb = {
@@ -18,6 +18,8 @@
 		label: string;
 		slug: string;
 		ordinal: number | null;
+		isNextSection?: boolean;
+		isPreviousSection?: boolean;
 	};
 
 	export type NeighborSet = {
@@ -31,6 +33,7 @@
 		sectionItems?: CurriculumItem[];
 		neighbors?: NeighborSet;
 		nextSection?: NextSection | null;
+		previousSection?: PreviousSection | null;
 		meta?: Snippet;
 		actions?: Snippet;
 		headerActions?: Snippet;
@@ -45,6 +48,7 @@
 		sectionItems = [],
 		neighbors,
 		nextSection,
+		previousSection,
 		meta,
 		actions,
 		headerActions,
@@ -65,18 +69,7 @@
 
 	const hasHiddenBreadcrumbs = $derived(!showAllBreadcrumbs && breadcrumbs.length > 2);
 
-	const visibleSectionItems = $derived.by(() => {
-		if (!sectionItems.length) return [];
-		const currentIndex = sectionItems.findIndex(i => i.conceptSlug === concept.slug);
-		if (currentIndex === -1) return sectionItems.slice(0, 10);
-		
-		const start = Math.max(0, currentIndex - 5);
-		const end = Math.min(sectionItems.length, currentIndex + 6);
-		return sectionItems.slice(start, end);
-	});
-
-	const hasMoreBefore = $derived(sectionItems.length > 0 && sectionItems.findIndex(i => i.conceptSlug === concept.slug) > 5);
-	const hasMoreAfter = $derived(sectionItems.length > 0 && sectionItems.findIndex(i => i.conceptSlug === concept.slug) < sectionItems.length - 6);
+	const visibleSectionItems = $derived(sectionItems);
 
 	const formatBreadcrumbLabel = (crumb: Breadcrumb) => {
 		return crumb.label;
@@ -135,9 +128,12 @@
 	<nav
 		class="concept-detail__breadcrumbs"
 		class:concept-detail__breadcrumbs--expanded={showAllBreadcrumbs}
+		class:concept-detail__breadcrumbs--modal={isModal}
 		aria-label="Navigacija"
 	>
-		<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
+		{#if !isModal}
+			<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
+		{/if}
 
 		{#if hasHiddenBreadcrumbs}
 			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
@@ -181,16 +177,18 @@
 		<article class="concept-detail__content">
 			<header class="concept-detail__content-header">
 				<div class="concept-detail__title-wrapper">
-					<h1 class="concept-detail__title">
-						{concept.termLt}
-						{#if concept.termEn}
-							<span class="concept-detail__subtitle">({concept.termEn})</span>
-						{/if}
-					</h1>
-					{#if headerActions}
+					<div class="concept-detail__title-row">
+						<h1 class="concept-detail__title">
+							{concept.termLt}
+						</h1>
 						<div class="concept-detail__header-actions">
-							{@render headerActions()}
+							{#if headerActions}
+								{@render headerActions()}
+							{/if}
 						</div>
+					</div>
+					{#if concept.termEn}
+						<div class="concept-detail__subtitle">({concept.termEn})</div>
 					{/if}
 				</div>
 			</header>
@@ -222,7 +220,9 @@
 			{/if}
 
 			{#if actions}
-				{@render actions()}
+				<div class="concept-detail__footer-actions">
+					{@render actions()}
+				</div>
 			{/if}
 		</article>
 
@@ -236,6 +236,9 @@
 					>
 						<span aria-hidden="true">‹</span>
 						<span>
+							{#if neighbors.previous.isPreviousSection}
+								<span class="concept-detail__pager-subtitle concept-detail__pager-subtitle--prev">Ankstesnis skyrius</span>
+							{/if}
 							<span class="concept-detail__pager-label">{neighbors.previous.label}</span>
 						</span>
 					</a>
@@ -248,6 +251,9 @@
 						onclick={(e) => handleModalNavigate(e, neighbors.next!.slug)}
 					>
 						<span>
+							{#if neighbors.next.isNextSection}
+								<span class="concept-detail__pager-subtitle">Kitas skyrius</span>
+							{/if}
 							<span class="concept-detail__pager-label">{neighbors.next.label}</span>
 						</span>
 						<span aria-hidden="true">›</span>
@@ -261,12 +267,6 @@
 				<section class="concept-detail__panel concept-detail__panel--list">
 					<h2>Šiame skyriuje</h2>
 					<ul class="concept-agenda">
-						{#if hasMoreBefore}
-							<li class="concept-agenda__item">
-								<div class="concept-agenda__marker" aria-hidden="true"></div>
-								<span class="concept-agenda__label concept-agenda__label--muted">...</span>
-							</li>
-						{/if}
 						{#each visibleSectionItems as item (item.ordinal)}
 							{@const isCurrent = item.conceptSlug === concept.slug}
 							{@const isLearned = item.conceptSlug && learnedSlugs.has(item.conceptSlug)}
@@ -297,37 +297,7 @@
 								{/if}
 							</li>
 						{/each}
-						{#if hasMoreAfter}
-							<li class="concept-agenda__item">
-								<div class="concept-agenda__marker" aria-hidden="true"></div>
-								<span class="concept-agenda__label concept-agenda__label--muted">...</span>
-							</li>
-						{/if}
 					</ul>
-				</section>
-			{/if}
-
-			{#if nextSection}
-				<section class="concept-detail__panel concept-detail__panel--next">
-					<h2>Kitas skyrius</h2>
-					{#if nextSection.firstConceptSlug}
-						<a
-							href="{resolve('/concepts/[slug]', { slug: nextSection.firstConceptSlug })}"
-							class="concept-detail__next-link"
-							onclick={(e) => handleModalNavigate(e, nextSection.firstConceptSlug!)}
-						>
-							<span class="concept-detail__next-label">{nextSection.title}</span>
-							<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
-						</a>
-					{:else}
-						<a
-							href="{resolve('/sections/[code]', { code: getRootCode(nextSection.code) })}?expand={nextSection.code}"
-							class="concept-detail__next-link"
-						>
-							<span class="concept-detail__next-label">{nextSection.title}</span>
-							<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
-						</a>
-					{/if}
 				</section>
 			{/if}
 		</aside>
@@ -391,6 +361,15 @@
 		outline-offset: 2px;
 	}
 
+	.concept-detail__breadcrumbs--modal {
+		padding: 0 2rem;
+		margin-top: 1rem;
+	}
+
+	.concept-detail__breadcrumbs--modal .concept-detail__crumb-separator:first-child {
+		display: none;
+	}
+
 	a.concept-detail__crumb:hover,
 	a.concept-detail__crumb:focus-visible,
 	button.concept-detail__crumb:hover,
@@ -404,14 +383,26 @@
 
 	.concept-detail__title-wrapper {
 		display: flex;
-		align-items: flex-start;
+		flex-direction: column;
+		gap: 0.2rem;
+		width: 100%;
+	}
+
+	.concept-detail__title-row {
+		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
+		width: 100%;
 	}
 
 	.concept-detail__header-actions {
 		flex-shrink: 0;
 		margin-top: 0.2rem;
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		margin-left: auto;
 	}
 
 	.concept-detail__layout {
@@ -420,14 +411,17 @@
 	}
 
 	.concept-detail__layout--modal {
-		gap: 1.5rem;
+		gap: 0.5rem;
 	}
 
 	.concept-detail__layout--modal .concept-detail__content {
 		border: none;
 		background: transparent;
-		padding: 2rem;
+		padding: 0 2rem 1rem 2rem;
 		box-shadow: none;
+	}	.concept-detail__layout--modal .concept-detail__sidebar {
+		padding-right: 2rem;
+		padding-bottom: 2rem;
 	}
 
 	.concept-detail__layout--modal .concept-detail__content-header {
@@ -438,11 +432,17 @@
 		padding: 0 2rem;
 	}
 
+	.concept-detail__footer-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 0.5rem;
+	}
+
 	.concept-detail__content {
 		display: grid;
 		gap: 1.3rem;
 		border-radius: 1.2rem;
-		padding: clamp(1.5rem, 3vw, 2rem);
+		padding: clamp(1.2rem, 3vw, 2rem);
 		border: 1px solid var(--color-border);
 		background: var(--color-panel);
 	}
@@ -470,7 +470,6 @@
 	.concept-detail__subtitle {
 		font-size: clamp(1rem, 2.4vw, 1.2rem);
 		color: var(--color-text-subtle);
-		margin-left: 0.4rem;
 	}
 
 	.concept-detail__translation {
@@ -522,15 +521,27 @@
 
 	.concept-detail__pager-label {
 		font-weight: 600;
+		display: block;
+	}
+
+	.concept-detail__pager-subtitle {
+		display: block;
+		font-size: 0.75rem;
+		color: var(--color-text-muted);
+		font-weight: normal;
+		margin-bottom: 0.1rem;
+		text-align: right;
 	}
 
 	.concept-detail__pager-link--next {
 		margin-left: auto;
+		text-align: right;
 	}
 
 	.concept-detail__sidebar {
 		display: grid;
 		gap: 1.2rem;
+		align-content: start;
 	}
 
 	.concept-detail__panel {
@@ -542,9 +553,23 @@
 		border: 1px solid var(--color-border-light);
 	}
 
+	.concept-detail__panel--list {
+		max-height: 25rem;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+
+
 	.concept-detail__panel h2 {
 		margin: 0;
 		font-size: 1.1rem;
+		position: sticky;
+		top: 0;
+		background: var(--color-panel-secondary);
+		z-index: 2;
+		padding-bottom: 0.5rem;
 	}
 
 	.concept-agenda {
@@ -554,6 +579,8 @@
 		display: grid;
 		gap: 0;
 		position: relative;
+		overflow-y: auto;
+		padding-right: 0.5rem;
 	}
 
 	.concept-agenda::before {
@@ -629,37 +656,7 @@
 		font-style: italic;
 	}
 
-	.concept-detail__panel--next {
-		background: var(--color-panel);
-		border-color: var(--color-accent-faint);
-	}
 
-	.concept-detail__next-link {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.8rem;
-		text-decoration: none;
-		color: var(--color-text);
-		font-weight: 500;
-		padding: 0.4rem 0;
-		transition: color 0.2s ease;
-	}
-
-	.concept-detail__next-link:hover {
-		color: var(--color-accent-strong);
-	}
-
-	.concept-detail__next-arrow {
-		font-size: 1.2rem;
-		line-height: 1;
-		color: var(--color-accent);
-		transition: transform 0.2s ease;
-	}
-
-	.concept-detail__next-link:hover .concept-detail__next-arrow {
-		transform: translateX(4px);
-	}
 
 	@media (min-width: 900px) {
 		.concept-detail__layout {
