@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* eslint-disable svelte/prefer-writable-derived */
 	import { resolve } from '$app/paths';
-	import { pushState } from '$app/navigation';
+	import { pushState, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { ConceptDetail as ConceptDetailData } from '$lib/api/concepts';
 	import type { CurriculumItem } from '$lib/api/curriculum';
@@ -94,6 +94,36 @@
 		pushState(url, { conceptSlug: slug });
 	}
 
+	function getBreadcrumbHref(crumb: Breadcrumb) {
+		if (!crumb.routeId) return '#';
+		
+		// If no code param, just resolve as is
+		if (!crumb.params?.code) {
+			return resolve(crumb.routeId, crumb.params as any);
+		}
+
+		const code = crumb.params.code;
+		const rootCode = getRootCode(code);
+		
+		// Resolve to the root section
+		const url = resolve(crumb.routeId, { code: rootCode });
+		
+		// If it's a subsection, add expand param
+		if (code !== rootCode) {
+			return `${url}?expand=${code}`;
+		}
+		return url;
+	}
+
+	function handleBreadcrumbClick(event: MouseEvent, href: string) {
+		if (!isModal) return;
+		// If we are in a modal, clicking a breadcrumb should navigate to that section
+		// and effectively close the modal.
+		// We use goto to ensure a full navigation, which will update the page component.
+		event.preventDefault();
+		goto(href);
+	}
+
 	$effect(() => {
 		showAllBreadcrumbs = false;
 	});
@@ -102,47 +132,50 @@
 </script>
 
 <section class="concept-detail">
-	{#if !isModal}
-		<nav
-			class="concept-detail__breadcrumbs"
-			class:concept-detail__breadcrumbs--expanded={showAllBreadcrumbs}
-			aria-label="Navigacija"
-		>
-			<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
+	<nav
+		class="concept-detail__breadcrumbs"
+		class:concept-detail__breadcrumbs--expanded={showAllBreadcrumbs}
+		aria-label="Navigacija"
+	>
+		<a class="concept-detail__crumb" href={boardHref}>Pagrindinis</a>
 
-			{#if hasHiddenBreadcrumbs}
-				<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-				<span
-					class="concept-detail__crumb concept-detail__crumb--static concept-detail__crumb--ellipsis"
-					aria-hidden="true"
+		{#if hasHiddenBreadcrumbs}
+			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
+			<span
+				class="concept-detail__crumb concept-detail__crumb--static concept-detail__crumb--ellipsis"
+				aria-hidden="true"
+			>
+				…
+			</span>
+			<button
+				type="button"
+				class="concept-detail__crumb concept-detail__crumb--toggle"
+				onclick={() => (showAllBreadcrumbs = true)}
+				aria-expanded={showAllBreadcrumbs}
+				aria-label="Rodyti pilną naršymo kelią"
+			>
+				>>
+			</button>
+		{/if}
+
+		{#each visibleBreadcrumbs as crumb (crumb.label)}
+			<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
+			{#if crumb.routeId && crumb.params}
+				{@const href = getBreadcrumbHref(crumb)}
+				<a 
+					class="concept-detail__crumb" 
+					href={href}
+					onclick={(e) => handleBreadcrumbClick(e, href)}
 				>
-					…
+					{formatBreadcrumbLabel(crumb)}
+				</a>
+			{:else}
+				<span class="concept-detail__crumb concept-detail__crumb--static">
+					{formatBreadcrumbLabel(crumb)}
 				</span>
-				<button
-					type="button"
-					class="concept-detail__crumb concept-detail__crumb--toggle"
-					onclick={() => (showAllBreadcrumbs = true)}
-					aria-expanded={showAllBreadcrumbs}
-					aria-label="Rodyti pilną naršymo kelią"
-				>
-					>>
-				</button>
 			{/if}
-
-			{#each visibleBreadcrumbs as crumb (crumb.label)}
-				<span class="concept-detail__crumb-separator" aria-hidden="true">›</span>
-				{#if crumb.routeId && crumb.params}
-					<a class="concept-detail__crumb" href={resolve(crumb.routeId, crumb.params)}
-						>{formatBreadcrumbLabel(crumb)}</a
-					>
-				{:else}
-					<span class="concept-detail__crumb concept-detail__crumb--static">
-						{formatBreadcrumbLabel(crumb)}
-					</span>
-				{/if}
-			{/each}
-		</nav>
-	{/if}
+		{/each}
+	</nav>
 
 	<div class="concept-detail__layout" class:concept-detail__layout--modal={isModal}>
 		<article class="concept-detail__content">
@@ -277,13 +310,24 @@
 			{#if nextSection}
 				<section class="concept-detail__panel concept-detail__panel--next">
 					<h2>Kitas skyrius</h2>
-					<a
-						href="{resolve('/sections/[code]', { code: getRootCode(nextSection.code) })}?expand={nextSection.code}"
-						class="concept-detail__next-link"
-					>
-						<span class="concept-detail__next-label">{nextSection.title}</span>
-						<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
-					</a>
+					{#if nextSection.firstConceptSlug}
+						<a
+							href="{resolve('/concepts/[slug]', { slug: nextSection.firstConceptSlug })}"
+							class="concept-detail__next-link"
+							onclick={(e) => handleModalNavigate(e, nextSection.firstConceptSlug!)}
+						>
+							<span class="concept-detail__next-label">{nextSection.title}</span>
+							<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
+						</a>
+					{:else}
+						<a
+							href="{resolve('/sections/[code]', { code: getRootCode(nextSection.code) })}?expand={nextSection.code}"
+							class="concept-detail__next-link"
+						>
+							<span class="concept-detail__next-label">{nextSection.title}</span>
+							<span class="concept-detail__next-arrow" aria-hidden="true">→</span>
+						</a>
+					{/if}
 				</section>
 			{/if}
 		</aside>

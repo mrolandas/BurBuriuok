@@ -25,6 +25,7 @@ export type ConceptNeighbors = {
 export type NextSection = {
 	title: string;
 	code: string;
+	firstConceptSlug?: string | null;
 };
 
 export type ConceptPageData = {
@@ -131,9 +132,31 @@ export async function loadConceptDetailData({
 								const currentNodeIndex = siblings.findIndex((n) => n.code === concept.curriculumNodeCode);
 								if (currentNodeIndex !== -1 && currentNodeIndex < siblings.length - 1) {
 									const nextNode = siblings[currentNodeIndex + 1];
+									
+									let firstConceptSlug: string | null = null;
+									try {
+										const nextItems = await fetchItems(nextNode.code);
+										const firstItem = nextItems.find(i => i.conceptSlug);
+										if (firstItem?.conceptSlug) {
+											firstConceptSlug = firstItem.conceptSlug;
+											// If we don't have a next neighbor yet (end of current list),
+											// point to the first concept of the next section.
+											if (!neighbors.next) {
+												neighbors.next = {
+													label: firstItem.label,
+													slug: firstItem.conceptSlug,
+													ordinal: firstItem.ordinal ?? null
+												};
+											}
+										}
+									} catch (e) {
+										console.warn('Failed to fetch items for next section', e);
+									}
+
 									nextSection = {
 										title: nextNode.title,
-										code: nextNode.code
+										code: nextNode.code,
+										firstConceptSlug
 									};
 								}
 							}

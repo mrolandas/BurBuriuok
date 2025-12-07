@@ -634,12 +634,27 @@
 		roots = initialNodes.map(createState);
 	}
 
+	let lastHandledExpandCode: string | null = null;
 	$: if (expandCode && roots.length > 0) {
-		void handleExpandCode(expandCode);
+		if (expandCode !== lastHandledExpandCode) {
+			lastHandledExpandCode = expandCode;
+			void handleExpandCode(expandCode);
+		}
 	}
 
 	$: if (section?.code && section.code !== sectionProgressTopologyCode) {
 		void loadSectionProgressTopology(section.code);
+	}
+
+	function collapseAllExcept(nodes: TreeNodeState[], keepPath: Set<string>) {
+		for (const node of nodes) {
+			if (!keepPath.has(node.node.code)) {
+				node.expanded = false;
+			}
+			if (node.children.length > 0) {
+				collapseAllExcept(node.children, keepPath);
+			}
+		}
 	}
 
 	async function handleExpandCode(code: string) {
@@ -647,6 +662,18 @@
 		// We need to expand "1", then "1.1", then "1.1.1"
 		
 		const parts = code.split('.');
+		const pathSet = new Set<string>();
+		let tempPath = parts[0];
+		pathSet.add(tempPath);
+		for (let i = 1; i < parts.length; i++) {
+			tempPath += '.' + parts[i];
+			pathSet.add(tempPath);
+		}
+
+		// Collapse everything that is not in the path
+		collapseAllExcept(roots, pathSet);
+		refreshTree();
+
 		let currentPath = parts[0];
 		
 		// We'll try to expand level by level
@@ -660,6 +687,7 @@
 			if (nodeState) {
 				if (!nodeState.expanded) {
 					nodeState.expanded = true;
+					refreshTree();
 					if (!nodeState.loaded) {
 						await ensureChildren(nodeState);
 						await tick();
@@ -670,9 +698,11 @@
 				// If it's the target node, scroll to it
 				if (currentPath === code) {
 					// Give a small delay for DOM update and try multiple times
-					for (let attempt = 0; attempt < 5; attempt++) {
+					for (let attempt = 0; attempt < 10; attempt++) {
 						const element = document.getElementById(`node-${code}`);
 						if (element) {
+							// Wait a bit more for layout to stabilize
+							await new Promise(r => setTimeout(r, 50));
 							element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 							// Only focus if it's not the body (it shouldn't be, but safety first)
 							if (element.tabIndex >= -1) {
@@ -697,6 +727,7 @@
 					if (parentNode) {
 						if (!parentNode.expanded) {
 							parentNode.expanded = true;
+							refreshTree();
 							if (!parentNode.loaded) {
 								await ensureChildren(parentNode);
 								await tick();
@@ -713,7 +744,7 @@
 						}
 					}
 				}
-				break;
+				continue;
 			}
 		}
 	}

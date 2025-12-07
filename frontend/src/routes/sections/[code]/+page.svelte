@@ -42,8 +42,12 @@
 		}
 		
 		const expand = $page.url.searchParams.get('expand');
-		if (expand !== expandCode) {
+		if (expand && expand !== expandCode) {
 			expandCode = expand;
+			// Clear the expand parameter from URL to avoid persistent state
+			const newUrl = new URL($page.url);
+			newUrl.searchParams.delete('expand');
+			pushState(newUrl, $page.state);
 		}
 	}
 
@@ -55,6 +59,10 @@
 		const expand = $page.url.searchParams.get('expand');
 		if (expand) {
 			expandCode = expand;
+			// Clear the expand parameter from URL to avoid persistent state
+			const newUrl = new URL($page.url);
+			newUrl.searchParams.delete('expand');
+			pushState(newUrl, $page.state);
 		}
 	});
 </script>
