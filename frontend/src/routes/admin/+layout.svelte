@@ -131,12 +131,6 @@
 		color: var(--color-text);
 	}
 
-	.admin-fallback__hint {
-		margin: 0;
-		font-size: 0.85rem;
-		color: var(--color-link-subtle);
-	}
-
 	@media (max-width: 640px) {
 		.admin-shell,
 		.admin-fallback {

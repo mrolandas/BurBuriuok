@@ -35,6 +35,7 @@
 		type ProgressStoreStatus,
 		type ProgressStatus as LearnerProgressStatus
 	} from '$lib/stores/progressStore';
+	import { authSession } from '$lib/stores/authStore';
 
 	type Breadcrumb = {
 		label: string;
@@ -670,7 +671,7 @@
 {/snippet}
 
 	{#snippet actionsSnippet()}
-		{#if !adminHasAccess}
+		{#if !adminHasAccess && $authSession}
 			<div class="concept-detail__actions-wrapper">
 				<span class="concept-detail__status-label">Moku</span>
 				<button
