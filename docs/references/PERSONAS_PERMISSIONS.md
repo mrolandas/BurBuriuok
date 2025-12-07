@@ -65,8 +65,7 @@ Legend: ✅ full access; ❌ denied. `/media-submissions` endpoints return once 
 
 ## Admin Route Enforcement
 
-- **Frontend Guard**: The `/admin` SvelteKit layout reads the Supabase session during `load()`, asserts `app_role === 'admin'`, renders persona banner for authorised users, and surfaces friendly guidance for everyone else. When `VITE_ENABLE_ADMIN_IMPERSONATION=true`, developers may pass `?impersonate=admin` to preview the shell without a privileged session; never enable this flag in production.
+- **Frontend Guard**: The `/admin` SvelteKit layout reads the Supabase session during `load()`, asserts `app_role === 'admin'`, renders persona banner for authorised users, and surfaces friendly guidance for everyone else.
 - **Backend Middleware**: Express middleware `requireAdminRole` checks the decoded JWT claim (`app_role`) for every `/admin/**` endpoint. Requests failing the check return HTTP 401/403 and are logged for analytics (ADM-001).
 - **Telemetry**: Both layers emit `admin_session_checked` events (console + `CustomEvent`) containing decision outcome, role, and email to support upcoming ADM-005 analytics work.
 - **Allowlist Management**: Until AUTH-002 lands, maintain admin emails via the Supabase dashboard (Auth → Users → Add user). The auth backlog replaces this with an invite console backed by the `profiles` table and documented auditing.
-- **Local Development Story**: For UI previews without Supabase auth, enable `VITE_ENABLE_ADMIN_IMPERSONATION=true` locally and append `?impersonate=admin` to the `/admin` URL. Remove/disable before committing or deploying.

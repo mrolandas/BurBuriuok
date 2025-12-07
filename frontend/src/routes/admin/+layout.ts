@@ -1,4 +1,4 @@
-import { adminImpersonationEnabled, resolveAdminSession } from '$lib/admin/session';
+import { resolveAdminSession } from '$lib/admin/session';
 import { emitAdminSessionEvent } from '$lib/telemetry/admin';
 import type { LayoutLoad } from './$types';
 
@@ -14,14 +14,12 @@ export const load = (async ({ url, fetch, parent }) => {
 	emitAdminSessionEvent({
 		status: guard.allowed ? 'granted' : 'denied',
 		reason: guard.reason,
-		impersonating: guard.impersonating,
 		appRole: guard.appRole,
 		email: guard.email
 	});
 
 	return {
-		guard,
-		impersonationEnabled: adminImpersonationEnabled
+		guard
 	};
 }) satisfies LayoutLoad;
 

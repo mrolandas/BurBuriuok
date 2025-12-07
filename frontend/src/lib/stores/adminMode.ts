@@ -49,21 +49,3 @@ function createAdminModeStore() {
 
 export const adminMode = createAdminModeStore();
 
-export function ensureAdminImpersonation(url: URL, enabled: boolean): boolean {
-	const current = url.searchParams.get('impersonate');
-
-	if (enabled) {
-		if (current === 'admin') {
-			return false;
-		}
-		url.searchParams.set('impersonate', 'admin');
-		return true;
-	}
-
-	if (!current) {
-		return false;
-	}
-
-	url.searchParams.delete('impersonate');
-	return true;
-}

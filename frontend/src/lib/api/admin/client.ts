@@ -1,10 +1,6 @@
 import { appConfig } from '$lib/config/appConfig';
 import { getSupabaseClient } from '$lib/supabase/client';
 
-const impersonationEnv = import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION;
-const impersonationEnabled =
-	impersonationEnv === 'true' || impersonationEnv === '1' || impersonationEnv === 'enabled';
-
 function resolveAdminApiBase(): string {
 	const configuredBase = (appConfig.admin?.apiBase ?? '').trim();
 	const envBase = (import.meta.env.VITE_ADMIN_API_BASE ?? '').trim();
@@ -56,32 +52,16 @@ async function resolveAccessToken(): Promise<string> {
 	return token;
 }
 
-function isMissingSessionError(error: unknown): boolean {
-	if (!(error instanceof Error)) {
-		return false;
-	}
-
-	return (
-		error.message === 'Administratorius neprisijungęs. Prisijunkite ir bandykite dar kartą.' ||
-		error.message === 'Nepavyko pasiekti Supabase sesijos.'
-	);
-}
-
 export async function adminFetch<TResponse>(
 	path: string,
 	init: RequestInit = {}
 ): Promise<TResponse> {
 	let token: string | null = null;
-	let impersonating = false;
 
 	try {
 		token = await resolveAccessToken();
 	} catch (error) {
-		if (impersonationEnabled && isMissingSessionError(error)) {
-			impersonating = true;
-		} else {
-			throw error;
-		}
+		throw error;
 	}
 
 	const headers = new Headers(init.headers ?? {});
@@ -92,8 +72,6 @@ export async function adminFetch<TResponse>(
 
 	if (token) {
 		headers.set('Authorization', `Bearer ${token}`);
-	} else if (impersonating) {
-		headers.set('X-Admin-Impersonate', 'true');
 	}
 
 	const targetPath = path.startsWith('/') ? path : `/${path}`;

@@ -24,7 +24,7 @@
 	let session: AuthSession | null = null;
 	let inviteForm = {
 		email: '',
-		role: 'admin' as ProfileRole,
+		role: 'learner' as ProfileRole,
 		expiresInHours: 72
 	};
 	let inviteFormState: FormState = 'idle';
@@ -35,11 +35,6 @@
 	let revokingInvites = new Set<string>();
 	let totalUsers = 0;
 	let adminCount = 0;
-	let impersonatingAdmin = false;
-	const adminImpersonationEnabled =
-		import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION === 'true' ||
-		import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION === '1' ||
-		import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION === 'enabled';
 	let pageUnsubscribe: (() => void) | null = null;
 
 	const roleOptions: { value: ProfileRole; label: string }[] = [
@@ -59,14 +54,9 @@
 		const unsub = authSession.subscribe((value) => {
 			session = value;
 		});
-		pageUnsubscribe = page.subscribe(({ url }) => {
-			impersonatingAdmin = adminImpersonationEnabled && url.searchParams.get('impersonate') === 'admin';
-		});
 		void loadDashboard();
 		return () => {
 			unsub();
-			pageUnsubscribe?.();
-			pageUnsubscribe = null;
 		};
 	});
 
@@ -97,6 +87,7 @@
 		try {
 			const payload = { ...inviteForm };
 			payload.email = payload.email.trim().toLowerCase();
+			payload.role = 'learner';
 			const response = await createAdminInvite(payload);
 			invites = [response.invite, ...invites];
 			inviteFormState = 'success';
@@ -220,16 +211,11 @@
 		</button>
 	</header>
 
-	{#if !session && !impersonatingAdmin}
+	{#if !session}
 		<p class="admin-alert">Prisijunkite kaip administratorius, kad pasiektumėte šį puslapį.</p>
-	{:else if session && session.appRole !== 'admin' && !impersonatingAdmin}
+	{:else if session && session.appRole !== 'admin'}
 		<p class="admin-alert">Tik administratoriai gali valdyti naudotojų sąrašą.</p>
 	{:else}
-		{#if impersonatingAdmin}
-			<p class="admin-alert admin-alert--warning users__banner">
-				Peržiūrite puslapį administratoriaus režimu (impersonation). Duomenys rodomi tik lokaliai.
-			</p>
-		{/if}
 		{#if loadState === 'loading'}
 			<p class="admin-alert">Įkeliame duomenis...</p>
 		{:else if loadState === 'error'}
@@ -298,15 +284,6 @@
 							</div>
 
 							<div class="admin-field">
-								<label class="admin-field__label" for="invite-role">Rolė</label>
-								<select id="invite-role" bind:value={inviteForm.role}>
-									{#each roleOptions as option}
-										<option value={option.value}>{option.label}</option>
-									{/each}
-								</select>
-							</div>
-
-							<div class="admin-field">
 								<label class="admin-field__label" for="invite-expiry">Galiojimas</label>
 								<select id="invite-expiry" bind:value={inviteForm.expiresInHours}>
 									{#each expiryOptions as option}
@@ -338,11 +315,11 @@
 
 					<article class="admin-card users__card">
 						<h2>Laukiantys kvietimai</h2>
-						{#if !invites.length}
+						{#if !invites.filter(i => i.status === 'pending').length}
 							<p>Nėra aktyvių kvietimų.</p>
 						{:else}
 							<ul class="invite-list">
-								{#each invites as invite}
+								{#each invites.filter(i => i.status === 'pending') as invite}
 									<li>
 										<div>
 											<strong>{invite.email}</strong>

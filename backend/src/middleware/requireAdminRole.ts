@@ -21,53 +21,11 @@ type MinimalSupabaseClient = {
   auth: MinimalSupabaseAuth;
 };
 
-const impersonationEnv = process.env.ADMIN_DEV_IMPERSONATION;
-const impersonationEnabled =
-  impersonationEnv === "true" ||
-  impersonationEnv === "1" ||
-  impersonationEnv === "enabled";
-
-function isImpersonatedRequest(req: Request): boolean {
-  if (!impersonationEnabled) {
-    return false;
-  }
-
-  const header = req.headers["x-admin-impersonate"]; 
-
-  if (!header) {
-    return false;
-  }
-
-  if (Array.isArray(header)) {
-    return header.some((value) => value === "true" || value === "1" || value === "admin");
-  }
-
-  const trimmed = header.trim().toLowerCase();
-  return trimmed === "true" || trimmed === "1" || trimmed === "admin";
-}
-
 export async function requireAdminRole(
   req: Request,
   _res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (isImpersonatedRequest(req)) {
-    req.authUser = {
-      id: "impersonated-admin",
-      email: null,
-      appRole: "admin",
-    };
-
-    logAdminSessionEvent({
-      status: "granted",
-      reason: "impersonation",
-      appRole: "admin",
-      email: null,
-    });
-
-    return next();
-  }
-
   const token = extractBearerToken(req);
 
   if (!token) {

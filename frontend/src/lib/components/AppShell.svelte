@@ -5,7 +5,7 @@
 	import type { Snippet } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { quizModal } from '$lib/stores/quizModal';
-	import { adminMode, ensureAdminImpersonation } from '$lib/stores/adminMode';
+	import { adminMode } from '$lib/stores/adminMode';
 	import type { AuthSession, AuthStatus } from '$lib/stores/authStore';
 	import { authSession, authStatus, initializeAuth, signOut } from '$lib/stores/authStore';
 
@@ -50,9 +50,7 @@
 	let searchTerm = $state($page.url.searchParams.get('q') ?? '');
 	let searchInput = $state<HTMLInputElement | null>(null);
 	let adminModeEnabled = $state(adminMode.value);
-	let impersonatingAdmin = $state($page.url.searchParams.get('impersonate') === 'admin');
 	let adminModeUnsubscribe: (() => void) | null = null;
-	let allowAdminSync = false;
 	let userMenuOpen = $state(false);
 	let currentSession = $state<AuthSession | null>(null);
 	let authState = $state<AuthStatus>('idle');
@@ -83,7 +81,7 @@
 	const userToggleTitle = $derived(
 		currentSession?.email ?? (adminModeEnabled ? 'Administratorius aktyvus' : 'Naudotojo parinktys')
 	);
-	const showAdminMenu = $derived(Boolean(currentSession?.appRole === 'admin' || impersonatingAdmin));
+	const showAdminMenu = $derived(Boolean(currentSession?.appRole === 'admin'));
 
 	const themeOptions = [
 		{
@@ -156,9 +154,6 @@
 		adminMode.initialize();
 		adminModeUnsubscribe = adminMode.subscribe((value) => {
 			adminModeEnabled = value;
-			if (allowAdminSync) {
-				void syncAdminModeToUrl(value);
-			}
 		});
 		initializeAuth();
 		authSessionUnsubscribe = authSession.subscribe((value) => {
@@ -180,9 +175,6 @@
 		if (!isKnownTheme(stored)) {
 			persistTheme(initial);
 		}
-
-		allowAdminSync = true;
-		void syncAdminModeToUrl(adminModeEnabled);
 	});
 
 	const autoEnableAdminMode = (session: AuthSession | null) => {
@@ -248,23 +240,6 @@
 		}
 	};
 
-	const syncAdminModeToUrl = async (enabled: boolean) => {
-		if (typeof window === 'undefined') {
-			return;
-		}
-
-		const url = new URL(window.location.href);
-		if (!ensureAdminImpersonation(url, enabled)) {
-			return;
-		}
-
-		await goto(url, {
-			replaceState: true,
-			noScroll: true,
-			keepFocus: true
-		});
-	};
-
 	const unsubscribePage = page.subscribe(({ url }) => {
 		const nextPath = normalizePathname(url.pathname);
 		if (nextPath !== activePath) {
@@ -272,10 +247,6 @@
 			closeMenus();
 		}
 		searchTerm = url.searchParams.get('q') ?? '';
-		impersonatingAdmin = url.searchParams.get('impersonate') === 'admin';
-		if (allowAdminSync) {
-			void syncAdminModeToUrl(adminModeEnabled);
-		}
 	});
 
 	const clearSearch = () => {
@@ -382,17 +353,23 @@
 						{#if currentSession}
 							{#if currentSession.appRole === 'admin'}
 								<div class="app-shell__user-summary">
-									<span class="app-shell__badge">Administratorius</span>
+									<div class="app-shell__user-admin-row">
+										<span class="app-shell__badge">Administratorius</span>
+										<button
+											type="button"
+											class="app-shell__admin-toggle"
+											class:active={adminModeEnabled}
+											onclick={handleAdminModeToggle}
+											aria-label={adminModeEnabled ? 'Išjungti admin režimą' : 'Įjungti admin režimą'}
+											title={adminModeEnabled ? 'Išjungti admin režimą' : 'Įjungti admin režimą'}
+										>
+											<span class="app-shell__admin-toggle-track">
+												<span class="app-shell__admin-toggle-thumb"></span>
+											</span>
+										</button>
+									</div>
 								</div>
 							{/if}
-							<button
-								type="button"
-								class="app-shell__user-item"
-								role="menuitem"
-								onclick={handleSignOut}
-							>
-								Atsijungti
-							</button>
 						{:else}
 							<a
 								href={loginLink}
@@ -405,17 +382,9 @@
 							<p class="app-shell__user-hint">
 								{authState === 'checking' || authState === 'idle'
 									? 'Tikriname prisijungimo būseną...'
-									: 'Naudokite vienkartinę el. pašto nuorodą.'}
+									: ''}
 							</p>
 						{/if}
-						<button
-							type="button"
-							class="app-shell__user-item app-shell__user-item--admin"
-							role="menuitem"
-							onclick={handleAdminModeToggle}
-						>
-							{adminModeEnabled ? 'Deaktyvuoti Admin' : 'Aktyvuoti Admin'}
-						</button>
 						{#if currentSession}
 							<button
 								type="button"
@@ -482,9 +451,7 @@
 
 					<li class="app-shell__menu-admin">
 						<a
-							href={withBase(
-								adminModeEnabled || impersonatingAdmin ? '/admin?impersonate=admin' : '/admin'
-							)}
+							href={withBase('/admin')}
 							target="_blank"
 							rel="noopener noreferrer"
 							onclick={closeMenus}
@@ -493,9 +460,7 @@
 							Admin pultas
 							<span aria-hidden="true" class="app-shell__menu-admin-icon">&nearr;</span>
 						</a>
-						{#if impersonatingAdmin}
-							<p class="app-shell__menu-admin-hint">Imituojate administratoriaus paskyrą.</p>
-						{:else if adminModeEnabled}
+						{#if adminModeEnabled}
 							<p class="app-shell__menu-admin-hint">Administratoriaus režimas aktyvus šiame lange.</p>
 						{/if}
 					</li>
@@ -897,6 +862,59 @@
 		flex-direction: column;
 		gap: 0.25rem;
 		padding: 0.25rem 0.5rem 0.5rem;
+	}
+
+	.app-shell__user-admin-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+
+	.app-shell__admin-toggle {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		width: 2.2rem;
+		height: 1.2rem;
+		padding: 0;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.app-shell__admin-toggle-track {
+		position: absolute;
+		inset: 0;
+		border-radius: 999px;
+		background: var(--color-surface-alt);
+		border: 1px solid var(--color-border);
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.app-shell__admin-toggle.active .app-shell__admin-toggle-track {
+		background: var(--color-accent-faint);
+		border-color: var(--color-accent-border);
+	}
+
+	.app-shell__admin-toggle-thumb {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: calc(1.2rem - 6px);
+		height: calc(1.2rem - 6px);
+		border-radius: 50%;
+		background: var(--color-text-muted);
+		transition:
+			transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+			background-color 0.2s ease;
+	}
+
+	.app-shell__admin-toggle.active .app-shell__admin-toggle-thumb {
+		transform: translateX(1rem);
+		background: var(--color-accent-strong);
 	}
 
 	.app-shell__badge {

@@ -80,7 +80,6 @@ jobs:
           VITE_APP_BASE_PATH: /BurBuriuok
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_ENABLE_ADMIN_IMPERSONATION: enabled
           VITE_ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
           VITE_PUBLIC_API_BASE: ${{ secrets.VITE_PUBLIC_API_BASE }}
         run: npm run build

@@ -7,16 +7,13 @@
 			reason: string;
 			appRole: string | null;
 			email: string | null;
-			impersonating: boolean;
 			errorMessage?: string;
 		};
-		impersonationEnabled: boolean;
 	};
 
 	let { data, children } = $props<{ data: LayoutData; children: () => unknown }>();
 
 	const guard = data.guard;
-	const impersonationEnabled = data.impersonationEnabled;
 	const homeHref = resolve('/');
 	const profileHref = resolve('/profile');
 
@@ -34,14 +31,12 @@
 		guard.errorMessage ??
 		statusCopy[guard.reason] ??
 		'Administratoriaus sritis pasiekiama tik turint reikiamas teises.';
-
-	const personaLabel = guard.impersonating ? 'Imituojamas administratorius' : 'Administratorius';
 </script>
 
 {#if guard.allowed}
 	<section class="admin-shell" aria-label="Administratoriaus aplinka">
 		<div class="admin-shell__status" role="status">
-			<span class="admin-shell__persona">{personaLabel}</span>
+			<span class="admin-shell__persona">Administratorius</span>
 			{#if guard.email}
 				<a class="admin-shell__email" href={profileHref}>
 					{guard.email}
@@ -57,14 +52,6 @@
 		<h1 id="admin-access-title">Administratoriaus prieiga</h1>
 		<p>{fallbackMessage}</p>
 		<a class="admin-fallback__link" href={homeHref}>Grįžti į pagrindinį puslapį</a>
-
-		{#if impersonationEnabled}
-			<p class="admin-fallback__hint">
-				Režimas <code>?impersonate=admin</code> leidžiamas tik kūrėjams, kai sukonfigūruotas
-				aplinkos kintamasis
-				<code>VITE_ENABLE_ADMIN_IMPERSONATION</code>.
-			</p>
-		{/if}
 	</section>
 {/if}
 

@@ -1,11 +1,6 @@
 import { getSupabaseClient } from '$lib/supabase/client';
 
-const impersonationEnv = import.meta.env.VITE_ENABLE_ADMIN_IMPERSONATION;
-export const adminImpersonationEnabled =
-	impersonationEnv === 'true' || impersonationEnv === '1' || impersonationEnv === 'enabled';
-
 export type AdminSessionReason =
-	| 'impersonation'
 	| 'role-match'
 	| 'missing-session'
 	| 'insufficient-role'
@@ -18,7 +13,6 @@ export type AdminSessionState = {
 	reason: AdminSessionReason;
 	appRole: string | null;
 	email: string | null;
-	impersonating: boolean;
 	errorMessage?: string;
 };
 
@@ -27,8 +21,7 @@ const DEFAULT_DENIED_STATE: AdminSessionState = {
 	authenticated: false,
 	reason: 'missing-session',
 	appRole: null,
-	email: null,
-	impersonating: false
+	email: null
 };
 
 const ADMIN_EDIT_PARAM = 'admin';
@@ -41,20 +34,6 @@ export function isAdminEditRequested(url: URL): boolean {
 }
 
 export async function resolveAdminSession(url: URL): Promise<AdminSessionState> {
-	const impersonateParam = url.searchParams.get('impersonate');
-	const impersonatingAdmin = adminImpersonationEnabled && impersonateParam === 'admin';
-
-	if (impersonatingAdmin) {
-		return {
-			allowed: true,
-			authenticated: true,
-			reason: 'impersonation',
-			appRole: 'admin',
-			email: null,
-			impersonating: true
-		};
-	}
-
 	let supabase;
 
 	try {
@@ -91,8 +70,7 @@ export async function resolveAdminSession(url: URL): Promise<AdminSessionState> 
 			authenticated: true,
 			reason: 'role-match',
 			appRole,
-			email,
-			impersonating: false
+			email
 		};
 	}
 

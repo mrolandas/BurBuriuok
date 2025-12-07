@@ -23,9 +23,6 @@ This document explains how authenticated administrators can work inside the BurK
 1. Submit an access request to the platform team so they can add your Supabase user to the admin allowlist (steps documented in `docs/references/PERSONAS_PERMISSIONS.md`).
 2. An administrator updates your Supabase Auth user metadata to include `app_role = "admin"`—typically via the Supabase dashboard or by running `select auth.set_claim(user_id, 'app_role', 'admin');` in SQL Editor.
 3. Sign out and sign back in so the session carries the refreshed claim. Confirm by checking the persona banner on `/admin`.
-4. Local development shortcut: when `VITE_ENABLE_ADMIN_IMPERSONATION=true` (set this in `frontend/.env.local` alongside your Supabase keys) **and** the backend `.env` contains `ADMIN_DEV_IMPERSONATION=true`, append `?impersonate=admin` to the URL (e.g., `http://localhost:5173/admin?impersonate=admin`) to preview the shell without modifying real accounts.
-
-> **Development note:** Impersonation is available only while the feature flag remains enabled for testing. Remove or disable this shortcut for production launch.
 
 ### Persona Banner and Session Indicator
 

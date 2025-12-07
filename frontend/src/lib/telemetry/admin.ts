@@ -5,7 +5,6 @@ export type AdminSessionStatus = 'granted' | 'denied';
 export type AdminSessionTelemetry = {
 	status: AdminSessionStatus;
 	reason: string;
-	impersonating: boolean;
 	appRole: string | null;
 	email: string | null;
 	timestamp?: string;

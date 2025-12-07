@@ -162,8 +162,6 @@ async function main(): Promise<void> {
   assertEnv("SUPABASE_SERVICE_ROLE_KEY");
   assertEnv("SUPABASE_ANON_KEY");
 
-  process.env.ADMIN_DEV_IMPERSONATION = process.env.ADMIN_DEV_IMPERSONATION ?? "true";
-
   process.env.ADMIN_MEDIA_UPLOADS_PER_DAY = process.env.ADMIN_MEDIA_UPLOADS_PER_DAY ?? "2";
   process.env.ADMIN_MEDIA_UPLOAD_BURST = process.env.ADMIN_MEDIA_UPLOAD_BURST ?? "2";
   process.env.ADMIN_MEDIA_DELETES_PER_DAY = process.env.ADMIN_MEDIA_DELETES_PER_DAY ?? "6";
@@ -180,10 +178,6 @@ async function main(): Promise<void> {
 
   const { server, baseUrl } = await startServer(createMediaApp(mediaRouter));
 
-  const impersonationHeaders = {
-    "x-admin-impersonate": "true",
-  } as Record<string, string>;
-
   const createdAssetIds: string[] = [];
 
   try {
@@ -191,13 +185,10 @@ async function main(): Promise<void> {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        ...impersonationHeaders,
       },
       body: JSON.stringify({
         conceptId,
         title: "Test upload asset",
-        captionLt: "LT caption",
-        captionEn: "EN caption",
         source: {
           kind: "upload",
           fileName: "test-image.jpg",
@@ -235,7 +226,6 @@ async function main(): Promise<void> {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        ...impersonationHeaders,
       },
       body: JSON.stringify({
         conceptId,
@@ -257,7 +247,6 @@ async function main(): Promise<void> {
     expect(!externalJson?.data?.upload, "External asset should not return upload instructions");
 
     const listResponse = await fetch(`${baseUrl}?conceptId=${conceptId}&limit=10`, {
-      headers: impersonationHeaders,
     });
 
     expect(listResponse.ok, "List request failed");
@@ -268,7 +257,6 @@ async function main(): Promise<void> {
     const externalOnlyResponse = await fetch(
       `${baseUrl}?conceptId=${conceptId}&sourceKind=external`,
       {
-        headers: impersonationHeaders,
       }
     );
     expect(externalOnlyResponse.ok, "External-only list request failed");
@@ -280,7 +268,6 @@ async function main(): Promise<void> {
     const uploadOnlyResponse = await fetch(
       `${baseUrl}?conceptId=${conceptId}&sourceKind=upload`,
       {
-        headers: impersonationHeaders,
       }
     );
     expect(uploadOnlyResponse.ok, "Upload-only list request failed");
@@ -292,7 +279,6 @@ async function main(): Promise<void> {
     const searchResponse = await fetch(
       `${baseUrl}?conceptId=${conceptId}&search=upload`,
       {
-        headers: impersonationHeaders,
       }
     );
     expect(searchResponse.ok, "Search request failed");
@@ -302,7 +288,6 @@ async function main(): Promise<void> {
     expect(searchItems?.[0]?.id === uploadAssetId, "Search returned wrong asset");
 
     const detailResponse = await fetch(`${baseUrl}/${uploadAssetId}`, {
-      headers: impersonationHeaders,
     });
 
     expect(detailResponse.ok, `Detail request failed (${detailResponse.status})`);
@@ -310,7 +295,6 @@ async function main(): Promise<void> {
     expect(detailJson?.data?.asset?.id === uploadAssetId, "Detail response returned wrong asset");
 
     const signedUrlResponse = await fetch(`${baseUrl}/${uploadAssetId}/url`, {
-      headers: impersonationHeaders,
     });
 
     expect(signedUrlResponse.ok, "Signed URL request failed for upload asset");
@@ -319,7 +303,6 @@ async function main(): Promise<void> {
     expect(typeof signedUrlJson?.data?.url === "string", "Signed URL missing");
 
     const externalUrlResponse = await fetch(`${baseUrl}/${externalAssetId}/url`, {
-      headers: impersonationHeaders,
     });
 
     expect(externalUrlResponse.ok, "Signed URL request failed for external asset");
@@ -331,7 +314,6 @@ async function main(): Promise<void> {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        ...impersonationHeaders,
       },
       body: JSON.stringify({
         conceptId,
@@ -357,7 +339,6 @@ async function main(): Promise<void> {
 
     const deleteUploadResponse = await fetch(`${baseUrl}/${uploadAssetId}`, {
       method: "DELETE",
-      headers: impersonationHeaders,
     });
 
     expect(deleteUploadResponse.ok, `Delete upload asset failed (${deleteUploadResponse.status})`);
@@ -367,7 +348,6 @@ async function main(): Promise<void> {
 
     const deleteExternalResponse = await fetch(`${baseUrl}/${externalAssetId}`, {
       method: "DELETE",
-      headers: impersonationHeaders,
     });
 
     expect(deleteExternalResponse.ok, `Delete external asset failed (${deleteExternalResponse.status})`);
