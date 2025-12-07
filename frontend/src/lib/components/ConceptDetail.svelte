@@ -478,6 +478,20 @@
 		const target = event.currentTarget as HTMLInputElement | null;
 		markKnown(Boolean(target?.checked));
 	};
+
+	async function refreshMedia() {
+		if (!concept?.slug) return;
+		mediaLoading = true;
+		mediaLoadError = null;
+		try {
+			mediaItems = await fetchConceptMedia(concept.slug);
+		} catch (e) {
+			console.error(e);
+			mediaLoadError = 'Nepavyko atnaujinti medijos.';
+		} finally {
+			mediaLoading = false;
+		}
+	}
 </script>
 
 {#snippet conceptMeta()}
@@ -641,7 +655,7 @@
 						Šiai temai dar nepriskirta vizualinės medžiagos.
 					</p>
 				{:else}
-					<ConceptMediaGallery items={mediaItems} />
+					<ConceptMediaGallery items={mediaItems} onchange={refreshMedia} />
 				{/if}
 			</section>
 		{/if}
@@ -658,13 +672,15 @@
 	{#snippet actionsSnippet()}
 		{#if !adminHasAccess}
 			<div class="concept-detail__actions-wrapper">
+				<span class="concept-detail__status-label">Moku</span>
 				<button
 					type="button"
-					class="concept-detail__status-toggle"
-					class:concept-detail__status-toggle--active={knownChecked}
+					class="concept-detail__status-toggle-icon"
+					class:concept-detail__status-toggle-icon--active={knownChecked}
 					onclick={toggleKnown}
 					disabled={progressStoreStatus === 'loading' || progressInputsDisabled}
 					aria-pressed={knownChecked}
+					title={knownChecked ? 'Pažymėta kaip išmokta' : 'Pažymėti kaip išmoktą'}
 				>
 					<svg
 						viewBox="0 0 24 24"
@@ -679,10 +695,9 @@
 						{#if knownChecked}
 							<polyline points="20 6 9 17 4 12" />
 						{:else}
-							<circle cx="12" cy="12" r="10" stroke-width="2" fill="none" />
+							<circle cx="12" cy="12" r="10" />
 						{/if}
 					</svg>
-					<span>{knownChecked ? 'Išmokta' : 'Pažymėti kaip išmoktą'}</span>
 				</button>
 				
 				{#if progressStoreStatus === 'loading'}
@@ -750,43 +765,52 @@
 	.concept-detail__actions-wrapper {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border-light);
+		gap: 0.5rem;
 	}
 
-	.concept-detail__status-toggle {
+	.concept-detail__status-label {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--color-text-subtle);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.concept-detail__status-toggle-icon {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.6rem;
-		padding: 0.6rem 1.2rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-border);
-		background: var(--color-surface-01);
-		color: var(--color-text);
-		font-size: 0.95rem;
-		font-weight: 500;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		border: 2px solid var(--color-border);
+		background: var(--color-panel);
+		color: var(--color-text-subtle);
 		cursor: pointer;
 		transition: all 0.2s ease;
+		padding: 0;
 	}
 
-	.concept-detail__status-toggle:hover:not(:disabled) {
-		background: var(--color-surface-02);
+	.concept-detail__status-toggle-icon:hover:not(:disabled) {
 		border-color: var(--color-border-strong);
+		background: var(--color-panel-hover);
+		color: var(--color-text);
+		transform: scale(1.05);
 	}
 
-	.concept-detail__status-toggle--active {
-		background: var(--color-status-success-bg);
-		border-color: var(--color-status-success-border);
-		color: var(--color-status-success-text);
+	.concept-detail__status-toggle-icon--active {
+		background: var(--color-accent-success, #10b981);
+		border-color: var(--color-accent-success, #10b981);
+		color: white;
 	}
 
-	.concept-detail__status-toggle--active:hover:not(:disabled) {
-		background: var(--color-status-success-bg-hover);
+	.concept-detail__status-toggle-icon--active:hover:not(:disabled) {
+		background: var(--color-accent-success-hover, #059669);
+		border-color: var(--color-accent-success-hover, #059669);
+		color: white;
 	}
 
-	.concept-detail__status-toggle:disabled {
+	.concept-detail__status-toggle-icon:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
 	}
@@ -805,63 +829,7 @@
 		font-weight: bold;
 	}
 
-	.concept-detail__actions-wrapper {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border-light);
-	}
 
-	.concept-detail__status-toggle {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.6rem;
-		padding: 0.6rem 1.2rem;
-		border-radius: 999px;
-		border: 1px solid var(--color-border);
-		background: var(--color-surface-01);
-		color: var(--color-text);
-		font-size: 0.95rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-
-	.concept-detail__status-toggle:hover:not(:disabled) {
-		background: var(--color-surface-02);
-		border-color: var(--color-border-strong);
-	}
-
-	.concept-detail__status-toggle--active {
-		background: var(--color-status-success-bg);
-		border-color: var(--color-status-success-border);
-		color: var(--color-status-success-text);
-	}
-
-	.concept-detail__status-toggle--active:hover:not(:disabled) {
-		background: var(--color-status-success-bg-hover);
-	}
-
-	.concept-detail__status-toggle:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.concept-detail__status-spinner {
-		width: 1.2rem;
-		height: 1.2rem;
-		border: 2px solid var(--color-border);
-		border-top-color: var(--color-accent);
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-	}
-
-	.concept-detail__status-error {
-		color: var(--color-status-error-text);
-		font-weight: bold;
-	}
 
 	.concept-detail__header-actions-wrapper {
 		display: flex;
@@ -912,6 +880,8 @@
 
 	.concept-detail__media-header h3 {
 		margin: 0;
+		font-weight: normal;
+		font-size: 1rem;
 	}
 
 	.concept-detail__media-button {

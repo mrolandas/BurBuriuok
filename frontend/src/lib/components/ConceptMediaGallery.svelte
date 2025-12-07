@@ -1,16 +1,26 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { tick } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	import type { ConceptMediaItem } from '$lib/api/media';
+	import { adminMode } from '$lib/stores/adminMode';
+	import { deleteAdminMediaAsset } from '$lib/api/admin/media';
+	import AdminMediaEditModal from '$lib/admin/media/AdminMediaEditModal.svelte';
 
 	type Props = {
 		items: ConceptMediaItem[];
+		onchange?: () => void;
 	};
 
 	const DEFAULT_VIDEO_TRACK_MESSAGE = 'Šiam vaizdo įrašui nėra aprašymo.';
-	let { items }: Props = $props();
+	let { items, onchange }: Props = $props();
 	let modalOpen = $state(false);
 	let activeIndex = $state(0);
+
+	let editModalOpen = $state(false);
+	let editItem = $state<ConceptMediaItem | null>(null);
+	let deleteConfirmItem = $state<ConceptMediaItem | null>(null);
+	let isDeleting = $state(false);
 
 	const displayItems = $derived(items.filter((item) => Boolean(item.url)));
 	const toExternalHref = (target: string | null | undefined): string => {
@@ -30,6 +40,51 @@
 	let currentCaptionTrack = $state<string | null>(null);
 	let currentEmbedUrl = $state<string | null>(null);
 	let currentDisplayTitle = $state('');
+
+	function handleEdit(item: ConceptMediaItem, event: Event) {
+		event.stopPropagation();
+		editItem = item;
+		editModalOpen = true;
+	}
+
+	function handleEditSave(detail: {
+		id: string;
+		title: string;
+		captionLt: string;
+		captionEn: string;
+	}) {
+		// The modal calls onsave after successful API call.
+		// So we should reload data.
+		onchange?.();
+	}
+
+	function handleDeleteClick(item: ConceptMediaItem, event?: Event) {
+		event?.stopPropagation();
+		deleteConfirmItem = item;
+	}
+
+	function handleEditDelete(id: string) {
+		editModalOpen = false;
+		const item = items.find((i) => i.id === id);
+		if (item) {
+			deleteConfirmItem = item;
+		}
+	}
+
+	async function confirmDelete() {
+		if (!deleteConfirmItem) return;
+		isDeleting = true;
+		try {
+			await deleteAdminMediaAsset(deleteConfirmItem.id);
+			onchange?.();
+		} catch (e) {
+			console.error(e);
+			alert('Nepavyko pašalinti medijos.');
+		} finally {
+			isDeleting = false;
+			deleteConfirmItem = null;
+		}
+	}
 
 	async function focusModal(): Promise<void> {
 		await tick();
@@ -391,10 +446,73 @@
 						</div>
 					{/if}
 				</button>
+				{#if $adminMode}
+					<div class="media-gallery__admin-actions">
+						<button
+							type="button"
+							class="media-gallery__admin-btn"
+							onclick={(e) => handleEdit(item, e)}
+							title="Redaguoti"
+						>
+							✎
+						</button>
+						<button
+							type="button"
+							class="media-gallery__admin-btn media-gallery__admin-btn--danger"
+							onclick={(e) => handleDeleteClick(item, e)}
+							title="Šalinti"
+						>
+							🗑
+						</button>
+					</div>
+				{/if}
 				<span class="media-gallery__thumb-title" title={itemTitle}>{itemTitle}</span>
 			</div>
 		{/each}
 	</div>
+
+	{#if editItem}
+		<AdminMediaEditModal
+			open={editModalOpen}
+			id={editItem.id}
+			title={editItem.title || ''}
+			captionLt={editItem.captionLt || ''}
+			captionEn={editItem.captionEn || ''}
+			onclose={() => {
+				editModalOpen = false;
+				editItem = null;
+			}}
+			onsave={handleEditSave}
+			ondelete={handleEditDelete}
+		/>
+	{/if}
+
+	{#if deleteConfirmItem}
+		<div class="media-gallery__confirm-overlay" role="alertdialog" aria-modal="true">
+			<div class="media-gallery__confirm-modal">
+				<h3>Ar tikrai šalinti?</h3>
+				<p>Veiksmas negrįžtamas.</p>
+				<div class="media-gallery__confirm-actions">
+					<button
+						type="button"
+						class="media-gallery__confirm-btn"
+						onclick={() => (deleteConfirmItem = null)}
+						disabled={isDeleting}
+					>
+						Atšaukti
+					</button>
+					<button
+						type="button"
+						class="media-gallery__confirm-btn media-gallery__confirm-btn--danger"
+						onclick={confirmDelete}
+						disabled={isDeleting}
+					>
+						{#if isDeleting}Šalinama...{:else}Šalinti{/if}
+					</button>
+				</div>
+			</div>
+		</div>
+	{/if}
 
 	{#if modalOpen && currentItem}
 		<div class="media-gallery__overlay" tabindex="-1" onpointerdown={handleOverlayPointerDown}>
@@ -515,6 +633,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.35rem;
+		position: relative;
 	}
 
 	.media-gallery__thumb {
@@ -601,6 +720,93 @@
 
 	.media-gallery__thumb-placeholder--document {
 		background: linear-gradient(145deg, rgba(71, 85, 105, 0.85), rgba(30, 41, 59, 0.9));
+	}
+
+	.media-gallery__admin-actions {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.4rem;
+		display: flex;
+		gap: 0.4rem;
+		z-index: 10;
+	}
+
+	.media-gallery__admin-btn {
+		background: var(--color-panel);
+		border: 1px solid var(--color-border);
+		border-radius: 0.4rem;
+		width: 1.8rem;
+		height: 1.8rem;
+		display: grid;
+		place-items: center;
+		cursor: pointer;
+		font-size: 1rem;
+		color: var(--color-text);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		padding: 0;
+	}
+
+	.media-gallery__admin-btn:hover {
+		background: var(--color-panel-soft);
+	}
+
+	.media-gallery__admin-btn--danger {
+		color: #ef4444;
+	}
+
+	.media-gallery__confirm-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(15, 23, 42, 0.6);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 200;
+		padding: 1rem;
+	}
+
+	.media-gallery__confirm-modal {
+		background: var(--color-panel);
+		padding: 1.5rem;
+		border-radius: 0.8rem;
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+		max-width: 400px;
+		width: 100%;
+		text-align: center;
+	}
+
+	.media-gallery__confirm-modal h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.2rem;
+	}
+
+	.media-gallery__confirm-modal p {
+		margin: 0 0 1.5rem;
+		color: var(--color-text-soft);
+	}
+
+	.media-gallery__confirm-actions {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.media-gallery__confirm-btn {
+		padding: 0.6rem 1.2rem;
+		border-radius: 0.4rem;
+		font-weight: 600;
+		cursor: pointer;
+		border: none;
+		background: var(--color-panel-soft);
+		color: var(--color-text);
+	}
+
+	.media-gallery__confirm-btn--danger {
+		background: #ef4444;
+		color: #fff;
 	}
 
 	.media-gallery__overlay {
@@ -727,6 +933,105 @@
 
 	.media-gallery__nav--next {
 		right: -1.2rem;
+	}
+
+	.media-gallery__admin-actions {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.4rem;
+		display: flex;
+		gap: 0.4rem;
+		z-index: 5;
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+
+	.media-gallery__item:hover .media-gallery__admin-actions,
+	.media-gallery__item:focus-within .media-gallery__admin-actions {
+		opacity: 1;
+	}
+
+	.media-gallery__admin-btn {
+		background: var(--color-panel);
+		border: 1px solid var(--color-border);
+		border-radius: 0.4rem;
+		width: 1.8rem;
+		height: 1.8rem;
+		display: grid;
+		place-items: center;
+		cursor: pointer;
+		font-size: 1rem;
+		color: var(--color-text);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.media-gallery__admin-btn:hover {
+		background: var(--color-panel-soft);
+	}
+
+	.media-gallery__admin-btn--danger {
+		color: #ef4444;
+		border-color: rgba(239, 68, 68, 0.3);
+	}
+
+	.media-gallery__admin-btn--danger:hover {
+		background: #fee2e2;
+	}
+
+	.media-gallery__confirm-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(15, 23, 42, 0.65);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 200;
+		padding: 1rem;
+	}
+
+	.media-gallery__confirm-modal {
+		background: var(--color-panel);
+		padding: 1.5rem;
+		border-radius: 0.8rem;
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+		max-width: 400px;
+		width: 100%;
+		text-align: center;
+	}
+
+	.media-gallery__confirm-modal h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.2rem;
+	}
+
+	.media-gallery__confirm-modal p {
+		margin: 0 0 1.5rem;
+		color: var(--color-text-soft);
+	}
+
+	.media-gallery__confirm-actions {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.media-gallery__confirm-btn {
+		padding: 0.6rem 1.2rem;
+		border-radius: 0.4rem;
+		font-weight: 600;
+		cursor: pointer;
+		border: 1px solid var(--color-border);
+		background: var(--color-panel-soft);
+		color: var(--color-text);
+	}
+
+	.media-gallery__confirm-btn--danger {
+		background: #ef4444;
+		color: #fff;
+		border-color: #ef4444;
 	}
 
 	@media (max-width: 720px) {
