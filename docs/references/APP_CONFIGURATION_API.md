@@ -138,16 +138,16 @@ This section documents how an autonomous AI agent should interact with the API t
 
 ### Context & Future Architecture
 
-The platform is evolving into a generic learning engine hosted at `mokykis.cit.lt`.
+The platform is evolving into a generic learning engine hosted at `mokslai.cit.lt`.
 
-- **Multi-Tenancy**: Future versions will support unique subdomains for different subjects (e.g., `buriavimas.mokykis.cit.lt`, `fizika.mokykis.cit.lt`).
+- **Multi-Tenancy**: Future versions will support unique subdomains for different subjects (e.g., `buriavimas.mokslai.cit.lt`, `fizika.mokslai.cit.lt`).
 - **Admin Configuration**: An admin interface will allow users to provide AI credentials and prompts. The backend will then delegate content generation to the AI agent using this API.
 
 ### Authentication Strategy
 
 The AI agent acts as a super-admin. It must obtain a Bearer token associated with a user having the `app_role: 'admin'` claim.
 
-1.  **Lookup/Create Admin User**: Ensure a user exists (e.g., `ai-agent@mokykis.cit.lt`).
+1.  **Lookup/Create Admin User**: Ensure a user exists (e.g., `info@cit.lt`).
 2.  **Sign In**: Use `supabase.auth.signInWithPassword` to exchange credentials for a JWT.
 3.  **Authorization Header**: Include `Authorization: Bearer <ACCESS_TOKEN>` in all requests.
 
