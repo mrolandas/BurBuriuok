@@ -1,10 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { createClient } from '@supabase/supabase-js';
-  import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-
-  // Initialize Supabase client locally if not available via store
-  const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+  import { getSupabaseClient } from '$lib/supabase/client';
 
   let messages: { role: string; content: string }[] = [];
   let input = '';
@@ -20,6 +16,7 @@
 
   async function fetchApiKeyStatus() {
     try {
+      const supabase = getSupabaseClient();
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       const response = await fetch('http://localhost:3000/api/v1/admin/settings/api-key', {
@@ -36,6 +33,7 @@
 
   async function saveApiKey() {
     try {
+      const supabase = getSupabaseClient();
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       const response = await fetch('http://localhost:3000/api/v1/admin/settings/api-key', {
@@ -69,6 +67,7 @@
     loading = true;
 
     try {
+      const supabase = getSupabaseClient();
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
 
