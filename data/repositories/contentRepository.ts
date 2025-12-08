@@ -9,7 +9,7 @@ export async function resetContent(client: SupabaseClient | null = null): Promis
   // - media_assets (on delete cascade)
   // - concept_progress (on delete cascade)
   // - curriculum_dependencies (where source/prereq is concept)
-  const { error: conceptsError } = await supabase
+  const { error: conceptsError } = await (supabase as any)
     .from("concepts")
     .delete()
     .neq("id", "00000000-0000-0000-0000-000000000000");
@@ -23,7 +23,7 @@ export async function resetContent(client: SupabaseClient | null = null): Promis
   // - curriculum_items (on delete cascade)
   // - child curriculum_nodes (on delete cascade)
   // - curriculum_dependencies (where source/prereq is node)
-  const { error: nodesError } = await supabase
+  const { error: nodesError } = await (supabase as any)
     .from("curriculum_nodes")
     .delete()
     .neq("code", "_");
@@ -33,7 +33,7 @@ export async function resetContent(client: SupabaseClient | null = null): Promis
   }
 
   // 3. Delete all content versions (orphaned history)
-  const { error: versionsError } = await supabase
+  const { error: versionsError } = await (supabase as any)
     .from("content_versions")
     .delete()
     .neq("id", "00000000-0000-0000-0000-000000000000");

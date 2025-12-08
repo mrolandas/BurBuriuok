@@ -53,6 +53,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.3",
     "node-html-parser": "^7.0.1",
+    "openai": "^6.10.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {

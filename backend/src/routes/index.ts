@@ -7,6 +7,7 @@ import dependenciesRouter from "./dependencies.ts";
 import progressRouter from "./progress.ts";
 import adminRouter from "./admin.ts";
 import profileRouter from "./profile.ts";
+import agentRouter from "./agent.ts";
 
 const router = Router();
 
@@ -17,5 +18,7 @@ router.use("/progress", progressRouter);
 router.use("/auth", authRouter);
 router.use("/profile", profileRouter);
 router.use("/admin", requireAdminRole, adminRouter);
+router.use("/agent", requireAdminRole, agentRouter);
+
 
 export default router;
