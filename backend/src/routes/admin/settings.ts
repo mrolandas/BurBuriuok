@@ -1,21 +1,56 @@
 import { Router } from "express";
 import { z } from "zod";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { getSetting, updateSetting } from "../../../../data/repositories/settingsRepository.ts";
+import { getSetting, updateSetting, getAppConfig } from "../../../../data/repositories/settingsRepository.ts";
 
 const router = Router();
 
-const updateSettingSchema = z.object({
-  value: z.any(),
+const updateGlobalSettingsSchema = z.object({
+  appTitle: z.string().optional(),
+  appDescription: z.string().optional(),
+  primaryColor: z.string().optional(),
+  welcomeMessage: z.string().optional(),
+  registrationEnabled: z.boolean().optional(),
 });
+
+router.get(
+  "/global",
+  asyncHandler(async (_req, res) => {
+    const config = await getAppConfig();
+    res.json({
+      data: config,
+      meta: {
+        fetchedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
+
+router.patch(
+  "/global",
+  asyncHandler(async (req, res) => {
+    const payload = updateGlobalSettingsSchema.parse(req.body);
+    const current = await getAppConfig();
+    const next = { ...current, ...payload };
+    
+    await updateSetting("app_config", next, req.authUser?.id ?? null);
+    
+    res.json({
+      data: next,
+      meta: {
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  })
+);
 
 router.get(
   "/registration",
   asyncHandler(async (_req, res) => {
-    const enabled = await getSetting("registration_enabled", true);
+    const config = await getAppConfig();
     res.json({
       data: {
-        enabled,
+        enabled: config.registrationEnabled,
       },
       meta: {
         fetchedAt: new Date().toISOString(),
@@ -27,16 +62,15 @@ router.get(
 router.patch(
   "/registration",
   asyncHandler(async (req, res) => {
-    const payload = updateSettingSchema.parse(req.body);
-    const updated = await updateSetting(
-      "registration_enabled",
-      payload.value,
-      req.authUser?.id ?? null
-    );
+    const payload = z.object({ value: z.boolean() }).parse(req.body);
+    const current = await getAppConfig();
+    const next = { ...current, registrationEnabled: payload.value };
+    
+    await updateSetting("app_config", next, req.authUser?.id ?? null);
 
     res.json({
       data: {
-        setting: updated,
+        setting: { value: next.registrationEnabled },
       },
       meta: {
         updatedAt: new Date().toISOString(),

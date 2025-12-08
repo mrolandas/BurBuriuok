@@ -204,20 +204,18 @@ router.get(
   })
 );
 
-router.post(
-  "/",
-  asyncHandler(async (req, res) => {
-    const validation = adminConceptMutationSchema.safeParse(req.body);
+const handleUpsertConcept = async (req: any, res: any) => {
+  const validation = adminConceptMutationSchema.safeParse(req.body);
 
-    if (!validation.success) {
-      res.status(400).json({
-        error: {
-          message: "Invalid concept payload.",
-          details: validation.error.flatten(),
-        },
-      });
-      return;
-    }
+  if (!validation.success) {
+    res.status(400).json({
+      error: {
+        message: "Invalid concept payload.",
+        details: validation.error.flatten(),
+      },
+    });
+    return;
+  }
 
   let payload = validation.data;
 
@@ -226,124 +224,133 @@ router.post(
   const supabase = getSupabaseClient({ service: true, schema: "burburiuok" });
   payload = await prepareCurriculumFields(payload, existing ?? null, supabase);
 
-    const isEditingExisting = Boolean(existing && payload.originalSlug === existing.slug);
+  const isEditingExisting = Boolean(existing && payload.originalSlug === existing.slug);
 
-    if (!isEditingExisting && existing) {
-      const conflictConcept = mapConceptForResponse(existing);
-      res.status(409).json({
-        error: {
-          message: `Slug '${payload.slug}' jau naudojamas kitai sąvokai.`,
-          code: "CONCEPT_ALREADY_EXISTS",
-          details: {
-            slug: conflictConcept.slug,
-            termLt: conflictConcept.termLt,
-            nodeCode: conflictConcept.curriculumNodeCode,
-            itemLabel: conflictConcept.curriculumItemLabel,
-          },
+  if (!isEditingExisting && existing) {
+    const conflictConcept = mapConceptForResponse(existing);
+    res.status(409).json({
+      error: {
+        message: `Slug '${payload.slug}' jau naudojamas kitai sąvokai.`,
+        code: "CONCEPT_ALREADY_EXISTS",
+        details: {
+          slug: conflictConcept.slug,
+          termLt: conflictConcept.termLt,
+          nodeCode: conflictConcept.curriculumNodeCode,
+          itemLabel: conflictConcept.curriculumItemLabel,
         },
-      });
-      return;
-    }
-
-    const conflictingByTerm = await findConceptBySectionAndTerm(
-      payload.sectionCode,
-      payload.termLt
-    );
-
-    if (
-      conflictingByTerm &&
-      conflictingByTerm.slug !== payload.slug &&
-      conflictingByTerm.slug !== payload.originalSlug
-    ) {
-      res.status(409).json({
-        error: {
-          message: `Šiame skyriuje jau yra sąvoka "${conflictingByTerm.termLt}".`,
-          code: "CONCEPT_ALREADY_EXISTS",
-          details: {
-            slug: conflictingByTerm.slug,
-            termLt: conflictingByTerm.termLt,
-            nodeCode: conflictingByTerm.curriculumNodeCode,
-            itemLabel: conflictingByTerm.curriculumItemLabel,
-          },
-        },
-      });
-      return;
-    }
-
-    const upsertPayload = toUpsertConceptInput(payload, existing?.metadata ?? {});
-
-    try {
-      await upsertConcepts([upsertPayload]);
-      await syncCurriculumItemRecord(payload, existing ?? null, supabase);
-    } catch (error) {
-      if (isSupabaseAuthError(error)) {
-        throw unauthorized(
-          "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
-        );
-      }
-      if (isUniqueConstraintError(error)) {
-        const conflict = await findConceptBySectionAndTerm(
-          payload.sectionCode,
-          payload.termLt
-        );
-
-        res.status(409).json({
-          error: {
-            message: conflict
-              ? `Šiame skyriuje jau yra sąvoka „${conflict.termLt}“.`
-              : "Šiame skyriuje jau yra tokia sąvoka.",
-            code: "CONCEPT_ALREADY_EXISTS",
-            details: conflict
-              ? {
-                  slug: conflict.slug,
-                  termLt: conflict.termLt,
-                  nodeCode: conflict.curriculumNodeCode,
-                  itemLabel: conflict.curriculumItemLabel,
-                }
-              : undefined,
-          },
-        });
-        return;
-      }
-      throw error;
-    }
-
-    const updated = await getConceptBySlug(payload.slug);
-
-    if (!updated) {
-      throw new Error(
-        `Concept '${payload.slug}' could not be reloaded after upsert.`
-      );
-    }
-
-    try {
-      await logContentMutation({
-        entityType: "concept",
-        entityId: payload.slug,
-        before: existing ? mapConceptForResponse(existing) : null,
-        after: mapConceptForResponse(updated),
-        actor: req.authUser?.email ?? req.authUser?.id ?? null,
-        status: payload.status,
-        changeSummary: existing
-          ? `Concept '${payload.slug}' updated via admin console.`
-          : `Concept '${payload.slug}' created via admin console.`,
-      });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Failed to log concept mutation", {
-        slug: payload.slug,
-        error,
-      });
-    }
-
-    res.status(existing ? 200 : 201).json({
-      data: {
-        concept: mapConceptForResponse(updated),
-      },
-      meta: {
-        savedAt: new Date().toISOString(),
       },
     });
+    return;
+  }
+
+  const conflictingByTerm = await findConceptBySectionAndTerm(
+    payload.sectionCode,
+    payload.termLt
+  );
+
+  if (
+    conflictingByTerm &&
+    conflictingByTerm.slug !== payload.slug &&
+    conflictingByTerm.slug !== payload.originalSlug
+  ) {
+    res.status(409).json({
+      error: {
+        message: `Šiame skyriuje jau yra sąvoka "${conflictingByTerm.termLt}".`,
+        code: "CONCEPT_ALREADY_EXISTS",
+        details: {
+          slug: conflictingByTerm.slug,
+          termLt: conflictingByTerm.termLt,
+          nodeCode: conflictingByTerm.curriculumNodeCode,
+          itemLabel: conflictingByTerm.curriculumItemLabel,
+        },
+      },
+    });
+    return;
+  }
+
+  const upsertPayload = toUpsertConceptInput(payload, existing?.metadata ?? {});
+
+  try {
+    await upsertConcepts([upsertPayload]);
+    await syncCurriculumItemRecord(payload, existing ?? null, supabase);
+  } catch (error) {
+    if (isSupabaseAuthError(error)) {
+      throw unauthorized(
+        "Supabase service role key rejected by database. Update SUPABASE_SERVICE_ROLE_KEY and restart the backend."
+      );
+    }
+    if (isUniqueConstraintError(error)) {
+      const conflict = await findConceptBySectionAndTerm(
+        payload.sectionCode,
+        payload.termLt
+      );
+
+      res.status(409).json({
+        error: {
+          message: conflict
+            ? `Šiame skyriuje jau yra sąvoka „${conflict.termLt}“.`
+            : "Šiame skyriuje jau yra tokia sąvoka.",
+          code: "CONCEPT_ALREADY_EXISTS",
+          details: conflict
+            ? {
+                slug: conflict.slug,
+                termLt: conflict.termLt,
+                nodeCode: conflict.curriculumNodeCode,
+                itemLabel: conflict.curriculumItemLabel,
+              }
+            : undefined,
+        },
+      });
+      return;
+    }
+    throw error;
+  }
+
+  const updated = await getConceptBySlug(payload.slug);
+
+  if (!updated) {
+    throw new Error(
+      `Concept '${payload.slug}' could not be reloaded after upsert.`
+    );
+  }
+
+  try {
+    await logContentMutation({
+      entityType: "concept",
+      entityId: payload.slug,
+      before: existing ? mapConceptForResponse(existing) : null,
+      after: mapConceptForResponse(updated),
+      actor: req.authUser?.email ?? req.authUser?.id ?? null,
+      status: payload.status,
+      changeSummary: existing
+        ? `Concept '${payload.slug}' updated via admin console.`
+        : `Concept '${payload.slug}' created via admin console.`,
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Failed to log concept mutation", {
+      slug: payload.slug,
+      error,
+    });
+  }
+
+  res.status(existing ? 200 : 201).json({
+    data: {
+      concept: mapConceptForResponse(updated),
+    },
+    meta: {
+      savedAt: new Date().toISOString(),
+    },
+  });
+};
+
+router.post("/", asyncHandler(handleUpsertConcept));
+
+router.put(
+  "/:slug",
+  asyncHandler(async (req, res) => {
+    req.body.originalSlug = req.params.slug;
+    return handleUpsertConcept(req, res);
   })
 );
 

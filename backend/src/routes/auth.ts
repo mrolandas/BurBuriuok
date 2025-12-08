@@ -10,7 +10,7 @@ import {
   getRequiredAuthEnv,
   sanitizeRedirectTarget,
 } from "../utils/authRedirect.ts";
-import { getSetting } from "../../../data/repositories/settingsRepository.ts";
+import { getAppConfig } from "../../../data/repositories/settingsRepository.ts";
 import { getProfileByEmail } from "../../../data/repositories/profileRepository.ts";
 import { findPendingInviteByEmail } from "../../../data/repositories/adminInviteRepository.ts";
 
@@ -65,7 +65,8 @@ router.post(
       emailRedirectTo,
     });
 
-    const registrationEnabled = await getSetting("registration_enabled", true);
+    const config = await getAppConfig();
+    const registrationEnabled = config.registrationEnabled;
 
     if (!registrationEnabled) {
       const existingProfile = await getProfileByEmail(normalizedEmail);

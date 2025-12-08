@@ -6,7 +6,7 @@ import {
   getProfileById,
   upsertProfile,
 } from "../../../data/repositories/profileRepository.ts";
-import { getSetting } from "../../../data/repositories/settingsRepository.ts";
+import { getAppConfig } from "../../../data/repositories/settingsRepository.ts";
 import { hashInviteToken } from "../utils/inviteTokens.ts";
 import {
   findInviteByTokenHash,
@@ -106,7 +106,8 @@ router.post(
       }
 
       if (!inviteId) {
-        const registrationEnabled = await getSetting("registration_enabled", true);
+        const config = await getAppConfig();
+        const registrationEnabled = config.registrationEnabled;
         if (!registrationEnabled) {
           const existing = await getProfileById(userId);
           if (!existing) {

@@ -1,8 +1,16 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../supabaseClient.ts";
-import type { SystemSetting, SystemSettingRow } from "../types.ts";
+import type { SystemSetting, SystemSettingRow, AppConfig } from "../types.ts";
 
 const TABLE = "system_settings";
+
+export const DEFAULT_APP_CONFIG: AppConfig = {
+  appTitle: "BurKursas",
+  appDescription: "Lietuvos buriuotojų sąjungos egzaminų ruošyklė",
+  primaryColor: "#2563eb",
+  welcomeMessage: "Sveiki atvykę į BurKursą!",
+  registrationEnabled: true,
+};
 
 function resolveClient(client: SupabaseClient | null): SupabaseClient {
   return client ?? getSupabaseClient({ service: true, schema: "burburiuok" });
@@ -52,6 +60,7 @@ export async function updateSetting<T = any>(
   const supabase = resolveClient(client) as any;
 
   const payload: any = {
+    key,
     value,
     updated_at: new Date().toISOString(),
   };
@@ -62,8 +71,7 @@ export async function updateSetting<T = any>(
 
   const { data, error } = await supabase
     .from(TABLE)
-    .update(payload)
-    .eq("key", key)
+    .upsert(payload)
     .select()
     .single();
 
@@ -72,4 +80,14 @@ export async function updateSetting<T = any>(
   }
 
   return mapRow(data as SystemSettingRow);
+}
+
+export async function getAppConfig(client: SupabaseClient | null = null): Promise<AppConfig> {
+  const config = await getSetting<Partial<AppConfig>>("app_config", {}, client);
+  
+  if (config.registrationEnabled === undefined) {
+      config.registrationEnabled = await getSetting("registration_enabled", true, client);
+  }
+
+  return { ...DEFAULT_APP_CONFIG, ...config };
 }

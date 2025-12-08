@@ -139,70 +139,108 @@ export async function loadConceptDetailData({
 					if (currentIndex === 0 || currentIndex === items.length - 1) {
 						try {
 							const currentNode = await fetchNode(concept.curriculumNodeCode);
-							if (currentNode?.parent_code) {
-								const siblings = await fetchChildNodes(currentNode.parent_code);
-								const currentNodeIndex = siblings.findIndex((n) => n.code === concept.curriculumNodeCode);
-								
+							
+							if (currentNode) {
 								// Previous Section Logic
-								if (currentIndex === 0 && currentNodeIndex > 0) {
-									const prevNode = siblings[currentNodeIndex - 1];
-									let lastConceptSlug: string | null = null;
-									try {
-										const prevItems = await fetchItems(prevNode.code);
-										// Find the last item with a concept slug
-										const lastItem = [...prevItems].reverse().find(i => i.conceptSlug);
-										if (lastItem?.conceptSlug) {
-											lastConceptSlug = lastItem.conceptSlug;
-											if (!neighbors.previous) {
-												neighbors.previous = {
-													label: lastItem.label,
-													slug: lastItem.conceptSlug,
-													ordinal: lastItem.ordinal ?? null,
-													isPreviousSection: true
-												};
+								if (currentIndex === 0) {
+									let prevNodeCandidate: any = null;
+									
+									if (currentNode.parent_code) {
+										const siblings = await fetchChildNodes(currentNode.parent_code);
+										const idx = siblings.findIndex(n => n.code === currentNode.code);
+										
+										if (idx > 0) {
+											// Previous sibling found - drill down to last descendant
+											let candidate = siblings[idx - 1];
+											while (true) {
+												const children = await fetchChildNodes(candidate.code);
+												if (children.length === 0) break;
+												candidate = children[children.length - 1];
 											}
+											prevNodeCandidate = candidate;
+										} else {
+											// No previous sibling, go to parent
+											prevNodeCandidate = await fetchNode(currentNode.parent_code);
 										}
-									} catch (e) {
-										console.warn('Failed to fetch items for previous section', e);
 									}
 
-									previousSection = {
-										title: prevNode.title,
-										code: prevNode.code,
-										lastConceptSlug
-									};
+									if (prevNodeCandidate) {
+										try {
+											const prevItems = await fetchItems(prevNodeCandidate.code);
+											const lastItem = [...prevItems].reverse().find(i => i.conceptSlug);
+											
+											if (lastItem?.conceptSlug) {
+												const lastConceptSlug = lastItem.conceptSlug;
+												if (!neighbors.previous) {
+													neighbors.previous = {
+														label: lastItem.label,
+														slug: lastItem.conceptSlug,
+														ordinal: lastItem.ordinal ?? null,
+														isPreviousSection: true
+													};
+												}
+												
+												previousSection = {
+													title: prevNodeCandidate.title,
+													code: prevNodeCandidate.code,
+													lastConceptSlug
+												};
+											}
+										} catch (e) {
+											console.warn('Failed to fetch items for previous section', e);
+										}
+									}
 								}
 
 								// Next Section Logic
-								if (currentIndex === items.length - 1 && currentNodeIndex !== -1 && currentNodeIndex < siblings.length - 1) {
-									const nextNode = siblings[currentNodeIndex + 1];
-									
-									let firstConceptSlug: string | null = null;
-									try {
-										const nextItems = await fetchItems(nextNode.code);
-										const firstItem = nextItems.find(i => i.conceptSlug);
-										if (firstItem?.conceptSlug) {
-											firstConceptSlug = firstItem.conceptSlug;
-											// If we don't have a next neighbor yet (end of current list),
-											// point to the first concept of the next section.
-											if (!neighbors.next) {
-												neighbors.next = {
-													label: firstItem.label,
-													slug: firstItem.conceptSlug,
-													ordinal: firstItem.ordinal ?? null,
-													isNextSection: true
-												};
+								if (currentIndex === items.length - 1) {
+									let nextNodeCandidate: any = null;
+
+									// 1. Check Children
+									const children = await fetchChildNodes(currentNode.code);
+									if (children.length > 0) {
+										nextNodeCandidate = children[0];
+									} else {
+										// 2. Check Siblings & Ancestors
+										let ptr = currentNode;
+										while (ptr.parent_code) {
+											const siblings = await fetchChildNodes(ptr.parent_code);
+											const idx = siblings.findIndex(s => s.code === ptr.code);
+											if (idx !== -1 && idx < siblings.length - 1) {
+												nextNodeCandidate = siblings[idx + 1];
+												break;
 											}
+											ptr = await fetchNode(ptr.parent_code);
+											if (!ptr) break;
 										}
-									} catch (e) {
-										console.warn('Failed to fetch items for next section', e);
 									}
 
-									nextSection = {
-										title: nextNode.title,
-										code: nextNode.code,
-										firstConceptSlug
-									};
+									if (nextNodeCandidate) {
+										try {
+											const nextItems = await fetchItems(nextNodeCandidate.code);
+											const firstItem = nextItems.find(i => i.conceptSlug);
+											
+											if (firstItem?.conceptSlug) {
+												const firstConceptSlug = firstItem.conceptSlug;
+												if (!neighbors.next) {
+													neighbors.next = {
+														label: firstItem.label,
+														slug: firstItem.conceptSlug,
+														ordinal: firstItem.ordinal ?? null,
+														isNextSection: true
+													};
+												}
+
+												nextSection = {
+													title: nextNodeCandidate.title,
+													code: nextNodeCandidate.code,
+													firstConceptSlug
+												};
+											}
+										} catch (e) {
+											console.warn('Failed to fetch items for next section', e);
+										}
+									}
 								}
 							}
 						} catch (e) {

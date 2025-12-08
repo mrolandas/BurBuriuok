@@ -381,6 +381,22 @@ export async function listCurriculumItems(
   return (data ?? []).map(mapItemRow);
 }
 
+export async function listAllCurriculumNodes(
+  client: SupabaseClient | null = null
+): Promise<CurriculumNode[]> {
+  const supabase = client ?? getSupabaseClient();
+  const { data, error } = await (supabase as any)
+    .from(NODE_VIEW)
+    .select("*")
+    .order("code", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch all curriculum nodes: ${error.message}`);
+  }
+
+  return (data ?? []).map(mapNodeRow);
+}
+
 export async function listCurriculumNodesByParent(
   parentCode: string | null,
   client: SupabaseClient | null = null

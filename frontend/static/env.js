@@ -28,9 +28,9 @@
 	const hasSupabaseAnonKey = sanitizeSupabaseField('supabaseAnonKey');
 
 	if (!hasSupabaseUrl || !hasSupabaseAnonKey) {
-		console.warn(
-			'[runtime-config] Supabase credentials missing in env.js. Build-time values (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) will be used instead.'
-		);
+		// console.warn(
+		// 	'[runtime-config] Supabase credentials missing in env.js. Build-time values (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) will be used instead.'
+		// );
 	}
 
 	try {

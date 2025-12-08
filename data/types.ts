@@ -307,3 +307,11 @@ export interface SystemSetting {
   updatedAt: string;
   updatedBy: string | null;
 }
+
+export interface AppConfig {
+  appTitle: string;
+  appDescription: string;
+  primaryColor: string;
+  welcomeMessage: string;
+  registrationEnabled: boolean;
+}

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../utils/asyncHandler.ts";
 import conceptsRouter from "./admin/concepts.ts";
+import contentRouter from "./admin/content.ts";
 import curriculumRouter from "./admin/curriculum.ts";
 import mediaRouter from "./admin/media.ts";
 import usersRouter from "./admin/users.ts";
@@ -28,6 +29,7 @@ router.get(
 );
 
 router.use("/concepts", conceptsRouter);
+router.use("/content", contentRouter);
 router.use("/curriculum", curriculumRouter);
 router.use("/media", mediaRouter);
 router.use("/users", usersRouter);
