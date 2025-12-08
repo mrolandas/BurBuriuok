@@ -3,17 +3,26 @@ import { resetContent } from '../../../data/repositories/contentRepository.ts';
 import { createCurriculumNodeAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
 import { upsertConcepts } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
+import { getSetting } from '../../../data/repositories/settingsRepository.ts';
 
 let openai: OpenAI | null = null;
 
-function getOpenAIClient() {
-  if (!openai) {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      throw new Error("OPENAI_API_KEY is not set in the environment.");
-    }
-    openai = new OpenAI({ apiKey });
+async function getOpenAIClient() {
+  if (openai) return openai;
+
+  let apiKey = process.env.OPENAI_API_KEY;
+  
+  if (!apiKey) {
+    // Try fetching from DB
+    const dbKey = await getSetting<string | null>('openai_api_key', null);
+    if (dbKey) apiKey = dbKey;
   }
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is not set in environment or system settings.");
+  }
+  
+  openai = new OpenAI({ apiKey });
   return openai;
 }
 
@@ -93,7 +102,7 @@ export async function chatWithAgent(messages: OpenAI.Chat.Completions.ChatComple
 
   const fullMessages = [systemMessage, ...messages];
 
-  const client = getOpenAIClient();
+  const client = await getOpenAIClient();
   let response = await client.chat.completions.create({
     model: "gpt-4-turbo",
     messages: fullMessages,

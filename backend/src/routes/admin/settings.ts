@@ -79,4 +79,26 @@ router.patch(
   })
 );
 
+router.get(
+  "/api-key",
+  asyncHandler(async (_req, res) => {
+    const key = await getSetting<string | null>("openai_api_key", null);
+    res.json({
+      data: {
+        isSet: !!key,
+        masked: key ? `${key.slice(0, 3)}...${key.slice(-4)}` : null
+      }
+    });
+  })
+);
+
+router.put(
+  "/api-key",
+  asyncHandler(async (req, res) => {
+    const { key } = z.object({ key: z.string() }).parse(req.body);
+    await updateSetting("openai_api_key", key, req.authUser?.id ?? null);
+    res.json({ success: true });
+  })
+);
+
 export default router;
