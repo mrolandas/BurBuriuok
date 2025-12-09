@@ -138,6 +138,12 @@ export async function createChatCompletion(
 
     const candidate = result?.response?.candidates?.[0];
     const parts = candidate?.content?.parts || [];
+    
+    // Log response structure for debugging empty responses
+    if (!parts.length) {
+      console.log('Gemini response debug - candidates:', JSON.stringify(result?.response?.candidates, null, 2));
+      console.log('Gemini response debug - promptFeedback:', JSON.stringify(result?.response?.promptFeedback, null, 2));
+    }
 
     const textParts: string[] = [];
     const toolCalls: any[] = [];

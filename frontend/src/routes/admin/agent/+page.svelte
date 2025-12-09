@@ -526,6 +526,11 @@
     line-height: 1.6;
   }
 
+  .message-text.empty-response {
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+
   .error-details {
     margin-top: 0.75rem;
     border-top: 1px solid rgba(255,255,255,0.1);
@@ -997,7 +1002,17 @@
                   <span class="message-time">{formatTime(msg.timestamp)}</span>
                 </div>
                 <div class="message-bubble" class:user={msg.role === 'user'} class:assistant={msg.role === 'assistant'} class:system={msg.role === 'system'} class:tool={msg.role === 'tool'}>
-                  <div class="message-text">{msg.content}</div>
+                  {#if msg.content}
+                    <div class="message-text">{msg.content}</div>
+                  {:else if msg.toolLogs && msg.toolLogs.length > 0}
+                    <div class="message-text empty-response">
+                      <em>The AI executed tools but didn't provide a text response. This may indicate a timeout or processing issue. Check the tool logs below.</em>
+                    </div>
+                  {:else}
+                    <div class="message-text empty-response">
+                      <em>No response content.</em>
+                    </div>
+                  {/if}
                   
                   {#if msg.errorDetails && (msg.errorDetails.stack || msg.errorDetails.apiError || msg.errorDetails.details)}
                     <details class="error-details">

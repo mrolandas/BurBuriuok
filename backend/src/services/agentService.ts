@@ -219,7 +219,19 @@ export async function chatWithAgent(
           await createCurriculumNodeAdmin(functionArgs);
           functionResult = `Node ${functionArgs.code} created.`;
         } else if (functionName === "create_concept") {
-          await upsertConcepts([functionArgs], contentClient);
+          // Transform camelCase tool args to snake_case UpsertConceptInput
+          const nodeCode = functionArgs.curriculumNodeCode;
+          // Extract section_code from nodeCode (e.g., "LBS-1-2-3" -> "LBS-1-2-3")
+          // The section_code is the same as nodeCode for concepts
+          const conceptInput = {
+            slug: functionArgs.slug,
+            term_lt: functionArgs.term,
+            description_lt: functionArgs.description || '',
+            curriculum_node_code: nodeCode,
+            section_code: nodeCode, // section_code is required, use nodeCode
+            curriculum_item_ordinal: functionArgs.ordinal || null,
+          };
+          await upsertConcepts([conceptInput], contentClient);
           functionResult = `Concept ${functionArgs.slug} created.`;
         } else if (functionName === "list_curriculum") {
           const tree = await listAllCurriculumNodes(publicClient);
