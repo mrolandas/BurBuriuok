@@ -1,32 +1,11 @@
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { resetContent } from '../../../data/repositories/contentRepository.ts';
 import { createCurriculumNodeAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
-import { upsertConcepts } from '../../../data/repositories/conceptsRepository.ts';
+import { upsertConcepts, listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
-import { getSetting } from '../../../data/repositories/settingsRepository.ts';
+import { createChatCompletion, type ChatMessage } from './llmProvider.ts';
 
-let openai: OpenAI | null = null;
-
-async function getOpenAIClient() {
-  if (openai) return openai;
-
-  let apiKey = process.env.OPENAI_API_KEY;
-  
-  if (!apiKey) {
-    // Try fetching from DB
-    const dbKey = await getSetting<string | null>('openai_api_key', null);
-    if (dbKey) apiKey = dbKey;
-  }
-
-  if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not set in environment or system settings.");
-  }
-  
-  openai = new OpenAI({ apiKey });
-  return openai;
-}
-
-const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
+const tools = [
   {
     type: "function",
     function: {
@@ -76,91 +55,257 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
     type: "function",
     function: {
       name: "list_curriculum",
-      description: "Returns the full curriculum tree.",
+      description: "Returns the full curriculum tree with all sections and subsections (nodes). Use this to understand the structure.",
       parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "list_concepts",
+      description: "Returns all learning concepts, optionally filtered by section or node code. Each concept belongs to a curriculum node.",
+      parameters: {
+        type: "object",
+        properties: {
+          sectionCode: { type: "string", description: "Filter by top-level section code (e.g., 'LBS-1')" },
+          nodeCode: { type: "string", description: "Filter by specific curriculum node code" },
+        },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_concept",
+      description: "Gets detailed information about a specific concept by its slug.",
+      parameters: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "The URL-friendly slug of the concept" },
+        },
+        required: ["slug"],
+      },
     },
   },
 ];
 
-export async function chatWithAgent(messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[]) {
-  const supabase = getSupabaseClient({ service: true, schema: 'burburiuok' });
+// Tools that don't modify data and can be auto-executed
+const READ_ONLY_TOOLS = new Set(["list_curriculum", "list_concepts", "get_concept"]);
 
-  // Ensure we have a system message
-  const systemMessage: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
-    role: "system",
-    content: `You are an expert curriculum designer for the 'Mokslai' learning platform. 
+function isReadOnlyToolCall(toolCalls: any[]): boolean {
+  return toolCalls.every(tc => READ_ONLY_TOOLS.has(tc.function?.name));
+}
+
+const systemMessage: ChatMessage = {
+  role: "system",
+  content: `You are an expert curriculum designer for the 'Mokslai' learning platform. 
     Your goal is to help the user design and implement a curriculum for a specific subject.
-    You have access to tools to manipulate the database directly.
+    You have access to tools to query and manipulate the curriculum database.
     
-    When asked to create a curriculum:
-    1. Plan the structure first.
-    2. Use 'create_curriculum_node' to build the tree.
-    3. Use 'create_concept' to populate content.
+    Available tools:
+    - list_curriculum: Get all curriculum nodes (sections/subsections) - the structure
+    - list_concepts: Get all learning concepts (optionally filtered by section or node)
+    - get_concept: Get detailed info about a specific concept by slug
+    - create_curriculum_node: Create a new section or subsection
+    - create_concept: Create a new learning concept
+    - reset_content: Wipe all data (DANGEROUS - always ask for confirmation)
+    
+    The curriculum has a hierarchical structure:
+    - Level 1 nodes are main sections (e.g., "Navigation", "Safety")
+    - Level 2 nodes are subsections under a parent section
+    - Concepts belong to nodes and contain the actual learning content
+    
+    When answering questions about the curriculum:
+    1. Use list_curriculum to see the structure
+    2. Use list_concepts to see what content exists
+    3. Use get_concept for detailed information about specific concepts
     
     Always ask for confirmation before running destructive actions like 'reset_content'.`
+};
+
+const DEFAULT_GEMINI_MODEL = 'gemini-2.5-flash';
+
+// Available Gemini models for the UI dropdown
+export const AVAILABLE_GEMINI_MODELS = [
+  { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', description: 'Fast and efficient' },
+  { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', description: 'Most capable' },
+  { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash', description: 'Previous generation' },
+] as const;
+
+function requireLLMConfig(modelOverride?: string) {
+  const config = {
+    provider: 'gemini' as const,
+    apiKey: process.env.GOOGLE_AI_STUDIO_KEY || process.env.GEMINI_API_KEY || '',
+    model: modelOverride || process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL,
   };
 
-  const fullMessages = [systemMessage, ...messages];
+  if (!config.apiKey) {
+    throw new Error('Google AI Studio key is missing on the server. Set GOOGLE_AI_STUDIO_KEY or GEMINI_API_KEY.');
+  }
 
-  const client = await getOpenAIClient();
-  let response = await client.chat.completions.create({
-    model: "gpt-4-turbo",
-    messages: fullMessages,
-    tools,
-    tool_choice: "auto",
-  });
+  return config;
+}
 
-  let responseMessage = response.choices[0].message;
+export async function chatWithAgent(
+  messages: ChatMessage[], 
+  options: { executionMode?: 'auto' | 'plan', confirmToolCalls?: boolean, model?: string } = {}
+) {
+  const { executionMode = 'auto', confirmToolCalls = false, model } = options;
+  // Use public schema for curriculum views, burburiuok for content tables
+  const publicClient = getSupabaseClient({ service: true, schema: 'public' });
+  const contentClient = getSupabaseClient({ service: true, schema: 'burburiuok' });
+  
+  // Track tool execution logs for debugging
+  const toolLogs: { tool: string; args: any; result: string; error?: string; timestamp: string }[] = [];
+  
+  const config = requireLLMConfig(model);
 
-  // Handle tool calls loop
+  // 1. Check if we need to resume execution (User confirmed plan)
+  const lastMsg = messages[messages.length - 1];
+  let resumeExecution = false;
+  
+  if (lastMsg && lastMsg.role === 'assistant' && lastMsg.tool_calls && confirmToolCalls) {
+    resumeExecution = true;
+  }
+
+  let responseMessage: ChatMessage;
+  let currentMessages = [...messages];
+
+  if (!resumeExecution) {
+    const fullMessages = [systemMessage, ...messages];
+    const response = await createChatCompletion(config as any, fullMessages, tools);
+    responseMessage = response.message;
+    
+    // If no tool calls, just return the text
+    if (!responseMessage.tool_calls) {
+      return responseMessage;
+    }
+    
+    // If tool calls exist and mode is 'plan', check if they're all read-only
+    if (executionMode === 'plan') {
+      // Auto-execute read-only tools without confirmation
+      if (isReadOnlyToolCall(responseMessage.tool_calls)) {
+        currentMessages.push(responseMessage);
+        // Fall through to execution loop
+      } else {
+        return responseMessage; // Return for confirmation
+      }
+    } else {
+      // If auto, append and continue
+      currentMessages.push(responseMessage);
+    }
+  } else {
+    // Resuming: The last message IS the response message with tool calls
+    responseMessage = lastMsg;
+    // It's already in currentMessages (passed in messages)
+  }
+
+  // Execution Loop
   while (responseMessage.tool_calls) {
-    fullMessages.push(responseMessage); // Add the assistant's message with tool calls
-
+    // Execute tools
     for (const toolCall of responseMessage.tool_calls) {
       const functionName = (toolCall as any).function.name;
       const functionArgs = JSON.parse((toolCall as any).function.arguments);
       let functionResult;
+      let toolError: string | undefined;
 
       console.log(`Executing tool: ${functionName}`, functionArgs);
 
       try {
         if (functionName === "reset_content") {
-          await resetContent(supabase);
+          await resetContent(contentClient);
           functionResult = "Content reset successfully.";
         } else if (functionName === "create_curriculum_node") {
           await createCurriculumNodeAdmin(functionArgs);
           functionResult = `Node ${functionArgs.code} created.`;
         } else if (functionName === "create_concept") {
-          // upsertConcepts expects an array
-          await upsertConcepts([functionArgs], supabase);
+          await upsertConcepts([functionArgs], contentClient);
           functionResult = `Concept ${functionArgs.slug} created.`;
         } else if (functionName === "list_curriculum") {
-          const tree = await listAllCurriculumNodes(supabase);
+          const tree = await listAllCurriculumNodes(publicClient);
           functionResult = JSON.stringify(tree);
+        } else if (functionName === "list_concepts") {
+          const concepts = await listConcepts(publicClient, {
+            sectionCode: functionArgs.sectionCode,
+            nodeCode: functionArgs.nodeCode,
+          });
+          // Return summary info to avoid overwhelming the LLM
+          const summary = concepts.map(c => ({
+            slug: c.slug,
+            term: c.termLt || c.termEn,
+            nodeCode: c.curriculumNodeCode,
+            sectionCode: c.sectionCode,
+          }));
+          functionResult = JSON.stringify({ count: concepts.length, concepts: summary });
+        } else if (functionName === "get_concept") {
+          const concept = await getConceptBySlug(functionArgs.slug, publicClient);
+          if (concept) {
+            functionResult = JSON.stringify(concept);
+          } else {
+            functionResult = `Concept with slug '${functionArgs.slug}' not found.`;
+          }
         } else {
           functionResult = "Unknown function";
         }
       } catch (error: any) {
         functionResult = `Error: ${error.message}`;
+        toolError = error.stack || error.message;
+        console.error(`Tool ${functionName} failed:`, error);
       }
+      
+      // Log tool execution
+      toolLogs.push({
+        tool: functionName,
+        args: functionArgs,
+        result: functionResult.substring(0, 500), // Truncate long results
+        error: toolError,
+        timestamp: new Date().toISOString()
+      });
 
-      fullMessages.push({
+      currentMessages.push({
         tool_call_id: toolCall.id,
         role: "tool",
         content: functionResult,
       });
     }
 
-    // Call OpenAI again with the tool results
-    response = await client.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: fullMessages,
-      tools,
-      tool_choice: "auto",
-    });
-
-    responseMessage = response.choices[0].message;
+    // Call LLM again with results
+    const response = await createChatCompletion(config as any, [systemMessage, ...currentMessages], tools);
+    responseMessage = response.message;
+    
+    // If new tool calls appear:
+    if (responseMessage.tool_calls) {
+      if (executionMode === 'plan') {
+        return responseMessage; // Return for another confirmation
+      }
+      currentMessages.push(responseMessage);
+    } else {
+      // Final text response - include tool logs
+      return { ...responseMessage, toolLogs: toolLogs.length > 0 ? toolLogs : undefined };
+    }
   }
 
-  return responseMessage;
+  return { ...responseMessage, toolLogs: toolLogs.length > 0 ? toolLogs : undefined };
+}
+
+export async function testAgentConnection() {
+  const config = requireLLMConfig();
+
+  if (config.provider !== 'gemini') {
+    return { ok: true };
+  }
+
+  const genAI = new GoogleGenerativeAI(config.apiKey);
+  const model = genAI.getGenerativeModel({ model: config.model || DEFAULT_GEMINI_MODEL });
+
+  await model.countTokens({
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: 'ping' }],
+      },
+    ],
+  });
+
+  return { ok: true };
 }

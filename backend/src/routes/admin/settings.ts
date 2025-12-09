@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
+import OpenAI from "openai";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { getSetting, updateSetting, getAppConfig } from "../../../../data/repositories/settingsRepository.ts";
 
@@ -79,25 +80,56 @@ router.patch(
   })
 );
 
+const aiConfigSchema = z.object({
+  provider: z.enum(['openai', 'gemini', 'openrouter']),
+  apiKey: z.string(),
+  model: z.string().optional()
+});
+
 router.get(
-  "/api-key",
+  "/ai-config",
   asyncHandler(async (_req, res) => {
-    const key = await getSetting<string | null>("openai_api_key", null);
+    const config = await getSetting("ai_config", { provider: 'openai', apiKey: '', model: '' });
     res.json({
       data: {
-        isSet: !!key,
-        masked: key ? `${key.slice(0, 3)}...${key.slice(-4)}` : null
+        provider: config.provider,
+        isSet: !!config.apiKey,
+        maskedKey: config.apiKey ? `${config.apiKey.slice(0, 3)}...${config.apiKey.slice(-4)}` : null,
+        model: config.model
       }
     });
   })
 );
 
 router.put(
-  "/api-key",
+  "/ai-config",
   asyncHandler(async (req, res) => {
-    const { key } = z.object({ key: z.string() }).parse(req.body);
-    await updateSetting("openai_api_key", key, req.authUser?.id ?? null);
+    const payload = aiConfigSchema.parse(req.body);
+    await updateSetting("ai_config", payload, req.authUser?.id ?? null);
     res.json({ success: true });
+  })
+);
+
+import { createChatCompletion } from "../../services/llmProvider.ts";
+
+router.post(
+  "/test-ai",
+  asyncHandler(async (req, res) => {
+    // Allow testing with provided credentials OR saved credentials
+    let config = req.body.apiKey ? req.body : await getSetting("ai_config", null);
+    
+    if (!config || !config.apiKey) {
+      res.status(400).json({ error: "Configuration not set" });
+      return;
+    }
+
+    try {
+      // Simple test message
+      await createChatCompletion(config, [{ role: 'user', content: 'Hello' }]);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
   })
 );
 

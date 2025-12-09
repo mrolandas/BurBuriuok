@@ -23,6 +23,10 @@
 			<h2>Naudotojų valdymas</h2>
 			<p>Stebėkite administratorių sąrašą, siųskite kvietimus ir tvarkykite roles.</p>
 		</a>
+		<a class="admin-card" href={resolve('/admin/agent')}>
+			<h2>AI Agentas</h2>
+			<p>Automatizuotas turinio kūrimas ir valdymas naudojant dirbtinį intelektą.</p>
+		</a>
 		<div class="admin-card admin-card--disabled">
 			<h2>Kitos sritys</h2>
 			<p>Greitai bus galima valdyti papildomus administravimo modulius.</p>
