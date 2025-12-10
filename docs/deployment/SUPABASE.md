@@ -121,8 +121,8 @@ In Supabase dashboard under Authentication > Settings:
 
 | Setting          | Value                                                                                         |
 | ---------------- | --------------------------------------------------------------------------------------------- |
-| Site URL         | `https://mrolandas.github.io/BurBuriuok`                                                      |
-| Redirect URLs    | `http://localhost:5173/auth/callback`, `https://mrolandas.github.io/BurBuriuok/auth/callback` |
+| Site URL         | `https://mrolandas.github.io/Moxlai`                                                      |
+| Redirect URLs    | `http://localhost:5173/auth/callback`, `https://mrolandas.github.io/Moxlai/auth/callback` |
 | Email OTP Expiry | 1 hour                                                                                        |
 
 ### Email Templates

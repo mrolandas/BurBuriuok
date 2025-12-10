@@ -3,7 +3,7 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const dev = process.argv.includes('dev');
-const basePath = process.env.VITE_APP_BASE_PATH ?? '/BurBuriuok';
+const basePath = process.env.VITE_APP_BASE_PATH ?? '/Moxlai';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

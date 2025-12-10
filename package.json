@@ -1,7 +1,7 @@
 {
-  "name": "buriavimas",
+  "name": "moxlai",
   "version": "1.0.0",
-  "description": "BurKursas is a Lithuanian-first learning companion that helps prepare for the Lithuanian Sailing Association skipper curriculum. User-facing copy will stay in Lithuanian, while source code, internal documentation, and developer discussions remain in English for clarity.",
+  "description": "Moxlai is a multi-subject learning platform that dynamically creates curriculum, study materials, and tests. Everything needed to learn any subject.",
   "type": "module",
   "directories": {
     "doc": "docs",
@@ -36,15 +36,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrolandas/BurBuriuok.git"
+    "url": "git+https://github.com/mrolandas/Moxlai.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mrolandas/BurBuriuok/issues"
+    "url": "https://github.com/mrolandas/Moxlai/issues"
   },
-  "homepage": "https://mrolandas.github.io/BurBuriuok/",
+  "homepage": "https://mrolandas.github.io/Moxlai/",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.43.5",

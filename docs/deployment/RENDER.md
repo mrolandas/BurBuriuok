@@ -10,7 +10,7 @@ The backend is deployed to Render.com as a Node.js web service.
 | **Runtime**       | Node.js 20                      |
 | **Build Command** | `npm install`                   |
 | **Start Command** | `npm run backend:start`         |
-| **URL**           | https://burburiuok.onrender.com |
+| **URL**           | https://moxlai.onrender.com |
 
 ## Deployment Pipeline
 
@@ -56,9 +56,9 @@ Configure in Render dashboard under "Environment":
 SUPABASE_URL=https://zvlziltltbalebqpmuqs.supabase.co
 SUPABASE_ANON_KEY=sb_publishable_xxx
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_xxx
-AUTH_REDIRECT_URL=https://mrolandas.github.io/BurBuriuok/auth/callback
+AUTH_REDIRECT_URL=https://mrolandas.github.io/Moxlai/auth/callback
 AUTH_EMAIL_FROM=Moxlai <noreply@moxlai.lt>
-BACKEND_ALLOWED_ORIGINS=https://mrolandas.github.io,https://mrolandas.github.io/BurBuriuok
+BACKEND_ALLOWED_ORIGINS=https://mrolandas.github.io,https://mrolandas.github.io/Moxlai
 GOOGLE_AI_STUDIO_KEY=AIzaSy...
 ```
 
@@ -68,7 +68,7 @@ GOOGLE_AI_STUDIO_KEY=AIzaSy...
 
 | Setting           | Value                   |
 | ----------------- | ----------------------- |
-| Name              | `burburiuok`            |
+| Name              | `moxlai`                |
 | Region            | Frankfurt (EU)          |
 | Branch            | `main`                  |
 | Build Command     | `npm install`           |
@@ -100,7 +100,7 @@ app.use(
 The `BACKEND_ALLOWED_ORIGINS` must include:
 
 - `https://mrolandas.github.io`
-- `https://mrolandas.github.io/BurBuriuok`
+- `https://mrolandas.github.io/Moxlai`
 
 Both are needed because:
 
@@ -207,13 +207,13 @@ After deploying:
 1. **Health check**:
 
    ```bash
-   curl https://burburiuok.onrender.com/health
+   curl https://moxlai.onrender.com/health
    ```
 
 2. **API test**:
 
    ```bash
-   curl https://burburiuok.onrender.com/api/v1/curriculum
+   curl https://moxlai.onrender.com/api/v1/curriculum
    ```
 
 3. **Frontend integration**:

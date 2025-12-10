@@ -13,8 +13,8 @@ This guide covers local development setup for the Moxlai platform.
 
 ```bash
 # Clone repository
-git clone https://github.com/mrolandas/BurBuriuok.git
-cd BurBuriuok
+git clone https://github.com/mrolandas/Moxlai.git
+cd Moxlai
 
 # Install dependencies
 npm install
@@ -55,7 +55,7 @@ VITE_SUPABASE_ANON_KEY="your-anon-key"
 GOOGLE_AI_STUDIO_KEY="your-gemini-api-key"
 
 # Backend CORS (production only)
-BACKEND_ALLOWED_ORIGINS="https://mrolandas.github.io,https://mrolandas.github.io/BurBuriuok"
+BACKEND_ALLOWED_ORIGINS="https://mrolandas.github.io,https://mrolandas.github.io/Moxlai"
 ```
 
 ## Development Scripts
@@ -135,7 +135,7 @@ Local credentials will be displayed after `supabase start`.
 ## Project Structure
 
 ```
-BurBuriuok/
+Moxlai/
 ├── backend/src/           # Express API
 │   ├── routes/            # Endpoint handlers
 │   ├── services/          # Business logic

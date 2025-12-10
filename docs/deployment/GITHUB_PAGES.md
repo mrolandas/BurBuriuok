@@ -9,7 +9,7 @@ The frontend is deployed as a static site to GitHub Pages.
 | **Trigger** | Push to `main` branch                  |
 | **Build**   | SvelteKit with adapter-static          |
 | **Output**  | Static HTML/JS/CSS                     |
-| **URL**     | https://mrolandas.github.io/BurBuriuok |
+| **URL**     | https://mrolandas.github.io/Moxlai |
 
 ## Deployment Pipeline
 
@@ -72,7 +72,7 @@ File: `frontend/svelte.config.js`
 ```javascript
 import adapter from "@sveltejs/adapter-static";
 
-const basePath = process.env.VITE_APP_BASE_PATH ?? "/BurBuriuok";
+const basePath = process.env.VITE_APP_BASE_PATH ?? "/Moxlai";
 
 export default {
   kit: {
@@ -88,7 +88,7 @@ export default {
 
 ### Base Path
 
-The app is served from `/BurBuriuok` (repo name), not root. This affects:
+The app is served from `/Moxlai` (repo name), not root. This affects:
 
 - All internal links
 - Asset paths
@@ -114,8 +114,8 @@ This file is overwritten during deployment with production values:
 window.__BURKURSAS_CONFIG__ = {
   supabaseUrl: "https://xxx.supabase.co",
   supabaseAnonKey: "xxx",
-  adminApiBase: "https://burburiuok.onrender.com/api/v1/admin",
-  publicApiBase: "https://burburiuok.onrender.com/api/v1",
+  adminApiBase: "https://moxlai.onrender.com/api/v1/admin",
+  publicApiBase: "https://moxlai.onrender.com/api/v1",
 };
 ```
 
@@ -157,7 +157,7 @@ This allows direct links like `/concepts/lbs-1-1a-jole` to work.
 Assets in `frontend/static/` are copied to build root. Reference them with absolute paths:
 
 ```html
-<link rel="icon" href="/BurBuriuok/favicon.ico" />
+<link rel="icon" href="/Moxlai/favicon.ico" />
 ```
 
 Or use the base path helper:
@@ -203,7 +203,7 @@ Check the Actions tab for:
 
 After deployment:
 
-1. Visit https://mrolandas.github.io/BurBuriuok
+1. Visit https://mrolandas.github.io/Moxlai
 2. Check browser console for errors
 3. Verify API connectivity
 

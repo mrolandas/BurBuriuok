@@ -15,8 +15,8 @@ This document covers the local development environment setup and workflow.
 
 ```bash
 # Clone repository
-git clone https://github.com/mrolandas/BurBuriuok.git
-cd BurBuriuok
+git clone https://github.com/mrolandas/Moxlai.git
+cd Moxlai
 
 # Install root dependencies
 npm install

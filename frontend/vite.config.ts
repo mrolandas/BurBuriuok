@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
 
 	Object.assign(process.env, effectiveEnv);
 
-	const repoBase = process.env.VITE_APP_BASE_PATH ?? '/BurBuriuok';
+	const repoBase = process.env.VITE_APP_BASE_PATH ?? '/Moxlai';
 	const base = mode === 'development' ? '' : repoBase;
 
 	return {

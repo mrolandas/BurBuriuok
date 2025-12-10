@@ -6,7 +6,7 @@ This document describes the REST API design conventions and authentication patte
 
 | Environment | URL                                      |
 | ----------- | ---------------------------------------- |
-| Production  | `https://burburiuok.onrender.com/api/v1` |
+| Production  | `https://moxlai.onrender.com/api/v1` |
 | Local       | `http://localhost:4000/api/v1`           |
 
 ## Authentication
@@ -268,7 +268,7 @@ GET /api/v1/search?q=jole&type=concept
 Backend requires `BACKEND_ALLOWED_ORIGINS` environment variable:
 
 ```bash
-BACKEND_ALLOWED_ORIGINS="https://mrolandas.github.io,https://mrolandas.github.io/BurBuriuok"
+BACKEND_ALLOWED_ORIGINS="https://mrolandas.github.io,https://mrolandas.github.io/Moxlai"
 ```
 
 Credentials are supported for authenticated requests.

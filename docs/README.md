@@ -72,7 +72,7 @@ moxlai/
 
 | Environment | Frontend                                 | Backend                           |
 | ----------- | ---------------------------------------- | --------------------------------- |
-| Production  | `https://mrolandas.github.io/BurBuriuok` | `https://burburiuok.onrender.com` |
+| Production  | `https://mrolandas.github.io/Moxlai` | `https://moxlai.onrender.com` |
 | Local Dev   | `http://localhost:5173`                  | `http://localhost:4000`           |
 | Future      | `moxlai.lt/<subject>`                    | TBD                               |
 
