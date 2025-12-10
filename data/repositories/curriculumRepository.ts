@@ -549,6 +549,42 @@ export type MoveCurriculumItemInput = {
   targetOrdinal?: number | null;
 };
 
+export type BatchCreateConceptInput = {
+  nodeCode: string;
+  term: string;
+  description?: string | null;
+  termEn?: string | null;
+  descriptionEn?: string | null;
+  slug?: string | null;
+};
+
+export type BatchCreateConceptsInput = {
+  concepts: BatchCreateConceptInput[];
+  dryRun?: boolean;
+};
+
+export type BatchCreateConceptResult = {
+  slug: string;
+  term: string;
+  nodeCode: string;
+  ordinal: number;
+  status: 'created' | 'skipped' | 'failed';
+  reason?: string;
+};
+
+export type BatchCreateConceptsResult = {
+  dryRun: boolean;
+  created: BatchCreateConceptResult[];
+  skipped: BatchCreateConceptResult[];
+  failed: BatchCreateConceptResult[];
+  summary: {
+    total: number;
+    created: number;
+    skipped: number;
+    failed: number;
+  };
+};
+
 export type CreateCurriculumItemResult = {
   item: CurriculumItem;
   concept: Concept;
@@ -1054,6 +1090,313 @@ export async function deleteCurriculumItemsAdminBySlug(
   }
 
   return { deleted, failed };
+}
+
+const BATCH_CREATE_MAX_ITEMS = 50;
+
+/**
+ * Batch create multiple concepts with guardrails.
+ * 
+ * Guardrails:
+ * 1. Pre-validates ALL items before creating ANY
+ * 2. Limits batch size to 50 items
+ * 3. Supports dry-run mode to preview what would be created
+ * 4. Detects duplicate slugs/terms within batch and against existing content
+ * 5. Groups by node for efficient ordinal calculation
+ * 6. Returns detailed results for each item
+ */
+export async function batchCreateCurriculumItemsAdmin(
+  input: BatchCreateConceptsInput
+): Promise<BatchCreateConceptsResult> {
+  const { concepts, dryRun = false } = input;
+  const serviceClient = getServiceClient();
+
+  const created: BatchCreateConceptResult[] = [];
+  const skipped: BatchCreateConceptResult[] = [];
+  const failed: BatchCreateConceptResult[] = [];
+
+  // Guardrail 1: Limit batch size
+  if (concepts.length > BATCH_CREATE_MAX_ITEMS) {
+    throw new Error(
+      `Batch size ${concepts.length} exceeds maximum of ${BATCH_CREATE_MAX_ITEMS}. ` +
+      `Split into smaller batches.`
+    );
+  }
+
+  if (!concepts.length) {
+    return {
+      dryRun,
+      created: [],
+      skipped: [],
+      failed: [],
+      summary: { total: 0, created: 0, skipped: 0, failed: 0 },
+    };
+  }
+
+  // Phase 1: Pre-validation - collect all info before any writes
+  const nodeCache = new Map<string, CurriculumNode>();
+  const sectionContextCache = new Map<string, SectionContext>();
+  const slugsInBatch = new Set<string>();
+  const termsInSection = new Map<string, Set<string>>(); // sectionCode -> terms
+
+  // Validate all nodes exist and build caches
+  const uniqueNodeCodes = [...new Set(concepts.map(c => c.nodeCode))];
+  for (const nodeCode of uniqueNodeCodes) {
+    const node = await getCurriculumNodeByCode(nodeCode, serviceClient);
+    if (!node) {
+      // All concepts targeting this node will fail
+      for (const c of concepts.filter(x => x.nodeCode === nodeCode)) {
+        failed.push({
+          slug: c.slug ?? slugifyConceptTerm(c.term),
+          term: c.term,
+          nodeCode: c.nodeCode,
+          ordinal: 0,
+          status: 'failed',
+          reason: `Node '${nodeCode}' not found`,
+        });
+      }
+    } else {
+      nodeCache.set(nodeCode, node);
+      const sectionContext = await resolveSectionContext(serviceClient, node);
+      sectionContextCache.set(nodeCode, sectionContext);
+    }
+  }
+
+  // Filter out concepts with invalid nodes
+  const validConcepts = concepts.filter(c => nodeCache.has(c.nodeCode));
+
+  // Pre-compute ordinals per node
+  const nodeOrdinalOffsets = new Map<string, number>();
+  for (const nodeCode of nodeCache.keys()) {
+    const nextOrdinal = await fetchNextItemOrdinal(serviceClient, nodeCode);
+    nodeOrdinalOffsets.set(nodeCode, nextOrdinal);
+  }
+
+  // Prepare items with computed slugs and ordinals
+  type PreparedItem = {
+    input: BatchCreateConceptInput;
+    slug: string;
+    ordinal: number;
+    sectionContext: SectionContext;
+    node: CurriculumNode;
+    skipReason?: string;
+  };
+
+  const preparedItems: PreparedItem[] = [];
+
+  for (const c of validConcepts) {
+    const node = nodeCache.get(c.nodeCode)!;
+    const sectionContext = sectionContextCache.get(c.nodeCode)!;
+    const termLt = c.term.trim();
+
+    // Generate slug
+    const slugBase = c.slug?.trim().toLowerCase() ?? termLt;
+    let slug = slugifyConceptTerm(slugBase);
+
+    // Guardrail 2: Check for duplicate slug within batch
+    if (slugsInBatch.has(slug)) {
+      // Try to make it unique with a suffix
+      let suffix = 1;
+      while (slugsInBatch.has(`${slug}-${suffix}`)) {
+        suffix++;
+        if (suffix > 100) break;
+      }
+      slug = `${slug}-${suffix}`;
+    }
+
+    // Check if slug already exists in database
+    const existingBySlug = await getConceptBySlug(slug, serviceClient);
+    if (existingBySlug) {
+      skipped.push({
+        slug,
+        term: termLt,
+        nodeCode: c.nodeCode,
+        ordinal: 0,
+        status: 'skipped',
+        reason: `Slug '${slug}' already exists`,
+      });
+      continue;
+    }
+
+    // Guardrail 3: Check for duplicate term in same section
+    const sectionTerms = termsInSection.get(sectionContext.sectionCode) ?? new Set();
+    if (sectionTerms.has(termLt.toLowerCase())) {
+      skipped.push({
+        slug,
+        term: termLt,
+        nodeCode: c.nodeCode,
+        ordinal: 0,
+        status: 'skipped',
+        reason: `Term '${termLt}' already exists in batch for section ${sectionContext.sectionCode}`,
+      });
+      continue;
+    }
+
+    // Check if term exists in database for this section
+    const existingByTerm = await findConceptBySectionAndTerm(
+      sectionContext.sectionCode,
+      termLt,
+      serviceClient
+    );
+    if (existingByTerm) {
+      skipped.push({
+        slug,
+        term: termLt,
+        nodeCode: c.nodeCode,
+        ordinal: 0,
+        status: 'skipped',
+        reason: `Term '${termLt}' already exists in section (slug: ${existingByTerm.slug})`,
+      });
+      continue;
+    }
+
+    // Calculate ordinal for this node
+    const ordinal = nodeOrdinalOffsets.get(c.nodeCode)!;
+    nodeOrdinalOffsets.set(c.nodeCode, ordinal + 1);
+
+    // Mark slug and term as used
+    slugsInBatch.add(slug);
+    sectionTerms.add(termLt.toLowerCase());
+    termsInSection.set(sectionContext.sectionCode, sectionTerms);
+
+    preparedItems.push({
+      input: c,
+      slug,
+      ordinal,
+      sectionContext,
+      node,
+    });
+  }
+
+  // If dry-run, return what would be created without actually creating
+  if (dryRun) {
+    for (const item of preparedItems) {
+      created.push({
+        slug: item.slug,
+        term: item.input.term,
+        nodeCode: item.input.nodeCode,
+        ordinal: item.ordinal,
+        status: 'created',
+        reason: 'Would be created (dry-run)',
+      });
+    }
+
+    return {
+      dryRun: true,
+      created,
+      skipped,
+      failed,
+      summary: {
+        total: concepts.length,
+        created: created.length,
+        skipped: skipped.length,
+        failed: failed.length,
+      },
+    };
+  }
+
+  // Phase 2: Execute creates - group by node for efficiency
+  const itemsByNode = new Map<string, PreparedItem[]>();
+  for (const item of preparedItems) {
+    const nodeItems = itemsByNode.get(item.node.code) ?? [];
+    nodeItems.push(item);
+    itemsByNode.set(item.node.code, nodeItems);
+  }
+
+  for (const [nodeCode, items] of itemsByNode) {
+    // Batch insert curriculum_items for this node
+    const itemPayloads = items.map(item => ({
+      node_code: nodeCode,
+      ordinal: item.ordinal,
+      label: item.input.term.trim(),
+    }));
+
+    const { error: itemsError } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .insert(itemPayloads);
+
+    if (itemsError) {
+      // All items for this node failed
+      for (const item of items) {
+        failed.push({
+          slug: item.slug,
+          term: item.input.term,
+          nodeCode,
+          ordinal: item.ordinal,
+          status: 'failed',
+          reason: `Failed to insert curriculum item: ${itemsError.message}`,
+        });
+      }
+      continue;
+    }
+
+    // Batch insert concepts
+    const conceptPayloads = items.map(item => ({
+      section_code: item.sectionContext.sectionCode,
+      section_title: item.sectionContext.sectionTitle,
+      subsection_code: item.sectionContext.subsectionCode,
+      subsection_title: item.sectionContext.subsectionTitle,
+      slug: item.slug,
+      term_lt: item.input.term.trim(),
+      term_en: item.input.termEn?.trim() ?? null,
+      description_lt: item.input.description?.trim() ?? 'Aprašymas bus papildytas vėliau.',
+      description_en: item.input.descriptionEn?.trim() ?? null,
+      metadata: { status: 'draft', createdVia: 'batch-create' },
+      is_required: true,
+      curriculum_node_code: nodeCode,
+      curriculum_item_ordinal: item.ordinal,
+      curriculum_item_label: item.input.term.trim(),
+    }));
+
+    const { error: conceptsError } = await (serviceClient as any)
+      .from(CONCEPTS_TABLE)
+      .insert(conceptPayloads);
+
+    if (conceptsError) {
+      // Concepts failed - need to rollback curriculum items
+      for (const item of items) {
+        await (serviceClient as any)
+          .from(ITEM_TABLE)
+          .delete()
+          .eq('node_code', nodeCode)
+          .eq('ordinal', item.ordinal);
+
+        failed.push({
+          slug: item.slug,
+          term: item.input.term,
+          nodeCode,
+          ordinal: item.ordinal,
+          status: 'failed',
+          reason: `Failed to insert concept: ${conceptsError.message}`,
+        });
+      }
+      continue;
+    }
+
+    // All items for this node succeeded
+    for (const item of items) {
+      created.push({
+        slug: item.slug,
+        term: item.input.term,
+        nodeCode,
+        ordinal: item.ordinal,
+        status: 'created',
+      });
+    }
+  }
+
+  return {
+    dryRun: false,
+    created,
+    skipped,
+    failed,
+    summary: {
+      total: concepts.length,
+      created: created.length,
+      skipped: skipped.length,
+      failed: failed.length,
+    },
+  };
 }
 
 async function resequenceParentChildren(

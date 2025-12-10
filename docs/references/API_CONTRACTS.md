@@ -76,9 +76,9 @@ Media submission endpoints are deferred; learners will gain upload APIs when MED
 
 The Agent API provides a conversational interface for AI-powered curriculum management. It exposes LLM-backed tools that can query and manipulate the curriculum database.
 
-| Method | Path                 | Body                                                        | Status  | Notes                                                   |
-| ------ | -------------------- | ----------------------------------------------------------- | ------- | ------------------------------------------------------- |
-| POST   | `/admin/agent/chat`  | `{ messages, model?, executionMode?, pendingToolCalls? }`  | Shipped | Send messages to AI agent; returns response with tools  |
+| Method | Path                | Body                                                      | Status  | Notes                                                  |
+| ------ | ------------------- | --------------------------------------------------------- | ------- | ------------------------------------------------------ |
+| POST   | `/admin/agent/chat` | `{ messages, model?, executionMode?, pendingToolCalls? }` | Shipped | Send messages to AI agent; returns response with tools |
 
 #### Request Body
 
@@ -120,18 +120,19 @@ The Agent API provides a conversational interface for AI-powered curriculum mana
 
 #### Available Agent Tools
 
-| Tool                    | Category   | Description                                                           |
-| ----------------------- | ---------- | --------------------------------------------------------------------- |
-| `list_curriculum`       | READ       | Returns the full curriculum tree (sections/subsections)               |
-| `list_concepts`         | READ       | Lists concepts, optionally filtered by sectionCode or nodeCode        |
-| `get_concept`           | READ       | Gets detailed info about a specific concept by slug                   |
-| `create_curriculum_node`| CREATE     | Creates a new section or subsection                                   |
-| `create_concept`        | CREATE     | Creates a new learning concept with curriculum item                   |
-| `edit_concept`          | EDIT       | Updates term, description, or label (does NOT change position)        |
-| `reorder_concept`       | EDIT       | Changes a concept's position within its current node                  |
-| `move_concept`          | EDIT       | Moves a concept to a different section/subsection                     |
-| `delete_concepts`       | DELETE     | Deletes one or more concepts by slug (batch deletion supported)       |
-| `reset_content`         | DESTRUCTIVE| Wipes all curriculum nodes and concepts (requires confirmation)       |
+| Tool                     | Category    | Description                                                     |
+| ------------------------ | ----------- | --------------------------------------------------------------- |
+| `list_curriculum`        | READ        | Returns the full curriculum tree (sections/subsections)         |
+| `list_concepts`          | READ        | Lists concepts, optionally filtered by sectionCode or nodeCode  |
+| `get_concept`            | READ        | Gets detailed info about a specific concept by slug             |
+| `create_curriculum_node` | CREATE      | Creates a new section or subsection                             |
+| `create_concept`         | CREATE      | Creates a new learning concept with curriculum item             |
+| `batch_create_concepts`  | CREATE      | Batch creates up to 50 concepts with validation (dryRun mode)   |
+| `edit_concept`           | EDIT        | Updates term, description, or label (does NOT change position)  |
+| `reorder_concept`        | EDIT        | Changes a concept's position within its current node            |
+| `move_concept`           | EDIT        | Moves a concept to a different section/subsection               |
+| `delete_concepts`        | DELETE      | Deletes one or more concepts by slug (batch deletion supported) |
+| `reset_content`          | DESTRUCTIVE | Wipes all curriculum nodes and concepts (requires confirmation) |
 
 READ tools are auto-executed; CREATE/EDIT/DELETE tools require user confirmation in `plan` mode.
 

@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { resetContent } from '../../../data/repositories/contentRepository.ts';
-import { createCurriculumNodeAdmin, createCurriculumItemAdmin, updateCurriculumItemAdmin, reorderCurriculumItemAdmin, moveCurriculumItemAdmin, deleteCurriculumItemsAdminBySlug, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
+import { createCurriculumNodeAdmin, createCurriculumItemAdmin, updateCurriculumItemAdmin, reorderCurriculumItemAdmin, moveCurriculumItemAdmin, deleteCurriculumItemsAdminBySlug, batchCreateCurriculumItemsAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
 import { listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
 import { createChatCompletion, type ChatMessage } from './llmProvider.ts';
@@ -155,6 +155,39 @@ const tools = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "batch_create_concepts",
+      description: "Creates multiple concepts at once. More efficient than calling create_concept repeatedly. Supports dry-run mode to preview what would be created. Max 50 concepts per batch. Automatically handles slug generation, ordinal assignment, and duplicate detection.",
+      parameters: {
+        type: "object",
+        properties: {
+          concepts: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                nodeCode: { type: "string", description: "Curriculum node code (e.g., 'LBS-1-1A')" },
+                term: { type: "string", description: "Main term/title in Lithuanian" },
+                description: { type: "string", description: "Description in Markdown" },
+                termEn: { type: "string", description: "English term (optional)" },
+                descriptionEn: { type: "string", description: "English description (optional)" },
+                slug: { type: "string", description: "Custom slug (optional, auto-generated if omitted)" },
+              },
+              required: ["nodeCode", "term"],
+            },
+            description: "Array of concepts to create (max 50)"
+          },
+          dryRun: {
+            type: "boolean",
+            description: "If true, validates and returns what would be created without actually creating. Use this first to verify the batch looks correct."
+          },
+        },
+        required: ["concepts"],
+      },
+    },
+  },
 ];
 
 // Tools that don't modify data and can be auto-executed
@@ -178,7 +211,8 @@ const systemMessage: ChatMessage = {
     
     CREATE:
     - create_curriculum_node: Create a new section or subsection
-    - create_concept: Create a new learning concept
+    - create_concept: Create a single learning concept
+    - batch_create_concepts: Create multiple concepts at once (max 50). ALWAYS use dryRun: true first to preview, then confirm with dryRun: false
     
     EDIT:
     - edit_concept: Update a concept's term, description, or label (does NOT change position)
@@ -190,6 +224,12 @@ const systemMessage: ChatMessage = {
     
     DESTRUCTIVE:
     - reset_content: Wipe all data (DANGEROUS - always ask for confirmation)
+    
+    BATCH OPERATIONS WORKFLOW:
+    When creating multiple concepts, ALWAYS follow this pattern:
+    1. First call batch_create_concepts with dryRun: true to preview what will be created
+    2. Show the user the preview and ask for confirmation
+    3. Only after user confirms, call batch_create_concepts with dryRun: false
     
     The curriculum has a hierarchical structure:
     - Level 1 nodes are main sections (e.g., "LBS-1", "LBS-2")
@@ -367,6 +407,37 @@ export async function chatWithAgent(
           const deletedList = result.deleted.map(d => d.termLt).join(', ');
           const failedList = result.failed.map(f => `${f.slug}: ${f.error}`).join('; ');
           functionResult = `Deleted ${result.deleted.length} concept(s): ${deletedList || 'none'}.${result.failed.length ? ` Failed: ${failedList}` : ''}`;
+        } else if (functionName === "batch_create_concepts") {
+          const concepts = functionArgs.concepts as Array<{
+            nodeCode: string;
+            term: string;
+            description?: string;
+            termEn?: string;
+            descriptionEn?: string;
+            slug?: string;
+          }>;
+          const dryRun = functionArgs.dryRun === true;
+          
+          const result = await batchCreateCurriculumItemsAdmin({
+            concepts,
+            dryRun,
+          });
+          
+          if (dryRun) {
+            const previewList = result.created.map(c => `${c.term} (${c.slug}) → ${c.nodeCode}:${c.ordinal}`).join('\n  ');
+            const skippedList = result.skipped.map(c => `${c.term}: ${c.reason}`).join('\n  ');
+            functionResult = `[DRY RUN] Would create ${result.created.length} concept(s):\n  ${previewList || 'none'}` +
+              (result.skipped.length ? `\n\nWould skip ${result.skipped.length}:\n  ${skippedList}` : '') +
+              (result.failed.length ? `\n\nWould fail ${result.failed.length}: ${result.failed.map(f => f.reason).join('; ')}` : '') +
+              `\n\nTo execute, call again with dryRun: false.`;
+          } else {
+            const createdList = result.created.map(c => c.term).join(', ');
+            const skippedList = result.skipped.map(c => `${c.term}: ${c.reason}`).join('; ');
+            const failedList = result.failed.map(c => `${c.term}: ${c.reason}`).join('; ');
+            functionResult = `Created ${result.created.length} concept(s): ${createdList || 'none'}.` +
+              (result.skipped.length ? ` Skipped ${result.skipped.length}: ${skippedList}.` : '') +
+              (result.failed.length ? ` Failed ${result.failed.length}: ${failedList}.` : '');
+          }
         } else {
           functionResult = "Unknown function";
         }
