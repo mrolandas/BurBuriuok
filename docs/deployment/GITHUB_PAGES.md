@@ -114,8 +114,8 @@ This file is overwritten during deployment with production values:
 window.__MOXLAI_CONFIG__ = {
   supabaseUrl: "https://xxx.supabase.co",
   supabaseAnonKey: "xxx",
-  adminApiBase: "https://moxlai.onrender.com/api/v1/admin",
-  publicApiBase: "https://moxlai.onrender.com/api/v1",
+  adminApiBase: "https://burburiuok.onrender.com/api/v1/admin",
+  publicApiBase: "https://burburiuok.onrender.com/api/v1",
 };
 ```
 

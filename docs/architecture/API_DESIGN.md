@@ -6,7 +6,7 @@ This document describes the REST API design conventions and authentication patte
 
 | Environment | URL                                      |
 | ----------- | ---------------------------------------- |
-| Production  | `https://moxlai.onrender.com/api/v1` |
+| Production  | `https://burburiuok.onrender.com/api/v1` |
 | Local       | `http://localhost:4000/api/v1`           |
 
 ## Authentication

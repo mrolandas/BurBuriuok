@@ -5,9 +5,11 @@
 ## Quick Links
 
 | Environment | Frontend | Backend |
-|-------------|----------|---------|
-| Production  | [mrolandas.github.io/Moxlai](https://mrolandas.github.io/Moxlai) | [moxlai.onrender.com](https://moxlai.onrender.com) |
-| Local       | http://localhost:5173 | http://localhost:3001 |
+|-------------|----------|---------||
+| Production | [mrolandas.github.io/Moxlai](https://mrolandas.github.io/Moxlai) | [burburiuok.onrender.com](https://burburiuok.onrender.com)\* |
+| Local | http://localhost:5173 | http://localhost:3001 |
+
+\* _Legacy Render URL - will be migrated in a future update._
 
 ## What is Moxlai?
 
@@ -45,12 +47,12 @@ See [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) for detailed setup.
 
 ## Documentation
 
-| Document | Purpose |
-|----------|---------|
+| Document                                      | Purpose               |
+| --------------------------------------------- | --------------------- |
 | [GETTING_STARTED.md](docs/GETTING_STARTED.md) | Developer setup guide |
-| [ROADMAP.md](docs/ROADMAP.md) | Feature priorities |
-| [architecture/](docs/architecture/) | System design docs |
-| [deployment/](docs/deployment/) | Hosting guides |
+| [ROADMAP.md](docs/ROADMAP.md)                 | Feature priorities    |
+| [architecture/](docs/architecture/)           | System design docs    |
+| [deployment/](docs/deployment/)               | Hosting guides        |
 
 ## Tech Stack
 

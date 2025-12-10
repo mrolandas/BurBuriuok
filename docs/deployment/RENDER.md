@@ -2,15 +2,17 @@
 
 The backend is deployed to Render.com as a Node.js web service.
 
+> **Note**: The Render service is still named `burburiuok` (legacy name). The URL cannot be easily changed without recreating the service. This will be addressed in a future migration.
+
 ## Overview
 
-| Aspect            | Details                     |
-| ----------------- | --------------------------- |
-| **Service Type**  | Web Service                 |
-| **Runtime**       | Node.js 20                  |
-| **Build Command** | `npm install`               |
-| **Start Command** | `npm run backend:start`     |
-| **URL**           | https://moxlai.onrender.com |
+| Aspect            | Details                         |
+| ----------------- | ------------------------------- |
+| **Service Type**  | Web Service                     |
+| **Runtime**       | Node.js 20                      |
+| **Build Command** | `npm install`                   |
+| **Start Command** | `npm run backend:start`         |
+| **URL**           | https://burburiuok.onrender.com |
 
 ## Deployment Pipeline
 

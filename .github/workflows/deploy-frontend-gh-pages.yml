@@ -100,8 +100,8 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
 
-          const defaultAdminApiBase = 'https://moxlai.onrender.com/api/v1/admin';
-          const defaultPublicApiBase = 'https://moxlai.onrender.com/api/v1';
+          const defaultAdminApiBase = 'https://burburiuok.onrender.com/api/v1/admin';
+          const defaultPublicApiBase = 'https://burburiuok.onrender.com/api/v1';
 
           const config = {
             supabaseUrl: process.env.SUPABASE_URL,

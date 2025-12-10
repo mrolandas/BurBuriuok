@@ -70,11 +70,13 @@ moxlai/
 
 ## URLs
 
-| Environment | Frontend                                 | Backend                           |
-| ----------- | ---------------------------------------- | --------------------------------- |
-| Production  | `https://mrolandas.github.io/Moxlai` | `https://moxlai.onrender.com` |
-| Local Dev   | `http://localhost:5173`                  | `http://localhost:4000`           |
-| Future      | `moxlai.lt/<subject>`                    | TBD                               |
+| Environment | Frontend                             | Backend                             |
+| ----------- | ------------------------------------ | ----------------------------------- |
+| Production  | `https://mrolandas.github.io/Moxlai` | `https://burburiuok.onrender.com`\* |
+| Local Dev   | `http://localhost:5173`              | `http://localhost:4000`             |
+| Future      | `moxlai.lt/<subject>`                | TBD                                 |
+
+\* _Legacy Render URL - will be migrated to `moxlai.onrender.com` in a future update._
 
 ---
 
