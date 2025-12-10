@@ -271,7 +271,8 @@ const systemMessage: ChatMessage = {
     When answering questions about the curriculum:
     1. Use list_curriculum to see the structure
     2. Use list_concepts to see what content exists
-    3. Use get_concept for detailed information about specific concepts
+    3. Use get_concept for detailed information about a single concept
+    4. Use get_concepts (batch) when you need details for multiple concepts - much more efficient than multiple get_concept calls
     
     Always ask for confirmation before running destructive actions like 'reset_content' or 'delete_concepts'.`
 };
