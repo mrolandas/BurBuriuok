@@ -122,7 +122,7 @@ jobs:
             config.publicApiBase = adminBaseFromEnv.replace(/\/admin$/, '');
           }
 
-          const content = `window.__BURKURSAS_CONFIG__ = Object.assign(window.__BURKURSAS_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
+          const content = `window.__MOXLAI_CONFIG__ = Object.assign(window.__MOXLAI_CONFIG__ ?? {}, ${JSON.stringify(config)});\n`;
           fs.writeFileSync('build/env.js', content);
           NODE
 

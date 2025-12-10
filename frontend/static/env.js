@@ -1,5 +1,5 @@
 (() => {
-	const existingConfig = window.__BURKURSAS_CONFIG__ ?? {};
+	const existingConfig = window.__MOXLAI_CONFIG__ ?? {};
 
 	const sanitizeSupabaseField = (fieldName) => {
 		const rawValue = existingConfig[fieldName];
@@ -45,5 +45,5 @@
 		// Ignore hostname parsing issues so local development keeps working
 	}
 
-	window.__BURKURSAS_CONFIG__ = existingConfig;
+	window.__MOXLAI_CONFIG__ = existingConfig;
 })();

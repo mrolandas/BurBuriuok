@@ -1,6 +1,6 @@
 # Infrastructure Module
 
-Automation scripts, deployment workflows, and infrastructure-as-code assets for BurKursas.
+Automation scripts, deployment workflows, and infrastructure-as-code assets for Moxlai.
 
 ## Responsibilities
 

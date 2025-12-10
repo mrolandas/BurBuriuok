@@ -4,10 +4,10 @@ Complete reference of all REST API endpoints.
 
 ## Base URLs
 
-| Environment | URL                                      |
-| ----------- | ---------------------------------------- |
+| Environment | URL                                  |
+| ----------- | ------------------------------------ |
 | Production  | `https://moxlai.onrender.com/api/v1` |
-| Local       | `http://localhost:4000/api/v1`           |
+| Local       | `http://localhost:4000/api/v1`       |
 
 ## Authentication
 

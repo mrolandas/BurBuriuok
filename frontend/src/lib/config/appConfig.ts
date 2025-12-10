@@ -6,13 +6,13 @@ type RuntimeConfig = {
 };
 
 const globalWithRuntimeConfig = globalThis as typeof globalThis & {
-	__BURKURSAS_CONFIG__?: unknown;
+	__MOXLAI_CONFIG__?: unknown;
 };
 
 const runtimeConfig: RuntimeConfig =
-	typeof globalWithRuntimeConfig.__BURKURSAS_CONFIG__ === 'object' &&
-	globalWithRuntimeConfig.__BURKURSAS_CONFIG__ !== null
-		? (globalWithRuntimeConfig.__BURKURSAS_CONFIG__ as RuntimeConfig)
+	typeof globalWithRuntimeConfig.__MOXLAI_CONFIG__ === 'object' &&
+	globalWithRuntimeConfig.__MOXLAI_CONFIG__ !== null
+		? (globalWithRuntimeConfig.__MOXLAI_CONFIG__ as RuntimeConfig)
 		: {};
 
 const supabaseUrl = runtimeConfig.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL ?? '';
@@ -22,7 +22,7 @@ const adminApiBase = runtimeConfig.adminApiBase ?? import.meta.env.VITE_ADMIN_AP
 const publicApiBase = runtimeConfig.publicApiBase ?? import.meta.env.VITE_PUBLIC_API_BASE ?? '';
 
 export const appConfig = {
-	appName: 'BurKursas',
+	appName: 'Moxlai',
 	supabase: {
 		url: supabaseUrl,
 		anonKey: supabaseAnonKey
@@ -49,11 +49,11 @@ export function validateSupabaseConfig(): void {
 
 declare global {
 	interface Global {
-		__BURKURSAS_CONFIG__?: RuntimeConfig;
+		__MOXLAI_CONFIG__?: RuntimeConfig;
 	}
 
 	interface Window {
-		__BURKURSAS_CONFIG__?: RuntimeConfig;
+		__MOXLAI_CONFIG__?: RuntimeConfig;
 	}
 }
 

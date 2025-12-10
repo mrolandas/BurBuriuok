@@ -4,11 +4,11 @@ The frontend is deployed as a static site to GitHub Pages.
 
 ## Overview
 
-| Aspect      | Details                                |
-| ----------- | -------------------------------------- |
-| **Trigger** | Push to `main` branch                  |
-| **Build**   | SvelteKit with adapter-static          |
-| **Output**  | Static HTML/JS/CSS                     |
+| Aspect      | Details                            |
+| ----------- | ---------------------------------- |
+| **Trigger** | Push to `main` branch              |
+| **Build**   | SvelteKit with adapter-static      |
+| **Output**  | Static HTML/JS/CSS                 |
 | **URL**     | https://mrolandas.github.io/Moxlai |
 
 ## Deployment Pipeline
@@ -111,7 +111,7 @@ File: `frontend/static/env.js`
 This file is overwritten during deployment with production values:
 
 ```javascript
-window.__BURKURSAS_CONFIG__ = {
+window.__MOXLAI_CONFIG__ = {
   supabaseUrl: "https://xxx.supabase.co",
   supabaseAnonKey: "xxx",
   adminApiBase: "https://moxlai.onrender.com/api/v1/admin",
