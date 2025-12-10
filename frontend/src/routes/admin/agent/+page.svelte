@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterUpdate, onMount } from 'svelte';
+  import { afterUpdate, onMount, tick } from 'svelte';
   import { getSupabaseClient } from '$lib/supabase/client';
 
   type ToolLog = {
@@ -36,14 +36,24 @@
   let input = '';
   let chatLoading = false;
   let chatContainer: HTMLDivElement;
+  let inputTextarea: HTMLTextAreaElement;
   let pendingPlan: Message | null = null;
   let testStatus: { state: 'idle' | 'loading' | 'success' | 'error'; message: string } = { state: 'idle', message: '' };
   
   // Model selection
   let availableModels: GeminiModel[] = [];
   let selectedModel = 'gemini-2.5-flash'; // Default
+  let previousModel = ''; // Track for change detection
 
   onMount(async () => {
+    // Hide the admin status bar for this page
+    const statusEl = document.querySelector('.admin-shell__status');
+    if (statusEl) (statusEl as HTMLElement).style.display = 'none';
+    
+    // Focus input on mount
+    await tick();
+    inputTextarea?.focus();
+    
     try {
       const headers = await getAuthHeaders();
       const res = await fetch('/api/v1/agent/models', { headers });
@@ -54,13 +64,28 @@
     } catch (e) {
       console.error('Failed to load models:', e);
     }
+    
+    // Auto-test connection on mount
+    previousModel = selectedModel;
+    testConnection();
   });
+
+  // Auto-test when model actually changes (not on initial load)
+  $: if (selectedModel && previousModel && selectedModel !== previousModel) {
+    previousModel = selectedModel;
+    testConnection();
+  }
 
   afterUpdate(() => {
     if (chatContainer) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   });
+
+  async function focusInput() {
+    await tick();
+    inputTextarea?.focus();
+  }
 
   async function getAuthHeaders() {
     const supabase = getSupabaseClient();
@@ -133,6 +158,7 @@
       messages = [...messages, { role: 'system', content: `Error: ${error.message}`, timestamp: new Date() }];
     } finally {
       chatLoading = false;
+      focusInput();
     }
   }
 
@@ -181,17 +207,20 @@
       messages = [...messages, { role: 'system', content: `Error: ${error.message}`, timestamp: new Date() }];
     } finally {
       chatLoading = false;
+      focusInput();
     }
   }
 
   function abortPlan() {
     pendingPlan = null;
+    focusInput();
   }
 
   function clearChat() {
     messages = [];
     pendingPlan = null;
     input = '';
+    focusInput();
   }
 
   async function testConnection() {
@@ -222,144 +251,23 @@
 
 <style>
   .chat-container {
-    display: flex;
-    height: 100vh;
-    background: #343541;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  }
-
-  .sidebar {
-    width: 260px;
-    background: #202123;
+    position: fixed;
+    top: 4.5rem; /* app header height */
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .sidebar-header {
-    padding: 1rem;
-  }
-
-  .new-chat-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: transparent;
-    color: rgba(255,255,255,0.9);
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .new-chat-btn:hover {
-    background: rgba(255,255,255,0.05);
-  }
-
-  .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 0.5rem;
-  }
-
-  .sidebar-label {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    padding: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .model-selector {
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-  }
-
-  .model-label {
-    display: block;
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 0.375rem;
-  }
-
-  .model-dropdown {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: #2a2b32;
-    color: rgba(255,255,255,0.9);
-    font-size: 0.875rem;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    padding-right: 2rem;
-  }
-
-  .model-dropdown:hover {
-    border-color: rgba(255,255,255,0.3);
-  }
-
-  .model-dropdown:focus {
-    outline: none;
-    border-color: #0d9488;
-  }
-
-  .model-dropdown option {
-    background: #2a2b32;
-    color: rgba(255,255,255,0.9);
-  }
-
-  .sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: rgba(255,255,255,0.7);
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #6b7280;
-  }
-
-  .status-dot.success { background: #22c55e; }
-  .status-dot.error { background: #ef4444; }
-  .status-dot.loading { background: #eab308; animation: pulse 1s infinite; }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  .test-btn {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .test-btn:hover {
-    color: rgba(255,255,255,0.8);
+    background: var(--color-bg);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    z-index: 10;
   }
 
   .main-area {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
   .messages-area {
@@ -389,12 +297,12 @@
   .welcome-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: white;
+    color: var(--color-text);
     margin-bottom: 0.5rem;
   }
 
   .welcome-text {
-    color: rgba(255,255,255,0.6);
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
     line-height: 1.6;
   }
@@ -408,9 +316,9 @@
   .quick-action-btn {
     padding: 0.75rem;
     border-radius: 0.5rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid var(--color-border);
     background: transparent;
-    color: rgba(255,255,255,0.8);
+    color: var(--color-text);
     font-size: 0.875rem;
     text-align: left;
     cursor: pointer;
@@ -418,7 +326,7 @@
   }
 
   .quick-action-btn:hover {
-    background: rgba(255,255,255,0.05);
+    background: var(--color-surface-alt);
   }
 
   .messages-list {
@@ -446,9 +354,9 @@
     flex-shrink: 0;
   }
 
-  .avatar.user { background: #2563eb; }
-  .avatar.assistant { background: #0d9488; }
-  .avatar.system { background: #dc2626; }
+  .avatar.user { background: var(--color-accent); }
+  .avatar.assistant { background: var(--color-accent-strong); }
+  .avatar.system { background: var(--color-status-error-text); }
   .avatar.tool { background: #7c3aed; }
 
   .avatar svg {
@@ -479,13 +387,13 @@
   .message-role {
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.6);
+    color: var(--color-text-muted);
     text-transform: uppercase;
   }
 
   .message-time {
     font-size: 0.625rem;
-    color: rgba(255,255,255,0.3);
+    color: var(--color-text-soft);
   }
 
   .message-bubble {
@@ -497,25 +405,26 @@
   }
 
   .message-bubble.user {
-    background: #2563eb;
+    background: var(--color-accent);
     color: white;
   }
 
   .message-bubble.assistant {
-    background: #444654;
-    color: rgba(255,255,255,0.9);
+    background: var(--color-panel);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
   }
 
   .message-bubble.system {
-    background: rgba(127, 29, 29, 0.5);
-    color: #fca5a5;
-    border: 1px solid rgba(185, 28, 28, 0.5);
+    background: var(--color-status-error-bg);
+    color: var(--color-status-error-text);
+    border: 1px solid var(--color-status-error-border);
   }
 
   .message-bubble.tool {
-    background: rgba(88, 28, 135, 0.5);
-    color: #c4b5fd;
-    border: 1px solid rgba(124, 58, 237, 0.5);
+    background: var(--color-accent-faint);
+    color: var(--color-text);
+    border: 1px solid var(--color-accent-border);
     font-family: monospace;
     font-size: 0.75rem;
   }
@@ -527,13 +436,13 @@
   }
 
   .message-text.empty-response {
-    color: rgba(255,255,255,0.5);
+    color: var(--color-text-muted);
     font-style: italic;
   }
 
   .error-details {
     margin-top: 0.75rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid var(--color-border);
     padding-top: 0.5rem;
   }
 
@@ -542,13 +451,13 @@
     align-items: center;
     gap: 0.25rem;
     font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
+    color: var(--color-text-muted);
     cursor: pointer;
     user-select: none;
   }
 
   .error-summary:hover {
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text);
   }
 
   .error-summary svg {
@@ -562,7 +471,7 @@
   .error-content {
     margin-top: 0.5rem;
     padding: 0.5rem;
-    background: rgba(0,0,0,0.3);
+    background: var(--color-surface-alt);
     border-radius: 0.375rem;
     font-size: 0.75rem;
   }
@@ -576,20 +485,21 @@
   }
 
   .error-label {
-    color: rgba(255,255,255,0.6);
+    color: var(--color-text-muted);
     font-weight: 500;
   }
 
   .error-pre {
     margin: 0.25rem 0 0 0;
     padding: 0.5rem;
-    background: rgba(0,0,0,0.3);
+    background: var(--color-surface);
     border-radius: 0.25rem;
     overflow-x: auto;
     white-space: pre-wrap;
     word-break: break-word;
     font-size: 0.6875rem;
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
   }
 
   .error-stack {
@@ -599,7 +509,7 @@
 
   .tool-logs {
     margin-top: 0.75rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid var(--color-border);
     padding-top: 0.5rem;
   }
 
@@ -608,13 +518,13 @@
     align-items: center;
     gap: 0.25rem;
     font-size: 0.75rem;
-    color: rgba(45, 212, 191, 0.7);
+    color: var(--color-accent);
     cursor: pointer;
     user-select: none;
   }
 
   .tool-logs-summary:hover {
-    color: rgba(45, 212, 191, 0.9);
+    color: var(--color-accent-strong);
   }
 
   .tool-logs-summary svg {
@@ -634,13 +544,13 @@
 
   .tool-log-item {
     padding: 0.5rem;
-    background: rgba(0,0,0,0.25);
+    background: var(--color-surface-alt);
     border-radius: 0.375rem;
-    border-left: 3px solid rgba(45, 212, 191, 0.5);
+    border-left: 3px solid var(--color-accent);
   }
 
   .tool-log-item.has-error {
-    border-left-color: #ef4444;
+    border-left-color: var(--color-status-error-text);
   }
 
   .tool-log-header {
@@ -652,14 +562,14 @@
 
   .tool-log-name {
     font-weight: 600;
-    color: #2dd4bf;
+    color: var(--color-accent);
     font-size: 0.75rem;
     font-family: monospace;
   }
 
   .tool-log-time {
     font-size: 0.625rem;
-    color: rgba(255,255,255,0.4);
+    color: var(--color-text-soft);
   }
 
   .tool-log-section {
@@ -668,37 +578,38 @@
 
   .tool-log-label {
     font-size: 0.6875rem;
-    color: rgba(255,255,255,0.5);
+    color: var(--color-text-muted);
   }
 
   .tool-log-label.error-label {
-    color: #f87171;
+    color: var(--color-status-error-text);
   }
 
   .tool-log-pre {
     margin: 0.125rem 0 0 0;
     padding: 0.375rem;
-    background: rgba(0,0,0,0.3);
+    background: var(--color-surface);
     border-radius: 0.25rem;
     overflow-x: auto;
     white-space: pre-wrap;
     word-break: break-word;
     font-size: 0.625rem;
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text);
     font-family: monospace;
     max-height: 150px;
     overflow-y: auto;
+    border: 1px solid var(--color-border);
   }
 
   .tool-log-pre.error-text {
-    color: #f87171;
+    color: var(--color-status-error-text);
   }
 
   .pending-plan {
-    background: #444654;
+    background: var(--color-panel);
     border-radius: 1rem;
     padding: 1rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid var(--color-border);
     margin-bottom: 1.5rem;
   }
 
@@ -726,7 +637,7 @@
   .plan-title {
     font-size: 0.875rem;
     font-weight: 500;
-    color: white;
+    color: var(--color-text);
   }
 
   .plan-actions {
@@ -738,7 +649,7 @@
     padding: 0.375rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text-muted);
     background: none;
     border: none;
     border-radius: 0.5rem;
@@ -747,8 +658,8 @@
   }
 
   .discard-btn:hover {
-    color: white;
-    background: rgba(255,255,255,0.1);
+    color: var(--color-text);
+    background: var(--color-surface-alt);
   }
 
   .execute-btn {
@@ -773,7 +684,7 @@
   }
 
   .tool-call-item {
-    background: rgba(0,0,0,0.2);
+    background: var(--color-surface-alt);
     border-radius: 0.5rem;
     padding: 0.75rem;
     margin-top: 0.5rem;
@@ -782,12 +693,12 @@
   }
 
   .tool-call-name {
-    color: #2dd4bf;
+    color: var(--color-accent);
     font-weight: 700;
   }
 
   .tool-call-args {
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text);
     margin-top: 0.25rem;
     white-space: pre-wrap;
     word-break: break-word;
@@ -800,17 +711,18 @@
   }
 
   .loading-bubble {
-    background: #444654;
+    background: var(--color-panel);
     border-radius: 1rem;
     padding: 0.75rem 1rem;
     display: inline-block;
+    border: 1px solid var(--color-border);
   }
 
   .loading-content {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: rgba(255,255,255,0.7);
+    color: var(--color-text-muted);
     font-size: 0.875rem;
   }
 
@@ -822,7 +734,7 @@
   .loading-dot {
     width: 8px;
     height: 8px;
-    background: rgba(255,255,255,0.5);
+    background: var(--color-accent);
     border-radius: 50%;
     animation: bounce 1s infinite;
   }
@@ -836,7 +748,7 @@
   }
 
   .loading-text {
-    color: rgba(255,255,255,0.5);
+    color: var(--color-text-muted);
     margin-left: 0.5rem;
   }
 
@@ -850,9 +762,9 @@
   }
 
   .input-area {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    background: #343541;
-    padding: 1rem;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-panel);
+    padding: 0.75rem 1rem;
   }
 
   .input-wrapper {
@@ -862,29 +774,31 @@
 
   .input-box {
     display: flex;
-    align-items: flex-end;
-    gap: 0.75rem;
-    background: #40414f;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 0.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-surface);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.75rem;
   }
 
   .input-textarea {
     flex: 1;
     background: transparent;
-    color: white;
+    color: var(--color-text);
     border: none;
     outline: none;
     resize: none;
     font-size: 0.875rem;
     font-family: inherit;
-    min-height: 24px;
-    max-height: 200px;
+    line-height: 1.4;
+    min-height: 20px;
+    max-height: 120px;
+    padding: 0;
   }
 
   .input-textarea::placeholder {
-    color: rgba(255,255,255,0.4);
+    color: var(--color-text-muted);
   }
 
   .input-textarea:disabled {
@@ -892,17 +806,18 @@
   }
 
   .send-btn {
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    background: #0d9488;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    background: var(--color-accent);
     color: white;
     border: none;
     cursor: pointer;
     transition: background 0.2s;
+    flex-shrink: 0;
   }
 
   .send-btn:hover {
-    background: #0f766e;
+    background: var(--color-accent-strong);
   }
 
   .send-btn:disabled {
@@ -913,53 +828,157 @@
   .send-btn svg {
     width: 1rem;
     height: 1rem;
+    display: block;
+  }
+
+  /* Footer bar - replaces sidebar */
+  .chat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-panel);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.75rem;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .new-chat-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .new-chat-btn:hover {
+    background: var(--color-surface-alt);
+  }
+
+  .new-chat-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .model-dropdown {
+    padding: 0.375rem 0.5rem;
+    padding-right: 1.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.375rem center;
+  }
+
+  .model-dropdown:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .model-dropdown:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .model-dropdown option {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+  }
+
+  .status-indicator span {
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .status-dot.success { background: #22c55e; }
+  .status-dot.error { background: #ef4444; }
+  .status-dot.loading { background: #eab308; animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .refresh-btn:hover {
+    color: var(--color-text);
+    background: var(--color-surface-alt);
+  }
+
+  .refresh-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .refresh-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .refresh-btn svg.spinning {
+    animation: spin 1s linear infinite;
   }
 
   .disclaimer {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.3);
+    font-size: 0.6875rem;
+    color: var(--color-text-soft);
     text-align: center;
-    margin-top: 0.5rem;
   }
 </style>
 
 <div class="chat-container">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <button class="new-chat-btn" on:click={clearChat}>
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-        </svg>
-        New chat
-      </button>
-    </div>
-    <div class="sidebar-content">
-      <div class="sidebar-label">Curriculum Architect</div>
-      
-      <!-- Model Selector -->
-      <div class="model-selector">
-        <label class="model-label" for="model-select">Model</label>
-        <select id="model-select" class="model-dropdown" bind:value={selectedModel}>
-          {#each availableModels as model}
-            <option value={model.id} title={model.description}>{model.name}</option>
-          {/each}
-        </select>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="status-row">
-        <div class="status-dot" class:success={testStatus.state === 'success'} class:error={testStatus.state === 'error'} class:loading={testStatus.state === 'loading'}></div>
-        <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-          {testStatus.state === 'idle' ? 'AI Status' : testStatus.message}
-        </span>
-        <button class="test-btn" on:click={testConnection} disabled={testStatus.state === 'loading'}>
-          Test
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Main Chat Area -->
   <div class="main-area">
     <!-- Messages -->
@@ -974,11 +993,17 @@
               All changes require your approval before being applied.
             </p>
             <div class="quick-actions">
-              <button class="quick-action-btn" on:click={() => { input = 'Show me the current curriculum structure'; sendMessage(); }}>
-                📋 Show current curriculum
+              <button class="quick-action-btn" on:click={() => { input = 'What can you help me with?'; sendMessage(); }}>
+                💡 What can you help me with?
               </button>
-              <button class="quick-action-btn" on:click={() => { input = 'Create a new Physics section with 5 concepts'; sendMessage(); }}>
-                ➕ Create new section
+              <button class="quick-action-btn" on:click={() => { input = 'Help me plan curriculum changes'; sendMessage(); }}>
+                📝 Help me plan changes
+              </button>
+              <button class="quick-action-btn" on:click={() => { input = 'Which sections need more content?'; sendMessage(); }}>
+                🔍 Which sections need attention?
+              </button>
+              <button class="quick-action-btn" on:click={() => { input = 'Give me an overview of the curriculum structure'; sendMessage(); }}>
+                🗂️ Curriculum overview
               </button>
             </div>
           </div>
@@ -1155,6 +1180,7 @@
       <div class="input-wrapper">
         <div class="input-box">
           <textarea
+            bind:this={inputTextarea}
             bind:value={input}
             disabled={chatLoading}
             class="input-textarea"
@@ -1169,20 +1195,49 @@
             on:input={(e) => {
               const target = e.target as HTMLTextAreaElement;
               target.style.height = 'auto';
-              target.style.height = Math.min(target.scrollHeight, 200) + 'px';
+              target.style.height = Math.min(target.scrollHeight, 120) + 'px';
             }}
           ></textarea>
           <button
             class="send-btn"
             on:click={() => sendMessage(false)}
             disabled={chatLoading || !input.trim()}
+            aria-label="Send message"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
             </svg>
           </button>
         </div>
-        <p class="disclaimer">AI can make mistakes. Review proposed changes before executing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bar -->
+  <div class="chat-footer">
+    <div class="footer-left">
+      <button class="new-chat-btn" on:click={clearChat}>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        New
+      </button>
+      <select class="model-dropdown" bind:value={selectedModel}>
+        {#each availableModels as model}
+          <option value={model.id} title={model.description}>{model.name}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="disclaimer">AI can make mistakes. Review proposed changes before executing.</div>
+    <div class="footer-right">
+      <div class="status-indicator">
+        <div class="status-dot" class:success={testStatus.state === 'success'} class:error={testStatus.state === 'error'} class:loading={testStatus.state === 'loading'}></div>
+        <span>{testStatus.state === 'loading' ? 'Testing…' : testStatus.state === 'success' ? 'Connected' : testStatus.state === 'error' ? testStatus.message : ''}</span>
+        <button class="refresh-btn" on:click={testConnection} disabled={testStatus.state === 'loading'} aria-label="Re-test connection">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class:spinning={testStatus.state === 'loading'}>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>

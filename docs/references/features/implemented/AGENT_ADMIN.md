@@ -15,10 +15,25 @@ The Agent Admin interface (`/admin/agent`) provides a conversational AI-powered 
 
 The main interface consists of:
 
-1. **Message History**: Displays the conversation between user and AI
-2. **Input Area**: Text input for sending messages to the AI
-3. **Model Selector**: Dropdown to choose between available Gemini models
+1. **Message History**: Full-height scrollable area displaying the conversation between user and AI
+2. **Input Area**: Text input for sending messages to the AI (auto-focused on load)
+3. **Footer Bar**: Compact footer containing:
+   - New Chat button
+   - Model selector dropdown
+   - Disclaimer text
+   - Connection status indicator with refresh button
 4. **Tool Execution Logs**: Collapsible panel showing executed tool calls and results
+
+### Quick Action Prompts
+
+On the welcome screen, four suggested prompts help users get started:
+
+| Prompt                              | Purpose                                     |
+| ----------------------------------- | ------------------------------------------- |
+| 💡 "What can you help me with?"     | Discover AI capabilities                    |
+| 📝 "Help me plan changes"           | Start a collaborative planning conversation |
+| 🔍 "Which sections need attention?" | Analyze curriculum gaps                     |
+| 🗂️ "Curriculum overview"            | Get a summary of the structure              |
 
 ### Available Models
 
@@ -392,10 +407,27 @@ backend/src/
 
 ### Rate Limits
 
-The agent API inherits admin rate limits:
+The agent API has dedicated rate limiting:
 
-- 30 content modifications per hour
-- No limit on read operations
+- 60 requests per hour per user (rolling window)
+- Includes both tool execution and chat messages
+- No separate limit on read operations
+
+### Guardrails
+
+The agent includes safety guardrails:
+
+- **MAX_TOOL_ITERATIONS**: 10 - Prevents runaway tool execution loops
+- **MAX_TOOLS_PER_ITERATION**: 20 - Limits parallel tool calls per iteration
+- **Explanation requirement**: AI must explain its approach before calling tools
+
+### AI Behavior
+
+The system prompt instructs the AI to:
+
+1. **Always explain first**: Before calling any tools, the AI provides a 1-2 sentence explanation of what it's about to do and why
+2. **Use dry runs**: For batch operations, always preview with `dryRun: true` first
+3. **Confirm destructive actions**: Always ask for confirmation before deleting or resetting content
 
 ## Troubleshooting
 
