@@ -4,6 +4,7 @@ import { createCurriculumNodeAdmin, createCurriculumItemAdmin, updateCurriculumI
 import { listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
 import { createChatCompletion, type ChatMessage } from './llmProvider.ts';
+import { logAgentToolEvent, logAgentSessionEvent } from '../utils/telemetry.ts';
 
 const tools = [
   {
@@ -211,6 +212,10 @@ const tools = [
 // Tools that don't modify data and can be auto-executed
 const READ_ONLY_TOOLS = new Set(["list_curriculum", "list_concepts", "get_concept", "get_concepts"]);
 
+// Guardrails
+const MAX_TOOL_ITERATIONS = 10; // Prevent runaway tool execution loops
+const MAX_TOOLS_PER_ITERATION = 20; // Prevent excessive parallel tool calls
+
 function isReadOnlyToolCall(toolCalls: any[]): boolean {
   return toolCalls.every(tc => READ_ONLY_TOOLS.has(tc.function?.name));
 }
@@ -295,6 +300,7 @@ export async function chatWithAgent(
   messages: ChatMessage[], 
   options: { executionMode?: 'auto' | 'plan', confirmToolCalls?: boolean, model?: string } = {}
 ) {
+  const sessionStart = Date.now();
   const { executionMode = 'auto', confirmToolCalls = false, model } = options;
   // Use public schema for curriculum views, burburiuok for content tables
   const publicClient = getSupabaseClient({ service: true, schema: 'public' });
@@ -302,6 +308,8 @@ export async function chatWithAgent(
   
   // Track tool execution logs for debugging
   const toolLogs: { tool: string; args: any; result: string; error?: string; timestamp: string }[] = [];
+  let totalToolCalls = 0;
+  let iterationCount = 0;
   
   const config = requireLLMConfig(model);
 
@@ -345,10 +353,44 @@ export async function chatWithAgent(
     // It's already in currentMessages (passed in messages)
   }
 
-  // Execution Loop
+  // Execution Loop with guardrails
   while (responseMessage.tool_calls) {
+    iterationCount++;
+    
+    // Guardrail: Prevent runaway loops
+    if (iterationCount > MAX_TOOL_ITERATIONS) {
+      console.warn(`[agent] Stopping execution: exceeded ${MAX_TOOL_ITERATIONS} iterations`);
+      logAgentSessionEvent({
+        model: config.model,
+        toolCallCount: totalToolCalls,
+        iterationCount,
+        durationMs: Date.now() - sessionStart,
+        success: false,
+        error: 'MAX_ITERATIONS_EXCEEDED'
+      });
+      toolLogs.push({
+        tool: '_system',
+        args: {},
+        result: `Execution stopped: exceeded maximum of ${MAX_TOOL_ITERATIONS} tool iterations`,
+        error: 'MAX_ITERATIONS_EXCEEDED',
+        timestamp: new Date().toISOString()
+      });
+      return {
+        role: 'assistant',
+        content: `I've reached the maximum number of tool execution steps (${MAX_TOOL_ITERATIONS}). Please break your request into smaller parts or try a more specific query.`,
+        toolLogs
+      };
+    }
+    
+    // Guardrail: Limit tools per iteration
+    if (responseMessage.tool_calls.length > MAX_TOOLS_PER_ITERATION) {
+      console.warn(`[agent] Limiting tool calls from ${responseMessage.tool_calls.length} to ${MAX_TOOLS_PER_ITERATION}`);
+      responseMessage.tool_calls = responseMessage.tool_calls.slice(0, MAX_TOOLS_PER_ITERATION);
+    }
+    
     // Execute tools
     for (const toolCall of responseMessage.tool_calls) {
+      totalToolCalls++;
       const functionName = (toolCall as any).function.name;
       const functionArgs = JSON.parse((toolCall as any).function.arguments);
       let functionResult;
@@ -518,9 +560,27 @@ export async function chatWithAgent(
       }
       currentMessages.push(responseMessage);
     } else {
-      // Final text response - include tool logs
+      // Final text response - log session and include tool logs
+      logAgentSessionEvent({
+        model: config.model,
+        toolCallCount: totalToolCalls,
+        iterationCount,
+        durationMs: Date.now() - sessionStart,
+        success: true
+      });
       return { ...responseMessage, toolLogs: toolLogs.length > 0 ? toolLogs : undefined };
     }
+  }
+
+  // Log session for responses without tool execution
+  if (totalToolCalls > 0) {
+    logAgentSessionEvent({
+      model: config.model,
+      toolCallCount: totalToolCalls,
+      iterationCount,
+      durationMs: Date.now() - sessionStart,
+      success: true
+    });
   }
 
   return { ...responseMessage, toolLogs: toolLogs.length > 0 ? toolLogs : undefined };
