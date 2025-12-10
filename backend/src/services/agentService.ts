@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { resetContent } from '../../../data/repositories/contentRepository.ts';
-import { createCurriculumNodeAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
-import { upsertConcepts, listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
+import { createCurriculumNodeAdmin, createCurriculumItemAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
+import { listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
 import { createChatCompletion, type ChatMessage } from './llmProvider.ts';
 
@@ -224,20 +224,17 @@ export async function chatWithAgent(
           await createCurriculumNodeAdmin(functionArgs);
           functionResult = `Node ${functionArgs.code} created.`;
         } else if (functionName === "create_concept") {
-          // Transform camelCase tool args to snake_case UpsertConceptInput
-          const nodeCode = functionArgs.curriculumNodeCode;
-          // Extract section_code from nodeCode (e.g., "LBS-1-2-3" -> "LBS-1-2-3")
-          // The section_code is the same as nodeCode for concepts
-          const conceptInput = {
-            slug: functionArgs.slug,
-            term_lt: functionArgs.term,
-            description_lt: functionArgs.description || '',
-            curriculum_node_code: nodeCode,
-            section_code: nodeCode, // section_code is required, use nodeCode
-            curriculum_item_ordinal: functionArgs.ordinal || null,
-          };
-          await upsertConcepts([conceptInput], contentClient);
-          functionResult = `Concept ${functionArgs.slug} created.`;
+          // Use createCurriculumItemAdmin which properly creates both:
+          // 1. curriculum_item entry (required for frontend display)
+          // 2. concept entry with all metadata
+          const result = await createCurriculumItemAdmin({
+            nodeCode: functionArgs.curriculumNodeCode,
+            label: functionArgs.term,
+            conceptSlug: functionArgs.slug,
+            termLt: functionArgs.term,
+            descriptionLt: functionArgs.description || 'Aprašymas bus papildytas vėliau.',
+          });
+          functionResult = `Concept "${result.concept.termLt}" created with slug "${result.concept.slug}" at ordinal ${result.item.ordinal}.`;
         } else if (functionName === "list_curriculum") {
           const tree = await listAllCurriculumNodes(publicClient);
           functionResult = JSON.stringify(tree);
