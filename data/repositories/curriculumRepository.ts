@@ -529,6 +529,26 @@ export type CreateCurriculumItemInput = {
   isRequired?: boolean | null;
 };
 
+export type UpdateCurriculumItemInput = {
+  termLt?: string | null;
+  termEn?: string | null;
+  descriptionLt?: string | null;
+  descriptionEn?: string | null;
+  sourceRef?: string | null;
+  label?: string | null;
+};
+
+export type ReorderCurriculumItemInput = {
+  slug: string;
+  newOrdinal: number;
+};
+
+export type MoveCurriculumItemInput = {
+  slug: string;
+  targetNodeCode: string;
+  targetOrdinal?: number | null;
+};
+
 export type CreateCurriculumItemResult = {
   item: CurriculumItem;
   concept: Concept;
@@ -956,6 +976,86 @@ export async function deleteCurriculumItemAdminBySlug(
   } satisfies DeleteCurriculumItemAdminResult;
 }
 
+export type BatchDeleteResult = {
+  deleted: Array<{ slug: string; termLt: string }>;
+  failed: Array<{ slug: string; error: string }>;
+};
+
+/**
+ * Delete multiple concepts by their slugs.
+ * More efficient than calling deleteCurriculumItemAdminBySlug multiple times
+ * because it groups deletions by node and only resequences once per node.
+ */
+export async function deleteCurriculumItemsAdminBySlug(
+  slugs: string[]
+): Promise<BatchDeleteResult> {
+  if (!slugs.length) {
+    return { deleted: [], failed: [] };
+  }
+
+  const serviceClient = getServiceClient();
+  const deleted: Array<{ slug: string; termLt: string }> = [];
+  const failed: Array<{ slug: string; error: string }> = [];
+  const nodesToResequence = new Set<string>();
+
+  for (const slug of slugs) {
+    try {
+      const concept = await getConceptBySlug(slug, serviceClient);
+
+      if (!concept) {
+        failed.push({ slug, error: "Concept not found" });
+        continue;
+      }
+
+      // Delete curriculum item if exists
+      if (
+        concept.curriculumNodeCode &&
+        typeof concept.curriculumItemOrdinal === "number" &&
+        Number.isFinite(concept.curriculumItemOrdinal)
+      ) {
+        const { error: deleteItemError } = await (serviceClient as any)
+          .from(ITEM_TABLE)
+          .delete()
+          .eq("node_code", concept.curriculumNodeCode)
+          .eq("ordinal", concept.curriculumItemOrdinal);
+
+        if (deleteItemError) {
+          failed.push({ slug, error: `Failed to delete item: ${deleteItemError.message}` });
+          continue;
+        }
+
+        nodesToResequence.add(concept.curriculumNodeCode);
+      }
+
+      // Delete concept
+      const { error: deleteConceptError } = await (serviceClient as any)
+        .from(CONCEPTS_TABLE)
+        .delete()
+        .eq("slug", slug);
+
+      if (deleteConceptError) {
+        failed.push({ slug, error: `Failed to delete concept: ${deleteConceptError.message}` });
+        continue;
+      }
+
+      deleted.push({ slug, termLt: concept.termLt });
+    } catch (error: any) {
+      failed.push({ slug, error: error.message });
+    }
+  }
+
+  // Resequence all affected nodes once at the end
+  for (const nodeCode of nodesToResequence) {
+    try {
+      await resequenceNodeItems(serviceClient, nodeCode);
+    } catch (error: any) {
+      console.error(`Failed to resequence node ${nodeCode}:`, error.message);
+    }
+  }
+
+  return { deleted, failed };
+}
+
 async function resequenceParentChildren(
   client: SupabaseClient,
   parentCode: string | null,
@@ -1126,4 +1226,344 @@ async function resequenceNodeItems(
       );
     }
   }
+}
+
+/**
+ * Update a concept's content fields (term, description, etc.) by its slug.
+ * Does NOT change the concept's position or curriculum association.
+ */
+export async function updateCurriculumItemAdmin(
+  slug: string,
+  input: UpdateCurriculumItemInput
+): Promise<{ concept: Concept; item: CurriculumItem | null }> {
+  const serviceClient = getServiceClient();
+  const concept = await getConceptBySlug(slug, serviceClient);
+
+  if (!concept) {
+    const error = new Error(`Concept '${slug}' was not found.`);
+    (error as { code?: string }).code = "CONCEPT_NOT_FOUND";
+    throw error;
+  }
+
+  const now = new Date().toISOString();
+
+  // Update concept fields
+  const conceptUpdate: Record<string, unknown> = { updated_at: now };
+  if (input.termLt !== undefined) conceptUpdate.term_lt = sanitizeNullable(input.termLt) ?? concept.termLt;
+  if (input.termEn !== undefined) conceptUpdate.term_en = sanitizeNullable(input.termEn);
+  if (input.descriptionLt !== undefined) conceptUpdate.description_lt = sanitizeNullable(input.descriptionLt);
+  if (input.descriptionEn !== undefined) conceptUpdate.description_en = sanitizeNullable(input.descriptionEn);
+  if (input.sourceRef !== undefined) conceptUpdate.source_ref = sanitizeNullable(input.sourceRef);
+  if (input.label !== undefined) conceptUpdate.curriculum_item_label = sanitizeNullable(input.label) ?? concept.curriculumItemLabel;
+
+  const { error: conceptUpdateError } = await (serviceClient as any)
+    .from(CONCEPTS_TABLE)
+    .update(conceptUpdate)
+    .eq("slug", slug);
+
+  if (conceptUpdateError) {
+    throw new Error(`Failed to update concept '${slug}': ${conceptUpdateError.message}`);
+  }
+
+  // Also update the curriculum_item label if provided and item exists
+  let item: CurriculumItem | null = null;
+  if (
+    input.label !== undefined &&
+    concept.curriculumNodeCode &&
+    typeof concept.curriculumItemOrdinal === "number"
+  ) {
+    const newLabel = sanitizeNullable(input.label) ?? concept.curriculumItemLabel ?? concept.termLt;
+    const { data: itemData, error: itemUpdateError } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .update({ label: newLabel, updated_at: now })
+      .eq("node_code", concept.curriculumNodeCode)
+      .eq("ordinal", concept.curriculumItemOrdinal)
+      .select("*")
+      .single();
+
+    if (itemUpdateError && itemUpdateError.code !== "PGRST116") {
+      throw new Error(`Failed to update curriculum item label: ${itemUpdateError.message}`);
+    }
+    if (itemData) {
+      item = mapItemRow(itemData);
+    }
+  }
+
+  // Reload the updated concept
+  const updatedConcept = await getConceptBySlug(slug, serviceClient);
+  if (!updatedConcept) {
+    throw new Error(`Concept '${slug}' could not be reloaded after update.`);
+  }
+
+  return { concept: updatedConcept, item };
+}
+
+/**
+ * Change the ordinal (position) of a concept within its current curriculum node.
+ */
+export async function reorderCurriculumItemAdmin(
+  input: ReorderCurriculumItemInput
+): Promise<{ concept: Concept; item: CurriculumItem }> {
+  const serviceClient = getServiceClient();
+  const { slug, newOrdinal } = input;
+
+  if (!Number.isFinite(newOrdinal) || newOrdinal < 1) {
+    throw new Error("New ordinal must be a positive integer.");
+  }
+
+  const concept = await getConceptBySlug(slug, serviceClient);
+  if (!concept) {
+    const error = new Error(`Concept '${slug}' was not found.`);
+    (error as { code?: string }).code = "CONCEPT_NOT_FOUND";
+    throw error;
+  }
+
+  const nodeCode = concept.curriculumNodeCode;
+  const currentOrdinal = concept.curriculumItemOrdinal;
+
+  if (!nodeCode || typeof currentOrdinal !== "number") {
+    throw new Error(`Concept '${slug}' is not linked to a curriculum item.`);
+  }
+
+  if (currentOrdinal === newOrdinal) {
+    // No change needed
+    const { data: itemData } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .select("*")
+      .eq("node_code", nodeCode)
+      .eq("ordinal", currentOrdinal)
+      .single();
+    return { concept, item: mapItemRow(itemData) };
+  }
+
+  // Get all items in this node ordered by ordinal
+  const { data: allItems, error: fetchError } = await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .select("ordinal, label")
+    .eq("node_code", nodeCode)
+    .order("ordinal", { ascending: true });
+
+  if (fetchError) {
+    throw new Error(`Failed to fetch items for reordering: ${fetchError.message}`);
+  }
+
+  const items = (allItems ?? []) as { ordinal: number; label: string }[];
+  const maxOrdinal = items.length;
+  const targetOrdinal = Math.min(newOrdinal, maxOrdinal);
+
+  const now = new Date().toISOString();
+  const tempOrdinal = maxOrdinal + 1000; // Temporary ordinal to avoid conflicts
+
+  // Step 1: Move current item to temp ordinal
+  await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .update({ ordinal: tempOrdinal, updated_at: now })
+    .eq("node_code", nodeCode)
+    .eq("ordinal", currentOrdinal);
+
+  await (serviceClient as any)
+    .from(CONCEPTS_TABLE)
+    .update({ curriculum_item_ordinal: tempOrdinal })
+    .eq("curriculum_node_code", nodeCode)
+    .eq("curriculum_item_ordinal", currentOrdinal);
+
+  // Step 2: Shift items between old and new position
+  if (targetOrdinal < currentOrdinal) {
+    // Moving up: shift items down (increase ordinal) from targetOrdinal to currentOrdinal-1
+    for (let ord = currentOrdinal - 1; ord >= targetOrdinal; ord--) {
+      await (serviceClient as any)
+        .from(ITEM_TABLE)
+        .update({ ordinal: ord + 1, updated_at: now })
+        .eq("node_code", nodeCode)
+        .eq("ordinal", ord);
+
+      await (serviceClient as any)
+        .from(CONCEPTS_TABLE)
+        .update({ curriculum_item_ordinal: ord + 1 })
+        .eq("curriculum_node_code", nodeCode)
+        .eq("curriculum_item_ordinal", ord);
+    }
+  } else {
+    // Moving down: shift items up (decrease ordinal) from currentOrdinal+1 to targetOrdinal
+    for (let ord = currentOrdinal + 1; ord <= targetOrdinal; ord++) {
+      await (serviceClient as any)
+        .from(ITEM_TABLE)
+        .update({ ordinal: ord - 1, updated_at: now })
+        .eq("node_code", nodeCode)
+        .eq("ordinal", ord);
+
+      await (serviceClient as any)
+        .from(CONCEPTS_TABLE)
+        .update({ curriculum_item_ordinal: ord - 1 })
+        .eq("curriculum_node_code", nodeCode)
+        .eq("curriculum_item_ordinal", ord);
+    }
+  }
+
+  // Step 3: Move item from temp to target ordinal
+  const { data: movedItem, error: finalMoveError } = await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .update({ ordinal: targetOrdinal, updated_at: now })
+    .eq("node_code", nodeCode)
+    .eq("ordinal", tempOrdinal)
+    .select("*")
+    .single();
+
+  if (finalMoveError) {
+    throw new Error(`Failed to finalize reorder: ${finalMoveError.message}`);
+  }
+
+  await (serviceClient as any)
+    .from(CONCEPTS_TABLE)
+    .update({ curriculum_item_ordinal: targetOrdinal })
+    .eq("curriculum_node_code", nodeCode)
+    .eq("curriculum_item_ordinal", tempOrdinal);
+
+  const updatedConcept = await getConceptBySlug(slug, serviceClient);
+  if (!updatedConcept) {
+    throw new Error(`Concept '${slug}' could not be reloaded after reorder.`);
+  }
+
+  return { concept: updatedConcept, item: mapItemRow(movedItem) };
+}
+
+/**
+ * Move a concept from one curriculum node to another.
+ */
+export async function moveCurriculumItemAdmin(
+  input: MoveCurriculumItemInput
+): Promise<{ concept: Concept; item: CurriculumItem }> {
+  const serviceClient = getServiceClient();
+  const { slug, targetNodeCode, targetOrdinal } = input;
+
+  const concept = await getConceptBySlug(slug, serviceClient);
+  if (!concept) {
+    const error = new Error(`Concept '${slug}' was not found.`);
+    (error as { code?: string }).code = "CONCEPT_NOT_FOUND";
+    throw error;
+  }
+
+  const sourceNodeCode = concept.curriculumNodeCode;
+  const sourceOrdinal = concept.curriculumItemOrdinal;
+
+  if (!sourceNodeCode || typeof sourceOrdinal !== "number") {
+    throw new Error(`Concept '${slug}' is not linked to a curriculum item.`);
+  }
+
+  // Validate target node exists
+  const targetNode = await getCurriculumNodeByCode(targetNodeCode, serviceClient);
+  if (!targetNode) {
+    const error = new Error(`Target node '${targetNodeCode}' was not found.`);
+    (error as { code?: string }).code = "NODE_NOT_FOUND";
+    throw error;
+  }
+
+  if (sourceNodeCode === targetNodeCode) {
+    // Same node - just reorder
+    if (targetOrdinal && targetOrdinal !== sourceOrdinal) {
+      return reorderCurriculumItemAdmin({ slug, newOrdinal: targetOrdinal });
+    }
+    // No change needed
+    const { data: itemData } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .select("*")
+      .eq("node_code", sourceNodeCode)
+      .eq("ordinal", sourceOrdinal)
+      .single();
+    return { concept, item: mapItemRow(itemData) };
+  }
+
+  const now = new Date().toISOString();
+
+  // Get the item label from the source
+  const { data: sourceItemData } = await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .select("*")
+    .eq("node_code", sourceNodeCode)
+    .eq("ordinal", sourceOrdinal)
+    .single();
+
+  const sourceItem = sourceItemData as CurriculumItemRow | null;
+  const label = sourceItem?.label ?? concept.termLt;
+
+  // Calculate target ordinal (append if not specified)
+  const newOrdinal = targetOrdinal ?? (await fetchNextItemOrdinal(serviceClient, targetNodeCode));
+
+  // Resolve section context for the target node
+  const sectionContext = await resolveSectionContext(serviceClient, targetNode);
+
+  // Step 1: Delete the item from source node
+  await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .delete()
+    .eq("node_code", sourceNodeCode)
+    .eq("ordinal", sourceOrdinal);
+
+  // Step 2: Resequence source node
+  await resequenceNodeItems(serviceClient, sourceNodeCode);
+
+  // Step 3: Make room in target node if inserting at a specific position
+  if (targetOrdinal) {
+    // Shift existing items at and after targetOrdinal
+    const { data: targetItems } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .select("ordinal")
+      .eq("node_code", targetNodeCode)
+      .gte("ordinal", targetOrdinal)
+      .order("ordinal", { ascending: false });
+
+    for (const ti of (targetItems ?? []) as { ordinal: number }[]) {
+      await (serviceClient as any)
+        .from(ITEM_TABLE)
+        .update({ ordinal: ti.ordinal + 1, updated_at: now })
+        .eq("node_code", targetNodeCode)
+        .eq("ordinal", ti.ordinal);
+
+      await (serviceClient as any)
+        .from(CONCEPTS_TABLE)
+        .update({ curriculum_item_ordinal: ti.ordinal + 1 })
+        .eq("curriculum_node_code", targetNodeCode)
+        .eq("curriculum_item_ordinal", ti.ordinal);
+    }
+  }
+
+  // Step 4: Insert new item in target node
+  const { data: newItemData, error: insertError } = await (serviceClient as any)
+    .from(ITEM_TABLE)
+    .insert({
+      node_code: targetNodeCode,
+      ordinal: newOrdinal,
+      label,
+    })
+    .select("*")
+    .single();
+
+  if (insertError) {
+    throw new Error(`Failed to insert item in target node: ${insertError.message}`);
+  }
+
+  // Step 5: Update concept to point to new location
+  const { error: conceptUpdateError } = await (serviceClient as any)
+    .from(CONCEPTS_TABLE)
+    .update({
+      curriculum_node_code: targetNodeCode,
+      curriculum_item_ordinal: newOrdinal,
+      section_code: sectionContext.sectionCode,
+      section_title: sectionContext.sectionTitle,
+      subsection_code: sectionContext.subsectionCode,
+      subsection_title: sectionContext.subsectionTitle,
+      updated_at: now,
+    })
+    .eq("slug", slug);
+
+  if (conceptUpdateError) {
+    throw new Error(`Failed to update concept location: ${conceptUpdateError.message}`);
+  }
+
+  const updatedConcept = await getConceptBySlug(slug, serviceClient);
+  if (!updatedConcept) {
+    throw new Error(`Concept '${slug}' could not be reloaded after move.`);
+  }
+
+  return { concept: updatedConcept, item: mapItemRow(newItemData) };
 }

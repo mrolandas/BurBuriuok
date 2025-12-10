@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { resetContent } from '../../../data/repositories/contentRepository.ts';
-import { createCurriculumNodeAdmin, createCurriculumItemAdmin, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
+import { createCurriculumNodeAdmin, createCurriculumItemAdmin, updateCurriculumItemAdmin, reorderCurriculumItemAdmin, moveCurriculumItemAdmin, deleteCurriculumItemsAdminBySlug, listAllCurriculumNodes } from '../../../data/repositories/curriculumRepository.ts';
 import { listConcepts, getConceptBySlug } from '../../../data/repositories/conceptsRepository.ts';
 import { getSupabaseClient } from '../../../data/supabaseClient.ts';
 import { createChatCompletion, type ChatMessage } from './llmProvider.ts';
@@ -87,6 +87,74 @@ const tools = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "edit_concept",
+      description: "Updates the content of an existing concept (term, description, etc.). Does NOT change position.",
+      parameters: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "The slug of the concept to edit" },
+          term: { type: "string", description: "New Lithuanian term/title" },
+          termEn: { type: "string", description: "New English term/title" },
+          description: { type: "string", description: "New description in Markdown" },
+          descriptionEn: { type: "string", description: "New English description" },
+          label: { type: "string", description: "New curriculum item label (usually same as term)" },
+        },
+        required: ["slug"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "reorder_concept",
+      description: "Changes the position (ordinal) of a concept within its current curriculum node/subsection.",
+      parameters: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "The slug of the concept to reorder" },
+          newOrdinal: { type: "integer", description: "New position (1-based index)" },
+        },
+        required: ["slug", "newOrdinal"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "move_concept",
+      description: "Moves a concept from its current curriculum node to a different section/subsection.",
+      parameters: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "The slug of the concept to move" },
+          targetNodeCode: { type: "string", description: "The code of the destination curriculum node" },
+          targetOrdinal: { type: "integer", description: "Optional position in the target node (appends at end if not specified)" },
+        },
+        required: ["slug", "targetNodeCode"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "delete_concepts",
+      description: "Deletes one or more concepts by their slugs. Efficiently handles batch deletions.",
+      parameters: {
+        type: "object",
+        properties: {
+          slugs: { 
+            type: "array", 
+            items: { type: "string" },
+            description: "Array of concept slugs to delete" 
+          },
+        },
+        required: ["slugs"],
+      },
+    },
+  },
 ];
 
 // Tools that don't modify data and can be auto-executed
@@ -103,11 +171,24 @@ const systemMessage: ChatMessage = {
     You have access to tools to query and manipulate the curriculum database.
     
     Available tools:
+    READ (auto-executed):
     - list_curriculum: Get all curriculum nodes (sections/subsections) - the structure
     - list_concepts: Get all learning concepts (optionally filtered by section or node)
     - get_concept: Get detailed info about a specific concept by slug
+    
+    CREATE:
     - create_curriculum_node: Create a new section or subsection
     - create_concept: Create a new learning concept
+    
+    EDIT:
+    - edit_concept: Update a concept's term, description, or label (does NOT change position)
+    - reorder_concept: Change a concept's position within its current subsection
+    - move_concept: Move a concept to a different section/subsection
+    
+    DELETE:
+    - delete_concepts: Delete one or more concepts by their slugs (supports batch deletion)
+    
+    DESTRUCTIVE:
     - reset_content: Wipe all data (DANGEROUS - always ask for confirmation)
     
     The curriculum has a hierarchical structure:
@@ -125,7 +206,7 @@ const systemMessage: ChatMessage = {
     2. Use list_concepts to see what content exists
     3. Use get_concept for detailed information about specific concepts
     
-    Always ask for confirmation before running destructive actions like 'reset_content'.`
+    Always ask for confirmation before running destructive actions like 'reset_content' or 'delete_concepts'.`
 };
 
 const DEFAULT_GEMINI_MODEL = 'gemini-2.5-flash';
@@ -258,6 +339,34 @@ export async function chatWithAgent(
           } else {
             functionResult = `Concept with slug '${functionArgs.slug}' not found.`;
           }
+        } else if (functionName === "edit_concept") {
+          const result = await updateCurriculumItemAdmin(functionArgs.slug, {
+            termLt: functionArgs.term,
+            termEn: functionArgs.termEn,
+            descriptionLt: functionArgs.description,
+            descriptionEn: functionArgs.descriptionEn,
+            label: functionArgs.label,
+          });
+          functionResult = `Concept "${result.concept.slug}" updated. New term: "${result.concept.termLt}".`;
+        } else if (functionName === "reorder_concept") {
+          const result = await reorderCurriculumItemAdmin({
+            slug: functionArgs.slug,
+            newOrdinal: functionArgs.newOrdinal,
+          });
+          functionResult = `Concept "${result.concept.slug}" reordered to position ${result.item.ordinal} in node ${result.item.nodeCode}.`;
+        } else if (functionName === "move_concept") {
+          const result = await moveCurriculumItemAdmin({
+            slug: functionArgs.slug,
+            targetNodeCode: functionArgs.targetNodeCode,
+            targetOrdinal: functionArgs.targetOrdinal,
+          });
+          functionResult = `Concept "${result.concept.slug}" moved to node ${result.item.nodeCode} at position ${result.item.ordinal}.`;
+        } else if (functionName === "delete_concepts") {
+          const slugs = functionArgs.slugs as string[];
+          const result = await deleteCurriculumItemsAdminBySlug(slugs);
+          const deletedList = result.deleted.map(d => d.termLt).join(', ');
+          const failedList = result.failed.map(f => `${f.slug}: ${f.error}`).join('; ');
+          functionResult = `Deleted ${result.deleted.length} concept(s): ${deletedList || 'none'}.${result.failed.length ? ` Failed: ${failedList}` : ''}`;
         } else {
           functionResult = "Unknown function";
         }
