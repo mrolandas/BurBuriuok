@@ -79,6 +79,22 @@ User: "Show me details about the 'jolė' concept"
 AI: [Executes get_concept] "Jolė is a type of sailboat..."
 ```
 
+#### `get_concepts` (Batch)
+
+Gets detailed information about multiple concepts by their slugs. More efficient than calling get_concept repeatedly.
+
+Parameters:
+
+- `slugs` (required): Array of concept slugs to retrieve (max 50)
+
+```
+User: "Get details for jolė, švertbotas, and katamaranas"
+AI: [Executes get_concepts] "Found 3 concepts:
+  - Jolė: A small sailboat...
+  - Švertbotas: A centerboard sailboat...
+  - Katamaranas: A multi-hull vessel..."
+```
+
 ### CREATE Tools
 
 #### `create_curriculum_node`

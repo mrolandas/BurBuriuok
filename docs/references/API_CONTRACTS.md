@@ -125,6 +125,7 @@ The Agent API provides a conversational interface for AI-powered curriculum mana
 | `list_curriculum`        | READ        | Returns the full curriculum tree (sections/subsections)         |
 | `list_concepts`          | READ        | Lists concepts, optionally filtered by sectionCode or nodeCode  |
 | `get_concept`            | READ        | Gets detailed info about a specific concept by slug             |
+| `get_concepts`           | READ        | Batch retrieval of concept details by slugs (max 50)            |
 | `create_curriculum_node` | CREATE      | Creates a new section or subsection                             |
 | `create_concept`         | CREATE      | Creates a new learning concept with curriculum item             |
 | `batch_create_concepts`  | CREATE      | Batch creates up to 50 concepts with validation (dryRun mode)   |

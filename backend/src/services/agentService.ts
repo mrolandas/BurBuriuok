@@ -90,6 +90,24 @@ const tools = [
   {
     type: "function",
     function: {
+      name: "get_concepts",
+      description: "Gets detailed information about multiple concepts by their slugs. More efficient than calling get_concept repeatedly. Returns full details for each found concept.",
+      parameters: {
+        type: "object",
+        properties: {
+          slugs: {
+            type: "array",
+            items: { type: "string" },
+            description: "Array of concept slugs to retrieve (max 50)"
+          },
+        },
+        required: ["slugs"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "edit_concept",
       description: "Updates the content of an existing concept (term, description, etc.). Does NOT change position.",
       parameters: {
@@ -191,7 +209,7 @@ const tools = [
 ];
 
 // Tools that don't modify data and can be auto-executed
-const READ_ONLY_TOOLS = new Set(["list_curriculum", "list_concepts", "get_concept"]);
+const READ_ONLY_TOOLS = new Set(["list_curriculum", "list_concepts", "get_concept", "get_concepts"]);
 
 function isReadOnlyToolCall(toolCalls: any[]): boolean {
   return toolCalls.every(tc => READ_ONLY_TOOLS.has(tc.function?.name));
@@ -208,6 +226,7 @@ const systemMessage: ChatMessage = {
     - list_curriculum: Get all curriculum nodes (sections/subsections) - the structure
     - list_concepts: Get all learning concepts (optionally filtered by section or node)
     - get_concept: Get detailed info about a specific concept by slug
+    - get_concepts: Get detailed info for multiple concepts by slugs (max 50) - more efficient than calling get_concept repeatedly
     
     CREATE:
     - create_curriculum_node: Create a new section or subsection
@@ -378,6 +397,31 @@ export async function chatWithAgent(
             functionResult = JSON.stringify(concept);
           } else {
             functionResult = `Concept with slug '${functionArgs.slug}' not found.`;
+          }
+        } else if (functionName === "get_concepts") {
+          const slugs = functionArgs.slugs as string[];
+          if (slugs.length > 50) {
+            functionResult = `Error: Maximum 50 slugs allowed per request. You provided ${slugs.length}.`;
+          } else {
+            const results: { found: any[]; notFound: string[] } = { found: [], notFound: [] };
+            // Fetch concepts in parallel for efficiency
+            const conceptPromises = slugs.map(slug => getConceptBySlug(slug, publicClient));
+            const concepts = await Promise.all(conceptPromises);
+            
+            for (let i = 0; i < slugs.length; i++) {
+              if (concepts[i]) {
+                results.found.push(concepts[i]);
+              } else {
+                results.notFound.push(slugs[i]);
+              }
+            }
+            
+            functionResult = JSON.stringify({
+              count: results.found.length,
+              notFoundCount: results.notFound.length,
+              concepts: results.found,
+              notFound: results.notFound.length > 0 ? results.notFound : undefined,
+            });
           }
         } else if (functionName === "edit_concept") {
           const result = await updateCurriculumItemAdmin(functionArgs.slug, {
