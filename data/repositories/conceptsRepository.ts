@@ -68,6 +68,10 @@ export async function getConceptBySlug(
         .single();
 
       if (fallbackError) {
+        // Also check for no-rows-found in fallback
+        if (fallbackError.code === "PGRST116") {
+          return null;
+        }
         throw new Error(
           `Failed to fetch concept by slug '${slug}' via fallback: ${fallbackError.message}`
         );
