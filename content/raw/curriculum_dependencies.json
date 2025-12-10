@@ -2,30 +2,30 @@
   "dependencies": [
     {
       "source_type": "node",
-      "source_node_code": "2",
+      "source_node_code": "LBS-2",
       "prerequisite_type": "node",
-      "prerequisite_node_code": "1",
+      "prerequisite_node_code": "LBS-1",
       "notes": "Buriavimo teorijai reikalingi konstrukcijos pagrindai."
     },
     {
       "source_type": "node",
-      "source_node_code": "3",
+      "source_node_code": "LBS-3",
       "prerequisite_type": "node",
-      "prerequisite_node_code": "1",
+      "prerequisite_node_code": "LBS-1",
       "notes": "Prieš valdymo praktiką supažindiname su įrangos ir korpuso sąvokomis."
     },
     {
       "source_type": "node",
-      "source_node_code": "3",
+      "source_node_code": "LBS-3",
       "prerequisite_type": "node",
-      "prerequisite_node_code": "2",
+      "prerequisite_node_code": "LBS-2",
       "notes": "Manevravimo technika remiasi aerodinaminiais principais."
     },
     {
       "source_type": "node",
-      "source_node_code": "4",
+      "source_node_code": "LBS-4",
       "prerequisite_type": "node",
-      "prerequisite_node_code": "3",
+      "prerequisite_node_code": "LBS-3",
       "notes": "Saugos moduliai atsiremia į praktinius situacijų scenarijus."
     }
   ]

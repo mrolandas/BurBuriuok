@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-vytulas-virves-suringavimas",
+    "slug": "lbs-10-17-vytulas-virves-suringavimas",
     "term_lt": "Vytulas (virvės suringavimas)",
     "term_en": "Coil",
     "description_lt": "Tvarkingas virvės susukimas laikymui.",
@@ -15,16 +15,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Vytulas (virvės suringavimas)"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-klampes-mazgas",
+    "slug": "lbs-10-17-klampes-mazgas",
     "term_lt": "Klampės mazgas",
     "term_en": "Cleat hitch",
     "description_lt": "Mazgas virvei pritvirtinti prie klampės.",
@@ -35,16 +35,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Klampės mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-astuoniuke",
+    "slug": "lbs-10-17-astuoniuke",
     "term_lt": "Aštuoniukė",
     "term_en": "Figure eight",
     "description_lt": "Mazgas virvės galui apsaugoti nuo išslydimo.",
@@ -55,16 +55,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Aštuoniukė"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-tikrasis-mazgas",
+    "slug": "lbs-10-17-tikrasis-mazgas",
     "term_lt": "Tikrasis mazgas",
     "term_en": "Reef knot",
     "description_lt": "Mazgas dviem vienodo diametro virvėms sujungti.",
@@ -75,16 +75,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Tikrasis mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-rifo-mazgas",
+    "slug": "lbs-10-17-rifo-mazgas",
     "term_lt": "Rifo mazgas",
     "term_en": "Reef knot (context)",
     "description_lt": "Mazgas burėms apriboti (sutampa su tikruoju, bet mokoma rifavimo kontekste).",
@@ -95,16 +95,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Rifo mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-soto-mazgas",
+    "slug": "lbs-10-17-soto-mazgas",
     "term_lt": "Šoto mazgas",
     "term_en": "Sheet bend",
     "description_lt": "Mazgas virvei prie burės kampo tvirtinti.",
@@ -115,16 +115,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Šoto mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-bramsoto-mazgas",
+    "slug": "lbs-10-17-bramsoto-mazgas",
     "term_lt": "Bramšoto mazgas",
     "term_en": "Double sheet bend",
     "description_lt": "Sustiprintas šoto mazgo variantas skirtingo diametro virvėms.",
@@ -135,16 +135,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Bramšoto mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-paprastasis-stekas",
+    "slug": "lbs-10-17-paprastasis-stekas",
     "term_lt": "Paprastasis štekas",
     "term_en": "Clove hitch",
     "description_lt": "Mazgas virvei pritvirtinti prie strypo ar poliaus.",
@@ -155,16 +155,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Paprastasis štekas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-inkaro-mazgas",
+    "slug": "lbs-10-17-inkaro-mazgas",
     "term_lt": "Inkaro mazgas",
     "term_en": "Anchor bend",
     "description_lt": "Patikimas mazgas inkarų lynui pritvirtinti.",
@@ -175,16 +175,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Inkaro mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-gelbejimo-kilpa",
+    "slug": "lbs-10-17-gelbejimo-kilpa",
     "term_lt": "Gelbėjimo kilpa",
     "term_en": "Bowline",
     "description_lt": "Kilpa žmogui pakelti ar virvei pritvirtinti.",
@@ -195,16 +195,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Gelbėjimo kilpa"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-buksyravimo-mazgas",
+    "slug": "lbs-10-17-buksyravimo-mazgas",
     "term_lt": "Buksyravimo mazgas",
     "term_en": "Tow hitch",
     "description_lt": "Mazgas, skirtas užtikrintam buksyravimo lyno tvirtinimui.",
@@ -215,16 +215,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Buksyravimo mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-zveju-mazgas",
+    "slug": "lbs-10-17-zveju-mazgas",
     "term_lt": "Žvejų mazgas",
     "term_en": "Fisherman’s knot",
     "description_lt": "Mazgas monofilamentinėms virvelėms sujungti.",
@@ -235,16 +235,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Žvejų mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-piemenu-veblingo-mazgas",
+    "slug": "lbs-10-17-piemenu-veblingo-mazgas",
     "term_lt": "Piemenų (veblingo) mazgas",
     "term_en": "Sheepshank",
     "description_lt": "Mazgas virvei sutrumpinti ar pažeistai vietai izoliuoti.",
@@ -255,16 +255,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Piemenų (veblingo) mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-stoporo-mazgas",
+    "slug": "lbs-10-17-stoporo-mazgas",
     "term_lt": "Stoporo mazgas",
     "term_en": "Stopper knot",
     "description_lt": "Mazgas, sukuriantis storesnį galą, kad virvė neišlįstų iš įrangos.",
@@ -275,16 +275,16 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Stoporo mazgas"
   },
   {
-    "section_code": "10.17",
+    "section_code": "LBS-10-17",
     "section_title": "Jūriniai mazgai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "10-17-ploksciasis-mazgas",
+    "slug": "lbs-10-17-ploksciasis-mazgas",
     "term_lt": "Plokščiasis mazgas",
     "term_en": "Square knot",
     "description_lt": "Klasikinis mazgas, kai dvi virvės sujungtos plokščiai (lygiavertis tikrajam).",
@@ -295,7 +295,7 @@
       "topic_number": 10,
       "parent_section": "Jūriniai mazgai"
     },
-    "curriculum_node_code": "10.17",
+    "curriculum_node_code": "LBS-10-17",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Plokščiasis mazgas"
   }

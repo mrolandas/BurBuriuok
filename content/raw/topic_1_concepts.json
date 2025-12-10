@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-jole",
+    "slug": "lbs-1-1a-jole",
     "term_lt": "Jolė",
     "term_en": "Dinghy",
     "description_lt": "Maža, lengva burinė valtis su atviru deniu, skirta mokymui ar trumpoms išvykoms.",
@@ -15,16 +15,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Jolė"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-svertbotas",
+    "slug": "lbs-1-1a-svertbotas",
     "term_lt": "Švertbotas",
     "term_en": "Centreboard boat",
     "description_lt": "Korpusas su keliama šverto plokšte, leidžiančia plaukti sekliuose vandenyse.",
@@ -35,16 +35,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Švertbotas"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-kiline-jachta",
+    "slug": "lbs-1-1a-kiline-jachta",
     "term_lt": "Kilinė jachta",
     "term_en": "Keel yacht",
     "description_lt": "Laivas su fiksuotu, sunkiu kilio balastu, suteikiančiu stabilumą vandenyne.",
@@ -55,16 +55,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Kilinė jachta"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-kompromisas",
+    "slug": "lbs-1-1a-kompromisas",
     "term_lt": "Kompromisas",
     "term_en": "Bilge keel",
     "description_lt": "Jachta su dviem trumpais kiliais abiejuose bortuose, leidžiančiais stovėti ant dugno atoslūgio metu.",
@@ -75,16 +75,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Kompromisas"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-katamaranas",
+    "slug": "lbs-1-1a-katamaranas",
     "term_lt": "Katamaranas",
     "term_en": "Catamaran",
     "description_lt": "Dvikorpusis burlaivis su tiltu, pasižymintis greičiu ir mažu grimzlimu.",
@@ -95,16 +95,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Katamaranas"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-trimaranas",
+    "slug": "lbs-1-1a-trimaranas",
     "term_lt": "Trimaranas",
     "term_en": "Trimaran",
     "description_lt": "Trijų korpusų burlaivis, turintis centrinį korpusą ir dvi mažesnes atramas stabilumui.",
@@ -115,16 +115,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Trimaranas"
   },
   {
-    "section_code": "1.1a",
+    "section_code": "LBS-1-1A",
     "section_title": "Burinių jachtų korpusų tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1a-proa",
+    "slug": "lbs-1-1a-proa",
     "term_lt": "Proa",
     "term_en": "Proa",
     "description_lt": "Nesimetriškas Ramiojo vandenyno tradicinis burlaivis su viena stabilizuojančia ama.",
@@ -135,16 +135,16 @@
       "topic_number": 1,
       "parent_section": "Burinių jachtų korpusų tipai"
     },
-    "curriculum_node_code": "1.1a",
+    "curriculum_node_code": "LBS-1-1A",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Proa"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-ketas",
+    "slug": "lbs-1-1-1-ketas",
     "term_lt": "Ketas",
     "term_en": "Cat rig",
     "description_lt": "Vieno stiebo laivas su viena groto bure be priekinės burės.",
@@ -155,16 +155,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Ketas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-sliupas",
+    "slug": "lbs-1-1-1-sliupas",
     "term_lt": "Šliupas",
     "term_en": "Sloop",
     "description_lt": "Populiariausias vieno stiebo takelažas su grotu ir viena priekine bure (stakseliu ar genuja).",
@@ -175,16 +175,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Šliupas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-kuteris-tenderis",
+    "slug": "lbs-1-1-1-kuteris-tenderis",
     "term_lt": "Kuteris (tenderis)",
     "term_en": "Cutter",
     "description_lt": "Vieno stiebo laivas su dviem priekinėmis burėmis ir toliau nuo priekio pastatytu stiebu.",
@@ -195,16 +195,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Kuteris (tenderis)"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-kecas",
+    "slug": "lbs-1-1-1-kecas",
     "term_lt": "Kečas",
     "term_en": "Ketch",
     "description_lt": "Du stiebai, mažesnis bizanstiebis stovi priešais vairą; bizanburė padeda balansuoti laivą.",
@@ -215,16 +215,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Kečas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-jolas",
+    "slug": "lbs-1-1-1-jolas",
     "term_lt": "Jolas",
     "term_en": "Yawl",
     "description_lt": "Du stiebai, mažas bizanstiebis už vairo; naudojamas balanso reguliavimui.",
@@ -235,16 +235,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Jolas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-skuna",
+    "slug": "lbs-1-1-1-skuna",
     "term_lt": "Škuna",
     "term_en": "Schooner",
     "description_lt": "Bent du stiebai, galinis stiebas lygus arba aukštesnis už priekinį, burės mišrios.",
@@ -255,16 +255,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Škuna"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-brigantina",
+    "slug": "lbs-1-1-1-brigantina",
     "term_lt": "Brigantina",
     "term_en": "Brigantine",
     "description_lt": "Priekinis stiebas su keturkampėmis burėmis, galinis – su trikampėmis (markoni) burėmis.",
@@ -275,16 +275,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Brigantina"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-brigas",
+    "slug": "lbs-1-1-1-brigas",
     "term_lt": "Brigas",
     "term_en": "Brig",
     "description_lt": "Du stiebai su keturkampėmis burėmis ant abiejų stiebų; klasikinis kariniai/prekybiniai laivai.",
@@ -295,16 +295,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Brigas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-barkentina",
+    "slug": "lbs-1-1-1-barkentina",
     "term_lt": "Barkentina",
     "term_en": "Barquentine",
     "description_lt": "Trys ar daugiau stiebų: priekinis su keturkampėmis burėmis, likę su trikampėmis.",
@@ -315,16 +315,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Barkentina"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-barkas",
+    "slug": "lbs-1-1-1-barkas",
     "term_lt": "Barkas",
     "term_en": "Barque",
     "description_lt": "Keli stiebai, visi, išskyrus galinį, su keturkampėmis burėmis; galinis su markoni bure.",
@@ -335,16 +335,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Barkas"
   },
   {
-    "section_code": "1.1.1",
+    "section_code": "LBS-1-1-1",
     "section_title": "Burlaivių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-1-1-burinis-laivas",
+    "slug": "lbs-1-1-1-burinis-laivas",
     "term_lt": "Burinis laivas",
     "term_en": "Full-rigged ship",
     "description_lt": "Trys ar daugiau stiebų, ant kiekvieno įrengtos keturkampės burės; didžiausi tradiciniai burlaiviai.",
@@ -355,16 +355,16 @@
       "topic_number": 1,
       "parent_section": "Burlaivių tipai"
     },
-    "curriculum_node_code": "1.1.1",
+    "curriculum_node_code": "LBS-1-1-1",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Burinis laivas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-falskilis",
+    "slug": "lbs-1-2-1-falskilis",
     "term_lt": "Falškilis",
     "term_en": "False keel",
     "description_lt": "Papildomas išorinis kilio sluoksnis, saugantis pagrindinį kilį nuo nusidėvėjimo.",
@@ -375,16 +375,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Falškilis"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kilis",
+    "slug": "lbs-1-2-1-kilis",
     "term_lt": "Kilis",
     "term_en": "Keel",
     "description_lt": "Pagrindinė išilginė korpuso sija, suteikianti tvirtumą ir stabilumą.",
@@ -395,16 +395,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Kilis"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kilsonas",
+    "slug": "lbs-1-2-1-kilsonas",
     "term_lt": "Kilsonas",
     "term_en": "Keelson",
     "description_lt": "Vidinis sutvirtinimas virš kilio, paskirstantis apkrovas ir standinantis dugną.",
@@ -415,16 +415,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Kilsonas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-floras",
+    "slug": "lbs-1-2-1-floras",
     "term_lt": "Floras",
     "term_en": "Floor timber",
     "description_lt": "Skersinė rėmo dalis, jungianti bortus per kilį.",
@@ -435,16 +435,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Floras"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-stepsas",
+    "slug": "lbs-1-2-1-stepsas",
     "term_lt": "Stepsas",
     "term_en": "Mast step",
     "description_lt": "Stiebo padas, kuriame stiebas įtvirtinamas ir perimamos apkrovos.",
@@ -455,16 +455,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Stepsas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-spanhautai",
+    "slug": "lbs-1-2-1-spanhautai",
     "term_lt": "Španhautai",
     "term_en": "Frames / ribs",
     "description_lt": "Korpuso šonkauliai, formuojantys laivo kontūrą.",
@@ -475,16 +475,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Španhautai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-stringeriai",
+    "slug": "lbs-1-2-1-stringeriai",
     "term_lt": "Stringeriai",
     "term_en": "Stringers",
     "description_lt": "Išilginės sutvirtinančios sijos, jungiančios španhautus ir standinančios korpusą.",
@@ -495,16 +495,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Stringeriai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-knicos",
+    "slug": "lbs-1-2-1-knicos",
     "term_lt": "Knicos",
     "term_en": "Knees",
     "description_lt": "Sustiprintos kampinės jungtys tarp borto ir denio ar sijų.",
@@ -515,16 +515,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Knicos"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-bimsai",
+    "slug": "lbs-1-2-1-bimsai",
     "term_lt": "Bimsai",
     "term_en": "Deck beams",
     "description_lt": "Skersinės denio sijos, laikančios denį ir perduodančios apkrovas.",
@@ -535,16 +535,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Bimsai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-pusbimsiai",
+    "slug": "lbs-1-2-1-pusbimsiai",
     "term_lt": "Pusbimsiai",
     "term_en": "Half beams",
     "description_lt": "Sutrumpintos denio sijos aplink liukus ar angas, palaikančios atidarymus.",
@@ -555,16 +555,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Pusbimsiai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-karlingsai",
+    "slug": "lbs-1-2-1-karlingsai",
     "term_lt": "Karlingsai",
     "term_en": "Carlings",
     "description_lt": "Išilginės sijos, jungiančios bimsus ir remiančios liukus.",
@@ -575,16 +575,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Karlingsai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-komingsai",
+    "slug": "lbs-1-2-1-komingsai",
     "term_lt": "Komingsai",
     "term_en": "Coamings",
     "description_lt": "Pakelti borteliai aplink liukus ar kokpitą, apsaugantys nuo vandens.",
@@ -595,16 +595,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Komingsai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-pileriai",
+    "slug": "lbs-1-2-1-pileriai",
     "term_lt": "Pileriai",
     "term_en": "Pillars",
     "description_lt": "Vertikalūs denio atraminiai stulpai, perduodantys apkrovas į kilį.",
@@ -615,16 +615,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Pileriai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-svertas-sliuze",
+    "slug": "lbs-1-2-1-svertas-sliuze",
     "term_lt": "Švertas (šliūžė)",
     "term_en": "Centreboard / daggerboard",
     "description_lt": "Keliama plokštuma, stabdanti dreifą ir reguliuojanti kursą.",
@@ -635,16 +635,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Švertas (šliūžė)"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-sverto-sulinys",
+    "slug": "lbs-1-2-1-sverto-sulinys",
     "term_lt": "Šverto šulinys",
     "term_en": "Centreboard trunk",
     "description_lt": "Korpuso anga, kurioje slenka švertas.",
@@ -655,16 +655,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Šverto šulinys"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-sverto-tale",
+    "slug": "lbs-1-2-1-sverto-tale",
     "term_lt": "Šverto talė",
     "term_en": "Centreboard pennant",
     "description_lt": "Virvė ar talė, skirta švertui kelti ir nuleisti.",
@@ -675,16 +675,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Šverto talė"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-pakabinamasis-ir-stacionarusis-vairas",
+    "slug": "lbs-1-2-1-pakabinamasis-ir-stacionarusis-vairas",
     "term_lt": "Pakabinamasis ir stacionarusis vairas",
     "term_en": "Rudder types",
     "description_lt": "Pagrindiniai vairo variantai: išorinis (pakabinamas) ir integruotas (stacionarus) su jų detalėmis.",
@@ -695,16 +695,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 17,
     "curriculum_item_label": "Pakabinamasis ir stacionarusis vairas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-balansyrinis-ir-pusiau-balansyrinis-vairas",
+    "slug": "lbs-1-2-1-balansyrinis-ir-pusiau-balansyrinis-vairas",
     "term_lt": "Balansyrinis ir pusiau balansyrinis vairas",
     "term_en": "Balanced rudders",
     "description_lt": "Vairo konstrukcijos, turinčios dalį ploto prieš ašį, kad sumažintų valdymo jėgą.",
@@ -715,16 +715,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 18,
     "curriculum_item_label": "Balansyrinis ir pusiau balansyrinis vairas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-forstevenis",
+    "slug": "lbs-1-2-1-forstevenis",
     "term_lt": "Forštevenis",
     "term_en": "Stem",
     "description_lt": "Priekinis korpuso kraštas, formuojantis laivapriekį.",
@@ -735,16 +735,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 19,
     "curriculum_item_label": "Forštevenis"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-achterstevenis",
+    "slug": "lbs-1-2-1-achterstevenis",
     "term_lt": "Achterštevenis",
     "term_en": "Sternpost",
     "description_lt": "Galinis korpuso kraštas, formuojantis laivagalį.",
@@ -755,16 +755,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 20,
     "curriculum_item_label": "Achterštevenis"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-priekine-ir-galine-nuosvyros",
+    "slug": "lbs-1-2-1-priekine-ir-galine-nuosvyros",
     "term_lt": "Priekinė ir galinė nuosvyros",
     "term_en": "Rake (stem/stern rake)",
     "description_lt": "Stiebo ar borto pasvirimo kampai, veikiantys balansą ir buringumą.",
@@ -775,16 +775,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 21,
     "curriculum_item_label": "Priekinė ir galinė nuosvyros"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-deidvudas",
+    "slug": "lbs-1-2-1-deidvudas",
     "term_lt": "Deidvudas",
     "term_en": "Deadwood",
     "description_lt": "Sustorinta kilio dalis laivagalio srityje, apimanti vairo veleną.",
@@ -795,16 +795,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 22,
     "curriculum_item_label": "Deidvudas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kairysis-bortas",
+    "slug": "lbs-1-2-1-kairysis-bortas",
     "term_lt": "Kairysis bortas",
     "term_en": "Port side",
     "description_lt": "Laivo pusė, esanti į kairę žiūrint į priekį.",
@@ -815,16 +815,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 23,
     "curriculum_item_label": "Kairysis bortas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-desinysis-bortas",
+    "slug": "lbs-1-2-1-desinysis-bortas",
     "term_lt": "Dešinysis bortas",
     "term_en": "Starboard side",
     "description_lt": "Laivo pusė, esanti į dešinę žiūrint į priekį.",
@@ -835,16 +835,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 24,
     "curriculum_item_label": "Dešinysis bortas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-falsbortas",
+    "slug": "lbs-1-2-1-falsbortas",
     "term_lt": "Falšbortas",
     "term_en": "Bulwark",
     "description_lt": "Vertikalus borto prailginimas virš denio, saugantis įgulą ir įrangą.",
@@ -855,16 +855,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 25,
     "curriculum_item_label": "Falšbortas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-denio-sritys",
+    "slug": "lbs-1-2-1-denio-sritys",
     "term_lt": "Denio sritys",
     "term_en": "Deck areas",
     "description_lt": "Skirtingos denio zonos (bakas, midelis, jutas, kokpitas, kajutės antstatas) ir jų funkcijos.",
@@ -875,16 +875,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 26,
     "curriculum_item_label": "Denio sritys"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-lejeriai",
+    "slug": "lbs-1-2-1-lejeriai",
     "term_lt": "Lejeriai",
     "term_en": "Stanchions",
     "description_lt": "Vertikalūs stulpeliai, laikantys relingus ar saugos trosus.",
@@ -895,16 +895,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 27,
     "curriculum_item_label": "Lejeriai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-lejeriu-stovai",
+    "slug": "lbs-1-2-1-lejeriu-stovai",
     "term_lt": "Lejerių stovai",
     "term_en": "Stanchion bases",
     "description_lt": "Tvirtinimo plokštelės ar laikikliai lejeriams prie denio ar falšborto.",
@@ -915,16 +915,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 28,
     "curriculum_item_label": "Lejerių stovai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-forpikas",
+    "slug": "lbs-1-2-1-forpikas",
     "term_lt": "Forpikas",
     "term_en": "Forepeak",
     "description_lt": "Priekinė patalpa po deniu, skirta įrangai, burėms ar inkarams laikyti.",
@@ -935,16 +935,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 29,
     "curriculum_item_label": "Forpikas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kajute",
+    "slug": "lbs-1-2-1-kajute",
     "term_lt": "Kajutė",
     "term_en": "Cabin",
     "description_lt": "Gyvenamoji patalpa po deniu su miegamosiomis vietomis.",
@@ -955,16 +955,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 30,
     "curriculum_item_label": "Kajutė"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kajutkompanija",
+    "slug": "lbs-1-2-1-kajutkompanija",
     "term_lt": "Kajutkompanija",
     "term_en": "Saloon",
     "description_lt": "Pagrindinė bendro naudojimo erdvė su stalu ir sėdimomis vietomis.",
@@ -975,16 +975,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 31,
     "curriculum_item_label": "Kajutkompanija"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-achterpikas",
+    "slug": "lbs-1-2-1-achterpikas",
     "term_lt": "Achterpikas",
     "term_en": "Aft cabin",
     "description_lt": "Galinėje korpuso dalyje esanti saugykla ar kambarys.",
@@ -995,16 +995,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 32,
     "curriculum_item_label": "Achterpikas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-triumas",
+    "slug": "lbs-1-2-1-triumas",
     "term_lt": "Triumas",
     "term_en": "Bilge",
     "description_lt": "Žemiausia korpuso dalis, kur susirenka vanduo ir įrengiami siurbliai.",
@@ -1015,16 +1015,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 33,
     "curriculum_item_label": "Triumas"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-galjunas-wc",
+    "slug": "lbs-1-2-1-galjunas-wc",
     "term_lt": "Galjūnas (WC)",
     "term_en": "Head",
     "description_lt": "Sanitarinis mazgas su unitazu ir kriaukle.",
@@ -1035,16 +1035,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 34,
     "curriculum_item_label": "Galjūnas (WC)"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-kambuzas-virtuve",
+    "slug": "lbs-1-2-1-kambuzas-virtuve",
     "term_lt": "Kambuzas (virtuvė)",
     "term_en": "Galley",
     "description_lt": "Virtuvės zona su virykle, kriaukle ir spintelėmis.",
@@ -1055,16 +1055,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 35,
     "curriculum_item_label": "Kambuzas (virtuvė)"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-variklio-skyrius",
+    "slug": "lbs-1-2-1-variklio-skyrius",
     "term_lt": "Variklio skyrius",
     "term_en": "Engine compartment",
     "description_lt": "Izoliuota patalpa, kur sumontuotas pagalbinis variklis.",
@@ -1075,16 +1075,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 36,
     "curriculum_item_label": "Variklio skyrius"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-liukai",
+    "slug": "lbs-1-2-1-liukai",
     "term_lt": "Liukai",
     "term_en": "Hatches",
     "description_lt": "Atidaromos angos deniuose ar priekyje, suteikiančios priėjimą ir ventiliaciją.",
@@ -1095,16 +1095,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 37,
     "curriculum_item_label": "Liukai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-iliuminatoriai",
+    "slug": "lbs-1-2-1-iliuminatoriai",
     "term_lt": "Iliuminatoriai",
     "term_en": "Portholes",
     "description_lt": "Apvalūs ar ovalūs korpuso langai šviesai ir oro cirkuliacijai.",
@@ -1115,16 +1115,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 38,
     "curriculum_item_label": "Iliuminatoriai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-ventiliatoriai",
+    "slug": "lbs-1-2-1-ventiliatoriai",
     "term_lt": "Ventiliatoriai",
     "term_en": "Ventilators",
     "description_lt": "Vėdinimo įtaisai, leidžiantys orui cirkuliuoti neįleidžiant vandens.",
@@ -1135,16 +1135,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 39,
     "curriculum_item_label": "Ventiliatoriai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-vandens-tankai",
+    "slug": "lbs-1-2-1-vandens-tankai",
     "term_lt": "Vandens tankai",
     "term_en": "Water tanks",
     "description_lt": "Talpyklos gėlam vandeniui saugoti.",
@@ -1155,16 +1155,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 40,
     "curriculum_item_label": "Vandens tankai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-vandens-tiekimo-sistemos",
+    "slug": "lbs-1-2-1-vandens-tiekimo-sistemos",
     "term_lt": "Vandens tiekimo sistemos",
     "term_en": "Water systems",
     "description_lt": "Pompos, filtrai ir vamzdynai, tiekiantys vandenį į virtuvę ar sanitarinį mazgą.",
@@ -1175,16 +1175,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 41,
     "curriculum_item_label": "Vandens tiekimo sistemos"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-spigatai",
+    "slug": "lbs-1-2-1-spigatai",
     "term_lt": "Špigatai",
     "term_en": "Scuppers",
     "description_lt": "Nutekėjimo angos deniuose, kurios išleidžia vandenį už borto.",
@@ -1195,16 +1195,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 42,
     "curriculum_item_label": "Špigatai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-triumo-siurbliai",
+    "slug": "lbs-1-2-1-triumo-siurbliai",
     "term_lt": "Triumo siurbliai",
     "term_en": "Bilge pumps",
     "description_lt": "Rankiniai ar elektriniai siurbliai, pašalinantys vandenį iš triumo.",
@@ -1215,16 +1215,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 43,
     "curriculum_item_label": "Triumo siurbliai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-ventiliacijos-alsuokliai",
+    "slug": "lbs-1-2-1-ventiliacijos-alsuokliai",
     "term_lt": "Ventiliacijos alsuokliai",
     "term_en": "Dorade vents",
     "description_lt": "Specialūs vėdinimo gaubtai su vandens gaudyklėmis, leidžiantys orui cirkuliuoti.",
@@ -1235,16 +1235,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 44,
     "curriculum_item_label": "Ventiliacijos alsuokliai"
   },
   {
-    "section_code": "1.2.1",
+    "section_code": "LBS-1-2-1",
     "section_title": "Korpusas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-1-deflektoriai",
+    "slug": "lbs-1-2-1-deflektoriai",
     "term_lt": "Deflektoriai",
     "term_en": "Cowl vents",
     "description_lt": "Pasukami gaubtai, nukreipiantys vėją ir didinantys natūralią ventiliaciją.",
@@ -1255,16 +1255,16 @@
       "topic_number": 1,
       "parent_section": "Korpusas"
     },
-    "curriculum_node_code": "1.2.1",
+    "curriculum_node_code": "LBS-1-2-1",
     "curriculum_item_ordinal": 45,
     "curriculum_item_label": "Deflektoriai"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-stiebas",
+    "slug": "lbs-1-2-2-stiebas",
     "term_lt": "Stiebas",
     "term_en": "Mast",
     "description_lt": "Vertikalus rangauto elementas su topu, klotiku, pėda, šporu ir zalingiais, laikantis bures.",
@@ -1275,16 +1275,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Stiebas"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-gikas",
+    "slug": "lbs-1-2-2-gikas",
     "term_lt": "Gikas",
     "term_en": "Boom",
     "description_lt": "Horizontalus karčis, prie kurio tvirtinama groto apačia ir kuriuo valdoma burė.",
@@ -1295,16 +1295,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Gikas"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-buspritas",
+    "slug": "lbs-1-2-2-buspritas",
     "term_lt": "Bušpritas",
     "term_en": "Bowsprit",
     "description_lt": "Iš laivapriekio išsikišęs karčis, leidžiantis iškelti priekinę burę toliau nuo stiebo.",
@@ -1315,16 +1315,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Bušpritas"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-spinakerio-gikas",
+    "slug": "lbs-1-2-2-spinakerio-gikas",
     "term_lt": "Spinakerio gikas",
     "term_en": "Spinnaker pole",
     "description_lt": "Horizontalus karčis spinakerio kampui laikyti priešingoje borto pusėje.",
@@ -1335,16 +1335,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Spinakerio gikas"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-gafelis",
+    "slug": "lbs-1-2-2-gafelis",
     "term_lt": "Gafelis",
     "term_en": "Gaff",
     "description_lt": "Viršutinis karčis keturkampėse (gafelinėse) burėse.",
@@ -1355,16 +1355,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Gafelis"
   },
   {
-    "section_code": "1.2.2",
+    "section_code": "LBS-1-2-2",
     "section_title": "Rangautas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-2-pedos-ir-nokai-stiebu-pavadinimai",
+    "slug": "lbs-1-2-2-pedos-ir-nokai-stiebu-pavadinimai",
     "term_lt": "Pėdos ir nokai, stiebų pavadinimai",
     "term_en": "Spar foots & mast names",
     "description_lt": "Bendri terminai, apibūdinantys karčių tvirtinimo vietas ir stiebų pavadinimus daugiastiebiuose laivuose (grotstiebis, forstiebis, bizanstiebis).",
@@ -1375,16 +1375,16 @@
       "topic_number": 1,
       "parent_section": "Rangautas"
     },
-    "curriculum_node_code": "1.2.2",
+    "curriculum_node_code": "LBS-1-2-2",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Pėdos ir nokai, stiebų pavadinimai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-forstagai",
+    "slug": "lbs-1-2-3-forstagai",
     "term_lt": "Forštagai",
     "term_en": "Forestays",
     "description_lt": "Stovinčio takelažo trosai, laikantys stiebą nuo pasvyrimo atgal ir laikančios priekines bures.",
@@ -1395,16 +1395,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Forštagai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-achterstagai",
+    "slug": "lbs-1-2-3-achterstagai",
     "term_lt": "Achterštagai",
     "term_en": "Backstays",
     "description_lt": "Trosai, laikantys stiebą nuo pasvyrimo į priekį ir reguliuojantys stiebo lenkimą.",
@@ -1415,16 +1415,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Achterštagai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-bakstagai",
+    "slug": "lbs-1-2-3-bakstagai",
     "term_lt": "Bakštagai",
     "term_en": "Running backstays",
     "description_lt": "Reguliuojami šoneliai, stabilizuojantys stiebą pagal burės apkrovą.",
@@ -1435,16 +1435,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Bakštagai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-vantai",
+    "slug": "lbs-1-2-3-vantai",
     "term_lt": "Vantai",
     "term_en": "Shrouds",
     "description_lt": "Šoniniai stovo trosai (topvantai, pagrindiniai), suteikiantys šoninę atramą stiebui.",
@@ -1455,16 +1455,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Vantai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-talrepai-tempikliai",
+    "slug": "lbs-1-2-3-talrepai-tempikliai",
     "term_lt": "Talrepai (tempikliai)",
     "term_en": "Turnbuckles",
     "description_lt": "Srieginiai įtempėjai takelažo trosams preciziškai įtempti.",
@@ -1475,16 +1475,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Talrepai (tempikliai)"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-falai",
+    "slug": "lbs-1-2-3-falai",
     "term_lt": "Falai",
     "term_en": "Halyards",
     "description_lt": "Judamojo takelažo virvės burėms, stiebams ar karčiams kelti.",
@@ -1495,16 +1495,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Falai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-sotai",
+    "slug": "lbs-1-2-3-sotai",
     "term_lt": "Šotai",
     "term_en": "Sheets",
     "description_lt": "Virvės, reguliuojančios burės kampą į vėją.",
@@ -1515,16 +1515,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Šotai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-brasai",
+    "slug": "lbs-1-2-3-brasai",
     "term_lt": "Brasai",
     "term_en": "Braces",
     "description_lt": "Virvės, naudojamos skersinėms burėms pasukti vėjo atžvilgiu.",
@@ -1535,16 +1535,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Brasai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-halsai",
+    "slug": "lbs-1-2-3-halsai",
     "term_lt": "Halsai",
     "term_en": "Tacks",
     "description_lt": "Virvės, fiksuojančios burės priekinį kampą prie karčio ar denio.",
@@ -1555,16 +1555,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Halsai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-rifstertai",
+    "slug": "lbs-1-2-3-rifstertai",
     "term_lt": "Rifštertai",
     "term_en": "Reefing lines",
     "description_lt": "Virvės, sutrumpinančios burės plotą stipraus vėjo metu.",
@@ -1575,16 +1575,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Rifštertai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-topenantai",
+    "slug": "lbs-1-2-3-topenantai",
     "term_lt": "Topenantai",
     "term_en": "Topping lifts",
     "description_lt": "Virvės, keliančios karčius (pvz., giko galo) kai burė nuleista.",
@@ -1595,16 +1595,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Topenantai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-atotampos",
+    "slug": "lbs-1-2-3-atotampos",
     "term_lt": "Atotampos",
     "term_en": "Preventers",
     "description_lt": "Virvės, ribojančios karčio judėjimą (groto giko, spinakerio barberio atotampos) ir apsaugančios nuo nekontroliuoto vento gūsio.",
@@ -1615,16 +1615,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Atotampos"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-raksai",
+    "slug": "lbs-1-2-3-raksai",
     "term_lt": "Raksai",
     "term_en": "Slides",
     "description_lt": "Takelažo detalės, kuriomis burė pritvirtinta prie stiebo ar karčio bėgelio.",
@@ -1635,16 +1635,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Raksai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-karabinai",
+    "slug": "lbs-1-2-3-karabinai",
     "term_lt": "Karabinai",
     "term_en": "Snap hooks",
     "description_lt": "Greito tvirtinimo jungtys virvėms ar burėms sujungti.",
@@ -1655,16 +1655,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Karabinai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-sekeliai-junges",
+    "slug": "lbs-1-2-3-sekeliai-junges",
     "term_lt": "Šekeliai (jungės)",
     "term_en": "Shackles",
     "description_lt": "Metalinės U formos jungės su varžtu, jungiančios takelažo detales.",
@@ -1675,16 +1675,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Šekeliai (jungės)"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-blokai-skridiniai",
+    "slug": "lbs-1-2-3-blokai-skridiniai",
     "term_lt": "Blokai (skridiniai)",
     "term_en": "Blocks",
     "description_lt": "Skridiniai, leidžiantys keisti traukos kryptį ir santykį.",
@@ -1695,16 +1695,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Blokai (skridiniai)"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-klampes",
+    "slug": "lbs-1-2-3-klampes",
     "term_lt": "Klampės",
     "term_en": "Cleats",
     "description_lt": "Tvirtinimo detalės virvėms pritvirtinti ar užfiksuoti.",
@@ -1715,16 +1715,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 17,
     "curriculum_item_label": "Klampės"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-fiksatoriai-stoporai",
+    "slug": "lbs-1-2-3-fiksatoriai-stoporai",
     "term_lt": "Fiksatoriai (stoporai)",
     "term_en": "Jammers / stoppers",
     "description_lt": "Įtaisai, blokuojantys virvę, kad ji neišslystų iš bloko.",
@@ -1735,16 +1735,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 18,
     "curriculum_item_label": "Fiksatoriai (stoporai)"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-kipos",
+    "slug": "lbs-1-2-3-kipos",
     "term_lt": "Kipos",
     "term_en": "Fairleads",
     "description_lt": "Įvorės ar žiedai, nukreipiantys virvės eigą.",
@@ -1755,16 +1755,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 19,
     "curriculum_item_label": "Kipos"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-putensai",
+    "slug": "lbs-1-2-3-putensai",
     "term_lt": "Putensai",
     "term_en": "Deadeyes",
     "description_lt": "Medinės ar plastikinės plokštelės su skylėmis vantų įtempimui.",
@@ -1775,16 +1775,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 20,
     "curriculum_item_label": "Putensai"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-gerves",
+    "slug": "lbs-1-2-3-gerves",
     "term_lt": "Gervės",
     "term_en": "Winches",
     "description_lt": "Mechaniniai įrenginiai, didinantys traukos jėgą dirbant su virvėmis.",
@@ -1795,16 +1795,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 21,
     "curriculum_item_label": "Gervės"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-grotsotu-begelis-su-sliauzikliu",
+    "slug": "lbs-1-2-3-grotsotu-begelis-su-sliauzikliu",
     "term_lt": "Grotšotų bėgelis su šliaužikliu",
     "term_en": "Mainsheet traveler",
     "description_lt": "Bėgelis su slankikliu, leidžiantis reguliuoti giko padėtį šonine kryptimi.",
@@ -1815,16 +1815,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 22,
     "curriculum_item_label": "Grotšotų bėgelis su šliaužikliu"
   },
   {
-    "section_code": "1.2.3",
+    "section_code": "LBS-1-2-3",
     "section_title": "Takelažas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-3-stakselsotu-ir-kiti-begeliai",
+    "slug": "lbs-1-2-3-stakselsotu-ir-kiti-begeliai",
     "term_lt": "Stakselšotų ir kiti bėgeliai",
     "term_en": "Jib tracks",
     "description_lt": "Bėgeliai su slankikliais priekinių burių šotų kampui reguliuoti.",
@@ -1835,16 +1835,16 @@
       "topic_number": 1,
       "parent_section": "Takelažas"
     },
-    "curriculum_node_code": "1.2.3",
+    "curriculum_node_code": "LBS-1-2-3",
     "curriculum_item_ordinal": 23,
     "curriculum_item_label": "Stakselšotų ir kiti bėgeliai"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-tiesioji-bure",
+    "slug": "lbs-1-2-4-tiesioji-bure",
     "term_lt": "Tiesioji burė",
     "term_en": "Square sail",
     "description_lt": "Keturkampė burė, statmena stiebui, naudojama tradiciniuose laivuose.",
@@ -1855,16 +1855,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Tiesioji burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-spritine-bure",
+    "slug": "lbs-1-2-4-spritine-bure",
     "term_lt": "Špritinė burė",
     "term_en": "Spritsail",
     "description_lt": "Burė su įstrižiniu špritu, ištempiama įstrižai nuo stiebo.",
@@ -1875,16 +1875,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Špritinė burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-gafeline-bure",
+    "slug": "lbs-1-2-4-gafeline-bure",
     "term_lt": "Gafelinė burė",
     "term_en": "Gaff sail",
     "description_lt": "Keturkampė burė su gafaeliniu viršutiniu karčiu.",
@@ -1895,16 +1895,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Gafelinė burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-markonine-bermudine-bure",
+    "slug": "lbs-1-2-4-markonine-bermudine-bure",
     "term_lt": "Markoninė (bermudinė) burė",
     "term_en": "Bermudan sail",
     "description_lt": "Trikampė burė su aukštu stiebu ir ilgu liktrosu, šiandien dažniausia.",
@@ -1915,16 +1915,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Markoninė (bermudinė) burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-liugerine-bure",
+    "slug": "lbs-1-2-4-liugerine-bure",
     "term_lt": "Liugerinė burė",
     "term_en": "Lug sail",
     "description_lt": "Įstrižinė burė, slenkanti aplink stiebą be grotostiebio griovelio.",
@@ -1935,16 +1935,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Liugerinė burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-huari-bure",
+    "slug": "lbs-1-2-4-huari-bure",
     "term_lt": "Huari burė",
     "term_en": "Leg-of-mutton",
     "description_lt": "Trikampė burė su trumpu karčiu, dažnai mažuose burlaiviuose.",
@@ -1955,16 +1955,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Huari burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-lotyniska-bure",
+    "slug": "lbs-1-2-4-lotyniska-bure",
     "term_lt": "Lotyniška burė",
     "term_en": "Lateen sail",
     "description_lt": "Trikampė burė su ilgu įstrižiniu karčiu, pasisukanti aplink stiebą.",
@@ -1975,16 +1975,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Lotyniška burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-dzonko-bure",
+    "slug": "lbs-1-2-4-dzonko-bure",
     "term_lt": "Džonko burė",
     "term_en": "Junk sail",
     "description_lt": "Segmentuota burė su horizontaliomis latėmis, paplitusi Azijos laivuose.",
@@ -1995,16 +1995,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Džonko burė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-grotas",
+    "slug": "lbs-1-2-4-grotas",
     "term_lt": "Grotas",
     "term_en": "Mainsail",
     "description_lt": "Pagrindinė burė ant grotstiebo.",
@@ -2015,16 +2015,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Grotas"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-stakselis",
+    "slug": "lbs-1-2-4-stakselis",
     "term_lt": "Stakselis",
     "term_en": "Jib",
     "description_lt": "Priekinė trikampė burė, tvirtinama prie forštagio.",
@@ -2035,16 +2035,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Stakselis"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-genuja",
+    "slug": "lbs-1-2-4-genuja",
     "term_lt": "Genuja",
     "term_en": "Genoa",
     "description_lt": "Didelis stakselis, dengiantis grotą ir didinantis burės plotą esant silpnam vėjui.",
@@ -2055,16 +2055,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Genuja"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-spinakeris-simetrinis-asimetrinis",
+    "slug": "lbs-1-2-4-spinakeris-simetrinis-asimetrinis",
     "term_lt": "Spinakeris (simetrinis/ asimetrinis)",
     "term_en": "Spinnaker",
     "description_lt": "Didelė pripūsta burė plaukiant pavėjui; gali būti simetrinė ar asimetrinė.",
@@ -2075,16 +2075,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Spinakeris (simetrinis/ asimetrinis)"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-triselis",
+    "slug": "lbs-1-2-4-triselis",
     "term_lt": "Triselis",
     "term_en": "Trysail",
     "description_lt": "Maža audros burė, keičianti pagrindinę burę esant stipriam vėjui.",
@@ -2095,16 +2095,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Triselis"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-audros-stakselis",
+    "slug": "lbs-1-2-4-audros-stakselis",
     "term_lt": "Audros stakselis",
     "term_en": "Storm jib",
     "description_lt": "Mažas, tvirtas priekis burė, naudojama audros sąlygomis.",
@@ -2115,16 +2115,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Audros stakselis"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-bermudinio-groto-kampaikrastines",
+    "slug": "lbs-1-2-4-bermudinio-groto-kampaikrastines",
     "term_lt": "Bermudinio groto kampai/kraštinės",
     "term_en": "Sail corners",
     "description_lt": "Terminai, apibūdinantys burės kampus (galinis, priekinis, viršutinis), kraštines ir jų funkcijas.",
@@ -2135,16 +2135,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Bermudinio groto kampai/kraštinės"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-boutai",
+    "slug": "lbs-1-2-4-boutai",
     "term_lt": "Boutai",
     "term_en": "Battens",
     "description_lt": "Plonos juostos latės, suteikiančios burės profiliui formą.",
@@ -2155,16 +2155,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Boutai"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-liktrosas",
+    "slug": "lbs-1-2-4-liktrosas",
     "term_lt": "Liktrosas",
     "term_en": "Bolt rope",
     "description_lt": "Virvė burės kraštuose, įsitvirtinanti griovelyje.",
@@ -2175,16 +2175,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 17,
     "curriculum_item_label": "Liktrosas"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-bulinis",
+    "slug": "lbs-1-2-4-bulinis",
     "term_lt": "Bulinis",
     "term_en": "Foot",
     "description_lt": "Burės apatinė kraštinė, tvirtinama prie giko ar denio.",
@@ -2195,16 +2195,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 18,
     "curriculum_item_label": "Bulinis"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-liuversai",
+    "slug": "lbs-1-2-4-liuversai",
     "term_lt": "Liuversai",
     "term_en": "Grommets",
     "description_lt": "Sustiprintos skylės burėje virvėms ar rifams perverti.",
@@ -2215,16 +2215,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 19,
     "curriculum_item_label": "Liuversai"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-falo-lentele",
+    "slug": "lbs-1-2-4-falo-lentele",
     "term_lt": "Falo lentelė",
     "term_en": "Headboard",
     "description_lt": "Sustiprinta plokštelė burės viršūnėje falo pritvirtinimui.",
@@ -2235,16 +2235,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 20,
     "curriculum_item_label": "Falo lentelė"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-lates",
+    "slug": "lbs-1-2-4-lates",
     "term_lt": "Latės",
     "term_en": "Battens",
     "description_lt": "Į burę įstatytos standžios juostos, palaikančios profilį.",
@@ -2255,16 +2255,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 21,
     "curriculum_item_label": "Latės"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-laciu-kisenes",
+    "slug": "lbs-1-2-4-laciu-kisenes",
     "term_lt": "Lačių kišenės",
     "term_en": "Batten pockets",
     "description_lt": "Kišenės, į kurias įstatomos latės.",
@@ -2275,16 +2275,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 22,
     "curriculum_item_label": "Lačių kišenės"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-rifbantai",
+    "slug": "lbs-1-2-4-rifbantai",
     "term_lt": "Rifbantai",
     "term_en": "Reef bands",
     "description_lt": "Sutvirtintos burės zonos, kuriose pritvirtinami rifai.",
@@ -2295,16 +2295,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 23,
     "curriculum_item_label": "Rifbantai"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-rifsezeniai",
+    "slug": "lbs-1-2-4-rifsezeniai",
     "term_lt": "Rifsezeniai",
     "term_en": "Reef points",
     "description_lt": "Virvės ar dirželiai rifams surišti.",
@@ -2315,16 +2315,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 24,
     "curriculum_item_label": "Rifsezeniai"
   },
   {
-    "section_code": "1.2.4",
+    "section_code": "LBS-1-2-4",
     "section_title": "Burių tipai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-2-4-rifstertai",
+    "slug": "lbs-1-2-4-rifstertai",
     "term_lt": "Rifštertai",
     "term_en": "Reefing lines",
     "description_lt": "Virvės, naudojamos sutrumpinti burę (sutampa su takelažo sąvoka).",
@@ -2335,16 +2335,16 @@
       "topic_number": 1,
       "parent_section": "Burių tipai"
     },
-    "curriculum_node_code": "1.2.4",
+    "curriculum_node_code": "LBS-1-2-4",
     "curriculum_item_ordinal": 25,
     "curriculum_item_label": "Rifštertai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-kliuzai",
+    "slug": "lbs-1-3-1-kliuzai",
     "term_lt": "Kliuzai",
     "term_en": "Fairleads",
     "description_lt": "Metalinės ar plastikinės angos, nukreipiančios lynus per bortą.",
@@ -2355,16 +2355,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Kliuzai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-klampes",
+    "slug": "lbs-1-3-1-klampes",
     "term_lt": "Klampės",
     "term_en": "Cleats",
     "description_lt": "Tvirtinimo dvilaikės virvėms rišti prie denio ar borto.",
@@ -2375,16 +2375,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Klampės"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-knechtai",
+    "slug": "lbs-1-3-1-knechtai",
     "term_lt": "Knechtai",
     "term_en": "Bollards",
     "description_lt": "Tvirtinimo stulpai laivuose ar krantinėse lynams prisirišti.",
@@ -2395,16 +2395,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Knechtai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-bitengai",
+    "slug": "lbs-1-3-1-bitengai",
     "term_lt": "Bitengai",
     "term_en": "Bitts",
     "description_lt": "Dvigubi metaliniai stulpai deniuose, skirti švartavimo virvėms.",
@@ -2415,16 +2415,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Bitengai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-ziedai",
+    "slug": "lbs-1-3-1-ziedai",
     "term_lt": "Žiedai",
     "term_en": "Mooring rings",
     "description_lt": "Metalo žiedai krantinėse ar ant denio lynams tvirtinti.",
@@ -2435,16 +2435,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Žiedai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-atmusai-krancai-fenderiai",
+    "slug": "lbs-1-3-1-atmusai-krancai-fenderiai",
     "term_lt": "Atmušai (krancai, fenderiai)",
     "term_en": "Fenders",
     "description_lt": "Minkštos apsaugos tarp laivo ir krantinės ar kito laivo.",
@@ -2455,16 +2455,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Atmušai (krancai, fenderiai)"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-priekiniai-lynai",
+    "slug": "lbs-1-3-1-priekiniai-lynai",
     "term_lt": "Priekiniai lynai",
     "term_en": "Head lines",
     "description_lt": "Švartavimo virvės, vedamos į priekį nuo laivo.",
@@ -2475,16 +2475,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Priekiniai lynai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-galiniai-lynai",
+    "slug": "lbs-1-3-1-galiniai-lynai",
     "term_lt": "Galiniai lynai",
     "term_en": "Stern lines",
     "description_lt": "Virvės, vedamos į laivagalį tvirtinimui.",
@@ -2495,16 +2495,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Galiniai lynai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-pripaudziamieji-lynai",
+    "slug": "lbs-1-3-1-pripaudziamieji-lynai",
     "term_lt": "Pripaudžiamieji lynai",
     "term_en": "Breast lines",
     "description_lt": "Šoninės virvės, laikančios laivą arčiau krantinės.",
@@ -2515,16 +2515,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Pripaudžiamieji lynai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-springai",
+    "slug": "lbs-1-3-1-springai",
     "term_lt": "Špringai",
     "term_en": "Springs",
     "description_lt": "Įstrižos virvės, ribojančios laivo judėjimą pirmyn/atgal.",
@@ -2535,16 +2535,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Špringai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-inkarai",
+    "slug": "lbs-1-3-1-inkarai",
     "term_lt": "Inkarai",
     "term_en": "Anchors",
     "description_lt": "Įrangos elementas, tvirtinantis laivą prie dugno.",
@@ -2555,16 +2555,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Inkarai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-inkaru-tipai",
+    "slug": "lbs-1-3-1-inkaru-tipai",
     "term_lt": "Inkarų tipai",
     "term_en": "Anchor types",
     "description_lt": "Skirtingos konstrukcijos (Admiraliteto, Denforto, plūginis, sudedamasis, grybo, sraigtinis, katė, delta) ir jų panaudojimas.",
@@ -2575,16 +2575,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Inkarų tipai"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-inkaro-lynas",
+    "slug": "lbs-1-3-1-inkaro-lynas",
     "term_lt": "Inkaro lynas",
     "term_en": "Anchor rode",
     "description_lt": "Virvė ar kombinacija, jungianti inkarą su laivu.",
@@ -2595,16 +2595,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Inkaro lynas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-grandine",
+    "slug": "lbs-1-3-1-grandine",
     "term_lt": "Grandinė",
     "term_en": "Chain",
     "description_lt": "Metalinė grandinė inkaravimo sistemoms, didinanti svorį ir atsparumą trinčiai.",
@@ -2615,16 +2615,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Grandinė"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-suktukas",
+    "slug": "lbs-1-3-1-suktukas",
     "term_lt": "Suktukas",
     "term_en": "Swivel",
     "description_lt": "Jungtis tarp grandinės ir inkaro, leidžianti suktis nesusukant lyno.",
@@ -2635,16 +2635,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Suktukas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-zvakahalsas",
+    "slug": "lbs-1-3-1-zvakahalsas",
     "term_lt": "Žvakahalsas",
     "term_en": "Anchor shackle",
     "description_lt": "U formos jungė inkaro ir grandinės sujungimui.",
@@ -2655,16 +2655,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Žvakahalsas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-grandines-stabdis",
+    "slug": "lbs-1-3-1-grandines-stabdis",
     "term_lt": "Grandinės stabdis",
     "term_en": "Chain stopper",
     "description_lt": "Mechanizmas, fiksuojantis grandinę esant apkrovai.",
@@ -2675,16 +2675,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 17,
     "curriculum_item_label": "Grandinės stabdis"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-inkaro-boja-tomboja",
+    "slug": "lbs-1-3-1-inkaro-boja-tomboja",
     "term_lt": "Inkaro boja (tomboja)",
     "term_en": "Anchor buoy",
     "description_lt": "Plūdė, žyminti inkaro vietą vandenyje.",
@@ -2695,16 +2695,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 18,
     "curriculum_item_label": "Inkaro boja (tomboja)"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-admiraliteto-inkaro-kotas",
+    "slug": "lbs-1-3-1-admiraliteto-inkaro-kotas",
     "term_lt": "Admiraliteto inkaro kotas",
     "term_en": "Anchor shank",
     "description_lt": "Tiesioji Admiraliteto inkaro dalis, pereinanti į rankeną.",
@@ -2715,16 +2715,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 19,
     "curriculum_item_label": "Admiraliteto inkaro kotas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-stokas",
+    "slug": "lbs-1-3-1-stokas",
     "term_lt": "Štokas",
     "term_en": "Stock",
     "description_lt": "Horizontalus strypas, statantis inkarą reikiamu kampu.",
@@ -2735,16 +2735,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 20,
     "curriculum_item_label": "Štokas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-ragas",
+    "slug": "lbs-1-3-1-ragas",
     "term_lt": "Ragas",
     "term_en": "Fluke",
     "description_lt": "Inkarų sparnai, įsikimbantys į dugną.",
@@ -2755,16 +2755,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 21,
     "curriculum_item_label": "Ragas"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-letena",
+    "slug": "lbs-1-3-1-letena",
     "term_lt": "Letena",
     "term_en": "Crown",
     "description_lt": "Apatinė dalis, jungianti štoką ir ragus.",
@@ -2775,16 +2775,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 22,
     "curriculum_item_label": "Letena"
   },
   {
-    "section_code": "1.3.1",
+    "section_code": "LBS-1-3-1",
     "section_title": "Švartavimo ir inkaravimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-1-inkaro-kulnas-trentas",
+    "slug": "lbs-1-3-1-inkaro-kulnas-trentas",
     "term_lt": "Inkaro kulnas (trentas)",
     "term_en": "Bill",
     "description_lt": "Aštrus ragų galas, įsikimbantis į gruntą.",
@@ -2795,16 +2795,16 @@
       "topic_number": 1,
       "parent_section": "Švartavimo ir inkaravimo priemonės"
     },
-    "curriculum_node_code": "1.3.1",
+    "curriculum_node_code": "LBS-1-3-1",
     "curriculum_item_ordinal": 23,
     "curriculum_item_label": "Inkaro kulnas (trentas)"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-gesintuvai",
+    "slug": "lbs-1-3-2-gesintuvai",
     "term_lt": "Gesintuvai",
     "term_en": "Fire extinguishers",
     "description_lt": "Privalomi gaisro gesinimo prietaisai su tinkamomis klasėmis.",
@@ -2815,16 +2815,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Gesintuvai"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-kibirai",
+    "slug": "lbs-1-3-2-kibirai",
     "term_lt": "Kibirai",
     "term_en": "Buckets",
     "description_lt": "Paprasti įrankiai vandeniui semti ar gesinti gaisrą.",
@@ -2835,16 +2835,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Kibirai"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-avarinis-rumpelis",
+    "slug": "lbs-1-3-2-avarinis-rumpelis",
     "term_lt": "Avarinis rumpelis",
     "term_en": "Emergency tiller",
     "description_lt": "Atsarginė vairo valdymo sistema, naudojama sugedus pagrindinei.",
@@ -2855,16 +2855,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Avarinis rumpelis"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-irankiai-trosams-nukirpti",
+    "slug": "lbs-1-3-2-irankiai-trosams-nukirpti",
     "term_lt": "Įrankiai trosams nukirpti",
     "term_en": "Wire cutters",
     "description_lt": "Stiprios žnyplės ar pjovimo įrankiai trosams skubiai nupjauti.",
@@ -2875,16 +2875,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Įrankiai trosams nukirpti"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-kuginiu-kamsciu-rinkinys",
+    "slug": "lbs-1-3-2-kuginiu-kamsciu-rinkinys",
     "term_lt": "Kūginių kamščių rinkinys",
     "term_en": "Wooden plugs",
     "description_lt": "Mediniai kaiščiai skylių ar vamzdžių pratekėjimams užkimšti.",
@@ -2895,16 +2895,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Kūginių kamščių rinkinys"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-gelbejimo-ratas-ir-liemenes",
+    "slug": "lbs-1-3-2-gelbejimo-ratas-ir-liemenes",
     "term_lt": "Gelbėjimo ratas ir liemenės",
     "term_en": "Lifebuoy & lifejackets",
     "description_lt": "Asmeninės plūdrumo ir gelbėjimo priemonės, privalomos kiekvienam įgulos nariui.",
@@ -2915,16 +2915,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Gelbėjimo ratas ir liemenės"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-saugos-dirzai",
+    "slug": "lbs-1-3-2-saugos-dirzai",
     "term_lt": "Saugos diržai",
     "term_en": "Safety harnesses",
     "description_lt": "Diržai su karabinais, pririšantys žmogų prie laivo esant sudėtingoms sąlygoms.",
@@ -2935,16 +2935,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Saugos diržai"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-saugos-lejeriai",
+    "slug": "lbs-1-3-2-saugos-lejeriai",
     "term_lt": "Saugos lejeriai",
     "term_en": "Jacklines",
     "description_lt": "Trosai deniu per visą laivo ilgį, prie kurių segami saugos diržai.",
@@ -2955,16 +2955,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Saugos lejeriai"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-sanitarines-priemones",
+    "slug": "lbs-1-3-2-sanitarines-priemones",
     "term_lt": "Sanitarinės priemonės",
     "term_en": "Medical supplies",
     "description_lt": "Pirmosios pagalbos rinkiniai ir higienos priemonės ekstremalioms situacijoms.",
@@ -2975,16 +2975,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Sanitarinės priemonės"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-navigacines-priemones",
+    "slug": "lbs-1-3-2-navigacines-priemones",
     "term_lt": "Navigacinės priemonės",
     "term_en": "Signalling equipment",
     "description_lt": "Signalinės priemonės (radijas, reflektoriai) pagalbai iškviesti.",
@@ -2995,16 +2995,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Navigacinės priemonės"
   },
   {
-    "section_code": "1.3.2",
+    "section_code": "LBS-1-3-2",
     "section_title": "Avarinės ir gelbėjimo priemonės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-2-signalizavimo-priemones",
+    "slug": "lbs-1-3-2-signalizavimo-priemones",
     "term_lt": "Signalizavimo priemonės",
     "term_en": "Pyrotechnics",
     "description_lt": "Pirotechnika, garsiniai ar šviesos signalai nelaimės pranešimui.",
@@ -3015,16 +3015,16 @@
       "topic_number": 1,
       "parent_section": "Avarinės ir gelbėjimo priemonės"
     },
-    "curriculum_node_code": "1.3.2",
+    "curriculum_node_code": "LBS-1-3-2",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Signalizavimo priemonės"
   },
   {
-    "section_code": "1.3.3",
+    "section_code": "LBS-1-3-3",
     "section_title": "Jachtos pagalbinis mechaninis variklis",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-3-varikliu-rusys-ir-paruosimas",
+    "slug": "lbs-1-3-3-varikliu-rusys-ir-paruosimas",
     "term_lt": "Variklių rūšys ir paruošimas",
     "term_en": "Engine types & commissioning",
     "description_lt": "Dyzeliniai, benzininiai, elektriniai varikliai, jų galingumų parinkimas ir paleidimo procedūros.",
@@ -3035,16 +3035,16 @@
       "topic_number": 1,
       "parent_section": "Jachtos pagalbinis mechaninis variklis"
     },
-    "curriculum_node_code": "1.3.3",
+    "curriculum_node_code": "LBS-1-3-3",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Variklių rūšys ir paruošimas"
   },
   {
-    "section_code": "1.3.3",
+    "section_code": "LBS-1-3-3",
     "section_title": "Jachtos pagalbinis mechaninis variklis",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "1-3-3-prieziura",
+    "slug": "lbs-1-3-3-prieziura",
     "term_lt": "Priežiūra",
     "term_en": "Maintenance",
     "description_lt": "Reguliarus alyvos keitimas, filtrų priežiūra, aušinimo ir kuro sistemos kontrolė.",
@@ -3055,7 +3055,7 @@
       "topic_number": 1,
       "parent_section": "Jachtos pagalbinis mechaninis variklis"
     },
-    "curriculum_node_code": "1.3.3",
+    "curriculum_node_code": "LBS-1-3-3",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Priežiūra"
   }

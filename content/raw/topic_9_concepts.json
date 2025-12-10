@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-burinis-laivas",
+    "slug": "lbs-9-3-burinis-laivas",
     "term_lt": "Burinis laivas",
     "term_en": "Sailing vessel lights",
     "description_lt": "Navigaciniai žiburiai, kuriuos privalo rodyti burlaivis.",
@@ -15,16 +15,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Burinis laivas"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-laivas-su-mechaniniu-varikliu",
+    "slug": "lbs-9-3-laivas-su-mechaniniu-varikliu",
     "term_lt": "Laivas su mechaniniu varikliu",
     "term_en": "Power-driven lights",
     "description_lt": "Žiburiai, kai burinis laivas plaukia su varikliu.",
@@ -35,16 +35,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Laivas su mechaniniu varikliu"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-zvejojantis-laivas",
+    "slug": "lbs-9-3-zvejojantis-laivas",
     "term_lt": "Žvejojantis laivas",
     "term_en": "Fishing vessel lights",
     "description_lt": "Specialūs žiburiai ribotų manevrų žvejybos laivams.",
@@ -55,16 +55,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Žvejojantis laivas"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-velkantis-laivas",
+    "slug": "lbs-9-3-velkantis-laivas",
     "term_lt": "Velkantis laivas",
     "term_en": "Towing lights",
     "description_lt": "Žiburiai, rodantys vilkimo veiklą ir vilkstinės ilgį.",
@@ -75,16 +75,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Velkantis laivas"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-vilkstine",
+    "slug": "lbs-9-3-vilkstine",
     "term_lt": "Vilkstinė",
     "term_en": "Tow",
     "description_lt": "Bendras vilkstinės ženklinimas (vilkikas ir vilkiamas laivas).",
@@ -95,16 +95,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Vilkstinė"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-zemkase",
+    "slug": "lbs-9-3-zemkase",
     "term_lt": "Žemkasė",
     "term_en": "Dredger",
     "description_lt": "Navigaciniai žiburiai darbinius laivus ribotais manevrais.",
@@ -115,16 +115,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Žemkasė"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-stovintis-nuleidus-inkara",
+    "slug": "lbs-9-3-stovintis-nuleidus-inkara",
     "term_lt": "Stovintis nuleidus inkarą",
     "term_en": "Anchored vessel",
     "description_lt": "Šviesos ir dieniniai ženklai, kai laivas stovi.",
@@ -135,16 +135,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Stovintis nuleidus inkarą"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-ant-seklumos",
+    "slug": "lbs-9-3-ant-seklumos",
     "term_lt": "Ant seklumos",
     "term_en": "Aground",
     "description_lt": "Žiburiai ir ženklai, nurodantys, kad laivas užplaukęs ant seklumos.",
@@ -155,16 +155,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Ant seklumos"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-locmano-laivas",
+    "slug": "lbs-9-3-locmano-laivas",
     "term_lt": "Locmano laivas",
     "term_en": "Pilot vessel",
     "description_lt": "Žiburiai, rodantys locmano paslaugas.",
@@ -175,16 +175,16 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Locmano laivas"
   },
   {
-    "section_code": "9.3",
+    "section_code": "LBS-9-3",
     "section_title": "Laivų navigaciniai žiburiai ir ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "9-3-minu-traluotojas",
+    "slug": "lbs-9-3-minu-traluotojas",
     "term_lt": "Minų traluotojas",
     "term_en": "Mine clearance",
     "description_lt": "Specialūs žiburiai traluojantiems minas, įspėjantys apie pavojų.",
@@ -195,7 +195,7 @@
       "topic_number": 9,
       "parent_section": "Laivų navigaciniai žiburiai ir ženklai"
     },
-    "curriculum_node_code": "9.3",
+    "curriculum_node_code": "LBS-9-3",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Minų traluotojas"
   }

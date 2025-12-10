@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-ilgis-loa",
+    "slug": "lbs-2-1-ilgis-loa",
     "term_lt": "Ilgis (LOA)",
     "term_en": "Length overall",
     "description_lt": "Bendrasis jachtos ilgis nuo laivapriekio iki laivagalio, įskaitant išsikišimus.",
@@ -15,16 +15,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Ilgis (LOA)"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-plotis-bmax",
+    "slug": "lbs-2-1-plotis-bmax",
     "term_lt": "Plotis (BMAX)",
     "term_en": "Beam",
     "description_lt": "Didžiausias korpuso plotis, lemiantis stabilumą ir vidaus erdves.",
@@ -35,16 +35,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Plotis (BMAX)"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-grimzle-t",
+    "slug": "lbs-2-1-grimzle-t",
     "term_lt": "Grimzlė (T)",
     "term_en": "Draft",
     "description_lt": "Gylis nuo vandens linijos iki žemiausio taško, nusakantis, kiek laivas panyra.",
@@ -55,16 +55,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Grimzlė (T)"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-vaterlinijos-ilgis-lwl",
+    "slug": "lbs-2-1-vaterlinijos-ilgis-lwl",
     "term_lt": "Vaterlinijos ilgis (LWL)",
     "term_en": "Length on waterline",
     "description_lt": "Korabio ilgis vandens linijoje, įtakojantis teorinį greitį.",
@@ -75,16 +75,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Vaterlinijos ilgis (LWL)"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-laisvo-borto-aukstis-f",
+    "slug": "lbs-2-1-laisvo-borto-aukstis-f",
     "term_lt": "Laisvo borto aukštis (F)",
     "term_en": "Freeboard",
     "description_lt": "Atstumas nuo vandens linijos iki denio briaunos, svarbus saugumui.",
@@ -95,16 +95,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Laisvo borto aukštis (F)"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-vandentalpa",
+    "slug": "lbs-2-1-vandentalpa",
     "term_lt": "Vandentalpa",
     "term_en": "Displacement volume",
     "description_lt": "Vandens tūris, kurį laivas išstumia, rodo masę ir keliamąją galią.",
@@ -115,16 +115,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Vandentalpa"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-keliamoji-galia",
+    "slug": "lbs-2-1-keliamoji-galia",
     "term_lt": "Keliamoji galia",
     "term_en": "Displacement",
     "description_lt": "Maksimalus svoris, kurį laivas gali saugiai nešti.",
@@ -135,16 +135,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Keliamoji galia"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-stovumas",
+    "slug": "lbs-2-1-stovumas",
     "term_lt": "Stovumas",
     "term_en": "Stability",
     "description_lt": "Įgimtas laivo gebėjimas grįžti į vertikalią padėtį po pasvirimo.",
@@ -155,16 +155,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Stovumas"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-buringumas",
+    "slug": "lbs-2-1-buringumas",
     "term_lt": "Buringumas",
     "term_en": "Sail area",
     "description_lt": "Burių plotas, turintis tiesioginę įtaką varomajai jėgai.",
@@ -175,16 +175,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Buringumas"
   },
   {
-    "section_code": "2.1",
+    "section_code": "LBS-2-1",
     "section_title": "Jachtos charakteristikos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-1-pludrumas",
+    "slug": "lbs-2-1-pludrumas",
     "term_lt": "Plūdrumas",
     "term_en": "Buoyancy",
     "description_lt": "Laivo gebėjimas išlaikyti save ir krovinį vandens paviršiuje.",
@@ -195,16 +195,16 @@
       "topic_number": 2,
       "parent_section": "Jachtos charakteristikos"
     },
-    "curriculum_node_code": "2.1",
+    "curriculum_node_code": "LBS-2-1",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Plūdrumas"
   },
   {
-    "section_code": "2.5",
+    "section_code": "LBS-2-5",
     "section_title": "Tikrasis vėjas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-5-stiprumas-tws-ir-kryptis-twa",
+    "slug": "lbs-2-5-stiprumas-tws-ir-kryptis-twa",
     "term_lt": "Stiprumas (TWS) ir kryptis (TWA)",
     "term_en": "True wind speed & angle",
     "description_lt": "Meteorologinis vėjas, kurio greitis ir kryptis matuojami ramioje aplinkoje, naudojami navigacijai.",
@@ -215,16 +215,16 @@
       "topic_number": 2,
       "parent_section": "Tikrasis vėjas"
     },
-    "curriculum_node_code": "2.5",
+    "curriculum_node_code": "LBS-2-5",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Stiprumas (TWS) ir kryptis (TWA)"
   },
   {
-    "section_code": "2.6",
+    "section_code": "LBS-2-6",
     "section_title": "Kursinis vėjas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-6-savoka-ir-susidarymo-priezastis",
+    "slug": "lbs-2-6-savoka-ir-susidarymo-priezastis",
     "term_lt": "Sąvoka ir susidarymo priežastis",
     "term_en": "Apparent wind basics",
     "description_lt": "Vėjas, jaučiamas laive dėl laivo judėjimo, susidarantis tarp tikrojo vėjo ir laivo greičio vektorių.",
@@ -235,16 +235,16 @@
       "topic_number": 2,
       "parent_section": "Kursinis vėjas"
     },
-    "curriculum_node_code": "2.6",
+    "curriculum_node_code": "LBS-2-6",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Sąvoka ir susidarymo priežastis"
   },
   {
-    "section_code": "2.7",
+    "section_code": "LBS-2-7",
     "section_title": "Vimpelinis vėjas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "2-7-kryptis-awa-ir-stiprumas-aws",
+    "slug": "lbs-2-7-kryptis-awa-ir-stiprumas-aws",
     "term_lt": "Kryptis (AWA) ir stiprumas (AWS)",
     "term_en": "Apparent wind",
     "description_lt": "Laive matuojamas vėjas; nustatomas pagal vimpelį ar prietaisus ir būtinas burių reguliavimui.",
@@ -255,7 +255,7 @@
       "topic_number": 2,
       "parent_section": "Vimpelinis vėjas"
     },
-    "curriculum_node_code": "2.7",
+    "curriculum_node_code": "LBS-2-7",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Kryptis (AWA) ir stiprumas (AWS)"
   }

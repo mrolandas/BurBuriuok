@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "4.9",
+    "section_code": "LBS-4-9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "4-9-mob-tel-nr-112",
+    "slug": "lbs-4-9-mob-tel-nr-112",
     "term_lt": "Mob. tel. Nr. 112",
     "term_en": "Emergency phone 112",
     "description_lt": "Bendras Europos skubios pagalbos numeris.",
@@ -15,16 +15,16 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9",
+    "curriculum_node_code": "LBS-4-9",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Mob. tel. Nr. 112"
   },
   {
-    "section_code": "4.9",
+    "section_code": "LBS-4-9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "4-9-vhf-radijo-rysiu",
+    "slug": "lbs-4-9-vhf-radijo-rysiu",
     "term_lt": "VHF radijo ryšiu",
     "term_en": "VHF distress",
     "description_lt": "Skubios pagalbos kanalai (CH16), naudojant MAYDAY/PAN-PAN signalus.",
@@ -35,16 +35,16 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9",
+    "curriculum_node_code": "LBS-4-9",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "VHF radijo ryšiu"
   },
   {
-    "section_code": "4.9",
+    "section_code": "LBS-4-9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "4-9-gestais-matomumo-ribose",
+    "slug": "lbs-4-9-gestais-matomumo-ribose",
     "term_lt": "Gestais matomumo ribose",
     "term_en": "Visual signals",
     "description_lt": "Rankiniai signalai ar vėliavos, kai ryšys matomas iš arti.",
@@ -55,16 +55,16 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9",
+    "curriculum_node_code": "LBS-4-9",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Gestais matomumo ribose"
   },
   {
-    "section_code": "4.9",
+    "section_code": "LBS-4-9",
     "section_title": "Pagalbos iškvietimas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "4-9-signalizacine-pirotechnika",
+    "slug": "lbs-4-9-signalizacine-pirotechnika",
     "term_lt": "Signalizacinė pirotechnika",
     "term_en": "Pyrotechnics",
     "description_lt": "Parašiutinės raketos, dūminiai signalai ar žibintai pagalbai prisišaukti.",
@@ -75,7 +75,7 @@
       "topic_number": 4,
       "parent_section": "Pagalbos iškvietimas"
     },
-    "curriculum_node_code": "4.9",
+    "curriculum_node_code": "LBS-4-9",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Signalizacinė pirotechnika"
   }

@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "7.2.1",
+    "section_code": "LBS-7-2-1",
     "section_title": "Buriavimas pasienio ruože",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-2-1-straipsniai-nr-141-78",
+    "slug": "lbs-7-2-1-straipsniai-nr-141-78",
     "term_lt": "Straipsniai Nr. 14/1; 7.8",
     "term_en": "Border sailing rules",
     "description_lt": "Pagrindinės Valstybės sienos įstatymo nuostatos dėl judėjimo pasienio ruože ir kontrolės.",
@@ -15,16 +15,16 @@
       "topic_number": 7,
       "parent_section": "Buriavimas pasienio ruože"
     },
-    "curriculum_node_code": "7.2.1",
+    "curriculum_node_code": "LBS-7-2-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Straipsniai Nr. 14/1; 7.8"
   },
   {
-    "section_code": "7.2.2",
+    "section_code": "LBS-7-2-2",
     "section_title": "Draudimai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-2-2-straipsniai-nr-1412-13-14",
+    "slug": "lbs-7-2-2-straipsniai-nr-1412-13-14",
     "term_lt": "Straipsniai Nr. 14/12; 13; 14",
     "term_en": "Prohibited actions",
     "description_lt": "Vidaus vandenų transporto taisyklių straipsniai, apibrėžiantys draudžiamą elgesį.",
@@ -35,16 +35,16 @@
       "topic_number": 7,
       "parent_section": "Draudimai"
     },
-    "curriculum_node_code": "7.2.2",
+    "curriculum_node_code": "LBS-7-2-2",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Straipsniai Nr. 14/12; 13; 14"
   },
   {
-    "section_code": "7.9",
+    "section_code": "LBS-7-9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-9-buriuojant",
+    "slug": "lbs-7-9-buriuojant",
     "term_lt": "Buriuojant",
     "term_en": "Under sail",
     "description_lt": "Valstybinės ir klubo vėliavos kėlimas bei išdėstymas, kai laivas plaukia burėmis.",
@@ -55,16 +55,16 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9",
+    "curriculum_node_code": "LBS-7-9",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Buriuojant"
   },
   {
-    "section_code": "7.9",
+    "section_code": "LBS-7-9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-9-stovint-uoste-ar-nuleidus-inkara",
+    "slug": "lbs-7-9-stovint-uoste-ar-nuleidus-inkara",
     "term_lt": "Stovint uoste ar nuleidus inkarą",
     "term_en": "In port / at anchor",
     "description_lt": "Vėliavų tvarka ir iškėlimo laikai stovint.",
@@ -75,16 +75,16 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9",
+    "curriculum_node_code": "LBS-7-9",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Stovint uoste ar nuleidus inkarą"
   },
   {
-    "section_code": "7.9",
+    "section_code": "LBS-7-9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-9-plaukiant-varikliu",
+    "slug": "lbs-7-9-plaukiant-varikliu",
     "term_lt": "Plaukiant varikliu",
     "term_en": "Under power",
     "description_lt": "Papildomi ženklai ir vėliavos naudojant variklį.",
@@ -95,16 +95,16 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9",
+    "curriculum_node_code": "LBS-7-9",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Plaukiant varikliu"
   },
   {
-    "section_code": "7.9",
+    "section_code": "LBS-7-9",
     "section_title": "Vėliavų etiketas",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "7-9-kitos-valstybes-vandenyse",
+    "slug": "lbs-7-9-kitos-valstybes-vandenyse",
     "term_lt": "Kitos valstybės vandenyse",
     "term_en": "Foreign waters",
     "description_lt": "Mandagumo vėliavos ir vietinių reikalavimų laikymasis.",
@@ -115,7 +115,7 @@
       "topic_number": 7,
       "parent_section": "Vėliavų etiketas"
     },
-    "curriculum_node_code": "7.9",
+    "curriculum_node_code": "LBS-7-9",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Kitos valstybės vandenyse"
   }

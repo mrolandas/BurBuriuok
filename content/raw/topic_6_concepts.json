@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-baseinas",
+    "slug": "lbs-6-6-baseinas",
     "term_lt": "Baseinas",
     "term_en": "Basin",
     "description_lt": "Uždaresnė vandens akvatorija uostuose ar prieplaukose.",
@@ -15,16 +15,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Baseinas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-akvatorija",
+    "slug": "lbs-6-6-akvatorija",
     "term_lt": "Akvatorija",
     "term_en": "Water area",
     "description_lt": "Vandens telkinio dalis, skirta navigacijai ar kitoms veikloms.",
@@ -35,16 +35,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Akvatorija"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-sekluma",
+    "slug": "lbs-6-6-sekluma",
     "term_lt": "Sekluma",
     "term_en": "Shoal",
     "description_lt": "Nedidelis gylis, keliantis pavojų laivams.",
@@ -55,16 +55,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Sekluma"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-seklius",
+    "slug": "lbs-6-6-seklius",
     "term_lt": "Sėklius",
     "term_en": "Sandbank",
     "description_lt": "Smėlio ar dumblo sankaupa po vandeniu, galinti iškilti.",
@@ -75,16 +75,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Sėklius"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-baras",
+    "slug": "lbs-6-6-baras",
     "term_lt": "Baras",
     "term_en": "Bar",
     "description_lt": "Nuosėdų sankaupa upės žiotyse, ribojanti gylį.",
@@ -95,16 +95,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Baras"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-rifas",
+    "slug": "lbs-6-6-rifas",
     "term_lt": "RIfas",
     "term_en": "Reef",
     "description_lt": "Uolėta, seklėjanti struktūra, pavojinga navigacijai.",
@@ -115,16 +115,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "RIfas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-banke",
+    "slug": "lbs-6-6-banke",
     "term_lt": "Bankė",
     "term_en": "Bank",
     "description_lt": "Platoka sekluma jūrose su mažesniu gyliu nei aplink.",
@@ -135,16 +135,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Bankė"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-reidas",
+    "slug": "lbs-6-6-reidas",
     "term_lt": "Reidas",
     "term_en": "Roads",
     "description_lt": "Atvira akvatorija netoli uosto, skirta laikinam inkaravimui.",
@@ -155,16 +155,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Reidas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-uostas",
+    "slug": "lbs-6-6-uostas",
     "term_lt": "Uostas",
     "term_en": "Port",
     "description_lt": "Įrengta krantinė infrastruktūra laivams priimti.",
@@ -175,16 +175,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Uostas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-avanportas-priesuostis",
+    "slug": "lbs-6-6-avanportas-priesuostis",
     "term_lt": "Avanportas (priešuostis)",
     "term_en": "Outer harbour",
     "description_lt": "Uosto prieiga prieš pagrindinę akvatoriją, skirtas manevrams ar laukimui.",
@@ -195,16 +195,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Avanportas (priešuostis)"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-prieplauka",
+    "slug": "lbs-6-6-prieplauka",
     "term_lt": "Prieplauka",
     "term_en": "Pier",
     "description_lt": "Smulkesnė krantinė ar pontonas nedideliems laivams.",
@@ -215,16 +215,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Prieplauka"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-pirsas",
+    "slug": "lbs-6-6-pirsas",
     "term_lt": "Pirsas",
     "term_en": "Wharf",
     "description_lt": "Ilga krantinė struktūra, skirta laivams prišvartuoti.",
@@ -235,16 +235,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Pirsas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-damba",
+    "slug": "lbs-6-6-damba",
     "term_lt": "Damba",
     "term_en": "Dyke",
     "description_lt": "Apsauginis pylimas, saugantis nuo užliejimo.",
@@ -255,16 +255,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Damba"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-molas",
+    "slug": "lbs-6-6-molas",
     "term_lt": "Molas",
     "term_en": "Breakwater",
     "description_lt": "Statinys, saugantis uostą nuo bangavimo.",
@@ -275,16 +275,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Molas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-bangolauzis",
+    "slug": "lbs-6-6-bangolauzis",
     "term_lt": "Bangolaužis",
     "term_en": "Breakwater",
     "description_lt": "Konstrukcija, mažinanti bangų energiją uoste.",
@@ -295,16 +295,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Bangolaužis"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-kanalas",
+    "slug": "lbs-6-6-kanalas",
     "term_lt": "Kanalas",
     "term_en": "Channel",
     "description_lt": "Dalis akvatorijos, gilinama navigacijai.",
@@ -315,16 +315,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Kanalas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-farvateris",
+    "slug": "lbs-6-6-farvateris",
     "term_lt": "Farvateris",
     "term_en": "Fairway",
     "description_lt": "Oficialus laivybai skirtas kelias su nustatytomis koordinatėmis.",
@@ -335,16 +335,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 17,
     "curriculum_item_label": "Farvateris"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-gaire",
+    "slug": "lbs-6-6-gaire",
     "term_lt": "Gairė",
     "term_en": "Leading mark",
     "description_lt": "Pažymėti orientyrai kursui palaikyti.",
@@ -355,16 +355,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 18,
     "curriculum_item_label": "Gairė"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-bakenas",
+    "slug": "lbs-6-6-bakenas",
     "term_lt": "Bakenas",
     "term_en": "Beacon",
     "description_lt": "Fiksuotas navigacinis ženklas vandenyje ar krante.",
@@ -375,16 +375,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 19,
     "curriculum_item_label": "Bakenas"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-boja",
+    "slug": "lbs-6-6-boja",
     "term_lt": "Boja",
     "term_en": "Buoy",
     "description_lt": "Plūduriuojantis navigacinis ženklas gylio, kliūčių ar maršruto nurodymui.",
@@ -395,16 +395,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 20,
     "curriculum_item_label": "Boja"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-svyturys",
+    "slug": "lbs-6-6-svyturys",
     "term_lt": "Švyturys",
     "term_en": "Lighthouse",
     "description_lt": "Pastovus šviesos signalas laivybai orientuoti.",
@@ -415,16 +415,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 21,
     "curriculum_item_label": "Švyturys"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-pludrusis-svyturys",
+    "slug": "lbs-6-6-pludrusis-svyturys",
     "term_lt": "Pludrusis švyturys",
     "term_en": "Light vessel",
     "description_lt": "Plūduriuojanti priemonė su šviesos signalais, žyminti pavojų ar kelią.",
@@ -435,16 +435,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 22,
     "curriculum_item_label": "Pludrusis švyturys"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-sektinis-svyturys",
+    "slug": "lbs-6-6-sektinis-svyturys",
     "term_lt": "Sektорinis švyturys",
     "term_en": "Sector light",
     "description_lt": "Švyturys, rodantis skirtingas spalvas pagal kursą.",
@@ -455,16 +455,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 23,
     "curriculum_item_label": "Sektорinis švyturys"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-kranto-orientyras",
+    "slug": "lbs-6-6-kranto-orientyras",
     "term_lt": "Kranto orientyras",
     "term_en": "Landmark",
     "description_lt": "Aiškus objektas krante, padedantis nustatyti padėtį.",
@@ -475,16 +475,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 24,
     "curriculum_item_label": "Kranto orientyras"
   },
   {
-    "section_code": "6.6",
+    "section_code": "LBS-6-6",
     "section_title": "Locijos terminai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-6-vedline",
+    "slug": "lbs-6-6-vedline",
     "term_lt": "Vedlinė",
     "term_en": "Leading line",
     "description_lt": "Du orientyrai, sudarantys liniją teisingam kursui.",
@@ -495,16 +495,16 @@
       "topic_number": 6,
       "parent_section": "Locijos terminai"
     },
-    "curriculum_node_code": "6.6",
+    "curriculum_node_code": "LBS-6-6",
     "curriculum_item_ordinal": 25,
     "curriculum_item_label": "Vedlinė"
   },
   {
-    "section_code": "6.11",
+    "section_code": "LBS-6-11",
     "section_title": "Kliūčių žymėjimo sistemos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-11-kardinaline-sistema",
+    "slug": "lbs-6-11-kardinaline-sistema",
     "term_lt": "Kardinalinė sistema",
     "term_en": "Cardinal marks",
     "description_lt": "Ženklai, rodantys saugiausią pusę aplenkti kliūtį pagal pasaulio šalis.",
@@ -515,16 +515,16 @@
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
     },
-    "curriculum_node_code": "6.11",
+    "curriculum_node_code": "LBS-6-11",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Kardinalinė sistema"
   },
   {
-    "section_code": "6.11",
+    "section_code": "LBS-6-11",
     "section_title": "Kliūčių žymėjimo sistemos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-11-lateraline-ir-kiti-zenklai",
+    "slug": "lbs-6-11-lateraline-ir-kiti-zenklai",
     "term_lt": "Lateralinė ir kiti ženklai",
     "term_en": "Lateral & special marks",
     "description_lt": "Ženklai, nurodantys farvaterio kraštus, specialias zonas, izoliuotus pavojus.",
@@ -535,16 +535,16 @@
       "topic_number": 6,
       "parent_section": "Kliūčių žymėjimo sistemos"
     },
-    "curriculum_node_code": "6.11",
+    "curriculum_node_code": "LBS-6-11",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Lateralinė ir kiti ženklai"
   },
   {
-    "section_code": "6.13",
+    "section_code": "LBS-6-13",
     "section_title": "Darbo su jūrlapiais taisyklės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-13-liniju-ilgis",
+    "slug": "lbs-6-13-liniju-ilgis",
     "term_lt": "Linijų ilgis",
     "term_en": "Plotting lines",
     "description_lt": "Tikslus atstumų žymėjimas jūrlapyje pagal mastelį.",
@@ -555,16 +555,16 @@
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
     },
-    "curriculum_node_code": "6.13",
+    "curriculum_node_code": "LBS-6-13",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Linijų ilgis"
   },
   {
-    "section_code": "6.13",
+    "section_code": "LBS-6-13",
     "section_title": "Darbo su jūrlapiais taisyklės",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-13-kampu-nustatymas",
+    "slug": "lbs-6-13-kampu-nustatymas",
     "term_lt": "Kampų nustatymas",
     "term_en": "Bearing measurement",
     "description_lt": "Krypties ir kursų žymėjimas naudojant braižymo įrankius.",
@@ -575,16 +575,16 @@
       "topic_number": 6,
       "parent_section": "Darbo su jūrlapiais taisyklės"
     },
-    "curriculum_node_code": "6.13",
+    "curriculum_node_code": "LBS-6-13",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Kampų nustatymas"
   },
   {
-    "section_code": "6.14",
+    "section_code": "LBS-6-14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-14-matlankis",
+    "slug": "lbs-6-14-matlankis",
     "term_lt": "Matlankis",
     "term_en": "Protractor",
     "description_lt": "Kampų matavimo įrankis kursams braižyti.",
@@ -595,16 +595,16 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14",
+    "curriculum_node_code": "LBS-6-14",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Matlankis"
   },
   {
-    "section_code": "6.14",
+    "section_code": "LBS-6-14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-14-lygiagrecioji-liniuote",
+    "slug": "lbs-6-14-lygiagrecioji-liniuote",
     "term_lt": "Lygiagrečioji liniuotė",
     "term_en": "Parallel ruler",
     "description_lt": "Įrankis kursams perkelti per jūrlapį.",
@@ -615,16 +615,16 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14",
+    "curriculum_node_code": "LBS-6-14",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Lygiagrečioji liniuotė"
   },
   {
-    "section_code": "6.14",
+    "section_code": "LBS-6-14",
     "section_title": "Navigatoriaus-šturmano įrankiai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-14-skriestuvas-matuoklis",
+    "slug": "lbs-6-14-skriestuvas-matuoklis",
     "term_lt": "Skriestuvas-matuoklis",
     "term_en": "Dividers",
     "description_lt": "Įrankis atstumams matuoti pagal mastelį.",
@@ -635,16 +635,16 @@
       "topic_number": 6,
       "parent_section": "Navigatoriaus-šturmano įrankiai"
     },
-    "curriculum_node_code": "6.14",
+    "curriculum_node_code": "LBS-6-14",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Skriestuvas-matuoklis"
   },
   {
-    "section_code": "6.15",
+    "section_code": "LBS-6-15",
     "section_title": "Grafiniai navigaciniai uždaviniai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-15-koordinaciu-nustatymas",
+    "slug": "lbs-6-15-koordinaciu-nustatymas",
     "term_lt": "Koordinačių nustatymas",
     "term_en": "Fixing position",
     "description_lt": "Taško ilgumos ir platumos nustatymas jūrlapyje.",
@@ -655,16 +655,16 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15",
+    "curriculum_node_code": "LBS-6-15",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Koordinačių nustatymas"
   },
   {
-    "section_code": "6.15",
+    "section_code": "LBS-6-15",
     "section_title": "Grafiniai navigaciniai uždaviniai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-15-tasko-radimas-pagal-koordinates",
+    "slug": "lbs-6-15-tasko-radimas-pagal-koordinates",
     "term_lt": "Taško radimas pagal koordinates",
     "term_en": "Plotting position",
     "description_lt": "Koordinačių perkėlimas į jūrlapį, norint rasti vietą.",
@@ -675,16 +675,16 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15",
+    "curriculum_node_code": "LBS-6-15",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Taško radimas pagal koordinates"
   },
   {
-    "section_code": "6.15",
+    "section_code": "LBS-6-15",
     "section_title": "Grafiniai navigaciniai uždaviniai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-15-atstumo-tarp-tasku-nustatymas",
+    "slug": "lbs-6-15-atstumo-tarp-tasku-nustatymas",
     "term_lt": "Atstumo tarp taškų nustatymas",
     "term_en": "Distance measurement",
     "description_lt": "Atstumo skaičiavimas tarp dviejų pozicijų naudojant skriestuvą.",
@@ -695,16 +695,16 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15",
+    "curriculum_node_code": "LBS-6-15",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Atstumo tarp taškų nustatymas"
   },
   {
-    "section_code": "6.15",
+    "section_code": "LBS-6-15",
     "section_title": "Grafiniai navigaciniai uždaviniai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-15-tikrojo-kurso-ar-pelengo-brezimas",
+    "slug": "lbs-6-15-tikrojo-kurso-ar-pelengo-brezimas",
     "term_lt": "Tikrojo kurso ar pelengo brėžimas",
     "term_en": "True course/bearing",
     "description_lt": "Kursų žymėjimas nuo pasirinkto taško.",
@@ -715,16 +715,16 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15",
+    "curriculum_node_code": "LBS-6-15",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Tikrojo kurso ar pelengo brėžimas"
   },
   {
-    "section_code": "6.15",
+    "section_code": "LBS-6-15",
     "section_title": "Grafiniai navigaciniai uždaviniai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-15-nubreztos-linijos-krypties-nustatymas",
+    "slug": "lbs-6-15-nubreztos-linijos-krypties-nustatymas",
     "term_lt": "Nubrėžtos linijos krypties nustatymas",
     "term_en": "Bearing of a line",
     "description_lt": "Esamos linijos krypties nustatymas kursais ar pelengais.",
@@ -735,16 +735,16 @@
       "topic_number": 6,
       "parent_section": "Grafiniai navigaciniai uždaviniai"
     },
-    "curriculum_node_code": "6.15",
+    "curriculum_node_code": "LBS-6-15",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Nubrėžtos linijos krypties nustatymas"
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-lagas",
+    "slug": "lbs-6-16-lagas",
     "term_lt": "Lagas",
     "term_en": "Log",
     "description_lt": "Prietaisas laivo greičiui ir nuplauktam atstumui matuoti.",
@@ -755,16 +755,16 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Lagas"
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-echolotas",
+    "slug": "lbs-6-16-echolotas",
     "term_lt": "Echolotas",
     "term_en": "Echo sounder",
     "description_lt": "Prietaisas gylio matavimui po laivu.",
@@ -775,16 +775,16 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Echolotas"
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-vejo-matuokliai",
+    "slug": "lbs-6-16-vejo-matuokliai",
     "term_lt": "Vėjo matuokliai",
     "term_en": "Wind instruments",
     "description_lt": "Prietaisai, rodantys vėjo kryptį ir greitį.",
@@ -795,16 +795,16 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Vėjo matuokliai"
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-gps-stacionari-ir-mobili",
+    "slug": "lbs-6-16-gps-stacionari-ir-mobili",
     "term_lt": "GPS (stacionari ir mobili)",
     "term_en": "GPS",
     "description_lt": "Palydovinė navigacijos sistema, teikianti poziciją ir greitį.",
@@ -815,16 +815,16 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "GPS (stacionari ir mobili)"
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-ais",
+    "slug": "lbs-6-16-ais",
     "term_lt": "A.I.S.",
     "term_en": "Automatic Identification System",
     "description_lt": "Sistema, perduodanti laivo duomenis ir padedanti išvengti susidūrimų.",
@@ -835,16 +835,16 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "A.I.S."
   },
   {
-    "section_code": "6.16",
+    "section_code": "LBS-6-16",
     "section_title": "Elektroniniai navigacijos prietaisai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "6-16-kompasas",
+    "slug": "lbs-6-16-kompasas",
     "term_lt": "Kompasas",
     "term_en": "Compass",
     "description_lt": "Magnetinis ar giroskopinis prietaisas, rodantis kryptį.",
@@ -855,7 +855,7 @@
       "topic_number": 6,
       "parent_section": "Elektroniniai navigacijos prietaisai"
     },
-    "curriculum_node_code": "6.16",
+    "curriculum_node_code": "LBS-6-16",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Kompasas"
   }

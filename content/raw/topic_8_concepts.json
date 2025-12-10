@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-laivas",
+    "slug": "lbs-8-1-laivas",
     "term_lt": "Laivas",
     "term_en": "Vessel",
     "description_lt": "Bet koks plaukiojantis įrenginys, tinkamas judėti vandeniu.",
@@ -15,16 +15,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Laivas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-laivas-su-mechaniniu-varikliu",
+    "slug": "lbs-8-1-laivas-su-mechaniniu-varikliu",
     "term_lt": "Laivas su mechaniniu varikliu",
     "term_en": "Power-driven vessel",
     "description_lt": "Laivas, varomas mechanine jėga.",
@@ -35,16 +35,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Laivas su mechaniniu varikliu"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-burinis-laivas",
+    "slug": "lbs-8-1-burinis-laivas",
     "term_lt": "Burinis laivas",
     "term_en": "Sailing vessel",
     "description_lt": "Laivas, kurio pagrindinė varomoji jėga yra burės.",
@@ -55,16 +55,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Burinis laivas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-greitaeigis-laivas",
+    "slug": "lbs-8-1-greitaeigis-laivas",
     "term_lt": "Greitaeigis laivas",
     "term_en": "High-speed craft",
     "description_lt": "Vandens transportas, galintis plaukti labai dideliu greičiu, reikalaujantis specialių taisyklių.",
@@ -75,16 +75,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Greitaeigis laivas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-mazasis-laivas",
+    "slug": "lbs-8-1-mazasis-laivas",
     "term_lt": "Mažasis laivas",
     "term_en": "Small craft",
     "description_lt": "Laivas iki nacionalinių teisės aktų nustatytos ribos (dažnai <20 m).",
@@ -95,16 +95,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Mažasis laivas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-keltas",
+    "slug": "lbs-8-1-keltas",
     "term_lt": "Keltas",
     "term_en": "Ferry",
     "description_lt": "Laivas žmonėms ar transportui perkelti per vandens telkinius.",
@@ -115,16 +115,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Keltas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-zvejojantis-laivas",
+    "slug": "lbs-8-1-zvejojantis-laivas",
     "term_lt": "Žvejojantis laivas",
     "term_en": "Fishing vessel",
     "description_lt": "Laivas, užsiimantis žvejyba ir turintis apribotas manevravimo galimybes.",
@@ -135,16 +135,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Žvejojantis laivas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-laivas-stovi",
+    "slug": "lbs-8-1-laivas-stovi",
     "term_lt": "Laivas stovi",
     "term_en": "Vessel at anchor",
     "description_lt": "Laivas, kuris nenaudoja varomosios jėgos ir nekontroliuojamai nejuda.",
@@ -155,16 +155,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Laivas stovi"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-laivas-plaukia",
+    "slug": "lbs-8-1-laivas-plaukia",
     "term_lt": "Laivas plaukia",
     "term_en": "Vessel underway",
     "description_lt": "Laivas, kuris juda vandeniu savo ar kitų priemonių pagalba.",
@@ -175,16 +175,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Laivas plaukia"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-saugus-greitis",
+    "slug": "lbs-8-1-saugus-greitis",
     "term_lt": "Saugus greitis",
     "term_en": "Safe speed",
     "description_lt": "Greitis, leidžiantis laiku sustabdyti ar manevruoti pagal situaciją.",
@@ -195,16 +195,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 10,
     "curriculum_item_label": "Saugus greitis"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-diena",
+    "slug": "lbs-8-1-diena",
     "term_lt": "Diena",
     "term_en": "Daytime",
     "description_lt": "Laikotarpis, kuriame naudojami dieniniai ženklai ir signalai.",
@@ -215,16 +215,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 11,
     "curriculum_item_label": "Diena"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-naktis",
+    "slug": "lbs-8-1-naktis",
     "term_lt": "Naktis",
     "term_en": "Nighttime",
     "description_lt": "Laikotarpis, kai naudojami šviesos signalai.",
@@ -235,16 +235,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 12,
     "curriculum_item_label": "Naktis"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-ribotas-matomumas",
+    "slug": "lbs-8-1-ribotas-matomumas",
     "term_lt": "Ribotas matomumas",
     "term_en": "Restricted visibility",
     "description_lt": "Sąlygos (rūkas, lietus) ribojančios matymo atstumą.",
@@ -255,16 +255,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 13,
     "curriculum_item_label": "Ribotas matomumas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-trumpas-garsas",
+    "slug": "lbs-8-1-trumpas-garsas",
     "term_lt": "Trumpas garsas",
     "term_en": "Short blast",
     "description_lt": "Trumpas (apie 1 sekundės) garso signalas.",
@@ -275,16 +275,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 14,
     "curriculum_item_label": "Trumpas garsas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-ilgas-garsas",
+    "slug": "lbs-8-1-ilgas-garsas",
     "term_lt": "Ilgas garsas",
     "term_en": "Prolonged blast",
     "description_lt": "Ilgesnis (4–6 sekundžių) garso signalas.",
@@ -295,16 +295,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 15,
     "curriculum_item_label": "Ilgas garsas"
   },
   {
-    "section_code": "8.1",
+    "section_code": "LBS-8-1",
     "section_title": "Pagrindinės sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-1-labai-trumpu-garsu-serija",
+    "slug": "lbs-8-1-labai-trumpu-garsu-serija",
     "term_lt": "Labai trumpų garsų serija",
     "term_en": "Very short blasts",
     "description_lt": "Keletas greitų signalų, naudojamų specialiems pranešimams.",
@@ -315,16 +315,16 @@
       "topic_number": 8,
       "parent_section": "Pagrindinės sąvokos"
     },
-    "curriculum_node_code": "8.1",
+    "curriculum_node_code": "LBS-8-1",
     "curriculum_item_ordinal": 16,
     "curriculum_item_label": "Labai trumpų garsų serija"
   },
   {
-    "section_code": "8.8",
+    "section_code": "LBS-8-8",
     "section_title": "Laivų garsinė signalizacija",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-8-garsiniai-signalai",
+    "slug": "lbs-8-8-garsiniai-signalai",
     "term_lt": "Garsiniai signalai",
     "term_en": "Sound signals",
     "description_lt": "Signalų seka (dėmesio, posūkiai, ribotas matomumas, nelaimės) pagal CEVNI taisykles.",
@@ -335,16 +335,16 @@
       "topic_number": 8,
       "parent_section": "Laivų garsinė signalizacija"
     },
-    "curriculum_node_code": "8.8",
+    "curriculum_node_code": "LBS-8-8",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Garsiniai signalai"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-draudziamieji",
+    "slug": "lbs-8-9-draudziamieji",
     "term_lt": "Draudžiamieji",
     "term_en": "Prohibitory signs",
     "description_lt": "Ženklai, draudžiantys tam tikrą veiklą ar judėjimą.",
@@ -355,16 +355,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Draudžiamieji"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-privalomieji",
+    "slug": "lbs-8-9-privalomieji",
     "term_lt": "Privalomieji",
     "term_en": "Mandatory signs",
     "description_lt": "Ženklai, įpareigojantys laikytis nurodytos krypties ar veiksmo.",
@@ -375,16 +375,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Privalomieji"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-ribojamieji",
+    "slug": "lbs-8-9-ribojamieji",
     "term_lt": "Ribojamieji",
     "term_en": "Restrictive signs",
     "description_lt": "Nurodo apribojimus (greitį, gylį, toną).",
@@ -395,16 +395,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Ribojamieji"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-nurodomieji",
+    "slug": "lbs-8-9-nurodomieji",
     "term_lt": "Nurodomieji",
     "term_en": "Indicative signs",
     "description_lt": "Informuoja apie rekomenduojamą elgesį ar kryptį.",
@@ -415,16 +415,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Nurodomieji"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-informaciniai",
+    "slug": "lbs-8-9-informaciniai",
     "term_lt": "Informaciniai",
     "term_en": "Information signs",
     "description_lt": "Suteikia papildomos informacijos (pvz., infrastruktūra).",
@@ -435,16 +435,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Informaciniai"
   },
   {
-    "section_code": "8.9",
+    "section_code": "LBS-8-9",
     "section_title": "Laivybą reguliuojantys signaliniai ženklai",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-9-pagalbiniai",
+    "slug": "lbs-8-9-pagalbiniai",
     "term_lt": "Pagalbiniai",
     "term_en": "Auxiliary signs",
     "description_lt": "Papildo kitų ženklų reikšmę ar taikymo ribas.",
@@ -455,16 +455,16 @@
       "topic_number": 8,
       "parent_section": "Laivybą reguliuojantys signaliniai ženklai"
     },
-    "curriculum_node_code": "8.9",
+    "curriculum_node_code": "LBS-8-9",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Pagalbiniai"
   },
   {
-    "section_code": "8.10.1",
+    "section_code": "LBS-8-10-1",
     "section_title": "Sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-10-1-plaukimas-aukstynzemyn",
+    "slug": "lbs-8-10-1-plaukimas-aukstynzemyn",
     "term_lt": "Plaukimas aukštyn/žemyn",
     "term_en": "Upstream/downstream",
     "description_lt": "Navigacija prieš ar pasroviui upėje.",
@@ -475,16 +475,16 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1",
+    "curriculum_node_code": "LBS-8-10-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Plaukimas aukštyn/žemyn"
   },
   {
-    "section_code": "8.10.1",
+    "section_code": "LBS-8-10-1",
     "section_title": "Sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-10-1-priespriesinis-plaukimas",
+    "slug": "lbs-8-10-1-priespriesinis-plaukimas",
     "term_lt": "Priešpriešinis plaukimas",
     "term_en": "Head-on situation",
     "description_lt": "Situacija, kai laivai artėja vienas prieš kitą.",
@@ -495,16 +495,16 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1",
+    "curriculum_node_code": "LBS-8-10-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Priešpriešinis plaukimas"
   },
   {
-    "section_code": "8.10.1",
+    "section_code": "LBS-8-10-1",
     "section_title": "Sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-10-1-kursu-susikirtimas",
+    "slug": "lbs-8-10-1-kursu-susikirtimas",
     "term_lt": "Kursų susikirtimas",
     "term_en": "Crossing situation",
     "description_lt": "Situacija, kai laivų kursai kertasi.",
@@ -515,16 +515,16 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1",
+    "curriculum_node_code": "LBS-8-10-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Kursų susikirtimas"
   },
   {
-    "section_code": "8.10.1",
+    "section_code": "LBS-8-10-1",
     "section_title": "Sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "8-10-1-lenkimas",
+    "slug": "lbs-8-10-1-lenkimas",
     "term_lt": "Lenkimas",
     "term_en": "Overtaking",
     "description_lt": "Vieno laivo manevras, kai aplenkiamas kitas laivas.",
@@ -535,7 +535,7 @@
       "topic_number": 8,
       "parent_section": "Sąvokos"
     },
-    "curriculum_node_code": "8.10.1",
+    "curriculum_node_code": "LBS-8-10-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Lenkimas"
   }

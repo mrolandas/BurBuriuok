@@ -1,10 +1,10 @@
 [
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-vendas",
+    "slug": "lbs-3-4-vendas",
     "term_lt": "Vendas",
     "term_en": "Tack",
     "description_lt": "Posūkis prieš vėją, kai nosis kerta vėją ir burės persimetamos.",
@@ -15,16 +15,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Vendas"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-halsas",
+    "slug": "lbs-3-4-halsas",
     "term_lt": "Halsas",
     "term_en": "Gybe",
     "description_lt": "Posūkis pavėjui, kai laivagalys kerta vėjo kryptį ir gikas persimetamas.",
@@ -35,16 +35,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Halsas"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-kilti",
+    "slug": "lbs-3-4-kilti",
     "term_lt": "Kilti",
     "term_en": "Luff up",
     "description_lt": "Pasukti laivą arčiau vėjo krypties.",
@@ -55,16 +55,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Kilti"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-kristi",
+    "slug": "lbs-3-4-kristi",
     "term_lt": "Kristi",
     "term_en": "Bear away",
     "description_lt": "Nukreipti laivą toliau nuo vėjo krypties.",
@@ -75,16 +75,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Kristi"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-laviruoti",
+    "slug": "lbs-3-4-laviruoti",
     "term_lt": "Laviruoti",
     "term_en": "Beat",
     "description_lt": "Plaukti zigzagais prieš vėją keičiant halsus.",
@@ -95,16 +95,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Laviruoti"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-buriuoti-astriaubukiau",
+    "slug": "lbs-3-4-buriuoti-astriaubukiau",
     "term_lt": "Buriuoti aštriau/bukiau",
     "term_en": "Sail closer/further off the wind",
     "description_lt": "Reguliuoti kursą taip, kad burės dirbtų optimaliai pagal vėjo kampą.",
@@ -115,16 +115,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Buriuoti aštriau/bukiau"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-dreifuoti",
+    "slug": "lbs-3-4-dreifuoti",
     "term_lt": "Dreifuoti",
     "term_en": "Drift",
     "description_lt": "Nekontroliuojamas laivo slinkimas dėl vėjo ar srovės.",
@@ -135,16 +135,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Dreifuoti"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-dreifuoti-su-buremis-ir-be-ju",
+    "slug": "lbs-3-4-dreifuoti-su-buremis-ir-be-ju",
     "term_lt": "Dreifuoti su burėmis ir be jų",
     "term_en": "Heave-to / drift",
     "description_lt": "Sustabdyti laivą vėjo atžvilgiu su burių pagalba arba be jų.",
@@ -155,16 +155,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Dreifuoti su burėmis ir be jų"
   },
   {
-    "section_code": "3.4",
+    "section_code": "LBS-3-4",
     "section_title": "Manevravimo sąvokos",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-4-manevru-komandos",
+    "slug": "lbs-3-4-manevru-komandos",
     "term_lt": "Manevrų komandos",
     "term_en": "Helm orders",
     "description_lt": "Standartinės frazės, nurodančios įgulai veiksmus manevrų metu.",
@@ -175,16 +175,16 @@
       "topic_number": 3,
       "parent_section": "Manevravimo sąvokos"
     },
-    "curriculum_node_code": "3.4",
+    "curriculum_node_code": "LBS-3-4",
     "curriculum_item_ordinal": 9,
     "curriculum_item_label": "Manevrų komandos"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-vandens-telkinio-dugno-gruntas",
+    "slug": "lbs-3-12-1-vandens-telkinio-dugno-gruntas",
     "term_lt": "Vandens telkinio dugno gruntas",
     "term_en": "Seabed type",
     "description_lt": "Vertiname dugno sudėtį (smėlis, molis, uoliena), kad inkaras įsikibtų.",
@@ -195,16 +195,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Vandens telkinio dugno gruntas"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-povandeniniai-kliuviniai",
+    "slug": "lbs-3-12-1-povandeniniai-kliuviniai",
     "term_lt": "Povandeniniai kliuviniai",
     "term_en": "Underwater hazards",
     "description_lt": "Patikriname ar nėra akmenų, nuolaužų ar kitų kliūčių inkaro vietoje.",
@@ -215,16 +215,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Povandeniniai kliuviniai"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-dugno-nuolydis",
+    "slug": "lbs-3-12-1-dugno-nuolydis",
     "term_lt": "Dugno nuolydis",
     "term_en": "Bottom slope",
     "description_lt": "Įvertiname dugno pasvirimą, kad inkaras neslystų.",
@@ -235,16 +235,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Dugno nuolydis"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-kranto-orientyrai",
+    "slug": "lbs-3-12-1-kranto-orientyrai",
     "term_lt": "Kranto orientyrai",
     "term_en": "Shore marks",
     "description_lt": "Pasirenkame lengvai atpažįstamus orientyrus pozicijai stebėti.",
@@ -255,16 +255,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Kranto orientyrai"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-meteorologiniai-aspektai",
+    "slug": "lbs-3-12-1-meteorologiniai-aspektai",
     "term_lt": "Meteorologiniai aspektai",
     "term_en": "Weather factors",
     "description_lt": "Analizuojame vėjo kryptį, stiprumą ir prognozes.",
@@ -275,16 +275,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Meteorologiniai aspektai"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-hidrologiniai-aspektai",
+    "slug": "lbs-3-12-1-hidrologiniai-aspektai",
     "term_lt": "Hidrologiniai aspektai",
     "term_en": "Tidal/current factors",
     "description_lt": "Įvertiname sroves, potvynius ir vandens lygio pokyčius.",
@@ -295,16 +295,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Hidrologiniai aspektai"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-teisiniai-aspektai",
+    "slug": "lbs-3-12-1-teisiniai-aspektai",
     "term_lt": "Teisiniai aspektai",
     "term_en": "Legal constraints",
     "description_lt": "Patikriname draudžiamas zonas, rezervatus ar leidimų poreikį.",
@@ -315,16 +315,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 7,
     "curriculum_item_label": "Teisiniai aspektai"
   },
   {
-    "section_code": "3.12.1",
+    "section_code": "LBS-3-12-1",
     "section_title": "Vietos parinkimas (inkaravimas)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-12-1-urbanistiniai-aspektai",
+    "slug": "lbs-3-12-1-urbanistiniai-aspektai",
     "term_lt": "Urbanistiniai aspektai",
     "term_en": "Local infrastructure",
     "description_lt": "Įvertiname kaimynystės objektus, eismo intensyvumą ir triukšmą.",
@@ -335,16 +335,16 @@
       "topic_number": 3,
       "parent_section": "Vietos parinkimas (inkaravimas)"
     },
-    "curriculum_node_code": "3.12.1",
+    "curriculum_node_code": "LBS-3-12-1",
     "curriculum_item_ordinal": 8,
     "curriculum_item_label": "Urbanistiniai aspektai"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-priesvejiniam-vantui",
+    "slug": "lbs-3-15-1-priesvejiniam-vantui",
     "term_lt": "Priešvėjiniam vantui",
     "term_en": "Windward shroud failure",
     "description_lt": "Situacija, kai nutrūksta vėjo pusėje esantis vantas – reikia skubiai atramos.",
@@ -355,16 +355,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Priešvėjiniam vantui"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-bakstagui",
+    "slug": "lbs-3-15-1-bakstagui",
     "term_lt": "Bakštagui",
     "term_en": "Runner failure",
     "description_lt": "Nutrūkus bakštagui, stiebas gali prarasti atramą plaukaujant aštriai pavėjui.",
@@ -375,16 +375,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Bakštagui"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-forstagui",
+    "slug": "lbs-3-15-1-forstagui",
     "term_lt": "Forštagui",
     "term_en": "Forestay failure",
     "description_lt": "Priekinio stovo nutrūkimas kelia pavojų stiebo stabilumui ir stakseliui.",
@@ -395,16 +395,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Forštagui"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-achterstagui",
+    "slug": "lbs-3-15-1-achterstagui",
     "term_lt": "Achterštagui",
     "term_en": "Backstay failure",
     "description_lt": "Galinio stovo praradimas leidžia stiebui pasvirti į priekį.",
@@ -415,16 +415,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Achterštagui"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-stakselio-falui",
+    "slug": "lbs-3-15-1-stakselio-falui",
     "term_lt": "Stakselio falui",
     "term_en": "Jib halyard failure",
     "description_lt": "Praradus falą priekis burė nusileidžia, reikia atsarginio kėlimo.",
@@ -435,16 +435,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Stakselio falui"
   },
   {
-    "section_code": "3.15.1",
+    "section_code": "LBS-3-15-1",
     "section_title": "Nutrūkus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-1-groto-falui",
+    "slug": "lbs-3-15-1-groto-falui",
     "term_lt": "Groto falui",
     "term_en": "Main halyard failure",
     "description_lt": "Groto nuleidimas dėl falo gedimo, būtina fiksuoti burę.",
@@ -455,16 +455,16 @@
       "topic_number": 3,
       "parent_section": "Nutrūkus (įrangai)"
     },
-    "curriculum_node_code": "3.15.1",
+    "curriculum_node_code": "LBS-3-15-1",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Groto falui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-pavejiniam-vantui",
+    "slug": "lbs-3-15-2-pavejiniam-vantui",
     "term_lt": "Pavėjiniam vantui",
     "term_en": "Leeward shroud slip",
     "description_lt": "Atsikabinęs pavėjinės pusės vantas praranda įtempimą, stiebas gali vibruoti.",
@@ -475,16 +475,16 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 1,
     "curriculum_item_label": "Pavėjiniam vantui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-bakstagui",
+    "slug": "lbs-3-15-2-bakstagui",
     "term_lt": "Bakštagui",
     "term_en": "Runner slip",
     "description_lt": "Bakštagas nuslysta nuo tvirtinimo, reikia iš naujo įtempti.",
@@ -495,16 +495,16 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 2,
     "curriculum_item_label": "Bakštagui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-forstagui",
+    "slug": "lbs-3-15-2-forstagui",
     "term_lt": "Forštagui",
     "term_en": "Forestay slip",
     "description_lt": "Forštagas atsilaisvina, pablogėja stakselio profilis.",
@@ -515,16 +515,16 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 3,
     "curriculum_item_label": "Forštagui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-achterstagui",
+    "slug": "lbs-3-15-2-achterstagui",
     "term_lt": "Achterštagui",
     "term_en": "Backstay slip",
     "description_lt": "Achterštagas praranda įtempimą, stiebas pasvyra į priekį.",
@@ -535,16 +535,16 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 4,
     "curriculum_item_label": "Achterštagui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-stakselio-falui",
+    "slug": "lbs-3-15-2-stakselio-falui",
     "term_lt": "Stakselio falui",
     "term_en": "Jib halyard slip",
     "description_lt": "Falas išslysta iš fiksatoriaus ir burė nusileidžia.",
@@ -555,16 +555,16 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 5,
     "curriculum_item_label": "Stakselio falui"
   },
   {
-    "section_code": "3.15.2",
+    "section_code": "LBS-3-15-2",
     "section_title": "Atsikabinus (įrangai)",
     "subsection_code": null,
     "subsection_title": null,
-    "slug": "3-15-2-groto-falui",
+    "slug": "lbs-3-15-2-groto-falui",
     "term_lt": "Groto falui",
     "term_en": "Main halyard slip",
     "description_lt": "Groto falas atsilaisvina, sumažėja burės įtempimas ir profilis.",
@@ -575,7 +575,7 @@
       "topic_number": 3,
       "parent_section": "Atsikabinus (įrangai)"
     },
-    "curriculum_node_code": "3.15.2",
+    "curriculum_node_code": "LBS-3-15-2",
     "curriculum_item_ordinal": 6,
     "curriculum_item_label": "Groto falui"
   }

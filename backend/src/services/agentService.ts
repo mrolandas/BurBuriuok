@@ -111,9 +111,14 @@ const systemMessage: ChatMessage = {
     - reset_content: Wipe all data (DANGEROUS - always ask for confirmation)
     
     The curriculum has a hierarchical structure:
-    - Level 1 nodes are main sections (e.g., "Navigation", "Safety")
-    - Level 2 nodes are subsections under a parent section
+    - Level 1 nodes are main sections (e.g., "LBS-1", "LBS-2")
+    - Level 2 nodes are subsections under a parent section (e.g., "LBS-1-1A", "LBS-1-2-1")
     - Concepts belong to nodes and contain the actual learning content
+    
+    Code format: All curriculum codes follow the pattern "{SUBJECT}-{SECTION}[-{SUBSECTION}]"
+    - Current subject prefix: LBS (Laivo Buriuotojo Sertifikatas - sailing theory)
+    - Examples: LBS-1 (main section), LBS-1-1A (subsection), LBS-10-17 (subsection under section 10)
+    - Concept slugs: lowercase with subject prefix, e.g., "lbs-1-1a-jole"
     
     When answering questions about the curriculum:
     1. Use list_curriculum to see the structure
