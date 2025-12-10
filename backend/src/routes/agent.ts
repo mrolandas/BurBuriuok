@@ -6,13 +6,14 @@ const router = express.Router();
 
 // Rate limiter for agent chat: 60 requests per hour per admin
 const agentChatRateLimiter = createRateLimiter({
+  name: 'agent-chat',
   windowMs: 60 * 60 * 1000, // 1 hour
   limit: 60,
-  keyGenerator: (req) => req.authUser?.id || req.ip || 'unknown',
+  keyExtractor: (req) => req.authUser?.id || req.ip || null,
   onLimitExceeded: (ctx) => {
     console.warn('[agent] Rate limit exceeded', { 
-      userId: ctx.key, 
-      limit: ctx.limit 
+      userId: ctx.identifier, 
+      retryAfter: ctx.retryAfterSeconds 
     });
   }
 });
