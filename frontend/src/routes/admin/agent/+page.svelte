@@ -1,6 +1,13 @@
 <script lang="ts">
   import { afterUpdate, onMount, tick } from 'svelte';
   import { getSupabaseClient } from '$lib/supabase/client';
+  import { appConfig } from '$lib/config/appConfig';
+
+  // Get the agent API base URL (uses publicApiBase in production, relative in dev)
+  function getAgentApiBase(): string {
+    const base = appConfig.public.apiBase;
+    return base ? `${base}/agent` : '/api/v1/agent';
+  }
 
   type ToolLog = {
     tool: string;
@@ -56,7 +63,7 @@
     
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch('/api/v1/agent/models', { headers });
+      const res = await fetch(`${getAgentApiBase()}/models`, { headers });
       if (res.ok) {
         const data = await res.json();
         availableModels = data.models;
@@ -116,7 +123,7 @@
 
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch('/api/v1/agent/chat', {
+      const res = await fetch(`${getAgentApiBase()}/chat`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -168,7 +175,7 @@
 
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch('/api/v1/agent/chat', {
+      const res = await fetch(`${getAgentApiBase()}/chat`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -227,7 +234,7 @@
     testStatus = { state: 'loading', message: 'Testing…' };
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch('/api/v1/agent/test', {
+      const res = await fetch(`${getAgentApiBase()}/test`, {
         method: 'GET',
         headers,
       });
