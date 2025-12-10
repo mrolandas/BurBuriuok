@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..");
 const masterMarkdownPath = path.resolve(
   repoRoot,
-  "docs/static_info/LBS_concepts_master.md"
+  "content/source/LBS_concepts_master.md"
 );
 
 function stripFormatting(cell = "") {

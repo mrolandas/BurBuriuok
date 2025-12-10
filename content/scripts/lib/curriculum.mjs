@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const DEFAULT_DOC_PATH = path.resolve(
   __dirname,
-  "../../../docs/static_info/LBS_programa.md"
+  "../../source/LBS_programa.md"
 );
 
 export function normalizeCurriculumString(text) {

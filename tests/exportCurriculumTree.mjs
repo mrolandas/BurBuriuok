@@ -3,7 +3,7 @@
 // Export the curriculum hierarchy in either tree or CSV format.
 // Usage examples:
 //   node tests/exportCurriculumTree.mjs
-//   node tests/exportCurriculumTree.mjs --format csv --out docs/static_info/curriculum_in_supabase.csv
+//   node tests/exportCurriculumTree.mjs --format csv --out content/source/curriculum_in_supabase.csv
 
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";

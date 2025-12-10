@@ -36,7 +36,7 @@ const STRUCTURE_PATH = path.resolve(
 );
 const MASTER_CONCEPT_PATH = path.resolve(
   __dirname,
-  "../../docs/static_info/LBS_concepts_master.md"
+  "../source/LBS_concepts_master.md"
 );
 
 function parseCliArgs(rawArgs) {

@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const MASTER_FILE_PATH = path.resolve(
   __dirname,
-  "../../docs/static_info/LBS_concepts_master.md"
+  "../source/LBS_concepts_master.md"
 );
 const RAW_CONTENT_DIR = path.resolve(__dirname, "../raw");
 

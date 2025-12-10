@@ -1,37 +1,85 @@
-# BurKursas Documentation Index
+# Moxlai
 
-Use this guide to find the right document quickly and understand when it needs an update. When you touch a slice of work, scan the relevant section below and keep the linked docs in sync.
+**Moxlai** is a dynamic curriculum creation and learning platform. Using AI-assisted tools, educators and administrators can build complete learning structures—curriculum hierarchies, study materials, and assessments—for any subject matter. Learners subscribe to subjects and track their progress through structured content and testing.
 
-## Core Planning
+> **Note**: The project is transitioning from "burburiuok" to "moxlai". Some code references still use the old naming.
 
-- `MASTER_PLAN.md` – vision, personas, trimmed launch scope, and deferred roadmap items. Update when scope changes or major bets shift.
-- `INFRASTRUCTURE.md` – near-term vs future-state platform plans plus operational checklist. Refresh after infrastructure decisions or tooling upgrades.
-- `session/current_session.md` – active working session plan and checklist. As of 2025-11-20 it covers MVP polish after the media rollout; revise at the start/end of each session and archive completed plans under `archive/` with a datestamped filename.
-- `archive/` – historical session notes and superseded plans. Drop finished session docs here whenever a new plan replaces them (latest: `docs/archive/2025_11_13_current_session.md`).
+## Vision
 
-## Setup & Delivery
+A single platform where:
 
-- `DEVELOPMENT_SETUP.md` – canonical local tooling expectations, environment variables, and helper commands. Update when setup steps or scripts change.
-- `TESTING_GUIDE.md` – automated test coverage, required checks, and manual QA flows. Refresh after adding new suites or changing the release gate.
-- `static_info/` – authoritative curriculum sources (for example `static_info/LBS_programa.md`). Update only when the source material changes and regenerate seeds afterward.
-- `user_guides/` – learner/admin-facing product guides. Sync with significant UX updates so support and onboarding stay accurate.
+- **Admins/Managers** use AI to create and maintain comprehensive curricula from scratch or external sources
+- **Learners** subscribe to subjects, study concepts, and validate knowledge through dynamic testing
+- **Content** remains Lithuanian-first for learner-facing material, with English administration tools
 
-## Reference Hubs
+## Current State
 
-- `references/` – canonical specifications and design notes shared across teams. Update these alongside feature or schema changes and remember to append new entries to `references/README.md`. The front-end runbook now captures the extracted Concept Manager modules (`ConceptFilters`, `ConceptList`, `ConceptEditorDrawer`) so future admin UX tweaks stay consistent.
-  - `references/infrastructure/` – stack-specific guides (`BACKEND.md`, `FRONTEND.md`, `SUPABASE.md`). Use its `README.md` for navigation and refresh whenever backend/frontend architecture or Supabase workflows evolve.
-  - `references/features/implemented/` – living docs for shipped experiences (`ADMIN_SETUP.md`, etc.). Update as production behaviour changes.
-  - `references/features/ideas/` – discovery notes and future concepts (`QUIZ.md`, `STUDY_PATHS.md`, `GAMIFICATION_MODEL.md`). Extend when ideation outcomes shift or new backlog items emerge.
-  - Other root references (`API_CONTRACTS.md`, `ISSUE_TRACKER.md`, `SCHEMA_DECISIONS.md`, `PERSONAS_PERMISSIONS.md`, `UX_MOBILE_WIREFRAMES.md`) should be updated in lockstep with schema updates, backlog grooming, role changes, or UX approvals respectively.
+The platform is functional with:
 
-## Keeping Docs Fresh
+- ✅ Multi-level curriculum structure (sections → subsections → concepts)
+- ✅ AI-powered curriculum builder (admin chat interface)
+- ✅ Learner progress tracking ("moku" concepts)
+- ✅ Media library with image/video/PDF support
+- ✅ Magic-link authentication
+- ✅ Theme selection (Dawn/Marine/Sand)
 
-- When implementing a feature, update the matching entry under `references/features/` and tag any schema notes in `SCHEMA_DECISIONS.md`.
-- After altering infrastructure or CI, edit `INFRASTRUCTURE.md`, `DEVELOPMENT_SETUP.md`, and the relevant `references/infrastructure/` page.
-- At sprint close, archive the old `session/current_session.md`, refresh `MASTER_PLAN.md` if scope moved, and record outcomes in the session log.
-- Before releases, run through `TESTING_GUIDE.md` to confirm guard rails are current and capture any new manual smoke steps.
-- Keep `references/README.md` in sync when adding or moving reference documents so navigation stays accurate.
-- Update `references/ISSUE_TRACKER.md` whenever issues are opened/closed or acceptance criteria change—treat it as the single source of truth for sprint-ready work.
-- Reflect admin media workflow changes (bulk selection, modal previews, metadata editing, localisation) in `references/features/implemented/ADMIN_SETUP.md` whenever `/admin/media` or concept attachments evolve so operators can rely on the documented runbook.
+**Proof-of-Concept Subject**: LBS (Laivo Buriuotojo Sertifikatas) - Lithuanian sailing theory curriculum with ~300 concepts.
 
-> Add a bullet here whenever new documentation appears under `docs/` so contributors understand where it lives and when to maintain it.
+## Architecture Overview
+
+| Component | Technology              | Hosting           |
+| --------- | ----------------------- | ----------------- |
+| Frontend  | SvelteKit (static)      | GitHub Pages      |
+| Backend   | Express.js (TypeScript) | Render.com        |
+| Database  | PostgreSQL              | Supabase (hosted) |
+| Storage   | Object Storage          | Supabase (hosted) |
+| AI        | Google Gemini           | API               |
+
+## Quick Links
+
+| Document                                                   | Purpose                             |
+| ---------------------------------------------------------- | ----------------------------------- |
+| [Getting Started](GETTING_STARTED.md)                      | Local development setup             |
+| [Roadmap](ROADMAP.md)                                      | Current priorities and future plans |
+| [Architecture Overview](architecture/OVERVIEW.md)          | System design                       |
+| [Database Schema](architecture/DATABASE_SCHEMA.md)         | Tables and relationships            |
+| [API Reference](reference/API_ENDPOINTS.md)                | Backend endpoints                   |
+| [AI Curriculum Builder](features/AI_CURRICULUM_BUILDER.md) | Agent tools and workflow            |
+
+## Project Structure
+
+```
+moxlai/
+├── backend/           # Express.js API
+│   └── src/
+│       ├── routes/    # API endpoints
+│       ├── services/  # Business logic (AI agent, audit)
+│       └── middleware/# Auth, rate limiting
+├── frontend/          # SvelteKit app
+│   └── src/
+│       ├── routes/    # Pages and layouts
+│       └── lib/       # Components, stores, utils
+├── data/              # Shared data layer
+│   └── repositories/  # Database access
+├── shared/            # Shared validation schemas
+├── supabase/          # Migrations and seeds
+├── content/           # Content source files and scripts
+├── scripts/           # Development utilities
+└── docs/              # Documentation (you are here)
+```
+
+## URLs
+
+| Environment | Frontend                                 | Backend                           |
+| ----------- | ---------------------------------------- | --------------------------------- |
+| Production  | `https://mrolandas.github.io/BurBuriuok` | `https://burburiuok.onrender.com` |
+| Local Dev   | `http://localhost:5173`                  | `http://localhost:4000`           |
+| Future      | `moxlai.lt/<subject>`                    | TBD                               |
+
+---
+
+## Maintenance
+
+- **Last verified**: 2025-12-10
+- **Update when**: Project structure, hosting, or core features change
+- **Related docs**: All docs link back here

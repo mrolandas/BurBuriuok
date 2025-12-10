@@ -5,16 +5,11 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DEFAULT_DOC_PATH = path.resolve(
-  __dirname,
-  "../..",
-  "docs/static_info/LBS_programa.md"
-);
+const DEFAULT_DOC_PATH = path.resolve(__dirname, "../source/LBS_programa.md");
 
 const DEFAULT_OUTPUT_PATH = path.resolve(
   __dirname,
-  "../..",
-  "docs/static_info/temp_structure_interpretation.md"
+  "../source/temp_structure_interpretation.md"
 );
 
 const DEFAULT_JSON_OUTPUT_PATH = path.resolve(

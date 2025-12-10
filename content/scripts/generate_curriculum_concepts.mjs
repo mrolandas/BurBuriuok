@@ -12,10 +12,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const CURRICULUM_PATH = path.resolve(
-  __dirname,
-  "../../docs/static_info/LBS_programa.md"
-);
+const CURRICULUM_PATH = path.resolve(__dirname, "../source/LBS_programa.md");
 const OUTPUT_DIR = path.resolve(__dirname, "../raw");
 
 // Ensure output directory exists
