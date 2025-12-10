@@ -38,7 +38,7 @@ const tools = [
     type: "function",
     function: {
       name: "create_concept",
-      description: "Creates a new learning concept.",
+      description: "Creates a new learning concept. If ordinal is specified, inserts at that position and shifts existing concepts. Otherwise appends to end.",
       parameters: {
         type: "object",
         properties: {
@@ -46,7 +46,7 @@ const tools = [
           term: { type: "string", description: "Main term/title" },
           description: { type: "string", description: "Markdown content" },
           curriculumNodeCode: { type: "string", description: "Code of the parent curriculum node" },
-          ordinal: { type: "integer", description: "Order index" },
+          ordinal: { type: "integer", description: "Position to insert at (1-based). If omitted, appends to end. If specified, existing items are shifted." },
         },
         required: ["slug", "term", "description", "curriculumNodeCode"],
       },
@@ -415,6 +415,7 @@ export async function chatWithAgent(
             conceptSlug: functionArgs.slug,
             termLt: functionArgs.term,
             descriptionLt: functionArgs.description || 'Aprašymas bus papildytas vėliau.',
+            targetOrdinal: typeof functionArgs.ordinal === 'number' ? functionArgs.ordinal : null,
           });
           functionResult = `Concept "${result.concept.termLt}" created with slug "${result.concept.slug}" at ordinal ${result.item.ordinal}.`;
         } else if (functionName === "list_curriculum") {

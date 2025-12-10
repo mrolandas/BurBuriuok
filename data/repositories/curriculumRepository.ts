@@ -527,6 +527,8 @@ export type CreateCurriculumItemInput = {
   descriptionEn?: string | null;
   sourceRef?: string | null;
   isRequired?: boolean | null;
+  /** Optional target ordinal. If provided, existing items at and after this ordinal will be shifted. */
+  targetOrdinal?: number | null;
 };
 
 export type UpdateCurriculumItemInput = {
@@ -841,7 +843,41 @@ export async function createCurriculumItemAdmin(
   const sourceRef = sanitizeNullable(input.sourceRef);
   const isRequired = typeof input.isRequired === "boolean" ? input.isRequired : true;
 
-  const ordinal = await fetchNextItemOrdinal(serviceClient, node.code);
+  // Calculate ordinal: use targetOrdinal if provided, otherwise append
+  let ordinal: number;
+  const targetOrdinal = typeof input.targetOrdinal === "number" && input.targetOrdinal >= 1 
+    ? input.targetOrdinal 
+    : null;
+  
+  if (targetOrdinal) {
+    // Insert at specific position - shift existing items at and after targetOrdinal
+    const now = new Date().toISOString();
+    const { data: existingItems } = await (serviceClient as any)
+      .from(ITEM_TABLE)
+      .select("ordinal")
+      .eq("node_code", node.code)
+      .gte("ordinal", targetOrdinal)
+      .order("ordinal", { ascending: false });
+
+    // Shift items from highest to lowest to avoid conflicts
+    for (const item of (existingItems ?? []) as { ordinal: number }[]) {
+      await (serviceClient as any)
+        .from(ITEM_TABLE)
+        .update({ ordinal: item.ordinal + 1, updated_at: now })
+        .eq("node_code", node.code)
+        .eq("ordinal", item.ordinal);
+
+      await (serviceClient as any)
+        .from(CONCEPTS_TABLE)
+        .update({ curriculum_item_ordinal: item.ordinal + 1 })
+        .eq("curriculum_node_code", node.code)
+        .eq("curriculum_item_ordinal", item.ordinal);
+    }
+    ordinal = targetOrdinal;
+  } else {
+    ordinal = await fetchNextItemOrdinal(serviceClient, node.code);
+  }
+
   const slugBase = providedSlug ?? termLt ?? label;
   const slug = await ensureUniqueConceptSlug(serviceClient, slugBase);
   const sectionContext = await resolveSectionContext(serviceClient, node);
@@ -1499,7 +1535,9 @@ async function resequenceNodeItems(
     return;
   }
 
-  const offset = ordinals.length;
+  // Use the maximum ordinal value as offset to avoid conflicts
+  const maxOrdinal = Math.max(...ordinals);
+  const offset = maxOrdinal;
   const now = new Date().toISOString();
 
   for (let index = 0; index < ordinals.length; index += 1) {
@@ -1691,11 +1729,13 @@ export async function reorderCurriculumItemAdmin(
   }
 
   const items = (allItems ?? []) as { ordinal: number; label: string }[];
-  const maxOrdinal = items.length;
-  const targetOrdinal = Math.min(newOrdinal, maxOrdinal);
+  const itemCount = items.length;
+  // Use actual max ordinal value, not count (in case of gaps)
+  const actualMaxOrdinal = items.length > 0 ? Math.max(...items.map(i => i.ordinal)) : 0;
+  const targetOrdinal = Math.min(newOrdinal, itemCount); // Target based on item count (1 to N)
 
   const now = new Date().toISOString();
-  const tempOrdinal = maxOrdinal + 1000; // Temporary ordinal to avoid conflicts
+  const tempOrdinal = actualMaxOrdinal + 1000; // Temporary ordinal to avoid conflicts
 
   // Step 1: Move current item to temp ordinal
   await (serviceClient as any)
@@ -1761,6 +1801,9 @@ export async function reorderCurriculumItemAdmin(
     .update({ curriculum_item_ordinal: targetOrdinal })
     .eq("curriculum_node_code", nodeCode)
     .eq("curriculum_item_ordinal", tempOrdinal);
+
+  // Resequence all items to compact ordinals (1, 2, 3, ...) and close any gaps
+  await resequenceNodeItems(serviceClient, nodeCode);
 
   const updatedConcept = await getConceptBySlug(slug, serviceClient);
   if (!updatedConcept) {
@@ -1902,6 +1945,9 @@ export async function moveCurriculumItemAdmin(
   if (conceptUpdateError) {
     throw new Error(`Failed to update concept location: ${conceptUpdateError.message}`);
   }
+
+  // Resequence target node to ensure ordinals are compact (1, 2, 3, ...)
+  await resequenceNodeItems(serviceClient, targetNodeCode);
 
   const updatedConcept = await getConceptBySlug(slug, serviceClient);
   if (!updatedConcept) {
