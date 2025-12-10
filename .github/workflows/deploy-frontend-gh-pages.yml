@@ -77,7 +77,7 @@ jobs:
       - name: Build static output
         working-directory: frontend
         env:
-          VITE_APP_BASE_PATH: /BurBuriuok
+          VITE_APP_BASE_PATH: /Moxlai
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_ADMIN_API_BASE: ${{ secrets.VITE_ADMIN_API_BASE }}
@@ -100,8 +100,8 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
 
-          const defaultAdminApiBase = 'https://burburiuok.onrender.com/api/v1/admin';
-          const defaultPublicApiBase = 'https://burburiuok.onrender.com/api/v1';
+          const defaultAdminApiBase = 'https://moxlai.onrender.com/api/v1/admin';
+          const defaultPublicApiBase = 'https://moxlai.onrender.com/api/v1';
 
           const config = {
             supabaseUrl: process.env.SUPABASE_URL,
