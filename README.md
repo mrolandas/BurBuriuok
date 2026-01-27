@@ -7,7 +7,7 @@
 - **Builds adaptive tests** that respond to learner progress
 - **Tracks mastery** across concepts and subjects
 
-### Current Demo: Learn Sailing (in Lithuanian)
+### Current Demo: Learn Sailing Theory (in Lithuanian)
 
 The platform currently showcases the LBS (Lithuanian Sailing Association) curriculum as a proof-of-concept. This demonstrates the full content pipeline while the multi-subject architecture is being built.
 
@@ -29,8 +29,6 @@ cp .env.example .env
 npm run backend:dev   # Terminal 1
 npm run frontend:dev  # Terminal 2
 ```
-
-See [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) for detailed setup.
 
 ## Documentation
 
