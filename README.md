@@ -2,25 +2,12 @@
 
 **A tool to dynamically create curriculum, study material, and tests — everything needed to learn any subject.**
 
-## Quick Links
-
-| Environment | Frontend | Backend |
-|-------------|----------|---------||
-| Production | [mrolandas.github.io/Moxlai](https://mrolandas.github.io/Moxlai) | [burburiuok.onrender.com](https://burburiuok.onrender.com)\* |
-| Local | http://localhost:5173 | http://localhost:3001 |
-
-\* _Legacy Render URL - will be migrated in a future update._
-
-## What is Moxlai?
-
-Moxlai is a multi-subject learning platform that:
-
-- **Dynamically generates curriculum** using AI (Google Gemini)
+- **Dynamically generates curriculum** using AI (i.e. Google Gemini, but can be anything)
 - **Creates study materials** with definitions, explanations, and media
 - **Builds adaptive tests** that respond to learner progress
 - **Tracks mastery** across concepts and subjects
 
-### Current Demo: Lithuanian Sailing
+### Current Demo: Learn Sailing (in Lithuanian)
 
 The platform currently showcases the LBS (Lithuanian Sailing Association) curriculum as a proof-of-concept. This demonstrates the full content pipeline while the multi-subject architecture is being built.
 
